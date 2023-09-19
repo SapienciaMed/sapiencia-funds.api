@@ -4,6 +4,7 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
 export default class VotingResultsController {
+
   public async getVotingResultsById({
     request,
     response,
@@ -19,4 +20,5 @@ export default class VotingResultsController {
       );
     }
   }
+  
 }

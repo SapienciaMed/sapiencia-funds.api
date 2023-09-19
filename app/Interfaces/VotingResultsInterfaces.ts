@@ -1,3 +1,7 @@
 export interface IVotingResults {
-  id: number;
+  id?: number;
+  communeNeighborhood: number;
+  numberProject: number;
+  validity: string;
+  ideaProject: string;
 }
