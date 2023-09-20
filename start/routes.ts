@@ -29,3 +29,7 @@ Route.group(() => {
 })
   .prefix("/api/v1/votingR-results")
   .middleware("auth");
+
+Route.group(() => {
+    Route.get("/", "MasterActivitiesController.getMasterActivityById");
+}).prefix("/api/v1/activities");
