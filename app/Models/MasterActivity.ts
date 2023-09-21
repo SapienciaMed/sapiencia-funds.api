@@ -13,7 +13,7 @@ export default class MasterActivity extends BaseModel {
     public totalValue: number;
 
     @column({ columnName: "MTA_CODPMA_PROGRAMA", serializeAs: "codProgramCode" })
-    public codCodeProgram: number;
+    public codProgramCode: number;
 
     @column({ columnName: "MTA_DESCRIPCION", serializeAs: "description" })
     public description: string;

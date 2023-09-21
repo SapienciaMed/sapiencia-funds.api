@@ -33,8 +33,6 @@ Route.group(() => {
 
 
 Route.group(() => {
-  Route.get("/:id", "MasterActivitiesController.getManualDeductionById");
   Route.post("/", "MasterActivitiesController.createActivity");
-  Route.post("get-paginated","MasterActivitiesController.getManualDeductionPaginate");
-  Route.put("/", "MasterActivitiesController.updateManualDeduction");
-}).prefix("/api/v1/activities");
+}).prefix("/api/v1/activities")
+.middleware("auth");;

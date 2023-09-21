@@ -1,13 +1,9 @@
 export interface IMasterActivity {
-    id: number;
+    id?: number;
     name: string
     totalValue: number;
     codProgramCode: number;
-    description?:string;
+    description:string;
 }
 
-export interface IMasterActivityFilters {
-    codProgramCode?: number;
-
-}
   
