@@ -30,6 +30,11 @@ Route.group(() => {
   .prefix("/api/v1/votingR-results")
   .middleware("auth");
 
+
+
 Route.group(() => {
-    Route.get("/", "MasterActivitiesController.getMasterActivityById");
+  Route.get("/:id", "MasterActivitiesController.getManualDeductionById");
+  Route.post("/", "MasterActivitiesController.createActivity");
+  Route.post("get-paginated","MasterActivitiesController.getManualDeductionPaginate");
+  Route.put("/", "MasterActivitiesController.updateManualDeduction");
 }).prefix("/api/v1/activities");

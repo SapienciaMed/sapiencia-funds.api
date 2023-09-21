@@ -7,9 +7,10 @@ export default class CreateAndUpdateMasterActivityValidator {
     
     public schema = schema.create({
         id: schema.number.optional(),
+        name: schema.string([rules.maxLength(20)]),
         totalValue: schema.number(),
         codProgramCode: schema.number(),
-        description: schema.string.optional([rules.maxLength(500)]),
+        description: schema.string([rules.maxLength(500)]),
   });
 
   public messages: CustomMessages = { err: "error" };
