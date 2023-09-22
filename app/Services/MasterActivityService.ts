@@ -13,6 +13,10 @@ export interface IMasterActivityService {
   getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<ApiResponse<IPagingData<IMasterActivity>>>;
+  updateMasterActivity(
+    activity: IMasterActivity,
+    id: number
+  ): Promise<ApiResponse<IMasterActivity | null>>;
 }
 
 export default class MasterActivityService implements IMasterActivityService {
@@ -40,6 +44,27 @@ export default class MasterActivityService implements IMasterActivityService {
       await this.masterActivityRepository.getMasterActivityPaginate(filters);
     return new ApiResponse(Activity, EResponseCodes.OK);
   }
+
+  async updateMasterActivity(
+    activity: IMasterActivity,
+    id: number
+  ): Promise<ApiResponse<IMasterActivity | null>>{
+    const res = await this.masterActivityRepository.updateMasterActivity(
+      activity,
+      id
+    );
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IMasterActivity,
+        EResponseCodes.FAIL,
+        "Ocurrió un error en su Transacción "
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
 
 }
 

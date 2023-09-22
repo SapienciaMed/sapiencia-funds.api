@@ -42,4 +42,30 @@ export default class MasterActivitiesController {
     }
   }
 
+
+  public async updateActivity({
+    request,
+    response,
+  }: HttpContextContract) {
+    try {
+      const activityValidate = await request.validate(
+        CreateAndUpdateMasterActivityValidator
+      );
+
+      const { id } = activityValidate;
+
+      return response.send(
+        await MasterActivityProvider.updateMasterActivity(
+          activityValidate,
+          Number(id)
+        )
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+
 }

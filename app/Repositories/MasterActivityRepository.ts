@@ -9,6 +9,10 @@ export interface IMasterActivityRepository {
   getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<IPagingData<IMasterActivity>>;
+  updateMasterActivity(
+    activity: IMasterActivity,
+    id: number
+  ): Promise<IMasterActivity | null>;
 }
 
 export default class MasterActivityRepository implements IMasterActivityRepository {
@@ -33,8 +37,6 @@ export default class MasterActivityRepository implements IMasterActivityReposito
       if (filters.codProgramCode) {
         res.where("codProgramCode", filters.codProgramCode);
       }
-  
-  
       const workerMasterActivityPaginated = await res.paginate(
         filters.page,
         filters.perPage
@@ -47,6 +49,24 @@ export default class MasterActivityRepository implements IMasterActivityReposito
         array: dataArray as IMasterActivity[],
         meta,
       };
+    }
+
+
+    async updateMasterActivity(
+      masterActivity: IMasterActivity,
+      id: number
+    ): Promise<IMasterActivity | null> {
+      const toUpdate = await MasterActivity.find(id);
+  
+      if (!toUpdate) {
+        return null;
+      }
+
+      toUpdate.fill({ ...toUpdate,...masterActivity });
+  
+      await toUpdate.save();
+  
+      return toUpdate.serialize() as MasterActivity;
     }
 
 
