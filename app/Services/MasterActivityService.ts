@@ -13,6 +13,7 @@ export interface IMasterActivityService {
   getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<ApiResponse<IPagingData<IMasterActivity>>>;
+  getActivitiesList(): Promise<ApiResponse<IMasterActivity[]>>;
   updateMasterActivity(
     activity: IMasterActivity,
     id: number
@@ -35,6 +36,20 @@ export default class MasterActivityService implements IMasterActivityService {
       );
       }
       return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+  async getActivitiesList(): Promise<ApiResponse<IMasterActivity[]>> {
+    const res = await this.masterActivityRepository.getActivityList();
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IMasterActivity[],
+        EResponseCodes.FAIL,
+        "Registro no encontrado"
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
   }
 
   async getMasterActivityPaginate(

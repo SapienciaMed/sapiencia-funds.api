@@ -26,6 +26,18 @@ export default class MasterActivitiesController {
     }
   }
 
+  public async getMasterActivity({ response }: HttpContextContract) {
+    try {
+      return response.send(
+        await MasterActivityProvider.getActivitiesList()
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async getMasterActivityPaginate({
     response,
     request,

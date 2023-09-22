@@ -9,6 +9,7 @@ export interface IMasterActivityRepository {
   getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<IPagingData<IMasterActivity>>;
+  getActivityList(): Promise<IMasterActivity[]>;
   updateMasterActivity(
     activity: IMasterActivity,
     id: number
@@ -27,6 +28,13 @@ export default class MasterActivityRepository implements IMasterActivityReposito
       await toCreate.save();
       return toCreate.serialize() as IMasterActivity;
     }
+
+
+    async getActivityList(): Promise<IMasterActivity[]> {
+      const res = await MasterActivity.all();
+      return res as IMasterActivity[];
+    }
+
 
 
     async getMasterActivityPaginate(
