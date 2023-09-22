@@ -6,4 +6,9 @@ export interface IMasterActivity {
     description:string;
 }
 
-  
+export interface IMasterActivityFilters{
+    codProgramCode: number;
+    name: string
+    page: number;
+    perPage: number;
+  }

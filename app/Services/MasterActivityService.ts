@@ -2,16 +2,17 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 //import { IProgramTypes } from "App/Interfaces/TypesProgramInterface";
 import {
     IMasterActivity,
-    //IMasterActivityFilters,
+    IMasterActivityFilters,
 } from "App/Interfaces/MasterActivityInterface";
 import { IMasterActivityRepository } from "App/Repositories/MasterActivityRepository";
-import { ApiResponse, 
-  //IPagingData 
-} from "App/Utils/ApiResponses";
+import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 
 export interface IMasterActivityService {
   createMasterActivity(masterActivity: IMasterActivity): Promise<ApiResponse<IMasterActivity>>;
+  getMasterActivityPaginate(
+    filters: IMasterActivityFilters
+  ): Promise<ApiResponse<IPagingData<IMasterActivity>>>;
 }
 
 export default class MasterActivityService implements IMasterActivityService {
@@ -19,12 +20,9 @@ export default class MasterActivityService implements IMasterActivityService {
       private masterActivityRepository: IMasterActivityRepository
     ) {}
 
-     //crear dedudcción manual
+     //crear maestro actividad
      async createMasterActivity(masterActivity: IMasterActivity): Promise<ApiResponse<IMasterActivity>>{
-      console.log("***********estoy en service")
       const res = await this.masterActivityRepository.createMasterActivity(masterActivity);
-      console.log("***********estoy en service")
-
       if (!res) {
       return new ApiResponse(
           {} as IMasterActivity ,
@@ -33,6 +31,14 @@ export default class MasterActivityService implements IMasterActivityService {
       );
       }
       return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+  async getMasterActivityPaginate(
+    filters: IMasterActivityFilters
+  ): Promise<ApiResponse<IPagingData<IMasterActivity>>> {
+    const vacations =
+      await this.masterActivityRepository.getMasterActivityPaginate(filters);
+    return new ApiResponse(vacations, EResponseCodes.OK);
   }
 
 }
