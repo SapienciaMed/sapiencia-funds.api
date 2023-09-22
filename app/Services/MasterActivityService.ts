@@ -36,9 +36,9 @@ export default class MasterActivityService implements IMasterActivityService {
   async getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<ApiResponse<IPagingData<IMasterActivity>>> {
-    const vacations =
+    const Activity =
       await this.masterActivityRepository.getMasterActivityPaginate(filters);
-    return new ApiResponse(vacations, EResponseCodes.OK);
+    return new ApiResponse(Activity, EResponseCodes.OK);
   }
 
 }

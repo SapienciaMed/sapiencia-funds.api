@@ -29,17 +29,11 @@ export default class MasterActivityRepository implements IMasterActivityReposito
       filters: IMasterActivityFilters
     ): Promise<IPagingData<IMasterActivity>> {
       const res = MasterActivity.query();
-      const addProgramsTypeConditions = (query: any) => {
-        query.preload("TypesProgram", (programTypeQuery) => {
-          programTypeQuery.preload("charges")
-          if (filters.name) {
-            programTypeQuery.where("name", filters.name);
-          }
-          programTypeQuery.preload("worker")
-        });
-      };
+
+      if (filters.codProgramCode) {
+        res.where("codProgramCode", filters.codProgramCode);
+      }
   
-      addProgramsTypeConditions(res);
   
       const workerMasterActivityPaginated = await res.paginate(
         filters.page,

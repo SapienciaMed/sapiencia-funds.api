@@ -37,4 +37,4 @@ Route.group(() => {
   Route.post("/", "MasterActivitiesController.createActivity");
   Route.post("get-paginated","MasterActivitiesController.getMasterActivityPaginate");
 }).prefix("/api/v1/activities")
-.middleware("auth");;
+.middleware("auth");

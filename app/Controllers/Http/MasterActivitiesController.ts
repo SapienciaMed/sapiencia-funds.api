@@ -25,4 +25,21 @@ export default class MasterActivitiesController {
       );
     }
   }
+
+  public async getMasterActivityPaginate({
+    response,
+    request,
+  }: HttpContextContract) {
+    try {
+      const data = request.body() as IMasterActivityFilters;
+      return response.send(
+        await MasterActivityProvider.getMasterActivityPaginate(data)
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
 }
