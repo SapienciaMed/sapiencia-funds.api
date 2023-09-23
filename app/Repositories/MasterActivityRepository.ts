@@ -10,6 +10,7 @@ export interface IMasterActivityRepository {
     filters: IMasterActivityFilters
   ): Promise<IPagingData<IMasterActivity>>;
   getActivityList(): Promise<IMasterActivity[]>;
+  getActivityById(id: number): Promise<IMasterActivity[] | null>;
   updateMasterActivity(
     activity: IMasterActivity,
     id: number
@@ -29,13 +30,10 @@ export default class MasterActivityRepository implements IMasterActivityReposito
       return toCreate.serialize() as IMasterActivity;
     }
 
-
     async getActivityList(): Promise<IMasterActivity[]> {
       const res = await MasterActivity.all();
       return res as IMasterActivity[];
     }
-
-
 
     async getMasterActivityPaginate(
       filters: IMasterActivityFilters
@@ -59,6 +57,17 @@ export default class MasterActivityRepository implements IMasterActivityReposito
       };
     }
 
+    async getActivityById(id: number): Promise<IMasterActivity[] | null> {
+      const queryActivity = MasterActivity.query().where("id", id);
+  
+      const masterActivity = await queryActivity;
+  
+      if (!masterActivity) {
+        return null;
+      }
+  
+      return masterActivity as IMasterActivity[];
+    }
 
     async updateMasterActivity(
       masterActivity: IMasterActivity,

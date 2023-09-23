@@ -18,6 +18,7 @@ export interface IMasterActivityService {
     activity: IMasterActivity,
     id: number
   ): Promise<ApiResponse<IMasterActivity | null>>;
+  getActivityById(id: number): Promise<ApiResponse<IMasterActivity[]>>;
 }
 
 export default class MasterActivityService implements IMasterActivityService {
@@ -60,6 +61,22 @@ export default class MasterActivityService implements IMasterActivityService {
     return new ApiResponse(Activity, EResponseCodes.OK);
   }
 
+  async getActivityById(
+    id: number
+  ): Promise<ApiResponse<IMasterActivity[]>> {
+    const res = await this.masterActivityRepository.getActivityById(id);
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IMasterActivity[],
+        EResponseCodes.FAIL,
+        "Registro no encontrado"
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
   async updateMasterActivity(
     activity: IMasterActivity,
     id: number
@@ -76,10 +93,8 @@ export default class MasterActivityService implements IMasterActivityService {
         "Ocurrió un error en su Transacción "
       );
     }
-
     return new ApiResponse(res, EResponseCodes.OK);
   }
-
 
 }
 

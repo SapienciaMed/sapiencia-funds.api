@@ -54,6 +54,21 @@ export default class MasterActivitiesController {
     }
   }
 
+  public async getActivityById({
+    request, 
+    response 
+  }: HttpContextContract) {
+    try {
+      const { id } = request.params();
+      return response.send(
+        await MasterActivityProvider.getActivityById(id)
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
 
   public async updateActivity({
     request,

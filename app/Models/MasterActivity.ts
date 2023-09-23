@@ -22,7 +22,7 @@ export default class MasterActivity extends BaseModel {
         localKey: "codProgramType",
         foreignKey: "id",
     })
-    public TypesProgram: HasOne<typeof TypesProgram>;
+    public typesProgram: HasOne<typeof TypesProgram>;
 
 
 }

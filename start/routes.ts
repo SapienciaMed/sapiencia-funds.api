@@ -35,6 +35,7 @@ Route.group(() => {
 Route.group(() => {
 
   Route.post("/", "MasterActivitiesController.createActivity");
+  Route.get("/:id", "MasterActivitiesController.getActivityById");
   Route.post("get-paginated","MasterActivitiesController.getMasterActivityPaginate");
   Route.get("/","MasterActivitiesController.getMasterActivity");
   Route.put("/", "MasterActivitiesController.updateActivity");
