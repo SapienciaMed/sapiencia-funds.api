@@ -34,10 +34,10 @@ Route.group(() => {
 
 Route.group(() => {
 
-  Route.post("/", "MasterActivitiesController.createActivity");
+  Route.post("/create", "MasterActivitiesController.createActivity");
   Route.get("/:id", "MasterActivitiesController.getActivityById");
   Route.post("get-paginated","MasterActivitiesController.getMasterActivityPaginate");
   Route.get("/","MasterActivitiesController.getMasterActivity");
-  Route.put("/", "MasterActivitiesController.updateActivity");
+  Route.put("/edit/:id", "MasterActivitiesController.updateActivity");
 }).prefix("/api/v1/activities")
 .middleware("auth");

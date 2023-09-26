@@ -79,7 +79,7 @@ export default class MasterActivitiesController {
         CreateAndUpdateMasterActivityValidator
       );
 
-      const { id } = activityValidate;
+      const { id } = request.params();
 
       return response.send(
         await MasterActivityProvider.updateMasterActivity(

@@ -6,7 +6,7 @@ export default class CreateAndUpdateMasterActivityValidator {
     constructor(protected ctx: HttpContextContract) {}
     
     public schema = schema.create({
-        id: schema.number(),
+        id: schema.number.optional(),
         name: schema.string([rules.maxLength(20)]),
         totalValue: schema.number(),
         codProgramCode: schema.number(),

@@ -10,6 +10,7 @@ export interface IMasterActivity {
 
 
 export interface IMasterActivityFilters{
+    id?: number;
     codProgramCode: number;
     name: string
     page: number;
