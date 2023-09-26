@@ -1,5 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-//import { IProgramTypes } from "App/Interfaces/TypesProgramInterface";
+import { IProgramTypes } from "App/Interfaces/TypesProgramInterface";
 import {
     IMasterActivity,
     IMasterActivityFilters,
@@ -19,6 +19,7 @@ export interface IMasterActivityService {
     id: number
   ): Promise<ApiResponse<IMasterActivity | null>>;
   getActivityById(id: number): Promise<ApiResponse<IMasterActivity[]>>;
+  getProgramList(): Promise<ApiResponse<IProgramTypes[]>>;
 }
 
 export default class MasterActivityService implements IMasterActivityService {
@@ -47,6 +48,20 @@ export default class MasterActivityService implements IMasterActivityService {
         {} as IMasterActivity[],
         EResponseCodes.FAIL,
         "Registro no encontrado"
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+  async getProgramList(): Promise<ApiResponse<IProgramTypes[]>> {
+    const res = await this.masterActivityRepository.getProgramList();
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IProgramTypes[],
+        EResponseCodes.FAIL,
+        "Registro no encontrado....."
       );
     }
 

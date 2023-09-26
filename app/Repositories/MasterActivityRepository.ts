@@ -2,8 +2,10 @@ import {
   IMasterActivity,
   IMasterActivityFilters,
 } from "App/Interfaces/MasterActivityInterface";
+import {IProgramTypes} from "app/Interfaces/TypesProgramInterface"
 import MasterActivity from "../Models/MasterActivity";
 import { IPagingData } from "App/Utils/ApiResponses";
+import TypesProgram from "App/Models/TypeProgram";
 
 export interface IMasterActivityRepository {
   createMasterActivity(
@@ -18,6 +20,7 @@ export interface IMasterActivityRepository {
     activity: IMasterActivity,
     id: number
   ): Promise<IMasterActivity | null>;
+  getProgramList(): Promise<IProgramTypes[]>;
 }
 
 export default class MasterActivityRepository
@@ -40,10 +43,15 @@ export default class MasterActivityRepository
     return res.map((i) => i.serialize() as IMasterActivity);
   }
 
+  async getProgramList(): Promise<IProgramTypes[]> {
+    const programList = await TypesProgram.all();
+    return programList as IProgramTypes[];
+  }
+
   async getMasterActivityPaginate(
     filters: IMasterActivityFilters
   ): Promise<IPagingData<IMasterActivity>> {
-    const res = MasterActivity.query();
+    const res = MasterActivity.query().preload("typesProgram");
 
     if (filters.name) {
       res.whereILike("name", `%${filters.name}%`);
