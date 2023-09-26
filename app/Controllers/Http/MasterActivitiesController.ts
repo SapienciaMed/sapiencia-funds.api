@@ -1,7 +1,7 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import {IMasterActivity, IMasterActivityFilters} from "App/Interfaces/MasterActivityInterface";
+import {IMasterActivityFilters} from "App/Interfaces/MasterActivityInterface";
 import MasterActivityProvider from "@ioc:core.MasterActivityProvider";
 import CreateAndUpdateMasterActivityValidator from "App/Validators/CreateAndUpdateMasterActivityValidator";
 
@@ -30,6 +30,19 @@ export default class MasterActivitiesController {
     try {
       return response.send(
         await MasterActivityProvider.getActivitiesList()
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+
+  public async getProgramTypes({ response }: HttpContextContract) {
+    try {
+      return response.send(
+        await MasterActivityProvider.getProgramList()
       );
     } catch (err) {
       return response.badRequest(
@@ -79,7 +92,7 @@ export default class MasterActivitiesController {
         CreateAndUpdateMasterActivityValidator
       );
 
-      const { id } = activityValidate;
+      const { id } = request.params();
 
       return response.send(
         await MasterActivityProvider.updateMasterActivity(
