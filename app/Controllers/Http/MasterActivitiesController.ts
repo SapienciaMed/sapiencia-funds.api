@@ -1,7 +1,7 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import {IMasterActivity, IMasterActivityFilters} from "App/Interfaces/MasterActivityInterface";
+import {IMasterActivityFilters} from "App/Interfaces/MasterActivityInterface";
 import MasterActivityProvider from "@ioc:core.MasterActivityProvider";
 import CreateAndUpdateMasterActivityValidator from "App/Validators/CreateAndUpdateMasterActivityValidator";
 

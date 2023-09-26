@@ -31,8 +31,9 @@ export default class MasterActivityRepository implements IMasterActivityReposito
     }
 
     async getActivityList(): Promise<IMasterActivity[]> {
-      const res = await MasterActivity.all();
+      const res = await MasterActivity.query().preload("typesProgram");
       return res as IMasterActivity[];
+
     }
 
     async getMasterActivityPaginate(

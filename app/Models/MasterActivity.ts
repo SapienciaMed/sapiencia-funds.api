@@ -19,8 +19,9 @@ export default class MasterActivity extends BaseModel {
     public description: string;
     
     @hasOne(() => TypesProgram, {
-        localKey: "codProgramType",
+        localKey: "codProgramCode",
         foreignKey: "id",
+        serializeAs: "typesProgram",
     })
     public typesProgram: HasOne<typeof TypesProgram>;
 

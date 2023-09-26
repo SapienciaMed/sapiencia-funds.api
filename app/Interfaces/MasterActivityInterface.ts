@@ -1,10 +1,13 @@
+import {IProgramTypes} from "./TypesProgramInterface"
 export interface IMasterActivity {
     id?: number;
     name: string
     totalValue: number;
-    codProgramCode: number;
     description:string;
+    typesProgram?: IProgramTypes[];
+
 }
+
 
 export interface IMasterActivityFilters{
     codProgramCode: number;
