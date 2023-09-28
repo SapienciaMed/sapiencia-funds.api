@@ -17,14 +17,21 @@ export default class extends BaseSchema {
         .comment("llave primaria").notNullable();
       
       table.string("ITM_OBJETIVO_DIRECTO", 500).notNullable().comment(" ");
-      table.string("ITM_PRODUCTO_CATALOGO_DNP", 200).notNullable().comment(" ");
+      table.string("ITM_PRODUCTO_CATALOGO_DNP", 20).notNullable().comment(" ");
+      table.string("ITM_CODIGO_PRODUCTO_DNP", 20).notNullable().comment(" ");
       table.integer("ITM_CODPMA_PROGRAMA").notNullable().comment(" ");
-      table.integer("ITM_CODMTA_MAESTRO_ACTIVIDAD").notNullable().comment(" ");
       table.integer("ITM_CANTIDAD").notNullable().comment(" ");
       table.integer("ITM_COSTO_TOTAL").notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_123").notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_456").notNullable().comment(" ");
       table.integer("ITM_CODRTV_RESULTADO_VOTACION").notNullable().comment(" ");
+      table
+        .integer("ITM_CODMTA_MAESTRO_ACTIVIDAD")
+        .unsigned().references("MTA_CODIGO")
+        .inTable("MTA_MAESTRO_ACTIVIDAD")
+        .unsigned()
+        .notNullable()
+        .comment("Código de la actividad asociada al item FK(llave foranea de la actividad asociada al item)");
       
     })
   }

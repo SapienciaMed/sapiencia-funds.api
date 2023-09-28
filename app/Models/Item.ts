@@ -1,4 +1,5 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, HasOne, column, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import MasterActivity from './MasterActivity';
 
 export default class Item extends BaseModel {
 
@@ -33,5 +34,13 @@ export default class Item extends BaseModel {
 
   @column({ columnName: "ITM_CODRTV_RESULTADO_VOTACION", serializeAs: "codRtVotingResult" })
   public codRtVotingResult: string;
+
+  @hasOne(() => MasterActivity, {
+    localKey: "codMtaTeacherActivity",
+    foreignKey: "id",
+    serializeAs: "activiti",
+  })
+    
+  public activiti: HasOne<typeof MasterActivity>;
 
 }

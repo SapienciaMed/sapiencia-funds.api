@@ -1,4 +1,5 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import Item from "./Item";
 
 export default class VotingResults extends BaseModel {
   public static table = "RVO_RESULTADOS_VOTACION";
@@ -17,5 +18,12 @@ export default class VotingResults extends BaseModel {
 
   @column({ columnName: "RTV_IDEA_PROYECTO", serializeAs: "ideaProject" })
   public ideaProject: string;
+
+  @hasMany(() => Item, {
+    localKey: "id",
+    foreignKey: "codRtVotingResult",
+    serializeAs: "items",
+  })
+  public items: HasMany<typeof Item>;
 
 }
