@@ -11,7 +11,7 @@ export default class extends BaseSchema {
       )
       
       table
-        .increments("LGE_CODIGO")
+        .increments("RTV_CODIGO")
         .unsigned()
         .primary()
         .comment("llave primaria").notNullable();
@@ -20,6 +20,16 @@ export default class extends BaseSchema {
       table.integer("RTV_NUMERO_PROYECTO").notNullable().comment(" ");
       table.string("RTV_VIGENCIA", 10).notNullable().comment(" ");
       table.string("RTV_IDEA_PROYECTO", 500).notNullable().comment(" ");
+
+      table
+        .integer("RTV_CODIGO")
+        .unsigned().references("ITM_CODRTV_RESULTADO_VOTACION")
+        .inTable("ITM_ITEM")
+        .unsigned()
+        .notNullable()
+        .comment("Código del resultado de la votación asociado al item (FK llave foranea tbl resultado votación)");
+      
+      
     })
   }
 
