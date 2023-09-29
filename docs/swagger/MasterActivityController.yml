@@ -1,0 +1,272 @@
+/api/v1/activities:
+  get:
+    tags:
+      - activities
+    summary: Obtener la información de las actividades maestras de la gestión territorial
+    description: Obtener actividades de la gestión territorial y sus propiedades.
+    operationId: get
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/licence"
+    produces:
+      - application/json
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            examples:
+              Action:
+                value:
+                  {
+                    "data":
+                      [
+                        {
+                          "id": 1,
+                          "name": "actividad test",
+                          "totalValue": "1200000",
+                          "codProgramCode": 1,
+                          "description": "test"
+                        },
+                      ],
+                    "operation": { "code": "OK", "message": "" },
+                  }
+
+/api/v1/activities/programtypes:
+  get:
+    tags:
+      - Programas 
+    summary: Obtiene los tipos de programas.
+    description: Obtiene todos los tipos de programas y sus propiedades.
+    operationId: getTypes
+    produces:
+      - application/json
+    responses:
+      200:
+        description: OK
+        content:
+          application/json:
+            examples:
+              Action:
+                value:
+                  {
+                    "data":
+                      [
+                        {
+                          "id": 1,
+                          "name": "programa maestra",
+                        },
+                      ],
+                    "operation": { "code": "OK", "message": "" },
+                  }
+
+
+/api/v1/activities/get-paginated:
+  post:
+    tags:
+      - activities
+    summary: Obtener la información de las actividades maestras de la gestión territorial.
+    description: Obtener actividades según los filtros.
+    operationId: get-paginated-Activities
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              codProgramCode:
+                type: number
+                example: "2"
+                description: código del programa.
+                required: true
+              name:
+                type: string
+                example: "actividad test"
+                description: descripción de la actividad.
+                required: false
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            examples:
+              Action:
+                value:
+                  data:
+                    - id: 1
+                      name: "test"
+                      totalValue: 10000
+                      codProgramCode: 1
+                      description: "test"
+                      typesProgram:
+                        id: 12
+                        name: "test"
+                  operation: { code: "OK", message: "" }
+
+
+
+paths:
+  /api/v1/activities/create:
+    post:
+      tags:
+        - activities
+      summary: Permite la creación de una maestro de actividad.
+      description: Crea una actividad..
+      operationId: createMasterActivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: number
+                  example: 1
+                  description: nombre de la actividad maestra.
+                totalValue:
+                  type: number
+                  example: 1
+                  description: total de la actividad.
+                description:
+                  type: boolean
+                  example: true
+                  description: Indica la descripción.
+                typesProgram:
+                  type: number
+                  example: 5
+                  description:  Código del tipo de programa.
+
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              examples:
+                Action:
+                  value:
+                    {
+                      "data":
+                        [
+                          {
+                            "id": 1,
+                            "name": "actividad maestra",
+                            "codProgramCode": 1,
+                            "totalValue": 1200000,
+                            "description": "test",
+                          },
+                        ],
+                      "operation": { "code": "OK", "message": "" },
+                    }
+                    
+  /api/v1/activities/edit/{id}:
+    put:
+      tags:
+          - activities
+      summary: Permite la actualización de una maestro de actividad..
+      description: Actualizar una actividad.
+      operationId: updateMaterActivity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "test"
+                  description: nombre de la actividad maestra.
+                totalValue:
+                  type: number
+                  example: 1200000
+                  description: total de la actividad.
+                description:
+                  type: string
+                  example: "test"
+                  description: Indica la descripción.
+                typesProgram:
+                  type: number
+                  example: 5
+                  description:  Código del tipo de programa.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              examples:
+                Action:
+                  value:
+                    {
+                      "data":
+                        [
+                          {
+                        
+                          "id": 1,
+                          "name": "actividad test",
+                          "totalValue": "1200000",
+                          "codProgramCode": 1,
+                          "description": "test"
+                        
+                          },
+                        ],
+                      "operation": { "code": "OK", "message": "" },
+                  }
+
+/api/v1/activities/{id}:
+  get:
+    parameters:
+      - in: path
+        name: id
+        schema:
+          type: number
+          example: 1
+        required: true
+        description: Id de la actividad
+    tags:
+      - activities
+    summary: Obtener la información de una actividad.
+    description: Obtiene el actividad por id.
+    operationId: getActivityById
+    produces:
+      - application/json
+    responses:
+      "200":
+        description: OK
+        content:
+          application/json:
+            examples:
+              Action:
+                value:
+                  data:
+                    - id: 1
+                      name: "test"
+                      totalValue: 10000
+                      codProgramCode: 1
+                      description: "test"
+                  operation: { code: "OK", message: "" }   
+
+components:
+  schemas:
+    licence:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: "Actividad test 1"
+        totalValue:
+          type: number
+          example: 12000000
+        codEmployment:
+          type: number
+          example: 1
+        description:
+          type: string
+          example: "test"

@@ -3,7 +3,7 @@ export interface IMasterActivity {
     id?: number;
     name: string
     totalValue: number;
-    description:string;
+    description?:string;
     typesProgram?: IProgramTypes[];
 
 }
