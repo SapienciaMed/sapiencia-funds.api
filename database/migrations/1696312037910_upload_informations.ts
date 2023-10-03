@@ -12,7 +12,7 @@ export default class extends BaseSchema {
       .primary()
       .comment("llave primaria");
       table
-      .string("CIN_COMUNA_BARRIO", 15)
+      .string("CIN_COMUNA_BARRIO", 30)
       .notNullable()
       .comment("lista generica cargada por parámetros");
       table
@@ -20,7 +20,7 @@ export default class extends BaseSchema {
       .notNullable()
       .comment("lista generica de años cargada por parámetros");
       table
-      .string("CIN_INFORMACION", 15)
+      .string("CIN_INFORMACION", 30)
       .notNullable()
       .comment("lista generica de información");
       table
