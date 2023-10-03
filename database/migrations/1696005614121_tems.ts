@@ -24,7 +24,7 @@ export default class extends BaseSchema {
       table.integer("ITM_COSTO_TOTAL").notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_123").notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_456").notNullable().comment(" ");
-      table.integer("ITM_CODRTV_RESULTADO_VOTACION").notNullable().comment(" ");
+      // table.integer("ITM_CODRTV_RESULTADO_VOTACION").notNullable().comment(" ");
       table
         .integer("ITM_CODMTA_MAESTRO_ACTIVIDAD")
         .unsigned().references("MTA_CODIGO")
@@ -32,6 +32,17 @@ export default class extends BaseSchema {
         .unsigned()
         .notNullable()
         .comment("Código de la actividad asociada al item FK(llave foranea de la actividad asociada al item)");
+      
+      
+      
+      table
+        .integer("ITM_CODRTV_RESULTADO_VOTACION")
+        .unsigned().references("RTV_CODIGO")
+        .inTable("RTV_RESULTADO_VOTACION")
+        .unsigned()
+        .notNullable()
+        .comment("Código del resultado de la votación asociado al item (FK llave foranea tbl resultado votación)");
+      
       
     })
   }

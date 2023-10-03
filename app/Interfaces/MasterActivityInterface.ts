@@ -15,4 +15,14 @@ export interface IMasterActivityFilters{
     name: string
     page: number;
     perPage: number;
-  }
+}
+
+
+export interface IMasterActivityVoting {
+    id?: number;
+    name: string
+    totalValue: number;
+    description?:string;
+    codProgramCode?: number;
+
+}

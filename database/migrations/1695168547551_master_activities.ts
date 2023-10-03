@@ -23,6 +23,7 @@ export default class extends BaseSchema {
         .comment("Valor de la actividad");
 
 
+      
       table
         .integer("MTA_CODPMA_PROGRAMA")
         .unsigned().references("PMA_CODIGO")

@@ -8,6 +8,7 @@ export default class extends BaseSchema {
       table.comment(
         "Tabla que contiene grupos de listados genericos, disponibles para toda la aplicacion"
       );
+      
       table
         .increments("LGE_CODIGO")
         .unsigned()
