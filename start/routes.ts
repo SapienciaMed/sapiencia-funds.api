@@ -43,3 +43,12 @@ Route.group(() => {
   
 }).prefix("/api/v1/activities") 
 .middleware("auth");
+
+
+Route.group(() => {
+  
+  Route.get("/","UploadInformationController.getUploadInformation");
+  Route.post("get-paginated","UploadInformationController.getUploadInformationPaginate");
+
+}).prefix("/api/v1/uploadInformation") 
+.middleware("auth");
