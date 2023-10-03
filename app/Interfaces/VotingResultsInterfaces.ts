@@ -5,3 +5,9 @@ export interface IVotingResults {
   validity: string;
   ideaProject: string;
 }
+
+
+export interface IActivity {
+  id?: number;
+  nombre: string
+}
