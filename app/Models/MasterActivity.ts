@@ -2,6 +2,7 @@ import { BaseModel, HasOne, column, hasOne } from "@ioc:Adonis/Lucid/Orm";
 import TypesProgram from "./TypeProgram"
 
 export default class MasterActivity extends BaseModel {
+
     public static table = "MTA_MAESTRO_ACTIVIDAD";
     @column({isPrimary: true, columnName: "MTA_CODIGO", serializeAs: "id"})
     public id: number;

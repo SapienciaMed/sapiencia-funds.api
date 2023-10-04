@@ -6,6 +6,7 @@ export default class extends BaseSchema {
   public async up () {
     this.schema.createTable(this.tableName, (table) => {
       table.comment("Tabla que almacena los programas de la gestión territorial");
+      
 
       table.increments("PMA_CODIGO").primary();
       table

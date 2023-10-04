@@ -20,5 +20,21 @@ export default class VotingResultsController {
       );
     }
   }
+
+    public async getActivityProgram({
+      response,
+      request
+  }: HttpContextContract) {
+      try {
+      const { id } = request.params();
+      return response.send(
+        await VotingResultsProvider.getActivityProgram(Number(id))
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
   
 }

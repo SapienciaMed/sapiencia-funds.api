@@ -39,8 +39,8 @@ export default class UploadInformationService implements IUploadInformationServi
     async getUploadInformationPaginate(
         filters: IUploadInformationFilters
       ): Promise<ApiResponse<IPagingData<IUploadInformation>>> {
-        const Activity =
+        const Upload =
           await this.uploadInformationRepository.getUploadInformationPaginate(filters);
-        return new ApiResponse(Activity, EResponseCodes.OK);
+        return new ApiResponse(Upload, EResponseCodes.OK);
       }
     }

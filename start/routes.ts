@@ -26,8 +26,10 @@ Route.get("/", async () => {
 
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
+  Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
+
 })
-  .prefix("/api/v1/votingR-results")
+  .prefix("/api/v1/voting")
   .middleware("auth");
 
 
