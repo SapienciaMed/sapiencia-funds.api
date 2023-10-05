@@ -51,6 +51,8 @@ Route.group(() => {
   
   Route.get("/","UploadInformationController.getUploadInformation");
   Route.post("get-paginated","UploadInformationController.getUploadInformationPaginate");
+  Route.get("/:id", "UploadInformationController.getUploadInformationById");
+  Route.post("/create","UploadInformationController.createUploadInformation");
 
 }).prefix("/api/v1/uploadInformation") 
 .middleware("auth");

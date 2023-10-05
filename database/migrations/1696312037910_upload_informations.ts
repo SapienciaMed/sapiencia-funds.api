@@ -28,7 +28,7 @@ export default class extends BaseSchema {
       .notNullable()
       .comment("Nombre del archivo asociado a la información");
       table
-      .dateTime("HPA_FECHA_VIGENCIA")
+      .dateTime("CIN_FECHA_HORA_CARGA")
       .notNullable()
       .comment("Fecha y hora de la carga del archivo asociado a la información")
     })
