@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Master extends BaseModel {
@@ -8,10 +7,10 @@ export default class Master extends BaseModel {
   @column({ isPrimary: true, columnName: "LMA_CODIGO", serializeAs: "id" })
   public id: number;
 
-  @column({ columnName: "LMA_CODTLMO", serializeAs: "codtlmo" })
+  @column({ columnName: "LMA_CODTLM", serializeAs: "codtlmo" })
   public codtlmo: number;
 
-  @column({ columnName: "LMA_NOMBRECODTLMO", serializeAs: "name" })
+  @column({ columnName: "LMA_NOMBRE", serializeAs: "name" })
   public name: string;
 
   @column({ columnName: "LMA_DESCRIPCION", serializeAs: "description" })
