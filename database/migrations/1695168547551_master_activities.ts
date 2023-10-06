@@ -10,13 +10,13 @@ export default class extends BaseSchema {
       table
         .increments("MTA_CODIGO")
         .primary()
-        .comment("llave primaria");
-
+        .comment("llave primaria")
+        .unique();
       table
         .string("MTA_NOMBRE", 20)
         .notNullable()
-        .comment("Nombre de la actividad.");
-
+        .comment("Nombre de la actividad.")
+        .unique();
       table
         .integer("MTA_VALOR ")
         .notNullable()
