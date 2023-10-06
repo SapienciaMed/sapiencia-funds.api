@@ -1,4 +1,4 @@
-import { BaseModel, HasMany, HasOne, column, hasMany, hasOne } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasOne, column, hasOne } from '@ioc:Adonis/Lucid/Orm'
 import MasterActivity from './MasterActivity';
 
 export default class Item extends BaseModel {
