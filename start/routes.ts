@@ -26,22 +26,30 @@ Route.get("/", async () => {
 
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
-  Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
-
+  Route.get(
+    "/getActivityProgram/:id",
+    "VotingResultsController.getActivityProgram"
+  );
 })
   .prefix("/api/v1/voting")
   .middleware("auth");
 
-
+Route.group(() => {
+  Route.get("/get-by-id/:id", "SocializationController.getActivityById");
+})
+  .prefix("/api/v1/socialization")
+  .middleware("auth");
 
 Route.group(() => {
-  
   Route.get("/programtypes", "MasterActivitiesController.getProgramTypes");
   Route.post("/create", "MasterActivitiesController.createActivity");
   Route.get("/:id", "MasterActivitiesController.getActivityById");
-  Route.post("get-paginated","MasterActivitiesController.getMasterActivityPaginate");
-  Route.get("/","MasterActivitiesController.getMasterActivity");
+  Route.post(
+    "get-paginated",
+    "MasterActivitiesController.getMasterActivityPaginate"
+  );
+  Route.get("/", "MasterActivitiesController.getMasterActivity");
   Route.put("/edit/:id", "MasterActivitiesController.updateActivity");
-  
-}).prefix("/api/v1/activities") 
-.middleware("auth");
+})
+  .prefix("/api/v1/activities")
+  .middleware("auth");
