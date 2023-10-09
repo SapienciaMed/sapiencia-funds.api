@@ -47,12 +47,12 @@ Route.group(() => {
 .middleware("auth");
 
 Route.group(() => {
-  Route.post("/create", "MasterController.createMaster");
-  Route.post("get-paginated", "MasterController.getMasterPaginate");
+  Route.post("/create", "MasterController.createMaster").middleware('auth:MAESTROS_CREAR');
+  Route.post("get-paginated", "MasterController.getMasterPaginate").middleware('auth:MAESTROS_CONSULTAR');
 }).prefix("/api/v1/master")
-  //.middleware("auth");
+.middleware("auth");
 
 Route.group(() => {
   Route.get("/", "TypeMasterListController.getTypeMasterList");
 }).prefix("/api/v1/typemasterlist")
-  //.middleware("auth");
+  .middleware("auth");
