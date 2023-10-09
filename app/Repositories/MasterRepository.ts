@@ -34,7 +34,7 @@ export default class MasterRepository implements IMasterRepository {
     async getMasterPaginate(
         filters: IMasterFilters
       ): Promise<IPagingData<IMaster>> {
-        const res = Master.query();
+        const res = Master.query().preload('typeMasterList');
     
         if (filters.codtlmo) {
           res.whereILike("codtlmo", `%${filters.codtlmo}%`);

@@ -1,4 +1,5 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
+import TypeMasterList from './TypeMasterList'
 
 export default class Master extends BaseModel {
 
@@ -15,6 +16,12 @@ export default class Master extends BaseModel {
 
   @column({ columnName: "LMA_DESCRIPCION", serializeAs: "description" })
   public description: string;
+
+  @belongsTo(() => TypeMasterList, {
+    foreignKey: 'codtlmo', 
+    localKey: 'id',        
+  })
+  public typeMasterList: BelongsTo<typeof TypeMasterList>
 }
 
 

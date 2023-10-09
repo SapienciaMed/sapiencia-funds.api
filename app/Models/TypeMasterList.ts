@@ -1,4 +1,5 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, HasMany, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import Master from './Master';
 
 export default class TypeMasterList extends BaseModel {
 
@@ -9,4 +10,10 @@ export default class TypeMasterList extends BaseModel {
 
   @column({ columnName: "TLM_NOMBRE", serializeAs: "name" })
   public name: string;
+
+  @hasMany(() => Master, {
+    foreignKey: 'codtlmo', 
+    localKey: 'id',        
+  })
+  public masters: HasMany<typeof Master>
 }
