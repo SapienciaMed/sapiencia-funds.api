@@ -23,7 +23,7 @@ export default class extends BaseSchema {
         .comment("Valor de la actividad");
 
 
-      
+
       table
         .integer("MTA_CODPMA_PROGRAMA")
         .unsigned().references("PMA_CODIGO")
@@ -36,6 +36,24 @@ export default class extends BaseSchema {
         .string("MTA_DESCRIPCION", 500)
         .nullable()
         .comment("Descripción de la actividad.");
+
+        table
+        .string("MTA_USUARIO_MODIFICO", 15)
+        .comment(
+          "Numero del documento del ultimo usuario que hizo una modificacion"
+        );
+      table
+        .dateTime("MTA_FECHA_MODIFICO")
+        .comment("Fecha y hora de la ultima modificacion");
+      table
+        .string("MTA_USUARIO_CREO", 15)
+        .notNullable()
+        .comment("Numero del documento del usuario que creo el registro");
+      table
+        .dateTime("MTA_FECHA_CREO")
+        .notNullable()
+        .comment("Fecha y hora de creacion del registro");
+
     })
   }
 
