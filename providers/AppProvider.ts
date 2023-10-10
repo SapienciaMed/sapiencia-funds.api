@@ -11,6 +11,8 @@ export default class AppProvider {
     /**************************************************************************/
     const VotingResultsService = await import("App/Services/VotingResultsService");
     const IMasterActivityService = await import("App/Services/MasterActivityService");
+    const MasterService = await import("App/Services/MasterService");
+    const TypeMasterListService = await import("App/Services/TypeMasterListService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -25,6 +27,13 @@ export default class AppProvider {
     const MasterActivityRepository = await import(
       "App/Repositories/MasterActivityRepository"
     );
+    const MasterRepository = await import(
+      "App/Repositories/MasterRepository"
+    );
+    const TypeMasterListRepository = await import(
+      "App/Repositories/TypeMasterListRepository"
+    );
+    
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -38,6 +47,14 @@ export default class AppProvider {
       "core.MasterActivityProvider",
       () => new IMasterActivityService.default(new MasterActivityRepository.default())
     );
+    this.app.container.singleton(
+      "core.MasterProvider",
+      () => new MasterService.default(new MasterRepository.default())
+    );    
+    this.app.container.singleton(
+      "core.TypeMasterListProvider",
+      () => new TypeMasterListService.default(new TypeMasterListRepository.default())
+    );    
   }
 
   public async boot() {

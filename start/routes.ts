@@ -35,13 +35,24 @@ Route.group(() => {
 
 
 Route.group(() => {
-  
+
   Route.get("/programtypes", "MasterActivitiesController.getProgramTypes");
   Route.post("/create", "MasterActivitiesController.createActivity");
   Route.get("/:id", "MasterActivitiesController.getActivityById");
-  Route.post("get-paginated","MasterActivitiesController.getMasterActivityPaginate");
-  Route.get("/","MasterActivitiesController.getMasterActivity");
+  Route.post("get-paginated", "MasterActivitiesController.getMasterActivityPaginate");
+  Route.get("/", "MasterActivitiesController.getMasterActivity");
   Route.put("/edit/:id", "MasterActivitiesController.updateActivity");
   
-}).prefix("/api/v1/activities") 
+}).prefix("/api/v1/activities")
 .middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "MasterController.createMaster").middleware('auth:MAESTROS_CREAR');
+  Route.post("get-paginated", "MasterController.getMasterPaginate").middleware('auth:MAESTROS_CONSULTAR');
+}).prefix("/api/v1/master")
+.middleware("auth");
+
+Route.group(() => {
+  Route.get("/", "TypeMasterListController.getTypeMasterList");
+}).prefix("/api/v1/typemasterlist")
+  .middleware("auth");
