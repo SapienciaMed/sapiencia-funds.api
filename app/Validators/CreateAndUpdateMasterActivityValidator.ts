@@ -7,7 +7,7 @@ export default class CreateAndUpdateMasterActivityValidator {
     
     public schema = schema.create({
         id: schema.number.optional(),
-        name: schema.string([rules.maxLength(20)]),
+        name: schema.string([rules.maxLength(150)]),
         totalValue: schema.number(),
         codProgramCode: schema.number(),
         description: schema.string.optional([rules.maxLength(500)]),

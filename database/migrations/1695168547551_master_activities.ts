@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .comment("llave primaria")
         .unique();
       table
-        .string("MTA_NOMBRE", 20)
+        .string("MTA_NOMBRE", 150)
         .notNullable()
         .comment("Nombre de la actividad.")
         .unique();
