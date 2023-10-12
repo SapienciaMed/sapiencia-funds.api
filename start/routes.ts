@@ -57,4 +57,10 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/", "TypeMasterListController.getTypeMasterList");
 }).prefix("/api/v1/typemasterlist")
-  .middleware("auth");
+.middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "ActaController.createActa")
+  Route.post("get-paginated", "MasterController.getMasterPaginate")
+}).prefix("/api/v1/actas")
+//.middleware("auth");

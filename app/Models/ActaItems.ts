@@ -1,8 +1,8 @@
 import { BaseModel, BelongsTo, belongsTo, column } from '@ioc:Adonis/Lucid/Orm'
 import TypesProgram from './TypeProgram';
-import Certificate from './Certificate';
+import Acta from './Acta';
 
-export default class CertificateItem extends BaseModel {
+export default class ActaItems extends BaseModel {
   public static table = "IAA_ITEM_ACTA";
 
   @column({ isPrimary: true, columnName: "IAA_CODIGO", serializeAs: "id" })
@@ -44,8 +44,8 @@ export default class CertificateItem extends BaseModel {
   @column({ columnName: "IAA_CODPMA_PROGRAMA", serializeAs: "program" })
   public program: number;
 
-  @column({ columnName: "IAA_CODATA_ACTA", serializeAs: "certificate" })
-  public certificate: number;
+  @column({ columnName: "IAA_CODATA_ACTA", serializeAs: "idActa" })
+  public idActa: string;
 
   @belongsTo(() => TypesProgram, {
     foreignKey: 'program',
@@ -54,10 +54,10 @@ export default class CertificateItem extends BaseModel {
 
   public typeProgram: BelongsTo<typeof TypesProgram>
 
-  @belongsTo(() => Certificate, {
-    foreignKey: 'certificate',
+  @belongsTo(() => Acta, {
+    foreignKey: 'idActa',
     localKey: 'id',
   })
-  public certificated: BelongsTo<typeof Certificate>
+  public acta: BelongsTo<typeof Acta>
 
 }

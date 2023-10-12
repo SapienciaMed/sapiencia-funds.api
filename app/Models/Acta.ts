@@ -1,9 +1,10 @@
-import { BaseModel, BelongsTo, belongsTo, column,  } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany,  } from '@ioc:Adonis/Lucid/Orm'
 import State from './State';
+import ActaItems from './ActaItems';
 
-export default class Certificate extends BaseModel {
+export default class Acta extends BaseModel {
 
-  public static table = "LMA_LISTADOS_MAESTROS";
+  public static table = "ATA_ACTA";
 
   @column({ isPrimary: true, columnName: "ATA_CODIGO", serializeAs: "id" }) public id: number;
 
@@ -41,4 +42,10 @@ export default class Certificate extends BaseModel {
   })
   public typeMasterList: BelongsTo<typeof State>
 
+  @hasMany(() => ActaItems, {
+    localKey: "id",
+    foreignKey: "idActa",
+    serializeAs: "items",
+  })
+  public items: HasMany<typeof ActaItems>;
 }
