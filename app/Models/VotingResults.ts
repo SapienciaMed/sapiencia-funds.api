@@ -2,7 +2,7 @@ import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import Item from "./Item";
 
 export default class VotingResults extends BaseModel {
-  public static table = "RVO_RESULTADOS_VOTACION";
+  public static table = "RTV_RESULTADO_VOTACION";
 
   @column({ isPrimary: true, columnName: "RTV_CODIGO", serializeAs: "id" })
   public id: number;

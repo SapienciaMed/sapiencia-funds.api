@@ -13,4 +13,13 @@ export class VotingResultsRepositoryFake implements IVotingResultsRepository {
     return Promise.resolve({} as IVotingResults);
   }
 
+  createVotingResult(): Promise<IVotingResults> {
+    return Promise.resolve({} as IVotingResults);
+  }
+  updateVotingResult(): Promise<IVotingResults> {
+    return Promise.resolve({} as IVotingResults);
+  }
+
+
+
 }

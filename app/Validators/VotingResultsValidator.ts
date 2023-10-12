@@ -24,9 +24,23 @@ export default class VotingResultsValidator {
    *    ```
    */
   public schema = schema.create({
-    name: schema.string(),
-    description: schema.string(),
-    aplicationId: schema.number(),
+    communeNeighborhood: schema.number(),
+    numberProject: schema.number(),
+    validity: schema.string(),
+    ideaProject: schema.string(),
+    items: schema.array().members(
+      schema.object().members({
+        aimStraight: schema.number(),
+        productCatalogueDnp: schema.number(),
+        codProductgueDnp: schema.number(),
+        codPmaProgram: schema.string(),
+        codMtaTeacherActivity: schema.string(),
+        amount: schema.string(),
+        costTotal: schema.string(),
+        percentage123: schema.string(),
+        percentage456: schema.string(),        
+      })
+    )
   });
 
   /**

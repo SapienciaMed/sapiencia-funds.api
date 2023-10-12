@@ -2,6 +2,7 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import VotingResultsProvider from "@ioc:core.VotingResultsProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
+import VotingResultsValidator from "App/Validators/VotingResultsValidator";
 
 export default class VotingResultsController {
 
@@ -37,4 +38,36 @@ export default class VotingResultsController {
     }
   }
   
+  public async createVotingResult({response, request }: HttpContextContract){
+    try {            
+      const voting = await request.validate(
+        VotingResultsValidator
+      );     
+      return response.send(
+        await VotingResultsProvider.createVotingResult(voting)
+      );  
+    } catch (err) {
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+   
+      );
+    }
+  }
+
+  public async updateVotingResult({response, request }: HttpContextContract){
+    try {            
+      const { id } = request.params();     
+      const voting = await request.validate(
+        VotingResultsValidator
+      );     
+
+      return response.send(await VotingResultsProvider.updateVotingResult(voting,id));  
+
+    } catch (err) {
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+   
+      );
+    }
+  }
 }

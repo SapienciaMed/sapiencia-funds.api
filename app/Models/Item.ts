@@ -14,6 +14,9 @@ export default class Item extends BaseModel {
   @column({ columnName: "ITM_PRODUCTO_CATALOGO_DNP", serializeAs: "productCatalogueDnp" })
   public productCatalogueDnp: number;
 
+  @column({ columnName: "ITM_CODIGO_PRODUCTO_DNP", serializeAs: "codProductgueDnp" })
+  public codProductgueDnp: number;
+
   @column({ columnName: "ITM_CODPMA_PROGRAMA", serializeAs: "codPmaProgram" })
   public codPmaProgram: string;
 

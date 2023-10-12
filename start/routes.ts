@@ -27,10 +27,12 @@ Route.get("/", async () => {
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
+  Route.post("/create", "VotingResultsController.createVotingResult");
+  Route.put("/update/:id", "VotingResultsController.updateVotingResult");
 
 })
   .prefix("/api/v1/voting")
-  .middleware("auth");
+  //.middleware("auth");
 
 
 

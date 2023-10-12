@@ -7,6 +7,8 @@ import { IMasterActivity } from "App/Interfaces/MasterActivityInterface";
 export interface IVotingResultsService {
   getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>>;
   getActivityProgram(id : number): Promise<ApiResponse<IMasterActivity[]>>;
+  createVotingResult(voting: IVotingResults): Promise<ApiResponse<IVotingResults>>;
+  updateVotingResult(voting: IVotingResults, id: number): Promise<ApiResponse<IVotingResults>>;
 
 }
 
@@ -41,4 +43,29 @@ export default class VotingResultsService implements IVotingResultsService {
 
     return new ApiResponse(res, EResponseCodes.OK);
   }
+
+  async createVotingResult(voting: IVotingResults): Promise<ApiResponse<IVotingResults>> {
+    const res = await this.votingResultsRepository.createVotingResult(voting);
+    if (!res) {
+        return new ApiResponse(
+            {} as IVotingResults,
+            EResponseCodes.FAIL,
+            "*Ocurrió un error en su Transacción "
+        );
+    }
+    return new ApiResponse(res, EResponseCodes.OK);
+}
+
+async updateVotingResult(voting: IVotingResults, id: number): Promise<ApiResponse<IVotingResults>> {  
+  const res = await this.votingResultsRepository.updateVotingResult(voting, id);  
+  if (!res) {
+    return new ApiResponse(
+      {} as IVotingResults,
+      EResponseCodes.FAIL,
+      "El registro indicado no existe"
+    );
+  }
+
+  return new ApiResponse(res, EResponseCodes.OK);
+}
 }

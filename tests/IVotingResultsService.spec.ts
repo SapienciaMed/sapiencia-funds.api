@@ -26,4 +26,42 @@ test.group("RolService TEST for getVotingResultsById", () => {
     const result = await service.getVotingResultsById("filter");
     assert.isTrue(result.operation.code === EResponseCodes.OK);
   });
+
+  const datos =
+
+  {
+    "communeNeighborhood": 1,
+    "numberProject": 1,
+    "validity": "2024",
+    "ideaProject": "pruebas",
+    "items": [
+      {
+        "aimStraight": 90,
+        "productCatalogueDnp": 120,
+        "codProductgueDnp": 1,
+        "codPmaProgram": "1",
+        "codMtaTeacherActivity": "1",
+        "amount": "1000",
+        "costTotal": "2000",
+        "percentage123": "25",
+        "percentage456": "30"
+      },
+      {
+        "aimStraight": 85,
+        "productCatalogueDnp": 110,
+        "codProductgueDnp": 1,
+        "codPmaProgram": "1",
+        "codMtaTeacherActivity": "1",
+        "amount": "1500",
+        "costTotal": "3000",
+        "percentage123": "20",
+        "percentage456": "35"
+      }
+    ]
+  };
+
+  test("the method createVotingResult must return a OK code ", async (assert) => {
+    const result = await service.createVotingResult(datos);
+    assert.isTrue(result.operation.code === EResponseCodes.OK);
+  });
 });
