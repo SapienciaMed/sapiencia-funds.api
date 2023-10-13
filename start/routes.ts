@@ -29,10 +29,8 @@ Route.group(() => {
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
   Route.post("/create", "VotingResultsController.createVotingResult");
   Route.put("/update/:id", "VotingResultsController.updateVotingResult");
-
-})
-  .prefix("/api/v1/voting")
-  //.middleware("auth");
+  Route.get("/search", "VotingResultsController.getActivityProgram");
+}).prefix("/api/v1/voting").middleware("auth");
 
 
 
