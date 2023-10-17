@@ -20,10 +20,10 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
-Route.get("/", async () => {
+/* Route.get("/", async () => {
   return "Api de servicios Fondos de SAPIENCIA";
 });
-
+ */
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
