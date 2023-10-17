@@ -48,8 +48,9 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/create", "MasterController.createMaster").middleware('auth:MAESTROS_CREAR');
   Route.post("get-paginated", "MasterController.getMasterPaginate").middleware('auth:MAESTROS_CONSULTAR');
+  Route.get("/masterlist", "MasterController.getMaster");
 }).prefix("/api/v1/master")
-.middleware("auth");
+//.middleware("auth");
 
 Route.group(() => {
   Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
