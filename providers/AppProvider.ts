@@ -14,6 +14,8 @@ export default class AppProvider {
     const MasterService = await import("App/Services/MasterService");
     const TypeMasterListService = await import("App/Services/TypeMasterListService");
     const ActaService = await import("App/Services/ActaService");
+    const SapienciaService = await import("App/Services/SapienciaService");
+
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -22,6 +24,9 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** REPOSITORIES ****************************/
     /**************************************************************************/
+    const CallPeriodRepository = await import(
+      "App/Repositories/Sapiencia/CallPeriodRepository"
+    );
     const VotingResultsRepository = await import(
       "App/Repositories/VotingResultsRepository"
     );
@@ -43,6 +48,10 @@ export default class AppProvider {
     /******************************** CORE  ***********************************/
     /**************************************************************************/
 
+    this.app.container.singleton(
+      "core.SapienciaProvider",
+      () => new SapienciaService.default(new CallPeriodRepository.default())
+    );
     this.app.container.singleton(
       "core.VotingResultsProvider",
       () => new VotingResultsService.default(new VotingResultsRepository.default())
