@@ -9,7 +9,7 @@ export default class Item extends BaseModel {
   public id: number;
 
   @column({ columnName: "ITM_OBJETIVO_DIRECTO", serializeAs: "aimStraight" })
-  public aimStraight: number;
+  public aimStraight: string;
 
   @column({ columnName: "ITM_PRODUCTO_CATALOGO_DNP", serializeAs: "productCatalogueDnp" })
   public productCatalogueDnp: number;
@@ -18,10 +18,10 @@ export default class Item extends BaseModel {
   public codProductgueDnp: number;
 
   @column({ columnName: "ITM_CODPMA_PROGRAMA", serializeAs: "codPmaProgram" })
-  public codPmaProgram: string;
+  public codPmaProgram: number;
 
   @column({ columnName: "ITM_CODMTA_MAESTRO_ACTIVIDAD", serializeAs: "codMtaTeacherActivity" })
-  public codMtaTeacherActivity: string;
+  public codMtaTeacherActivity: number;
 
   @column({ columnName: "ITM_CANTIDAD", serializeAs: "amount" })
   public amount: string;

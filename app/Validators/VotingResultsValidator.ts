@@ -30,11 +30,11 @@ export default class VotingResultsValidator {
     ideaProject: schema.string(),
     items: schema.array().members(
       schema.object().members({
-        aimStraight: schema.number(),
+        aimStraight: schema.string(),
         productCatalogueDnp: schema.number(),
         codProductgueDnp: schema.number(),
-        codPmaProgram: schema.string(),
-        codMtaTeacherActivity: schema.string(),
+        codPmaProgram: schema.number(),
+        codMtaTeacherActivity: schema.number(),
         amount: schema.string(),
         costTotal: schema.string(),
         percentage123: schema.string(),

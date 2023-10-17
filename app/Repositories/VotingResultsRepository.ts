@@ -58,7 +58,6 @@ export default class VotingResultsRepository implements IVotingResultsRepository
   }
 
   async getActivityProgram(id: number): Promise<IMasterActivityVoting[]> {
-    console.log(id)
     const res = MasterActivity.query().where("codProgramCode", id);
     const rsp = await res;
     return rsp.map((i) => i.serialize() as IMasterActivityVoting);
