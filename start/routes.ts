@@ -33,7 +33,6 @@ Route.group(() => {
   Route.get("/search", "VotingResultsController.getActivityProgram");
 }).prefix("/api/v1/voting").middleware("auth");
 
-
 Route.group(() => {
 
   Route.get("/programtypes", "MasterActivitiesController.getProgramTypes");
@@ -54,7 +53,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/", "TypeMasterListController.getTypeMasterList");
-.middleware("auth");
+}).middleware("auth");
 
 Route.group(() => {
   Route.post("/create", "ActaController.createActa")
