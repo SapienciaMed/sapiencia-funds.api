@@ -1,6 +1,6 @@
-import { IVotingResults } from "App/Interfaces/VotingResultsInterfaces";
+import { IVotingFilters, IVotingResults } from "App/Interfaces/VotingResultsInterfaces";
 import { IVotingResultsRepository } from "App/Repositories/VotingResultsRepository";
-import { ApiResponse } from "App/Utils/ApiResponses";
+import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "../Constants/ResponseCodesEnum";
 import { IMasterActivity } from "App/Interfaces/MasterActivityInterface";
 
@@ -9,11 +9,19 @@ export interface IVotingResultsService {
   getActivityProgram(id : number): Promise<ApiResponse<IMasterActivity[]>>;
   createVotingResult(voting: IVotingResults): Promise<ApiResponse<IVotingResults>>;
   updateVotingResult(voting: IVotingResults, id: number): Promise<ApiResponse<IVotingResults>>;
-
+  getVotingPaginate(filters: IVotingFilters): Promise<ApiResponse<IPagingData<IVotingResults>>>;
 }
 
 export default class VotingResultsService implements IVotingResultsService {
   constructor(private votingResultsRepository: IVotingResultsRepository) {}
+
+  async getVotingPaginate(
+    filters: IVotingFilters
+  ): Promise<ApiResponse<IPagingData<IVotingResults>>> {
+    const Activity =
+      await this.votingResultsRepository.getVotingPaginate(filters);
+    return new ApiResponse(Activity, EResponseCodes.OK);
+  }
 
   async getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>> {
     const res = await this.votingResultsRepository.getVotingResultsById(id);

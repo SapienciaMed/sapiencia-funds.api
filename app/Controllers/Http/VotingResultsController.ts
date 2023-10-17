@@ -1,10 +1,27 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import VotingResultsProvider from "@ioc:core.VotingResultsProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
+import { IVotingFilters } from "App/Interfaces/VotingResultsInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import VotingResultsValidator from "App/Validators/VotingResultsValidator";
 
 export default class VotingResultsController {
+
+  public async getVotingPaginate({
+    response,
+    request,
+  }: HttpContextContract) {      
+    try {
+      const data = request.body() as IVotingFilters;
+      return response.send(
+        await VotingResultsProvider.getVotingPaginate(data)
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
 
   public async getVotingResultsById({
     request,

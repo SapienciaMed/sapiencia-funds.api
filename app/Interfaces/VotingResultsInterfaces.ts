@@ -14,3 +14,12 @@ export interface IActivity {
   id?: number;
   nombre: string
 }
+
+export interface IVotingFilters {
+  communeNeighborhood?: number;
+  numberProject?: number;
+  validity?: string;
+  ideaProject?: string;  
+  page: number;
+  perPage: number;
+}

@@ -29,10 +29,9 @@ Route.group(() => {
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
   Route.post("/create", "VotingResultsController.createVotingResult");
   Route.put("/update/:id", "VotingResultsController.updateVotingResult");
+  Route.post("/get-paginated/", "VotingResultsController.getVotingPaginate");  
   Route.get("/search", "VotingResultsController.getActivityProgram");
 }).prefix("/api/v1/voting").middleware("auth");
-
-
 
 Route.group(() => {
 
@@ -54,5 +53,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/", "TypeMasterListController.getTypeMasterList");
-}).prefix("/api/v1/typemasterlist")
-  .middleware("auth");
+}).middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "ActaController.createActa")
+  Route.post("get-paginated", "MasterController.getMasterPaginate")
+}).prefix("/api/v1/actas")
+//.middleware("auth");
