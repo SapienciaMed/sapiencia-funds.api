@@ -7,8 +7,7 @@ import { IPagingData } from "App/Utils/ApiResponses";
 
 export class VotingResultsRepositoryFake implements IVotingResultsRepository {  
 
-  getVotingPaginate(): Promise<IPagingData<IVotingResults>> {
-    // Implementación de la función sin utilizar 'filters'
+  getVotingPaginate(): Promise<IPagingData<IVotingResults>> {  
     throw new Error("Method not implemented.");
   }
   

@@ -42,14 +42,7 @@ test.group("RolService TEST for getVotingResultsById", () => {
     const votingRepo = new VotingResultsRepository()
     const result = await votingRepo.getVotingPaginate(filters);
     assert.isArray(result.array)
-  });
-
-  /* test('should paginate masters', async (assert) => {
-    const masterRepo = new MasterRepository()
-    const filters = {codtlmo: 1, page: 1, perPage: 10 }
-    const paginatedMasters = await masterRepo.getMasterPaginate(filters)
-    assert.isArray(paginatedMasters.array)
-  }) */
+  }); 
 
   const datos =
 
