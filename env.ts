@@ -31,4 +31,11 @@ export default Env.rules({
   MYSQL_USER: Env.schema.string(),
   MYSQL_PASSWORD: Env.schema.string.optional(),
   MYSQL_DB_NAME: Env.schema.string(),
+
+
+  MYSQL2_HOST: Env.schema.string({ format: "host" }),
+  MYSQL2_PORT: Env.schema.number(),
+  MYSQL2_USER: Env.schema.string(),
+  MYSQL2_PASSWORD: Env.schema.string.optional(),
+  MYSQL2_DB_NAME: Env.schema.string(),
 });

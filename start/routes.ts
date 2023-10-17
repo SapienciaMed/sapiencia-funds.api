@@ -24,6 +24,12 @@ Route.get("/", async () => {
   return "Api de servicios Fondos de SAPIENCIA";
 });
  
+
+Route.group(() => {
+  Route.get("/call-periods/get-all", "SapienciaController.getAllCallPeriod");
+}).prefix("/api/v1/sapiencia")
+
+
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
@@ -32,6 +38,8 @@ Route.group(() => {
   Route.post("/get-paginated/", "VotingResultsController.getVotingPaginate");  
   Route.get("/search", "VotingResultsController.getActivityProgram");
 }).prefix("/api/v1/voting").middleware("auth");
+
+
 
 Route.group(() => {
 
