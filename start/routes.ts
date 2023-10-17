@@ -20,10 +20,10 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
-/* Route.get("/", async () => {
+Route.get("/", async () => {
   return "Api de servicios Fondos de SAPIENCIA";
 });
- */
+ 
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get("/getActivityProgram/:id", "VotingResultsController.getActivityProgram");
@@ -52,8 +52,8 @@ Route.group(() => {
 .middleware("auth");
 
 Route.group(() => {
-  Route.get("/", "TypeMasterListController.getTypeMasterList");
-}).middleware("auth");
+  Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
+}).prefix("/api/v1/").middleware("auth");
 
 Route.group(() => {
   Route.post("/create", "ActaController.createActa")
