@@ -19,7 +19,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
   async getVotingPaginate(
     filters: IVotingFilters
   ): Promise<IPagingData<IVotingResults>> {
-    const res = VotingResults.query();
+    const res = VotingResults.query().preload('items');
 
     if (filters.communeNeighborhood) {
       res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
