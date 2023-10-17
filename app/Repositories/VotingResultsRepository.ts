@@ -1,18 +1,52 @@
-import { IVotingResults } from "App/Interfaces/VotingResultsInterfaces";
+import { IVotingFilters, IVotingResults } from "App/Interfaces/VotingResultsInterfaces";
 import VotingResults from "../Models/VotingResults";
 import MasterActivity from "App/Models/MasterActivity";
 import { IMasterActivityVoting } from "App/Interfaces/MasterActivityInterface";
 import Item from "App/Models/Item";
+import { IPagingData } from "App/Utils/ApiResponses";
 
 export interface IVotingResultsRepository {
   getVotingResultsById(id: string): Promise<IVotingResults | null>;
   getActivityProgram(id: number): Promise<IMasterActivityVoting[]>;
   createVotingResult(voting: IVotingResults): Promise<IVotingResults>;
   updateVotingResult(voting: IVotingResults, id: number): Promise<IVotingResults | null>;
+  getVotingPaginate(filters: IVotingFilters): Promise<IPagingData<IVotingResults>>;
 }
 
 export default class VotingResultsRepository implements IVotingResultsRepository {
   constructor() { }
+
+  async getVotingPaginate(
+    filters: IVotingFilters
+  ): Promise<IPagingData<IVotingResults>> {
+    const res = VotingResults.query();
+
+    if (filters.communeNeighborhood) {
+      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+    }
+    if (filters.numberProject) {
+      res.whereILike("numberProject", `%${filters.numberProject}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("validity", `%${filters.validity}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
+    }       
+
+    const workerMasterActivityPaginated = await res.paginate(
+      filters.page,
+      filters.perPage
+    );
+
+    const { data, meta } = workerMasterActivityPaginated.serialize();
+    const dataArray = data ?? [];   
+
+    return {
+      array: dataArray as IVotingResults[],
+      meta,
+    };
+  }
 
   async getVotingResultsById(id: string): Promise<IVotingResults | null> {
     const res = await VotingResults.find(id);
