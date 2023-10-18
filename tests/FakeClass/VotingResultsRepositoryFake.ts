@@ -1,3 +1,4 @@
+import { IItemResults } from "App/Interfaces/ItemInterface";
 import { IMasterActivityVoting } from "App/Interfaces/MasterActivityInterface";
 import { IVotingResults } from "App/Interfaces/VotingResultsInterfaces";
 import { IVotingResultsRepository } from "App/Repositories/VotingResultsRepository";
@@ -7,7 +8,7 @@ import { IPagingData } from "App/Utils/ApiResponses";
 
 export class VotingResultsRepositoryFake implements IVotingResultsRepository {  
 
-  getVotingPaginate(): Promise<IPagingData<IVotingResults>> {  
+  getVotingPaginate(): Promise<IPagingData<IItemResults>> {  
     throw new Error("Method not implemented.");
   }
   

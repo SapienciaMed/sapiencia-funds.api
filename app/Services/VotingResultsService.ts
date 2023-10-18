@@ -3,13 +3,14 @@ import { IVotingResultsRepository } from "App/Repositories/VotingResultsReposito
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "../Constants/ResponseCodesEnum";
 import { IMasterActivity } from "App/Interfaces/MasterActivityInterface";
+import { IItemResults } from "App/Interfaces/ItemInterface";
 
 export interface IVotingResultsService {
   getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>>;
   getActivityProgram(id : number): Promise<ApiResponse<IMasterActivity[]>>;
   createVotingResult(voting: IVotingResults): Promise<ApiResponse<IVotingResults>>;
   updateVotingResult(voting: IVotingResults, id: number): Promise<ApiResponse<IVotingResults>>;
-  getVotingPaginate(filters: IVotingFilters): Promise<ApiResponse<IPagingData<IVotingResults>>>;
+  getVotingPaginate(filters: IVotingFilters): Promise<ApiResponse<IPagingData<IItemResults>>>;
 }
 
 export default class VotingResultsService implements IVotingResultsService {
@@ -17,7 +18,7 @@ export default class VotingResultsService implements IVotingResultsService {
 
   async getVotingPaginate(
     filters: IVotingFilters
-  ): Promise<ApiResponse<IPagingData<IVotingResults>>> {
+  ): Promise<ApiResponse<IPagingData<IItemResults>>> {
     const Activity =
       await this.votingResultsRepository.getVotingPaginate(filters);
     return new ApiResponse(Activity, EResponseCodes.OK);

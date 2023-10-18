@@ -4,13 +4,14 @@ import MasterActivity from "App/Models/MasterActivity";
 import { IMasterActivityVoting } from "App/Interfaces/MasterActivityInterface";
 import Item from "App/Models/Item";
 import { IPagingData } from "App/Utils/ApiResponses";
+import { IItemResults } from "App/Interfaces/ItemInterface";
 
 export interface IVotingResultsRepository {
   getVotingResultsById(id: string): Promise<IVotingResults | null>;
   getActivityProgram(id: number): Promise<IMasterActivityVoting[]>;
   createVotingResult(voting: IVotingResults): Promise<IVotingResults>;
   updateVotingResult(voting: IVotingResults, id: number): Promise<IVotingResults | null>;
-  getVotingPaginate(filters: IVotingFilters): Promise<IPagingData<IVotingResults>>;
+  getVotingPaginate(filters: IVotingFilters): Promise<IPagingData<IItemResults>>;
 }
 
 export default class VotingResultsRepository implements IVotingResultsRepository {
@@ -18,7 +19,8 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
   async getVotingPaginate(
     filters: IVotingFilters
-  ): Promise<IPagingData<IVotingResults>> {
+  ): Promise<IPagingData<IItemResults>> {
+    
     const res = VotingResults.query().preload('items');
 
     if (filters.communeNeighborhood) {
@@ -42,8 +44,10 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     const { data, meta } = workerMasterActivityPaginated.serialize();
     const dataArray = data ?? [];   
 
+    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+
     return {
-      array: dataArray as IVotingResults[],
+      array: itemsArray as IItemResults[],
       meta,
     };
   }
