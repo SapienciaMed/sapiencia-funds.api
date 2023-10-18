@@ -21,7 +21,11 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     filters: IVotingFilters
   ): Promise<IPagingData<IItemResults>> {
     
-    const res = VotingResults.query().preload('items');
+    const res = VotingResults.query().preload('items', (itemQuery) => {
+      itemQuery.preload('activiti', (activitiQuery) => {
+        activitiQuery.preload('typesProgram');
+      });
+    });
 
     if (filters.communeNeighborhood) {
       res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
