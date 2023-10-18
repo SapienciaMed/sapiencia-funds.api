@@ -12,6 +12,7 @@ export default class AppProvider {
     const VotingResultsService = await import("App/Services/VotingResultsService");
     const IMasterActivityService = await import("App/Services/MasterActivityService");
     const IUploadInformationService = await import("App/Services/UploadInformationService");
+    const StorageService = await import("App/Services/StorageService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -45,6 +46,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.UploadInformationProvider",
       () => new IUploadInformationService.default(new UploadInformationRepository.default())
+    );
+    this.app.container.singleton(
+      "core.StorageProvider",
+      () => new StorageService.default()
     );
   }
 

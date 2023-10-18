@@ -1,11 +1,7 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import {
-  IUploadInformation,
-  IUploadInformationFilters,
-} from "App/Interfaces/UploadInformationInterface";
+import {IUploadInformation,IUploadInformationFilters,} from "App/Interfaces/UploadInformationInterface";
 import { IUploadInformationRepository } from "App/Repositories/UploadInformationRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
-
 
 export interface IUploadInformationService {
   createUploadInformation(uploadInformation: IUploadInformation): Promise<ApiResponse<IUploadInformation>>;
@@ -20,9 +16,9 @@ export interface IUploadInformationService {
 export default class UploadInformationService implements IUploadInformationService {
   constructor(
     private uploadInformationRepository: IUploadInformationRepository
-  ) { }
+  ) {}
 
-  //crear maestro actividad
+  //crear information upload
   async createUploadInformation(uploadInformation: IUploadInformation): Promise<ApiResponse<IUploadInformation>> {
     const res = await this.uploadInformationRepository.createUploadInformation(uploadInformation);
     if (!res) {
@@ -72,4 +68,5 @@ export default class UploadInformationService implements IUploadInformationServi
 
     return new ApiResponse(res, EResponseCodes.OK);
   }
+
 }

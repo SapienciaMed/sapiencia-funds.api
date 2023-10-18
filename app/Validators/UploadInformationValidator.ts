@@ -11,7 +11,6 @@ export default class UploadInformationValidatorValidator {
         validity: schema.string([rules.maxLength(10)]),
         information: schema.string([rules.maxLength(30)]),
         fileName: schema.string.optional([rules.maxLength(20)]),
-        dateUpload: schema.date(),
   });
 
   public messages: CustomMessages = { err: "error" };
