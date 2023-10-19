@@ -15,6 +15,13 @@ export default class AppProvider {
     const IMasterActivityService = await import(
       "App/Services/MasterActivityService"
     );
+    const MasterService = await import("App/Services/MasterService");
+    const TypeMasterListService = await import(
+      "App/Services/TypeMasterListService"
+    );
+    const ActaService = await import("App/Services/ActaService");
+    const SapienciaService = await import("App/Services/SapienciaService");
+    const ItemService = await import("App/Services/ItemService");
     const SocializationService = await import(
       "App/Services/SocializationService"
     );
@@ -26,12 +33,22 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** REPOSITORIES ****************************/
     /**************************************************************************/
+    const CallPeriodRepository = await import(
+      "App/Repositories/Sapiencia/CallPeriodRepository"
+    );
     const VotingResultsRepository = await import(
       "App/Repositories/VotingResultsRepository"
     );
     const MasterActivityRepository = await import(
       "App/Repositories/MasterActivityRepository"
     );
+    const MasterRepository = await import("App/Repositories/MasterRepository");
+    const TypeMasterListRepository = await import(
+      "App/Repositories/TypeMasterListRepository"
+    );
+    const ActaRepository = await import("App/Repositories/ActaRepository");
+
+    const ItemRepository = await import("App/Repositories/ItemRepository");
     const SocializationRepository = await import(
       "App/Repositories/SocializationRepository"
     );
@@ -40,6 +57,10 @@ export default class AppProvider {
     /******************************** CORE  ***********************************/
     /**************************************************************************/
 
+    this.app.container.singleton(
+      "core.SapienciaProvider",
+      () => new SapienciaService.default(new CallPeriodRepository.default())
+    );
     this.app.container.singleton(
       "core.VotingResultsProvider",
       () =>
@@ -56,6 +77,25 @@ export default class AppProvider {
       "core.SocializationProvider",
       () =>
         new SocializationService.default(new SocializationRepository.default())
+    );
+    this.app.container.singleton(
+      "core.MasterProvider",
+      () => new MasterService.default(new MasterRepository.default())
+    );
+    this.app.container.singleton(
+      "core.TypeMasterListProvider",
+      () =>
+        new TypeMasterListService.default(
+          new TypeMasterListRepository.default()
+        )
+    );
+    this.app.container.singleton(
+      "core.ActaProvider",
+      () => new ActaService.default(new ActaRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ItemsProvider",
+      () => new ItemService.default(new ItemRepository.default())
     );
   }
 

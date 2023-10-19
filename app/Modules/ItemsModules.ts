@@ -1,6 +1,6 @@
-declare module "@ioc:core.ItemsModules" {
+declare module "@ioc:core.ItemsProvider" {
   import { IItemService } from "App/Services/ItemService";
 
-  const ItemsModules: IItemService;
-  export default ItemsModules;
+  const ItemsProvider: IItemService;
+  export default ItemsProvider;
 }

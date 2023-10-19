@@ -1,12 +1,13 @@
 export interface IItemResults {
   id?: number;
-  aimStraight: number;
+  aimStraight: string;
   productCatalogueDnp: number;
-  codPmaProgram: string;
-  codMtaTeacherActivity: string;
+  codProductgueDnp:number;
+  codPmaProgram: number;
+  codMtaTeacherActivity: number;
   amount: string;
   costTotal: string;
   percentage123: string;
   percentage456: string;
-  codRtVotingResult: string;
+  codRtVotingResult?: string;
 }

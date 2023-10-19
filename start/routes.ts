@@ -25,25 +25,29 @@ Route.get("/", async () => {
 });
 
 Route.group(() => {
+  Route.get("/call-periods/get-all", "SapienciaController.getAllCallPeriod");
+}).prefix("/api/v1/sapiencia");
+
+Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get(
     "/getActivityProgram/:id",
     "VotingResultsController.getActivityProgram"
   );
+  Route.post("/create", "VotingResultsController.createVotingResult");
+  Route.put("/update/:id", "VotingResultsController.updateVotingResult");
+  Route.post("/get-paginated/", "VotingResultsController.getVotingPaginate");
+  Route.get("/search", "VotingResultsController.getActivityProgram");
 })
   .prefix("/api/v1/voting")
   .middleware("auth");
 
 Route.group(() => {
-  Route.get("/get-by-id/:id", "SocializationController.getSocializationById");
-  Route.post("/create", "SocializationController.createSocialization");
-  Route.post(
-    "get-paginated",
-    "SocializationController.getSocializationPaginate"
-  );
-  Route.put("/edit/:id", "SocializationController.updateSocialization");
+  Route.get("/get-by-id/:id", "ItemsController.getItemsById");
+  Route.put("/update/:id", "ItemsController.updateItems");
+  Route.delete("/delete/:id", "ItemsController.deleteItem");
 })
-  .prefix("/api/v1/socialization")
+  .prefix("/api/v1/items")
   .middleware("auth");
 
 Route.group(() => {
@@ -58,4 +62,39 @@ Route.group(() => {
   Route.put("/edit/:id", "MasterActivitiesController.updateActivity");
 })
   .prefix("/api/v1/activities")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "MasterController.createMaster").middleware(
+    "auth:MAESTROS_CREAR"
+  );
+  Route.post("get-paginated", "MasterController.getMasterPaginate").middleware(
+    "auth:MAESTROS_CONSULTAR"
+  );
+  Route.get("/masterlist", "MasterController.getMaster");
+}).prefix("/api/v1/master");
+//.middleware("auth");
+
+Route.group(() => {
+  Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
+})
+  .prefix("/api/v1/")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "ActaController.createActa");
+  Route.post("get-paginated", "MasterController.getMasterPaginate");
+}).prefix("/api/v1/actas");
+//.middleware("auth");
+
+Route.group(() => {
+  Route.get("/get-by-id/:id", "SocializationController.getSocializationById");
+  Route.post("/create", "SocializationController.createSocialization");
+  Route.post(
+    "get-paginated",
+    "SocializationController.getSocializationPaginate"
+  );
+  Route.put("/edit/:id", "SocializationController.updateSocialization");
+})
+  .prefix("/api/v1/socialization")
   .middleware("auth");

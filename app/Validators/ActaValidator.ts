@@ -1,7 +1,7 @@
 import { schema, CustomMessages } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
-export default class VotingResultsValidator {
+export default class ActaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -23,22 +23,31 @@ export default class VotingResultsValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({
-    communeNeighborhood: schema.number(),
+  public schema = schema.create({    
     numberProject: schema.number(),
-    validity: schema.string(),
-    ideaProject: schema.string(),
+    periodVigency: schema.number(),
+    announcementInitial: schema.number(),
+    salaryMin: schema.number(),
+    costsExpenses: schema.number(),
+    OperatorCommission: schema.number(),
+    financialOperation: schema.number(),
+    creationDate: schema.string(),
+    idStatus: schema.number(),    
     items: schema.array().members(
-      schema.object().members({
-        aimStraight: schema.string(),
-        productCatalogueDnp: schema.number(),
-        codProductgueDnp: schema.number(),
-        codPmaProgram: schema.number(),
-        codMtaTeacherActivity: schema.number(),
-        amount: schema.string(),
-        costTotal: schema.string(),
-        percentage123: schema.string(),
-        percentage456: schema.string(),        
+      schema.object().members({     
+        found: schema.string(),
+        line: schema.string(),
+        announcement: schema.string(),
+        concept: schema.string(),
+        costOperation: schema.string(),
+        periods: schema.string(),
+        subtotalVigency: schema.number(),
+        costBillsOperation: schema.number(),
+        net: schema.number(),
+        financialOperatorCommission: schema.number(),
+        resourcesCredit: schema.number(),
+        program: schema.number(),
+        idActa: schema.number(),        
       })
     )
   });

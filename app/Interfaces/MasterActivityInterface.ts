@@ -1,3 +1,4 @@
+import { DateTime } from "luxon";
 import {IProgramTypes} from "./TypesProgramInterface"
 export interface IMasterActivity {
     id?: number;
@@ -5,7 +6,10 @@ export interface IMasterActivity {
     totalValue: number;
     description?:string;
     typesProgram?: IProgramTypes[];
-
+    userModify?: string;
+    dateModified?: DateTime;
+    userCreate?: string;
+    dateCreate?: DateTime;
 }
 
 

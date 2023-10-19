@@ -2,14 +2,13 @@ import { schema, CustomMessages, rules } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 
-export default class CreateAndUpdateMasterActivityValidator {
+export default class CreateMasterValidator {
     constructor(protected ctx: HttpContextContract) {}
     
     public schema = schema.create({
         id: schema.number.optional(),
-        name: schema.string([rules.maxLength(150)]),
-        totalValue: schema.number(),
-        codProgramCode: schema.number(),
+        codtlmo: schema.number(),
+        name: schema.string([rules.maxLength(100)]),        
         description: schema.string.optional([rules.maxLength(500)]),
   });
 
