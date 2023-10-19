@@ -39,7 +39,11 @@ Route.group(() => {
   Route.get("/search", "VotingResultsController.getActivityProgram");
 }).prefix("/api/v1/voting").middleware("auth");
 
-
+Route.group(() => {
+  Route.get("/get-by-id/:id", "ItemsController.getItemsById"); 
+  Route.put("/update/:id", "ItemsController.updateItems"); 
+  Route.delete("/delete/:id", "ItemsController.deleteItem");
+}).prefix("/api/v1/items").middleware("auth");
 
 Route.group(() => {
 

@@ -15,6 +15,7 @@ export default class AppProvider {
     const TypeMasterListService = await import("App/Services/TypeMasterListService");
     const ActaService = await import("App/Services/ActaService");
     const SapienciaService = await import("App/Services/SapienciaService");
+    const ItemService = await import("App/Services/ItemService");
 
 
     /**************************************************************************/
@@ -41,6 +42,10 @@ export default class AppProvider {
     );    
     const ActaRepository = await import(
       "App/Repositories/ActaRepository"
+    );
+    
+    const ItemRepository = await import(
+      "App/Repositories/ItemRepository"
     );
     
 
@@ -71,6 +76,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ActaProvider",
       () => new ActaService.default(new ActaRepository.default())
+    );    
+    this.app.container.singleton(
+      "core.ItemsProvider",
+      () => new ItemService.default(new ItemRepository.default())
     );    
   }
 
