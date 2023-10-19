@@ -1,6 +1,6 @@
-declare module "@ioc:core.SocializationModule" {
+declare module "@ioc:core.SocializationProvider" {
   import { ISocializationService } from "App/Services/SocializationService";
 
-  const SocializationModules: ISocializationService;
-  export default SocializationModules;
+  const SocializationProvider: ISocializationService;
+  export default SocializationProvider;
 }

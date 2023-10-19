@@ -9,8 +9,15 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** SERVICES ********************************/
     /**************************************************************************/
-    const VotingResultsService = await import("App/Services/VotingResultsService");
-    const IMasterActivityService = await import("App/Services/MasterActivityService");
+    const VotingResultsService = await import(
+      "App/Services/VotingResultsService"
+    );
+    const IMasterActivityService = await import(
+      "App/Services/MasterActivityService"
+    );
+    const SocializationService = await import(
+      "App/Services/SocializationService"
+    );
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -25,6 +32,9 @@ export default class AppProvider {
     const MasterActivityRepository = await import(
       "App/Repositories/MasterActivityRepository"
     );
+    const SocializationRepository = await import(
+      "App/Repositories/SocializationRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -32,11 +42,20 @@ export default class AppProvider {
 
     this.app.container.singleton(
       "core.VotingResultsProvider",
-      () => new VotingResultsService.default(new VotingResultsRepository.default())
+      () =>
+        new VotingResultsService.default(new VotingResultsRepository.default())
     );
     this.app.container.singleton(
       "core.MasterActivityProvider",
-      () => new IMasterActivityService.default(new MasterActivityRepository.default())
+      () =>
+        new IMasterActivityService.default(
+          new MasterActivityRepository.default()
+        )
+    );
+    this.app.container.singleton(
+      "core.SocializationProvider",
+      () =>
+        new SocializationService.default(new SocializationRepository.default())
     );
   }
 

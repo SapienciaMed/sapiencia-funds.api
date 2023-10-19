@@ -35,7 +35,13 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.get("/get-by-id/:id", "SocializationController.getActivityById");
+  Route.get("/get-by-id/:id", "SocializationController.getSocializationById");
+  Route.post("/create", "SocializationController.createSocialization");
+  Route.post(
+    "get-paginated",
+    "SocializationController.getSocializationPaginate"
+  );
+  Route.put("/edit/:id", "SocializationController.updateSocialization");
 })
   .prefix("/api/v1/socialization")
   .middleware("auth");
