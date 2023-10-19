@@ -66,6 +66,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
+  Route.get("/estatusList", "StatusController.getStatusList");
 }).prefix("/api/v1/").middleware("auth");
 
 Route.group(() => {
