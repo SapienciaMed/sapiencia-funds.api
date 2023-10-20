@@ -1,11 +1,15 @@
 import { Storage } from "@google-cloud/storage";
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
+import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
+import { IFiles } from "App/Interfaces/StorageInterfaces";
+import { ApiResponse } from "App/Utils/ApiResponses";
 const keyFilename = process.env.GCLOUD_KEYFILE;
 const bucketName = process.env.GCLOUD_BUCKET ?? "";
 
 export interface IStorageService {
     uploadInformation(filePath: MultipartFileContract, path?: string): Promise<boolean>;
-    getInformationFiles(path?: string): Promise<any>;
+    getFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
+    downloadFile(fileName: string): Promise<Buffer>;
 }
 
 export default class StorageService implements IStorageService {
@@ -27,9 +31,22 @@ export default class StorageService implements IStorageService {
         }
     }
 
-    async getInformationFiles(path?: string): Promise<any> {
+    async getFiles(path?: string): Promise<ApiResponse<IFiles[]>> {
         const [files] = await this.storage.bucket(bucketName).getFiles({prefix: path});
-        
-        return files;
+        const response = files.map(file => {
+            const fileName = file.metadata.name?.split("/");
+            return {
+                name: fileName ? fileName[fileName.length - 1] : "",
+                path: file.metadata.name ?? "",
+                size: Number(file.metadata.size ?? 0),
+                date: file.metadata.timeCreated ?? ""
+            }
+        });
+        return new ApiResponse(response.filter(file => file.name), EResponseCodes.OK);
+    }
+
+    async downloadFile(fileName: string): Promise<Buffer> {
+        const [archivo] = await this.storage.bucket(bucketName).file(fileName).download();
+        return archivo;
     }
 }

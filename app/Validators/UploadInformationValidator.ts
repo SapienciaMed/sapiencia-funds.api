@@ -10,7 +10,7 @@ export default class UploadInformationValidatorValidator {
         commune: schema.string([rules.maxLength(30)]),
         validity: schema.string([rules.maxLength(10)]),
         information: schema.string([rules.maxLength(30)]),
-        fileName: schema.string.optional([rules.maxLength(20)]),
+        fileName: schema.string.optional([rules.maxLength(50)]),
   });
 
   public messages: CustomMessages = { err: "error" };

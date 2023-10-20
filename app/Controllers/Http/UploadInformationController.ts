@@ -74,6 +74,18 @@ public async getUploadInformation({ response }: HttpContextContract) {
     }
   }
 
+  public async getComuneType({ response }: HttpContextContract) {
+    try {
+      return response.send(
+        await UploadInformationProvider.getComuneList()
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async uploadInformation({ request, response }: HttpContextContract) {
     const files = request.files('files');
     const { id } = request.params();
@@ -109,10 +121,24 @@ public async getUploadInformation({ response }: HttpContextContract) {
     }
   }
 
-  public async getInformationFiles({ request, response }: HttpContextContract) {
+  public async getuploadFiles({ request, response }: HttpContextContract) {
     const { id } = request.params();
     try {
-      return response.send(await StorageProvider.getInformationFiles(`cargar-informacion/${id}`));
+      return response.send(await StorageProvider.getFiles(`cargar-informacion/${id}/`));
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+  public async getuploadFile({ request, response }: HttpContextContract) {
+    try {
+      const params = request.body();
+      if(!params.fileName) throw(new Error("Falta una ruta"));
+      response.header('Content-Type', 'application/octet-stream');
+      response.header('Content-Disposition', `attachment; filename="${params.fileName}"`);
+      return response.send(await StorageProvider.downloadFile(params.fileName));
     } catch (err) {
       return response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
