@@ -10,7 +10,7 @@ export default class Socialization extends BaseModel {
   public communeCode: string;
   @column({ columnName: "SIE_FECHA", serializeAs: "socializationDate" })
   public socializationDate: any;
-  @column({ columnName: "SIE_GRUPO_VALOR", serializeAs: "validity" })
+  @column({ columnName: "SIE_VIGENCIA", serializeAs: "validity" })
   public validity: number;
   @column({ columnName: "SIE_GRUPO_VALOR", serializeAs: "valueGroup" })
   public valueGroup: string;

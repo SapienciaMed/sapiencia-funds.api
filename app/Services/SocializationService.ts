@@ -2,12 +2,13 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import {
   ISocialization,
   ISocializationFilters,
+  ISocializationUpdate,
 } from "App/Interfaces/ISocialization";
 import { ISocializationRepository } from "App/Repositories/SocializationRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 export interface ISocializationService {
-  getSocializationById(id: number): Promise<ApiResponse<ISocialization>>;
+  getSocializationById(id: number): Promise<ApiResponse<ISocialization[]>>;
   createSocialization(
     socialization: ISocialization
   ): Promise<ApiResponse<ISocialization>>;
@@ -15,7 +16,7 @@ export interface ISocializationService {
     filters: ISocializationFilters
   ): Promise<ApiResponse<IPagingData<ISocialization>>>;
   updateSocialization(
-    socialization: ISocialization,
+    socialization: ISocializationUpdate,
     id: number
   ): Promise<ApiResponse<ISocialization | null>>;
 }
@@ -23,12 +24,14 @@ export interface ISocializationService {
 export default class SocializationService implements ISocializationService {
   constructor(private socializationRepository: ISocializationRepository) {}
 
-  async getSocializationById(id: number): Promise<ApiResponse<ISocialization>> {
+  async getSocializationById(
+    id: number
+  ): Promise<ApiResponse<ISocialization[]>> {
     const res = await this.socializationRepository.getSocializationById(id);
 
     if (!res) {
       return new ApiResponse(
-        {} as ISocialization,
+        {} as ISocialization[],
         EResponseCodes.FAIL,
         "Recurso no localizado"
       );
@@ -56,13 +59,13 @@ export default class SocializationService implements ISocializationService {
   async getSocializationPaginate(
     filters: ISocializationFilters
   ): Promise<ApiResponse<IPagingData<ISocialization>>> {
-    const Activity =
+    const socialization =
       await this.socializationRepository.getSocializationPaginate(filters);
-    return new ApiResponse(Activity, EResponseCodes.OK);
+    return new ApiResponse(socialization, EResponseCodes.OK);
   }
 
   async updateSocialization(
-    socialization: ISocialization,
+    socialization: ISocializationUpdate,
     id: number
   ): Promise<ApiResponse<ISocialization | null>> {
     const res = await this.socializationRepository.updateSocialization(

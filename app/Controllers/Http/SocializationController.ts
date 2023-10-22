@@ -3,7 +3,10 @@ import SocializationProvider from "@ioc:core.SocializationProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ISocializationFilters } from "App/Interfaces/ISocialization";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import { SocializationValidator } from "App/Validators/SocializationVlidator";
+import {
+  SocializationUpdateValidator,
+  SocializationValidator,
+} from "App/Validators/SocializationVlidator";
 
 export default class SocializationController {
   public async getSocializationById({
@@ -53,7 +56,9 @@ export default class SocializationController {
 
   public async updateSocialization({ request, response }: HttpContextContract) {
     try {
-      const socializationVal = await request.validate(SocializationValidator);
+      const socializationVal = await request.validate(
+        SocializationUpdateValidator
+      );
 
       const { id } = request.params();
 

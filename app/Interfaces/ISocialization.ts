@@ -10,6 +10,15 @@ export interface ISocialization {
   description?: string;
 }
 
+export interface ISocializationUpdate {
+  id?: number;
+  socializationDate: any;
+  valueGroup: string;
+  financialPerformance: number;
+  portfolioCollections: number;
+  description?: string;
+}
+
 export interface ISocializationFilters {
   noProyect: number;
   communeCode: number;

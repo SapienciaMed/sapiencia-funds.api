@@ -1,18 +1,19 @@
 import {
   ISocialization,
   ISocializationFilters,
+  ISocializationUpdate,
 } from "App/Interfaces/ISocialization";
 import Socialization from "App/Models/Socialization";
 import { IPagingData } from "App/Utils/ApiResponses";
 
 export interface ISocializationRepository {
-  getSocializationById(id: number): Promise<ISocialization | null>;
+  getSocializationById(id: number): Promise<ISocialization[] | null>;
   createSocialization(socialization: ISocialization): Promise<ISocialization>;
   getSocializationPaginate(
     filters: ISocializationFilters
   ): Promise<IPagingData<ISocialization>>;
   updateSocialization(
-    activity: ISocialization,
+    socialization: ISocializationUpdate,
     id: number
   ): Promise<ISocialization | null>;
 }
@@ -31,20 +32,14 @@ export default class SocializationRepository
     return toCreate.serialize() as ISocialization;
   }
 
-  async getSocializationById(id: number): Promise<ISocialization | null> {
-    const res = {
-      id: 4,
-      noProyect: 1,
-      communeCode: "99",
-      socializationDate: new Date(),
-      validity: 2023,
-      valueGroup: "CCCP",
-      financialPerformance: 33,
-      portfolioCollections: 33,
-      description: "test",
-    };
-    return res;
-    // return res ? (res.serialize() as ISocialization) : null;
+  async getSocializationById(id: number): Promise<ISocialization[] | null> {
+    const querySocialization = Socialization.query().where("id", id);
+    const socialization = await querySocialization;
+
+    if (socialization.length === 0) {
+      return null;
+    }
+    return socialization.map((i) => i.serialize() as ISocialization);
   }
 
   async getSocializationPaginate(
@@ -79,7 +74,7 @@ export default class SocializationRepository
   }
 
   async updateSocialization(
-    socialization: ISocialization,
+    socialization: ISocializationUpdate,
     id: number
   ): Promise<ISocialization | null> {
     const toUpdate = await Socialization.find(id);
