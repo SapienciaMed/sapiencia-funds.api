@@ -65,6 +65,25 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
+  Route.get(
+    "/files/get-by-project/:id",
+    "UploadInformationController.getuploadFiles"
+  );
+  Route.post("/files/get-file", "UploadInformationController.getuploadFile");
+  Route.post("/upload/:id", "UploadInformationController.uploadInformation");
+  Route.get("/", "UploadInformationController.getUploadInformation");
+  Route.post(
+    "get-paginated",
+    "UploadInformationController.getUploadInformationPaginate"
+  );
+  Route.get("/comunetype", "UploadInformationController.getComuneType");
+  Route.get("/:id", "UploadInformationController.getUploadInformationById");
+  Route.post("/create", "UploadInformationController.createUploadInformation");
+})
+  .prefix("/api/v1/uploadInformation")
+  .middleware("auth");
+
+Route.group(() => {
   Route.post("/create", "MasterController.createMaster").middleware(
     "auth:MAESTROS_CREAR"
   );

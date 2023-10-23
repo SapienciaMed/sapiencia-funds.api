@@ -26,6 +26,11 @@ export default class AppProvider {
       "App/Services/SocializationService"
     );
 
+    const IUploadInformationService = await import(
+      "App/Services/UploadInformationService"
+    );
+    const StorageService = await import("App/Services/StorageService");
+
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -51,6 +56,10 @@ export default class AppProvider {
     const ItemRepository = await import("App/Repositories/ItemRepository");
     const SocializationRepository = await import(
       "App/Repositories/SocializationRepository"
+    );
+
+    const UploadInformationRepository = await import(
+      "App/Repositories/UploadInformationRepository"
     );
 
     /**************************************************************************/
@@ -96,6 +105,17 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ItemsProvider",
       () => new ItemService.default(new ItemRepository.default())
+    );
+    this.app.container.singleton(
+      "core.UploadInformationProvider",
+      () =>
+        new IUploadInformationService.default(
+          new UploadInformationRepository.default()
+        )
+    );
+    this.app.container.singleton(
+      "core.StorageProvider",
+      () => new StorageService.default()
     );
   }
 
