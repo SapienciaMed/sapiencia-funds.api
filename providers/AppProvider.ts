@@ -17,6 +17,8 @@ export default class AppProvider {
     const SapienciaService = await import("App/Services/SapienciaService");
     const ItemService = await import("App/Services/ItemService");
 
+    const IUploadInformationService = await import("App/Services/UploadInformationService");
+    const StorageService = await import("App/Services/StorageService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -48,6 +50,9 @@ export default class AppProvider {
       "App/Repositories/ItemRepository"
     );
     
+    const UploadInformationRepository = await import(
+      "App/Repositories/UploadInformationRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -80,7 +85,15 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ItemsProvider",
       () => new ItemService.default(new ItemRepository.default())
-    );    
+    );
+    this.app.container.singleton(    
+      "core.UploadInformationProvider",
+      () => new IUploadInformationService.default(new UploadInformationRepository.default())
+    );
+    this.app.container.singleton(
+      "core.StorageProvider",
+      () => new StorageService.default()
+    );
   }
 
   public async boot() {

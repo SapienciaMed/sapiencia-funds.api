@@ -54,7 +54,22 @@ Route.group(() => {
   Route.get("/", "MasterActivitiesController.getMasterActivity");
   Route.put("/edit/:id", "MasterActivitiesController.updateActivity");
   
-}).prefix("/api/v1/activities")
+}).prefix("/api/v1/activities") 
+.middleware("auth");
+
+
+Route.group(() => {
+  
+  Route.get("/files/get-by-project/:id", "UploadInformationController.getuploadFiles");
+  Route.post("/files/get-file", "UploadInformationController.getuploadFile");
+  Route.post("/upload/:id", "UploadInformationController.uploadInformation");
+  Route.get("/","UploadInformationController.getUploadInformation");
+  Route.post("get-paginated","UploadInformationController.getUploadInformationPaginate");
+  Route.get("/comunetype","UploadInformationController.getComuneType");
+  Route.get("/:id", "UploadInformationController.getUploadInformationById");
+  Route.post("/create","UploadInformationController.createUploadInformation");
+  
+}).prefix("/api/v1/uploadInformation") 
 .middleware("auth");
 
 Route.group(() => {
