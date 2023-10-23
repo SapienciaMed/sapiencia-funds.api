@@ -9,7 +9,7 @@ export interface IActa {
     costsExpenses: number;
     OperatorCommission: number;
     financialOperation: number;
-    creationDate: string;
+    creationDate?: string;
     idStatus: number;
     items: IActaItems[];
 }
