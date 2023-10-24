@@ -60,6 +60,7 @@ Route.group(() => {
 
 Route.group(() => {
   
+  Route.post("/mail-notification", "UploadInformationController.emailNotification");
   Route.get("/files/get-by-project/:id", "UploadInformationController.getuploadFiles");
   Route.post("/files/get-file", "UploadInformationController.getuploadFile");
   Route.post("/upload/:id", "UploadInformationController.uploadInformation");
