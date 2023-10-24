@@ -5,7 +5,9 @@ import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import {IUploadInformationFilters} from "App/Interfaces/UploadInformationInterface";
 import UploadInformationProvider from "@ioc:core.UploadInformationProvider";
 import StorageProvider from "@ioc:core.StorageProvider";
+import EmailProvider from "@ioc:core.EmailProvider"
 import UploadInformationValidatorValidator from "App/Validators/UploadInformationValidator";
+import {IEmailNotification} from "App/Interfaces/EmailInterface";
 
 export default class UploadInformationController {
   public async createUploadInformation({ 
@@ -139,6 +141,25 @@ public async getUploadInformation({ response }: HttpContextContract) {
       response.header('Content-Type', 'application/octet-stream');
       response.header('Content-Disposition', `attachment; filename="${params.fileName}"`);
       return response.send(await StorageProvider.downloadFile(params.fileName));
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+
+  public async emailNotification({ request, response }: HttpContextContract) {
+    try {
+      const data = request.all();
+      const emailList: string[] = data.emails.split(',').map((email) => email.trim());
+  
+      console.log("***********emails", data);
+  
+      // Envia la lista de correos electrónicos al servicio
+      const emailResponse = await EmailProvider.emailNotification(emailList);
+  
+      return response.send(emailResponse);
     } catch (err) {
       return response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
