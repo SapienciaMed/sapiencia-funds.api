@@ -7,10 +7,10 @@ export class SocializationValidator {
   public schema = schema.create({
     id: schema.number.optional(),
     noProyect: schema.number(),
-    communeCode: schema.string([rules.maxLength(10)]),
+    communeCode: schema.string([rules.maxLength(50)]),
     socializationDate: schema.string(),
     validity: schema.number(),
-    valueGroup: schema.string([rules.maxLength(5)]),
+    valueGroup: schema.string([rules.maxLength(50)]),
     financialPerformance: schema.number(),
     portfolioCollections: schema.number(),
     description: schema.string.optional([rules.maxLength(500)]),
@@ -25,7 +25,7 @@ export class SocializationUpdateValidator {
   public schema = schema.create({
     id: schema.number.optional(),
     socializationDate: schema.string(),
-    valueGroup: schema.string([rules.maxLength(5)]),
+    valueGroup: schema.string([rules.maxLength(50)]),
     financialPerformance: schema.number(),
     portfolioCollections: schema.number(),
     description: schema.string.optional([rules.maxLength(500)]),
