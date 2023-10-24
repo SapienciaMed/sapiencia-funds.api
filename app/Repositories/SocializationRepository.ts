@@ -48,7 +48,7 @@ export default class SocializationRepository
     const res = Socialization.query();
 
     if (filters.noProyect) {
-      res.whereILike("noProyect", `%${filters.noProyect}%`);
+      res.where("noProyect", `%${filters.noProyect}%`);
     }
 
     if (filters.communeCode) {
