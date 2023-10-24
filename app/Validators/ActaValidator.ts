@@ -4,25 +4,6 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 export default class ActaValidator {
   constructor(protected ctx: HttpContextContract) {}
 
-  /*
-   * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
-   *
-   * For example:
-   * 1. The username must be of data type string. But then also, it should
-   *    not contain special characters or numbers.
-   *    ```
-   *     schema.string({}, [ rules.alpha() ])
-   *    ```
-   *
-   * 2. The email must be of data type string, formatted as a valid
-   *    email. But also, not used by any other user.
-   *    ```
-   *     schema.string({}, [
-   *       rules.email(),
-   *       rules.unique({ table: 'users', column: 'email' }),
-   *     ])
-   *    ```
-   */
   public schema = schema.create({    
     numberProject: schema.number(),
     periodVigency: schema.number(),
@@ -30,38 +11,30 @@ export default class ActaValidator {
     salaryMin: schema.number(),
     costsExpenses: schema.number(),
     OperatorCommission: schema.number(),
-    financialOperation: schema.number(),
-    creationDate: schema.string(),
+    financialOperation: schema.number(),    
     idStatus: schema.number(),    
     items: schema.array().members(
       schema.object().members({     
-        found: schema.string(),
-        line: schema.string(),
-        announcement: schema.string(),
-        concept: schema.string(),
+        idFound: schema.number(),
+        idLine: schema.number(),
+        idAnnouncement: schema.number(),
+        idConcept: schema.number(),
         costOperation: schema.string(),
-        periods: schema.string(),
+        periods: schema.object().members({
+          quantityPeriod1: schema.number.optional(),
+          valuePeriod1: schema.number.optional(),
+          quantityPeriod2: schema.number.optional(),
+          valuePeriod2: schema.number.optional(),
+        }),
         subtotalVigency: schema.number(),
         costBillsOperation: schema.number(),
         net: schema.number(),
         financialOperatorCommission: schema.number(),
         resourcesCredit: schema.number(),
-        program: schema.number(),
-        idActa: schema.number(),        
+        idProgram: schema.number(),           
       })
     )
   });
 
-  /**
-   * Custom messages for validation failures. You can make use of dot notation `(.)`
-   * for targeting nested fields and array expressions `(*)` for targeting all
-   * children of an array. For example:
-   *
-   * {
-   *   'profile.username.required': 'Username is required',
-   *   'scores.*.number': 'Define scores as valid numbers'
-   * }
-   *
-   */
   public messages: CustomMessages = {};
 }

@@ -1,5 +1,6 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
+
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -22,6 +23,7 @@ export default class AppProvider {
     const ActaService = await import("App/Services/ActaService");
     const SapienciaService = await import("App/Services/SapienciaService");
     const ItemService = await import("App/Services/ItemService");
+    const StatusListService = await import("App/Services/StatusListService");
     const SocializationService = await import(
       "App/Services/SocializationService"
     );
@@ -61,6 +63,11 @@ export default class AppProvider {
     const UploadInformationRepository = await import(
       "App/Repositories/UploadInformationRepository"
     );
+
+    const StatusListRepository = await import(
+      "App/Repositories/StatusListRepository"
+    );
+    
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -106,6 +113,10 @@ export default class AppProvider {
       "core.ItemsProvider",
       () => new ItemService.default(new ItemRepository.default())
     );
+    this.app.container.singleton(
+      "core.StatusListProvider",
+      () => new StatusListService.default(new StatusListRepository.default())
+    );    
     this.app.container.singleton(
       "core.UploadInformationProvider",
       () =>

@@ -96,9 +96,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
-})
-  .prefix("/api/v1/")
-  .middleware("auth");
+  Route.get("/estatusList", "StatusController.getStatusList");
+}).prefix("/api/v1/").middleware("auth");
 
 Route.group(() => {
   Route.post("/create", "ActaController.createActa");

@@ -1,16 +1,21 @@
 export interface IActaItems {
     id?: number;
-    found: string;
-    line: string;
-    announcement: string;
-    concept: string;
+    idFound: number;
+    idLine: number;
+    idAnnouncement?: number;
+    idConcept: number;
     costOperation: string;
-    periods: string;
+    periods?: {
+        valuePeriod1?:number,
+        valuePeriod2?:number,
+        quantityPeriod1?:number,
+        quantityPeriod2?:number,
+    };
     subtotalVigency: number;
     costBillsOperation: number;
     net: number;
     financialOperatorCommission: number;
     resourcesCredit: number;
-    program: number;
-    idActa: number;
+    idProgram: number;
+    idActa?: number;
 }
