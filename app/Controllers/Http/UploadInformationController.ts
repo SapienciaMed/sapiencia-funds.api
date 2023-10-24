@@ -7,7 +7,6 @@ import UploadInformationProvider from "@ioc:core.UploadInformationProvider";
 import StorageProvider from "@ioc:core.StorageProvider";
 import EmailProvider from "@ioc:core.EmailProvider"
 import UploadInformationValidatorValidator from "App/Validators/UploadInformationValidator";
-import {IEmailNotification} from "App/Interfaces/EmailInterface";
 
 export default class UploadInformationController {
   public async createUploadInformation({ 
