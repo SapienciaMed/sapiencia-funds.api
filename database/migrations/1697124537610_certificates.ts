@@ -35,17 +35,17 @@ export default class extends BaseSchema {
         .comment("Valor del salio minimo vigente");
 
       table
-        .integer("ATA_COSTOSGASTOS_OPERACION_LOGISTICA")
+        .bigint("ATA_COSTOSGASTOS_OPERACION_LOGISTICA")
         .notNullable()
         .comment("Porcentaje costos y gastos operación logistica");
 
       table
-        .integer("ATA_COMISION_OPERADOR_FINANCIERO")
+        .bigint("ATA_COMISION_OPERADOR_FINANCIERO")
         .notNullable()
         .comment("Valor de comisión operador financiero");
 
       table
-        .integer("ATA_OPERACION_FINANCIERA_MB")
+        .bigint("ATA_OPERACION_FINANCIERA_MB")
         .notNullable()
         .comment("Valor de operación financiera");
 

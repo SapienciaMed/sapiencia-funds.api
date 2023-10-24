@@ -36,7 +36,7 @@ export default class extends BaseSchema {
         .comment("Codigo concepto listado generico (Maestros)");
 
       table
-        .integer("IAA_COSTO_PROMEDIO")
+        .bigint("IAA_COSTO_PROMEDIO")
         .notNullable()
         .comment("Valor del costo promedio");
 
@@ -46,27 +46,27 @@ export default class extends BaseSchema {
         .comment("Json con los valores de los periodos");
 
       table
-        .integer("IAA_SUBTOTAL_VIGENCIA")
+        .bigint("IAA_SUBTOTAL_VIGENCIA")
         .notNullable()
         .comment("Valor del subtotal de la vigencia");
 
       table
-        .integer("IAA_COSTOS_GASTOS_OPERACION")
+        .bigint("IAA_COSTOS_GASTOS_OPERACION")
         .notNullable()
         .comment("Valor de datos de operación");
 
       table
-        .integer("IAA_NETO")
+        .bigint("IAA_NETO")
         .notNullable()
         .comment("Valor  neto");
 
       table
-        .integer("IAA_COMISION_OPERADOR_FINANCIERO")
+        .bigint("IAA_COMISION_OPERADOR_FINANCIERO")
         .notNullable()
         .comment("Valor de la comisión del operador financiero");
 
       table
-        .integer("IAA_RECURSOS_CREDITO")
+        .bigint("IAA_RECURSOS_CREDITO")
         .notNullable()
         .comment("Valor de los recursos para credito para crédito");
 

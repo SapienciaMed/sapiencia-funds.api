@@ -2,7 +2,7 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class State extends BaseModel {
 
-  public static table = "LMA_LISTADOS_MAESTROS";
+  public static table = "ETO_ESTADO";
 
   @column({ isPrimary: true, columnName: "ETO_CODIGO", serializeAs: "id" })
   public id: number;

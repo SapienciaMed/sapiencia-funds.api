@@ -1,5 +1,6 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
+
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -9,15 +10,27 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** SERVICES ********************************/
     /**************************************************************************/
-    const VotingResultsService = await import("App/Services/VotingResultsService");
-    const IMasterActivityService = await import("App/Services/MasterActivityService");
+    const VotingResultsService = await import(
+      "App/Services/VotingResultsService"
+    );
+    const IMasterActivityService = await import(
+      "App/Services/MasterActivityService"
+    );
     const MasterService = await import("App/Services/MasterService");
-    const TypeMasterListService = await import("App/Services/TypeMasterListService");
+    const TypeMasterListService = await import(
+      "App/Services/TypeMasterListService"
+    );
     const ActaService = await import("App/Services/ActaService");
     const SapienciaService = await import("App/Services/SapienciaService");
     const ItemService = await import("App/Services/ItemService");
+    const StatusListService = await import("App/Services/StatusListService");
+    const SocializationService = await import(
+      "App/Services/SocializationService"
+    );
 
-    const IUploadInformationService = await import("App/Services/UploadInformationService");
+    const IUploadInformationService = await import(
+      "App/Services/UploadInformationService"
+    );
     const StorageService = await import("App/Services/StorageService");
     const EmailService = await import("App/Services/EmailNotificationService");
 
@@ -37,23 +50,25 @@ export default class AppProvider {
     const MasterActivityRepository = await import(
       "App/Repositories/MasterActivityRepository"
     );
-    const MasterRepository = await import(
-      "App/Repositories/MasterRepository"
-    );
+    const MasterRepository = await import("App/Repositories/MasterRepository");
     const TypeMasterListRepository = await import(
       "App/Repositories/TypeMasterListRepository"
-    );    
-    const ActaRepository = await import(
-      "App/Repositories/ActaRepository"
     );
-    
-    const ItemRepository = await import(
-      "App/Repositories/ItemRepository"
+    const ActaRepository = await import("App/Repositories/ActaRepository");
+
+    const ItemRepository = await import("App/Repositories/ItemRepository");
+    const SocializationRepository = await import(
+      "App/Repositories/SocializationRepository"
     );
-    
+
     const UploadInformationRepository = await import(
       "App/Repositories/UploadInformationRepository"
     );
+
+    const StatusListRepository = await import(
+      "App/Repositories/StatusListRepository"
+    );
+    
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -65,31 +80,50 @@ export default class AppProvider {
     );
     this.app.container.singleton(
       "core.VotingResultsProvider",
-      () => new VotingResultsService.default(new VotingResultsRepository.default())
+      () =>
+        new VotingResultsService.default(new VotingResultsRepository.default())
     );
     this.app.container.singleton(
       "core.MasterActivityProvider",
-      () => new IMasterActivityService.default(new MasterActivityRepository.default())
+      () =>
+        new IMasterActivityService.default(
+          new MasterActivityRepository.default()
+        )
+    );
+    this.app.container.singleton(
+      "core.SocializationProvider",
+      () =>
+        new SocializationService.default(new SocializationRepository.default())
     );
     this.app.container.singleton(
       "core.MasterProvider",
       () => new MasterService.default(new MasterRepository.default())
-    );    
+    );
     this.app.container.singleton(
       "core.TypeMasterListProvider",
-      () => new TypeMasterListService.default(new TypeMasterListRepository.default())
-    );    
+      () =>
+        new TypeMasterListService.default(
+          new TypeMasterListRepository.default()
+        )
+    );
     this.app.container.singleton(
       "core.ActaProvider",
       () => new ActaService.default(new ActaRepository.default())
-    );    
+    );
     this.app.container.singleton(
       "core.ItemsProvider",
       () => new ItemService.default(new ItemRepository.default())
     );
-    this.app.container.singleton(    
+    this.app.container.singleton(
+      "core.StatusListProvider",
+      () => new StatusListService.default(new StatusListRepository.default())
+    );    
+    this.app.container.singleton(
       "core.UploadInformationProvider",
-      () => new IUploadInformationService.default(new UploadInformationRepository.default())
+      () =>
+        new IUploadInformationService.default(
+          new UploadInformationRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.StorageProvider",

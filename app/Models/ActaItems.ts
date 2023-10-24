@@ -8,17 +8,17 @@ export default class ActaItems extends BaseModel {
   @column({ isPrimary: true, columnName: "IAA_CODIGO", serializeAs: "id" })
   public id: number;
 
-  @column({ columnName: "IAA_CODFONDO", serializeAs: "found" })
-  public found: string;
+  @column({ columnName: "IAA_CODFONDO", serializeAs: "idFound" })
+  public idFound: number;
 
-  @column({ columnName: "IAA_CODLINEA", serializeAs: "line" })
-  public line: string;
+  @column({ columnName: "IAA_CODLINEA", serializeAs: "idLine" })
+  public idLine: number;
 
-  @column({ columnName: "IAA_CODCONVOCATORIA", serializeAs: "announcement" })
-  public announcement: string;
+  @column({ columnName: "IAA_CODCONVOCATORIA", serializeAs: "idAnnouncement" })
+  public idAnnouncement: number;
 
-  @column({ columnName: "IAA_CODCONCEPTO", serializeAs: "concept" })
-  public concept: string;
+  @column({ columnName: "IAA_CODCONCEPTO", serializeAs: "idConcept" })
+  public idConcept: number;
 
   @column({ columnName: "IAA_COSTO_PROMEDIO", serializeAs: "costOperation" })
   public costOperation: string;
@@ -41,8 +41,8 @@ export default class ActaItems extends BaseModel {
   @column({ columnName: "IAA_RECURSOS_CREDITO", serializeAs: "resourcesCredit" })
   public resourcesCredit: number;
 
-  @column({ columnName: "IAA_CODPMA_PROGRAMA", serializeAs: "program" })
-  public program: number;
+  @column({ columnName: "IAA_CODPMA_PROGRAMA", serializeAs: "idProgram" })
+  public idProgram: number;
 
   @column({ columnName: "IAA_CODATA_ACTA", serializeAs: "idActa" })
   public idActa: string;
