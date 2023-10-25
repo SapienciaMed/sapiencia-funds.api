@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { IActa } from "App/Interfaces/ActaInterface";
 import Acta from "App/Models/Acta";
 import ActaItems from "App/Models/ActaItems";
