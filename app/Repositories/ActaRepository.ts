@@ -65,7 +65,7 @@ export default class ActaRepository implements IActaRepository {
     await Mail.send((message) => {
       message
         .from("sapiencia@example.com")       
-        .subject("Olvidaste tu contraseña,")
+        .subject("Socialización de acta")
         .html(
           `
           <html>
