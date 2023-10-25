@@ -33,6 +33,16 @@ export default class ActaValidator {
         resourcesCredit: schema.number(),
         idProgram: schema.number(),           
       })
+    ),
+    citation: schema.array().members(
+      schema.object().members({
+        dateCitation: schema.string(),
+        timeCitation: schema.string(),
+        user: schema.string(),
+        status: schema.number(),        
+        dateAprobation: schema.string.optional(),
+        email: schema.string(),
+      })
     )
   });
 

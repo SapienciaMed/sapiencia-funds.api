@@ -1,6 +1,7 @@
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany,  } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany  } from '@ioc:Adonis/Lucid/Orm'
 import State from './State';
 import ActaItems from './ActaItems';
+import Citation from './Citation';
 
 export default class Acta extends BaseModel {
 
@@ -48,4 +49,11 @@ export default class Acta extends BaseModel {
     serializeAs: "items",
   })
   public items: HasMany<typeof ActaItems>;
+
+  @hasMany(() => Citation, {
+    localKey: "id",
+    foreignKey: "idActa",
+    serializeAs: "citation",
+  })
+  public citation: HasMany<typeof Citation>;
 }

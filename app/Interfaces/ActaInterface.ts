@@ -1,4 +1,5 @@
 import { IActaItems } from "./ActaItemsInterface";
+import { ICitation } from "./CitationInterface";
 
 export interface IActa {
     id?: number;
@@ -12,4 +13,5 @@ export interface IActa {
     creationDate?: string;
     idStatus: number;
     items: IActaItems[];
+    citation: ICitation[];
 }
