@@ -68,31 +68,37 @@ export default class ActaRepository implements IActaRepository {
         .subject("Socialización de acta")
         .html(
           `
-            <html>
-              <head>
-              </head>
-              <body>
-                  <div style="width: 900px; height: 600px; background-color: #E2E2E2;">
-                    <div style="width: 1440px; height: 100px; display: table; margin: 0 auto;">
-                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
-                        <img src="https://imagizer.imageshack.com/img924/6985/TW5Ygs.png" alt="Logo de la empresa" style="width: 81px; height: 41px;">
-                    </div>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              .center {
+                text-align: center; /* Centra horizontalmente el contenido */
+              }
+          
+              .center img {
+                display: block; /* Hace que la imagen sea un elemento de bloque */
+                margin: 0 auto; /* Centra la imagen horizontalmente */
+              }
+            </style>
+          </head>
+          <body>
+            <div style="width: 1200px; height: 600px; background-color: #E2E2E2;">
+              <div style="width: 500px; height: 50px; margin: 0 auto; padding: 10px;" class="center">
+                <img src="https://imagizer.imageshack.com/img924/6985/TW5Ygs.png" alt="Logo de la empresa" style="width: 81px; height: 41px;">
+              </div>
+              <div class="center" style="width: 600px; height: 443px; background-color: #ffffff; max-width: 600px; margin: 0 auto; top: 100px; left: 419px;">
+                <div style="background-color: #5E3893; width: 600px; height: 126px; display: table; margin: 0 auto; padding: 10px;">
+                  <img src="https://imagizer.imageshack.com/img923/5251/BGo4Au.png" alt="Logo de tarje" style="width: 122px; height: 106px;">
                 </div>
-              
-                      <div style="width: 600px; height: 443px; background-color: #ffffff; max-width: 600px; margin: 0 auto; top: 100px; left: 419px;">                          
-                          <div style="display: table; background-color: #5E3893; width: 100%; height: 126px; text-align: center; vertical-align: middle;">
-                            <div style="display: table-cell; vertical-align: middle;">
-                                <img src="https://imagizer.imageshack.com/img923/5251/BGo4Au.png" style="width: 122px; height: 106px;">
-                            </div>
-                        </div>
-                          <div style="width: 599px; height: 317px; padding: 54px;">
-                              <h1 style="width: 471px; height: 26px; text-align: center; font-size: 29px; font-weight: bold; font-family: 'Rubik', sans-serif;">Socialización de acta</h1>
-                              <p style="width: 471px; height: 57px; font-size: 17px; font-weight: 300; font-family: 'Rubik', sans-serif; line-height: 20.4px;">Se cita para aprobación de acta nro. ${id} el día ${citations[0].dateCitation} hora ${citations[0].timeCitation}.</p>
-                          </div>
-                      </div>
-                  </div>
-              </body>
-            </html>
+                <div style="width: 599px; height: 317px; padding: 54px;">
+                  <h1 style="width: 471px; height: 26px; text-align: center; font-size: 29px; font-weight: bold; font-family: 'Rubik', sans-serif;">Socialización de acta</h1>
+                  <p style="width: 471px; height: 57px; font-size: 17px; font-weight: 300; font-family: 'Rubik', sans-serif; line-height: 20.4px;">Se cita para aprobación de acta nro. ${id} el día ${citations[0].dateCitation} hora ${citations[0].timeCitation}.</p>
+                </div>
+              </div>
+            </div>
+          </body>
+          </html>
           `
         )
 
