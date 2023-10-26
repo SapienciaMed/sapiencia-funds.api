@@ -68,115 +68,32 @@ export default class ActaRepository implements IActaRepository {
         .subject("Socialización de acta")
         .html(
           `
-          <html>
-            <head>
-              <style>              
-              .element-correo-de {
-                background-color: #e2e2e2;
-                display: flex;
-                flex-direction: column;  /* Cambiado a column */
-                justify-content: center;
-                align-items: center;
-                width: 100%;
-                height: 100vh;  /* Añadido para ocupar toda la altura de la vista */
-              }
-        
-              .element-correo-de .container {
-                display: flex;
-                flex-direction: column;  /* Mantenido como column */
-                align-items: center;
-                position: relative;
-              }
-        
-              .element-correo-de .hero {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                padding: 10px;
-                background-color: #5e3893;
-              }
-        
-              .element-correo-de .content {
-                width: 82%;
-                display: flex;
-                flex-direction: column;
-                height: 317px;
-                align-items: flex-start;
-                gap: 32px;
-                padding: 64px;
-                background-color: #ffffff;
-                margin-top: -50px;  /* Nuevo: añade un margen-top negativo */
-              }
-              
-              .element-correo-de .text-wrapper {
-                position: relative;
-                width: 471px;
-                height: 26px;
-                margin-top: -1px;
-                font-family: "Rubik-Regular", Helvetica;
-                font-weight: 400;
-                color: var(--textprimario);
-                font-size: 29px;
-                text-align: center;
-                letter-spacing: 0;
-                line-height: 34.8px;
-                white-space: nowrap;
-              }
-              
-              .element-correo-de .se-cita-para {
-                position: relative;
-                width: 471px;
-                height: 57px;
-                font-family: "Rubik-Light", Helvetica;
-                font-weight: 300;
-                color: #000000;
-                font-size: 17px;
-                letter-spacing: 0;
-                line-height: 20.4px;
-              }
-              
-              .element-correo-de .header {
-                display: flex;
-                flex-direction: column;
-                width: 1440px;
-                height: 100px;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                padding: 10px;
-                position: absolute;
-                top: 0;
-                left: 0;
-                background-color: transparent;
-              }
-              
-              .element-correo-de .logo-aurora-color {
-                position: relative;
-                width: 81.11px;
-                height: 41.16px;
-              }
-              </style>
-            </head>
-            </html>
-            <body>                              
-            <div class="element-correo-de">
-            <div class="div">
-              <div class="container">
-                <div class="hero"><img class="imagen"/></div>
-                <div class="content">
-                  <div class="text-wrapper">Socialización de acta</div>                
-                    <p class="se-cita-para">
-                      Se cita para aprobación de acta nro. ${id} el día ${citations[0].dateCitation} hora ${citations[0].timeCitation}.
-                    </p>                 
+            <html>
+              <head>
+              </head>
+              <body>
+                  <div style="width: 900px; height: 600px; background-color: #E2E2E2;">
+                    <div style="width: 1440px; height: 100px; display: table; margin: 0 auto;">
+                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                        <img src="https://imagizer.imageshack.com/img924/6985/TW5Ygs.png" alt="Logo de la empresa" style="width: 81px; height: 41px;">
+                    </div>
                 </div>
-              </div>       
-            </div>
-          </div>        
-            </body>
-            `
+              
+                      <div style="width: 600px; height: 443px; background-color: #ffffff; max-width: 600px; margin: 0 auto; top: 100px; left: 419px;">                          
+                          <div style="display: table; background-color: #5E3893; width: 100%; height: 126px; text-align: center; vertical-align: middle;">
+                            <div style="display: table-cell; vertical-align: middle;">
+                                <img src="https://imagizer.imageshack.com/img923/5251/BGo4Au.png" style="width: 122px; height: 106px;">
+                            </div>
+                        </div>
+                          <div style="width: 599px; height: 317px; padding: 54px;">
+                              <h1 style="width: 471px; height: 26px; text-align: center; font-size: 29px; font-weight: bold; font-family: 'Rubik', sans-serif;">Socialización de acta</h1>
+                              <p style="width: 471px; height: 57px; font-size: 17px; font-weight: 300; font-family: 'Rubik', sans-serif; line-height: 20.4px;">Se cita para aprobación de acta nro. ${id} el día ${citations[0].dateCitation} hora ${citations[0].timeCitation}.</p>
+                          </div>
+                      </div>
+                  </div>
+              </body>
+            </html>
+          `
         )
 
       for (const email of emails) {
@@ -184,6 +101,7 @@ export default class ActaRepository implements IActaRepository {
       }
 
     });
+    //Se cita para aprobación de acta nro. ${id} el día ${citations[0].dateCitation} hora ${citations[0].timeCitation}.
 
     return new ApiResponse(true, EResponseCodes.OK);
   }
