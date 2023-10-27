@@ -4,167 +4,67 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
 export interface IEmailService {
-    emailNotification(emails: string[]): Promise<ApiResponse<boolean | null>>;
-  }
+  emailNotification(data: {
+    commune: string;
+    validity: string;
+    information: string;
+    User: string;
+  }, emails: string[]): Promise<ApiResponse<boolean | null>>;
+}
 
 export default class EmailService implements IEmailService {
-    async emailNotification(emails: string[]): Promise<ApiResponse<boolean | null>> {
-        try {
-          for (const email of emails) {
-            
-            await Mail.send((message) => {
-              message
-                .from("sapiencia@example.com")
-                .to(email)
-                .subject("Asunto del correo")
-                .html(
-                    `
-                    <html>
-                      <head>
-                        <style>
-                        
-                        body {
-                          margin: 0;
-                          padding: 0;
-                          height: 100vh; 
-                          display: flex; 
-                          justify-content: center;
-                          align-items: center;
-                          background-color: #f0f0f0; 
-                        }
-                        
-                        .container {
-                          text-align: center;
-                          width: 640px;
-                        }
-                        
-                        .titulo {
-                          
-                          color: #533893;
-                          font-family: "RubikMedium", sans-serif;
-                        }
-                        
-                        .card { 
-                          padding: 10px;  
-                          align-items: center;
-                          background-color: #FAF9F9;
-                          width: 640px;
-                          height: 120px;
-                          flex-shrink: 0;
-                          border-radius: 22px;  
-                          font-family: "RubikMedium", sans-serif;
-                          font-size: 20px;
-                        }
-                        
-                        .text {
-                          font-size: 20px;
-                          font-family: "RubikMedium", sans-serif;
-                        
-                        }
-                        
-                        .tittle1 {  
-                          font-family: "RubikMedium", sans-serif;
-                          font-weight: bold;
-                          font-size: 20px;
-                        }
-                        
-                        .button {
-                          display: inline-block;
-                          padding: 10px 20px;
-                          background-color: #533893; 
-                          color: #ffffff !important; 
-                          border: none; 
-                          border-radius: 20px;  
-                          cursor: pointer; 
-                          font-size: 16px;                   
-                          text-align: center;
-                          font-family: "RubikMedium", sans-serif;
-                          font-size: 16px;
-                          font-style: normal;
-                          font-weight: 600;
-                          line-height: 120%;
-                          text-decoration: none;
-                        }
-                        
-                        .svg-container {
-                          float: left;   
-                        }
-                        
-                        .image-container {
-                          float: right;                       
-                        }
-                        @media (max-width: 768px) {
-                          .container {
-                            padding: 10px; 
-                          }
-                        
-                          .svg-container,
-                          .image-container {
-                            float: none; 
-                            margin: 0; 
-                            width: 100%; 
-                          }
-                        
-                          .svg-container {
-                            margin-bottom: 10px;
-                          }
-                          .button {
-                            font-size: 18px; 
-                            color: #FFFFFF;
-                          }
-                        .logos-r{
-                          width: 150px;
-                          height: 50px;
-                        }
-                        
-                        }
-          
-                        </style>
-                      </head>
-                      </html>
-                      <body>
-                        <div class="container">
-                            <img src="https://i.pinimg.com/originals/32/50/86/3250868d03afce054d836c4ab1922124.png" alt="Logo" />
-                                <h1 class="titulo">Hola,</h1>
-          
-                                <div class="card">
-                                    <p class="title1">Si quieres <b>cambiar tu contraseña,</b> has clic sobre el siguiente enlace:</p>           
-                                    <a class="button" href="" target="_blank">Cambiar contraseña</a>
-                                </div>
-          
-                                <p class="text">
-                                    Si no solicitaste recuperar tu contraseña o crees que alguien accedió a tu cuenta sin tu autorización, te
-                                    recomendamos que lo informes al administrador del sistema admonsistema@sapiencia.gov.co
-                                </p>
-          
-                                <br>
-          
-                                <p class="text">
-                                    Por favor no respondas este correo, solo es informativo.
-                                </p>
-          
-                                <div class="container">
-                                    <div class="svg-container">
-                                    <img class="logos-r" src="https://imagizer.imageshack.com/img923/2784/Q8iutZ.png" alt="" />
-                                    </div>
-                                    <div class="image-container">
-                                        <img src="https://imagizer.imageshack.com/img923/5295/gC0v0x.png" alt="">
-                                        <img src="https://imagizer.imageshack.com/img923/406/U0cQIv.png" alt="">
-                                    </div>
-                                </div>
+  async emailNotification(data: {
+    commune: string;
+    validity: string;
+    information: string;
+    User: string;
+    fileName: string;
+  }, emails: string[]): Promise<ApiResponse<boolean | null>> {
+    try {
+      for (const email of emails) {
+        await Mail.send((message) => {
+          message
+            .from("sapiencia@example.com")
+            .to(email)
+            .subject("Cargar información")
+            .html(
+              `
+              <html>
+              <head>
+              </head>
+              
+              <body>
+                  <div class="email-notification" style="width: 1440px; height: 1024px; background-color: #E2E2E2;">
+                      <div class="header" style="width: 1440px; height: 100px; display: flex; justify-content: center; align-items: center; padding: 10px;">
+                          <img src="https://imagizer.imageshack.com/img924/6985/TW5Ygs.png" alt="Logo de la empresa" style="display: block; margin: 0 auto;">
+                      </div>
+                      <div class="card" style="width: 600px; height: 443px; background-color: #ffffff; max-width: 600px; margin: 0 auto; top: 100px; left: 419px;">
+                          <div class="hero" style="background-color: #5E3893; width: 580px; height: 126px; display: flex; justify-content: center; align-items: center; padding: 10px;">
+                              <img src="https://imagizer.imageshack.com/img923/5251/BGo4Au.png" style="display: block; margin: 0 auto;">
                           </div>
-                        </body>
-                      `
-                  )
-          
-            });
-          }
-      
-          return new ApiResponse(true, EResponseCodes.OK);
-        } catch (error) {
-          console.error("Error al enviar correos:", error);
-          return new ApiResponse(null, EResponseCodes.FAIL, "Error al enviar correos");
-        }
+                          <div class="content" style="width: 599px; height: 317px; padding: 54px;">
+                              <h1 class="card-title" style="width: 471px; height: 26px; text-align: center; font-size: 29px; font-weight: bold; font-family: 'Rubik', sans-serif;">Cargar información</h1>
+                              <p class="card-text" style="width: 471px; height: 57px; font-size: 17px; font-weight: 300; font-family: 'Rubik', sans-serif; line-height: 20.4px;">La gestión territorial ha cargado la información de la comuna ${data.commune} y vigencia ${data.validity} para la elaboración de ficha. El nombre del archivo es ${data.fileName}.</p>
+                              <div class="button-container">
+                                  <a href="#" style="display: flex; justify-content: center; align-items: center; text-decoration: none; width: 126px; height: 43px; border-radius: 100px; background-color: #5E3893; font-size: 16px; color: #fff; font-family: 'Rubik', sans-serif;">Consultar</a>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </body>
+              </html>
+                                
+              `
+            )
+
+        });
       }
+
+      return new ApiResponse(true, EResponseCodes.OK);
+    } catch (error) {
+      console.error("Error al enviar correos:", error);
+      return new ApiResponse(null, EResponseCodes.FAIL, "Error al enviar correos");
+    }
+  }
 
 }

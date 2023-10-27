@@ -30,6 +30,7 @@ export default class UploadInformationController {
     }
   }
   
+  
 
 public async getUploadInformation({ response }: HttpContextContract) {
     try {
@@ -150,14 +151,11 @@ public async getUploadInformation({ response }: HttpContextContract) {
 
   public async emailNotification({ request, response }: HttpContextContract) {
     try {
-      const data = request.all();
-      const emailList: string[] = data.emails.split(',').map((email) => email.trim());
-  
-      console.log("***********emails", data);
-  
-      // Envia la lista de correos electrónicos al servicio
-      const emailResponse = await EmailProvider.emailNotification(emailList);
-  
+      const data = request.only(['commune', 'validity', 'information', 'User', 'emails' , 'fileName']);
+      
+      const emailList: string[] = data.emails;    
+      const emailResponse = await EmailProvider.emailNotification(data, emailList);
+    
       return response.send(emailResponse);
     } catch (err) {
       return response.badRequest(
@@ -165,5 +163,5 @@ public async getUploadInformation({ response }: HttpContextContract) {
       );
     }
   }
-
+  
 }

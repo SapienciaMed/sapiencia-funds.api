@@ -28,7 +28,7 @@ export default class UploadInformationRepository
       uploadInformation: IUploadInformation
     ): Promise<IUploadInformation> {
       const toCreate = new UploadInformation();
-  
+      
       toCreate.fill({ ...uploadInformation });
       await toCreate.save();
       return toCreate.serialize() as IUploadInformation;
