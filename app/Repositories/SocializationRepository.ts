@@ -46,9 +46,8 @@ export default class SocializationRepository
     filters: ISocializationFilters
   ): Promise<IPagingData<ISocialization>> {
     const res = Socialization.query();
-
     if (filters.noProyect) {
-      res.where("noProyect", `%${filters.noProyect}%`);
+      res.whereILike("noProyect", `%${filters.noProyect}%`);
     }
 
     if (filters.communeCode) {
