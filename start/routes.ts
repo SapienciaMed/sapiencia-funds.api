@@ -65,9 +65,14 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  
-  Route.post("/mail-notification", "UploadInformationController.emailNotification");
-  Route.get("/files/get-by-project/:id", "UploadInformationController.getuploadFiles");
+  Route.post(
+    "/mail-notification",
+    "UploadInformationController.emailNotification"
+  );
+  Route.get(
+    "/files/get-by-project/:id",
+    "UploadInformationController.getuploadFiles"
+  );
   Route.post("/files/get-file", "UploadInformationController.getuploadFile");
   Route.post("/upload/:id", "UploadInformationController.uploadInformation");
   Route.get("/", "UploadInformationController.getUploadInformation");
@@ -96,7 +101,9 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/typemasterlist", "TypeMasterListController.getTypeMasterList");
   Route.get("/estatusList", "StatusController.getStatusList");
-}).prefix("/api/v1/").middleware("auth");
+})
+  .prefix("/api/v1/")
+  .middleware("auth");
 
 Route.group(() => {
   Route.post("/create", "ActaController.createActa");
@@ -114,4 +121,23 @@ Route.group(() => {
   Route.put("/edit/:id", "SocializationController.updateSocialization");
 })
   .prefix("/api/v1/socialization")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.post("/create", "RequerimentController.createRequeriment");
+  Route.post("get-paginated", "RequerimentController.getRequerimentPaginate");
+  Route.put("/edit/:id", "RequerimentController.updateRequeriment");
+  Route.delete("/delete/:id", "RequerimentController.deleteRequeriment");
+})
+  .prefix("/api/v1/requeriments")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
+  Route.post("/create", "ReglamentController.createReglament");
+  Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
+  Route.put("/edit/:id", "ReglamentController.updateReglament");
+  Route.delete("/delete/:id", "ReglamentController.deleteReglament");
+})
+  .prefix("/api/v1/reglament")
   .middleware("auth");

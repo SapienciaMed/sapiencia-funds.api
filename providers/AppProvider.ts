@@ -1,6 +1,5 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
-
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -33,6 +32,10 @@ export default class AppProvider {
     );
     const StorageService = await import("App/Services/StorageService");
     const EmailService = await import("App/Services/EmailNotificationService");
+
+    const RequerimentService = await import("App/Services/RequerimentService");
+
+    const ReglamentService = await import("App/Services/ReglamentService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -68,7 +71,12 @@ export default class AppProvider {
     const StatusListRepository = await import(
       "App/Repositories/StatusListRepository"
     );
-    
+    const RequerimentRepository = await import(
+      "App/Repositories/RequerimentRepository"
+    );
+    const ReglamentRepository = await import(
+      "App/Repositories/ReglamentRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -117,7 +125,7 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.StatusListProvider",
       () => new StatusListService.default(new StatusListRepository.default())
-    );    
+    );
     this.app.container.singleton(
       "core.UploadInformationProvider",
       () =>
@@ -132,6 +140,14 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.EmailProvider",
       () => new EmailService.default()
+    );
+    this.app.container.singleton(
+      "core.RequerimentProvider",
+      () => new RequerimentService.default(new RequerimentRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ReglamentProvider",
+      () => new ReglamentService.default(new ReglamentRepository.default())
     );
   }
 
