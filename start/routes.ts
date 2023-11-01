@@ -26,6 +26,11 @@ Route.get("/", async () => {
 
 Route.group(() => {
   Route.get("/call-periods/get-all", "SapienciaController.getAllCallPeriod");
+  Route.get("/call-budget/get-all", "SapienciaController.getAllCallBudget");
+  Route.post(
+    "/getbudget-paginated/",
+    "SapienciaController.geCallBudgetPaginate"
+  );
 }).prefix("/api/v1/sapiencia");
 
 Route.group(() => {
@@ -122,6 +127,11 @@ Route.group(() => {
 })
   .prefix("/api/v1/socialization")
   .middleware("auth");
+
+Route.group(() => {
+  Route.get("/FondocomunaList/", "BudgetController.getFundList");
+}).prefix("/api/v1/presupuesto");
+//.middleware("auth");
 
 Route.group(() => {
   Route.post("/create", "RequerimentController.createRequeriment");
