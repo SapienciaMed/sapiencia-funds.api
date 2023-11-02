@@ -21,6 +21,7 @@ export interface IRequerimentService {
   deleteRequeriment(
     id: number
   ): Promise<ApiResponse<IRequerimentInterface | null>>;
+  deleteByReglamentId(id: number): Promise<ApiResponse<number>>;
 }
 
 export default class RequerimentService implements IRequerimentService {
@@ -80,6 +81,12 @@ export default class RequerimentService implements IRequerimentService {
         "Ocurrió un error en su Transacción "
       );
     }
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+  async deleteByReglamentId(id: number): Promise<ApiResponse<number>> {
+    const res = await this.requerimentRepository.deleteByReglamentId(id);
+
     return new ApiResponse(res, EResponseCodes.OK);
   }
 }

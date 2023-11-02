@@ -8,6 +8,7 @@ import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 export interface IReglamentService {
   getReglamentById(id: number): Promise<ApiResponse<IReglamentInterface[]>>;
+  getLastId(): Promise<ApiResponse<number>>;
   createReglament(
     reglament: IReglamentInterface
   ): Promise<ApiResponse<IReglamentInterface>>;
@@ -32,6 +33,19 @@ export default class ReglamentService implements IReglamentService {
     if (!res) {
       return new ApiResponse(
         {} as IReglamentInterface[],
+        EResponseCodes.FAIL,
+        "Recurso no localizado"
+      );
+    } else {
+      return new ApiResponse(res, EResponseCodes.OK);
+    }
+  }
+
+  async getLastId(): Promise<ApiResponse<number>> {
+    const res = await this.reglamentRepository.getLastId();
+    if (!res) {
+      return new ApiResponse(
+        {} as number,
         EResponseCodes.FAIL,
         "Recurso no localizado"
       );

@@ -6,6 +6,7 @@ import Reglament from "App/Models/Reglament";
 import { IPagingData } from "App/Utils/ApiResponses";
 
 export interface IReglamentRepository {
+  getLastId(): Promise<number | null>;
   getReglamentById(id: number): Promise<IReglamentInterface[] | null>;
   createReglament(reglament: IReglamentInterface): Promise<IReglamentInterface>;
   getReglamentPaginate(
@@ -20,6 +21,14 @@ export interface IReglamentRepository {
 
 export default class ReglamentRepository implements IReglamentRepository {
   constructor() {}
+
+  async getLastId(): Promise<number> {
+    const result = await Reglament.query()
+      .max("RCO_CODIGO as maxRCO_CODIGO")
+      .first();
+    const maxRCO_CODIGO = result ? result.$extras.maxRCO_CODIGO : null;
+    return maxRCO_CODIGO;
+  }
 
   async getReglamentById(id: number): Promise<IReglamentInterface[] | null> {
     const queryReglament = Reglament.query().where("id", id);

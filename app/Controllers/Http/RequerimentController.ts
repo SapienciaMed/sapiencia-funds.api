@@ -64,4 +64,18 @@ export default class RequerimentController {
       );
     }
   }
+
+  public async deleteByReglamentId({ request, response }: HttpContextContract) {
+    try {
+      const { id } = request.params();
+
+      return response.send(
+        await RequerimentProvider.deleteByReglamentId(Number(id))
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
 }

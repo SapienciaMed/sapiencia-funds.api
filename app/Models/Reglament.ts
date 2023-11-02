@@ -5,7 +5,7 @@ export default class Reglament extends BaseModel {
   @column({ isPrimary: true, columnName: "RCO_CODIGO", serializeAs: "id" })
   public id: number;
   @column({ columnName: "RCO_CODPMA_PROGRAMA", serializeAs: "program" })
-  public program: number;
+  public program: string;
   @column({ columnName: "RCO_PERIODO_INICIAL", serializeAs: "initialPeriod" })
   public initialPeriod: string;
   @column({ columnName: "RCO_PERIODO_ABIERTO", serializeAs: "openPeriod" })
@@ -109,9 +109,9 @@ export default class Reglament extends BaseModel {
   public applyCondonationPerformancePeriod: boolean;
   @column({
     columnName: "RCO_RENDIMIENTO_PERIODO",
-    serializeAs: "periodPerformance",
+    serializeAs: "performancePeriod",
   })
-  public periodPerformance: string;
+  public performancePeriod: string;
   @column({
     columnName: "RCO_APLICA_CODONACION_RENDIMEINTO_ACUMULADO",
     serializeAs: "accomulatedIncomeCondonationApplies",
@@ -119,9 +119,9 @@ export default class Reglament extends BaseModel {
   public accomulatedIncomeCondonationApplies: boolean;
   @column({
     columnName: "RCO_RENDIMEINTO_ACUMULADO",
-    serializeAs: "accomulatedPerformance",
+    serializeAs: "accumulatedPerformance",
   })
-  public accomulatedPerformance: string;
+  public accumulatedPerformance: string;
   @column({
     columnName: "RCO_USUARIO_MODIFICO",
     serializeAs: "modifyUser",
