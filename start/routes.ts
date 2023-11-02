@@ -153,6 +153,7 @@ Route.group(() => {
   Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
   Route.put("/edit/:id", "ReglamentController.updateReglament");
   Route.delete("/delete/:id", "ReglamentController.deleteReglament");
+  Route.get("/programs", "ReglamentController.getPrograms");
 })
   .prefix("/api/v1/reglament")
   .middleware("auth");

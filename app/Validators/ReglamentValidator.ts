@@ -8,7 +8,7 @@ export class ReglamentValidator {
     id: schema.number.optional(),
     program: schema.string([rules.maxLength(60)]),
     initialPeriod: schema.string([rules.maxLength(60)]),
-    openPeriod: schema.boolean(),
+    isOpenPeriod: schema.boolean(),
     endPeriod: schema.string.optional([rules.maxLength(60)]),
     theoreticalPercentage: schema.number(),
     applySocialService: schema.boolean(),

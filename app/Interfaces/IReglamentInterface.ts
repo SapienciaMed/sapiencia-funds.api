@@ -2,7 +2,7 @@ export interface IReglamentInterface {
   id?: number;
   program: string;
   initialPeriod: string;
-  openPeriod: boolean;
+  isOpenPeriod: boolean;
   endPeriod?: string;
   theoreticalPercentage: number;
   applySocialService: boolean;
@@ -40,4 +40,9 @@ export interface IReglamentFiltersInterface {
 export interface IRequerimentUpdateInterface {
   id?: number;
   status?: boolean;
+}
+
+export interface IReglamentPrograms {
+  name: string;
+  value: number;
 }

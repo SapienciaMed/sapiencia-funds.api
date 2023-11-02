@@ -8,8 +8,8 @@ export default class Reglament extends BaseModel {
   public program: string;
   @column({ columnName: "RCO_PERIODO_INICIAL", serializeAs: "initialPeriod" })
   public initialPeriod: string;
-  @column({ columnName: "RCO_PERIODO_ABIERTO", serializeAs: "openPeriod" })
-  public openPeriod: boolean;
+  @column({ columnName: "RCO_PERIODO_ABIERTO", serializeAs: "isOpenPeriod" })
+  public isOpenPeriod: boolean;
   @column({ columnName: "RCO_PERIODO_FINAL", serializeAs: "endPeriod" })
   public endPeriod: string;
   @column({

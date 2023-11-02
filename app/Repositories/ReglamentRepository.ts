@@ -1,14 +1,19 @@
 import {
   IReglamentFiltersInterface,
   IReglamentInterface,
+  IReglamentPrograms,
 } from "App/Interfaces/IReglamentInterface";
+import Programs from "App/Models/Programs";
 import Reglament from "App/Models/Reglament";
 import { IPagingData } from "App/Utils/ApiResponses";
 
 export interface IReglamentRepository {
   getLastId(): Promise<number | null>;
   getReglamentById(id: number): Promise<IReglamentInterface[] | null>;
-  createReglament(reglament: IReglamentInterface): Promise<IReglamentInterface>;
+  getReglamentPrograms(): Promise<IReglamentPrograms[] | null>;
+  createReglament(
+    reglament: IReglamentInterface
+  ): Promise<IReglamentInterface | null>;
   getReglamentPaginate(
     filters: IReglamentFiltersInterface
   ): Promise<IPagingData<IReglamentInterface>>;
@@ -30,6 +35,16 @@ export default class ReglamentRepository implements IReglamentRepository {
     return maxRCO_CODIGO;
   }
 
+  async getReglamentPrograms(): Promise<IReglamentPrograms[] | null> {
+    const queryReglament = Programs.query();
+    const reglament = await queryReglament;
+
+    if (reglament.length === 0) {
+      return null;
+    }
+    return reglament.map((i) => i.serialize() as IReglamentPrograms);
+  }
+
   async getReglamentById(id: number): Promise<IReglamentInterface[] | null> {
     const queryReglament = Reglament.query().where("id", id);
     const reglament = await queryReglament;
@@ -42,7 +57,17 @@ export default class ReglamentRepository implements IReglamentRepository {
 
   async createReglament(
     reglament: IReglamentInterface
-  ): Promise<IReglamentInterface> {
+  ): Promise<IReglamentInterface | null> {
+    const existReglament = Reglament.query()
+      .where("program", reglament.program)
+      .andWhere("initialPeriod", reglament.initialPeriod)
+      .andWhere("isOpenPeriod", reglament.isOpenPeriod)
+      .orWhere("endPeriod", reglament.endPeriod ? reglament.endPeriod : "");
+
+    const execute = await existReglament;
+
+    if (execute.length > 0) return null;
+
     const toCreate = new Reglament();
     toCreate.fill({ ...reglament });
     await toCreate.save();

@@ -17,6 +17,16 @@ export default class ReglamentController {
     }
   }
 
+  public async getPrograms({ request, response }: HttpContextContract) {
+    try {
+      return response.send(await ReglamentProvider.getPrograms());
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async getLastId({ request, response }: HttpContextContract) {
     try {
       return response.send(await ReglamentProvider.getLastId());
