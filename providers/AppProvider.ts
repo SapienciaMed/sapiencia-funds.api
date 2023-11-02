@@ -1,5 +1,6 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
+
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -11,6 +12,9 @@ export default class AppProvider {
     /**************************************************************************/
     const VotingResultsService = await import(
       "App/Services/VotingResultsService"
+    );
+     const ResumenPriorizacionService = await import(
+      "App/Services/ResumenPriorizacionService"
     );
     const IMasterActivityService = await import(
       "App/Services/MasterActivityService"
@@ -49,6 +53,9 @@ export default class AppProvider {
     );
     const VotingResultsRepository = await import(
       "App/Repositories/VotingResultsRepository"
+    );
+    const ResumenPriorizacionRepository = await import(
+      "App/Repositories/ResumenPriorizacionRepository"
     );
     const MasterActivityRepository = await import(
       "App/Repositories/MasterActivityRepository"
@@ -90,6 +97,11 @@ export default class AppProvider {
       "core.VotingResultsProvider",
       () =>
         new VotingResultsService.default(new VotingResultsRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ReumenPriorizacionProvider",
+      () =>
+        new ResumenPriorizacionService.default(new ResumenPriorizacionRepository.default())
     );
     this.app.container.singleton(
       "core.MasterActivityProvider",

@@ -48,6 +48,12 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
+  Route.post("/get-paginated/", "ResumenPriorizacionsController.getResumenPriorizacionPaginate");
+})
+  .prefix("/api/v1/resumen-priorizacion")
+  .middleware("auth");
+
+Route.group(() => {
   Route.get("/get-by-id/:id", "ItemsController.getItemsById");
   Route.put("/update/:id", "ItemsController.updateItems");
   Route.delete("/delete/:id", "ItemsController.deleteItem");
