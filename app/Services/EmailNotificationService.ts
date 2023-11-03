@@ -46,7 +46,6 @@ export default class EmailService implements IEmailService {
                               <h1 class="card-title" style="width: 471px; height: 26px; text-align: center; font-size: 29px; font-weight: bold; font-family: 'Rubik', sans-serif;">Cargar información</h1>
                               <p class="card-text" style="width: 471px; height: 57px; font-size: 17px; font-weight: 300; font-family: 'Rubik', sans-serif; line-height: 20.4px;">La gestión territorial ha cargado la información de la comuna ${data.commune} y vigencia ${data.validity} para la elaboración de ficha. El nombre del archivo es ${data.fileName}.</p>
                               <div class="button-container">
-                                  <a href="#" style="display: flex; justify-content: center; align-items: center; text-decoration: none; width: 126px; height: 43px; border-radius: 100px; background-color: #5E3893; font-size: 16px; color: #fff; font-family: 'Rubik', sans-serif;">Consultar</a>
                               </div>
                           </div>
                       </div>
