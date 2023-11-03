@@ -1,33 +1,19 @@
-import { ICallBudget, ICallBudgetFilters } from "App/Interfaces/CallBudgetInterfaces";
-import { ICallPeriod } from "App/Interfaces/CallPeriodInterfaces";
-import CallPeriod from "App/Models/Sapiencia/CallPeriod";
-import CallBudget from "App/Models/Sapiencia/Callbudget";
 import { IPagingData } from "App/Utils/ApiResponses";
+import { ICallBudget, ICallBudgetFilters } from "App/Interfaces/CallBudgetInterfaces";
+import CallBudget from "App/Models/Sapiencia/Callbudget";
 
 
-export interface ICallPeriodRepository {
-  getAllCallPeriod(): Promise<ICallPeriod[]>;
-  getAllCallBudget(): Promise<ICallBudget[]>;
-  geCallBudgetPaginate(
-    filters: ICallBudgetFilters
-  ): Promise<IPagingData<ICallBudget>>;
+export interface IBudgetRepository{
+    geCallBudgetFilter(
+        filters: ICallBudgetFilters
+      ): Promise<IPagingData<ICallBudget>>;
+
 }
 
-export default class CallPeriodRepository implements ICallPeriodRepository {
+export default class BudgetRepository implements IBudgetRepository{
   constructor() {}
 
-  async getAllCallPeriod(): Promise<ICallPeriod[]> {
-    const res = await CallPeriod.query();
-
-    return res.map((i) => i.serialize() as ICallPeriod);
-  }
-  async getAllCallBudget(): Promise<ICallBudget[]> {
-    const res = await CallBudget.query().distinct('Id_comuna');
-
-    return res.map((i) => i.serialize() as ICallBudget);
-  }
-
-  async geCallBudgetPaginate(
+  async geCallBudgetFilter(
     filters: ICallBudgetFilters
   ): Promise<IPagingData<ICallBudget>> {
     const res = CallBudget.query();
@@ -54,6 +40,5 @@ export default class CallPeriodRepository implements ICallPeriodRepository {
       meta,
     };
   }
-  
 
 }

@@ -23,17 +23,21 @@ export default class SapienciaController {
       );
     }
   }
-  public async geCallBudgetPaginate({response,request,
-  }: HttpContextContract) {
+  public async geCallBudgetPaginate({ response, request }: HttpContextContract) {
     try {
       const data = request.body() as ICallBudgetFilters;
-      return response.send(
-        await SapienciaProvider.geCallBudgetPaginate(data)
-      );
+  
+      // Asegúrate de que data.id_comuna sea un array
+      if (!Array.isArray(data.id_comuna)) {
+        data.id_comuna = [Number(data.id_comuna)];
+      }
+  
+      // Convierte todos los valores de data.id_comuna a números
+      data.id_comuna = data.id_comuna.map(Number);
+  
+      return response.send(await SapienciaProvider.geCallBudgetPaginate(data));
     } catch (err) {
-      return response.badRequest(
-        new ApiResponse(null, EResponseCodes.FAIL, String(err))
-      );
+      return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
     }
   }
 }
