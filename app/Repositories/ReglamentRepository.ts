@@ -79,12 +79,17 @@ export default class ReglamentRepository implements IReglamentRepository {
   ): Promise<IPagingData<IReglamentInterface>> {
     const res = Reglament.query();
 
-    //res.where("codReglament", `${filters.codReglament}`);
+    if (filters.program) {
+      res.where("program", filters.program);
+    }
 
-    //PREGUNTAR
-    // if (filters.percent) {
-    //   res.orderBy("percent");
-    // }
+    if (filters.initialPeriod) {
+      res.andWhere("initialPeriod", filters.initialPeriod);
+    }
+
+    if (filters?.endPeriod) {
+      res.andWhere("endPeriod", filters.endPeriod);
+    }
 
     const workerReglamentPaginated = await res.paginate(
       filters.page,

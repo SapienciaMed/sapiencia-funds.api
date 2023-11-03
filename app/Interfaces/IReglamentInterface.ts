@@ -35,6 +35,9 @@ export interface IReglamentInterface {
 export interface IReglamentFiltersInterface {
   page: number;
   perPage: number;
+  program: string;
+  initialPeriod: string;
+  endPeriod?: string;
 }
 
 export interface IRequerimentUpdateInterface {
