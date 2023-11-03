@@ -17,7 +17,7 @@ export default class ReglamentController {
     }
   }
 
-  public async getPrograms({ request, response }: HttpContextContract) {
+  public async getPrograms({ response }: HttpContextContract) {
     try {
       return response.send(await ReglamentProvider.getPrograms());
     } catch (err) {
@@ -27,7 +27,7 @@ export default class ReglamentController {
     }
   }
 
-  public async getLastId({ request, response }: HttpContextContract) {
+  public async getLastId({ response }: HttpContextContract) {
     try {
       return response.send(await ReglamentProvider.getLastId());
     } catch (err) {
