@@ -6,8 +6,8 @@ export default class ItemValidators {
  
   public schema = schema.create({    
     aimStraight: schema.string(),
-    productCatalogueDnp: schema.number(),
-    codProductgueDnp: schema.number(),
+    productCatalogueDnp: schema.string(),
+    codProductgueDnp: schema.string(),
     codPmaProgram: schema.number(),
     codMtaTeacherActivity: schema.number(),
     amount: schema.string(),

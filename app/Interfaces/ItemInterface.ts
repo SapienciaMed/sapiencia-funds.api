@@ -1,8 +1,8 @@
 export interface IItemResults {
   id?: number;
   aimStraight: string;
-  productCatalogueDnp: number;
-  codProductgueDnp:number;
+  productCatalogueDnp: string;
+  codProductgueDnp:string;
   codPmaProgram: number;
   codMtaTeacherActivity: number;
   amount: string;

@@ -31,8 +31,8 @@ export default class VotingResultsValidator {
     items: schema.array().members(
       schema.object().members({
         aimStraight: schema.string(),
-        productCatalogueDnp: schema.number(),
-        codProductgueDnp: schema.number(),
+        productCatalogueDnp: schema.string(),
+        codProductgueDnp: schema.string(),
         codPmaProgram: schema.number(),
         codMtaTeacherActivity: schema.number(),
         amount: schema.string(),

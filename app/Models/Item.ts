@@ -12,10 +12,10 @@ export default class Item extends BaseModel {
   public aimStraight: string;
 
   @column({ columnName: "ITM_PRODUCTO_CATALOGO_DNP", serializeAs: "productCatalogueDnp" })
-  public productCatalogueDnp: number;
+  public productCatalogueDnp: string;
 
   @column({ columnName: "ITM_CODIGO_PRODUCTO_DNP", serializeAs: "codProductgueDnp" })
-  public codProductgueDnp: number;
+  public codProductgueDnp: string;
 
   @column({ columnName: "ITM_CODPMA_PROGRAMA", serializeAs: "codPmaProgram" })
   public codPmaProgram: number;
