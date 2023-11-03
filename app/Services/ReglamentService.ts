@@ -2,15 +2,18 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import {
   IReglamentFiltersInterface,
   IReglamentInterface,
+  IReglamentPrograms,
 } from "App/Interfaces/IReglamentInterface";
 import { IReglamentRepository } from "App/Repositories/ReglamentRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 export interface IReglamentService {
   getReglamentById(id: number): Promise<ApiResponse<IReglamentInterface[]>>;
+  getPrograms(): Promise<ApiResponse<IReglamentPrograms[]>>;
+  getLastId(): Promise<ApiResponse<number>>;
   createReglament(
     reglament: IReglamentInterface
-  ): Promise<ApiResponse<IReglamentInterface>>;
+  ): Promise<ApiResponse<IReglamentInterface | null>>;
   getReglamentPaginate(
     filters: IReglamentFiltersInterface
   ): Promise<ApiResponse<IPagingData<IReglamentInterface>>>;
@@ -40,6 +43,33 @@ export default class ReglamentService implements IReglamentService {
     }
   }
 
+  async getPrograms(): Promise<ApiResponse<IReglamentPrograms[]>> {
+    const res = await this.reglamentRepository.getReglamentPrograms();
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IReglamentPrograms[],
+        EResponseCodes.FAIL,
+        "Recurso no localizado"
+      );
+    } else {
+      return new ApiResponse(res, EResponseCodes.OK);
+    }
+  }
+
+  async getLastId(): Promise<ApiResponse<number>> {
+    const res = await this.reglamentRepository.getLastId();
+    if (!res) {
+      return new ApiResponse(
+        {} as number,
+        EResponseCodes.FAIL,
+        "Recurso no localizado"
+      );
+    } else {
+      return new ApiResponse(res, EResponseCodes.OK);
+    }
+  }
+
   async createReglament(
     reglament: IReglamentInterface
   ): Promise<ApiResponse<IReglamentInterface>> {
@@ -48,7 +78,7 @@ export default class ReglamentService implements IReglamentService {
       return new ApiResponse(
         {} as IReglamentInterface,
         EResponseCodes.FAIL,
-        "*Ocurrió un error en su Transacción "
+        "Ya existe un reglamento para el periodo y programa seleccionado "
       );
     }
     return new ApiResponse(res, EResponseCodes.OK);

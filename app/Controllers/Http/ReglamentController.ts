@@ -17,6 +17,26 @@ export default class ReglamentController {
     }
   }
 
+  public async getPrograms({ request, response }: HttpContextContract) {
+    try {
+      return response.send(await ReglamentProvider.getPrograms());
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+  public async getLastId({ request, response }: HttpContextContract) {
+    try {
+      return response.send(await ReglamentProvider.getLastId());
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async createReglament({ request, response }: HttpContextContract) {
     try {
       const reglament = await request.validate(ReglamentValidator);

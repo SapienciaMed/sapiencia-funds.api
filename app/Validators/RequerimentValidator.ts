@@ -6,6 +6,7 @@ export class RequerimentValidator {
 
   public schema = schema.create({
     id: schema.number.optional(),
+    active: schema.boolean.optional(),
     codReglament: schema.number.optional(),
     percent: schema.number.optional(),
     description: schema.string([rules.maxLength(200)]),

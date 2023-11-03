@@ -144,16 +144,22 @@ Route.group(() => {
   Route.post("get-paginated", "RequerimentController.getRequerimentPaginate");
   Route.put("/edit/:id", "RequerimentController.updateRequeriment");
   Route.delete("/delete/:id", "RequerimentController.deleteRequeriment");
+  Route.delete(
+    "/delete-by-reglament-id/:id",
+    "RequerimentController.deleteByReglamentId"
+  );
 })
   .prefix("/api/v1/requeriments")
   .middleware("auth");
 
 Route.group(() => {
   Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
+  Route.get("/get-last-id", "ReglamentController.getLastId");
   Route.post("/create", "ReglamentController.createReglament");
   Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
   Route.put("/edit/:id", "ReglamentController.updateReglament");
   Route.delete("/delete/:id", "ReglamentController.deleteReglament");
+  Route.get("/programs", "ReglamentController.getPrograms");
 })
   .prefix("/api/v1/reglament")
   .middleware("auth");

@@ -18,6 +18,7 @@ export interface IRequerimentRepository {
     id: number
   ): Promise<IRequerimentInterface | null>;
   deleteRequeriment(id: number): Promise<IRequerimentInterface | null>;
+  deleteByReglamentId(id: number): Promise<number>;
 }
 
 export default class RequerimentRepository implements IRequerimentRepository {
@@ -87,5 +88,13 @@ export default class RequerimentRepository implements IRequerimentRepository {
     await toDelete.delete();
 
     return toDelete.serialize() as IRequerimentInterface;
+  }
+
+  async deleteByReglamentId(id: number): Promise<number> {
+    const toDelete = await Requeriment.query()
+      .where("codReglament", id)
+      .delete();
+
+    return toDelete[0];
   }
 }
