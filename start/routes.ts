@@ -157,3 +157,10 @@ Route.group(() => {
 })
   .prefix("/api/v1/reglament")
   .middleware("auth");
+
+  Route.group(() => {
+    Route.post("get-paginated", "FinancialController.getFinancialPaginate");
+  })
+    .prefix("/api/v1/Financials")
+    //.middleware("auth");
+  
