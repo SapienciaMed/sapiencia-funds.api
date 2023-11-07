@@ -1,5 +1,5 @@
 import { IVotingFilters } from "App/Interfaces/VotingResultsInterfaces";
-import  ResumenPriorizacionRepository  from "App/Repositories/ResumenPriorizacionRepository";
+import  SummaryPriorizacionRepository  from "App/Repositories/SummaryPriorizacionRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "../Constants/ResponseCodesEnum";
 import { IItemResults } from "App/Interfaces/ItemInterface";
@@ -8,8 +8,8 @@ export interface IREsumenPriorizacionService {
   getVotingPaginate(filters: IVotingFilters): Promise<ApiResponse<IPagingData<IItemResults>>>;
 }
 
-export default class ResumenPriorizacionService implements IREsumenPriorizacionService {
-  constructor(private resumenPriorizacionRepository: ResumenPriorizacionRepository) {}
+export default class SummaryPriorizacionService implements IREsumenPriorizacionService {
+  constructor(private resumenPriorizacionRepository: SummaryPriorizacionRepository) {}
 
   async getVotingPaginate(
     filters: IVotingFilters
