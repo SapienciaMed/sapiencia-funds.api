@@ -6,10 +6,11 @@ export default class BudgetValidatorFilter {
     constructor(protected ctx: HttpContextContract) {}
     
     public schema = schema.create({
+        page: schema.number([rules.required(), rules.unsigned()]),
+        perPage: schema.number([rules.required(), rules.unsigned()]),
         id_comuna: schema.number(),
         periodo: schema.number(),
-        page: schema.number(),
-        perPage: schema.number(),
+
   });
 
   public messages: CustomMessages = { err: "error" };

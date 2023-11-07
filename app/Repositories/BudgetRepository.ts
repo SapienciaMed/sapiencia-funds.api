@@ -13,32 +13,21 @@ export interface IBudgetRepository{
 export default class BudgetRepository implements IBudgetRepository{
   constructor() {}
 
-  async geCallBudgetFilter(
-    filters: ICallBudgetFilters
-  ): Promise<IPagingData<ICallBudget>> {
+  public async geCallBudgetFilter(filters: ICallBudgetFilters){
     const res = CallBudget.query();
+    const {page,perPage,periodo,id_comuna} = filters
   
-    if (filters.id_comuna) {
+    if (id_comuna) {
       const idComunaArray = Array.isArray(filters.id_comuna) ? filters.id_comuna : [filters.id_comuna];
       res.whereIn("id_comuna", idComunaArray.map(String));
     }
   
-    if (filters.periodo) {
+    if (periodo) {
       res.where("periodo", filters.periodo);
     }
   
-    const workerMasterActivityPaginated = await res.paginate(
-      filters.page,
-      filters.perPage
-    );
-  
-    const { data, meta } = workerMasterActivityPaginated.serialize();
-    const dataArray = data ?? [];
-  
-    return {
-      array: dataArray as ICallBudget[],
-      meta,
-    };
+    const finalQuery = await res.paginate(page, perPage);
+    const { data, meta } = finalQuery.serialize();
+    return { array: data as ICallBudget[], meta };
   }
-
 }

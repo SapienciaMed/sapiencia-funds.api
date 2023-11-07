@@ -14,4 +14,3 @@ export interface ICallBudgetFilters {
   page: number;
   perPage: number;
 }
-   

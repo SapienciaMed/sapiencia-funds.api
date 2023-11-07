@@ -1,30 +1,42 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import {ICallBudgetFilters} from "App/Interfaces/CallBudgetInterfaces";
+import { ICallBudgetFilters } from "App/Interfaces/CallBudgetInterfaces";
 import { IBudgetRepository } from "App/Repositories/BudgetRepository";
-import { ApiResponse} from "App/Utils/ApiResponses";
+import { ApiResponse } from "App/Utils/ApiResponses";
+import { generateXLSX } from "App/Utils/generateXLSX";
+import {
+  furnitureXLSXFilePath,
+  furnitureXLSXRows,
+  furnitureXLSXcolumnNames,
+} from "./BudgetServiceXLSX";
 
 
 export interface IBudgetService {
-  generateXLSXBudget(filters: ICallBudgetFilters)
+  generateXLSXBudget(
+    filters: ICallBudgetFilters
+  ): Promise<ApiResponse<string>>
 }
 
-export default class BudgetService implements IBudgetService {
-    constructor(private budgetRepository: IBudgetRepository) {}
+export default class BudgetService 
+implements IBudgetService 
+{
+  constructor(
+    private budgetRepository: IBudgetRepository
+  ) { }
 
-    public async generateXLSXBudget(filters: ICallBudgetFilters) {
-    const Budget = await this.budgetRepository.geCallBudgetFilter(filters);
-    //   await generateXLSX({
-    //     columns: accountStatementXLSXColumns,
-    //     data: accountStatementXLSXRows(res),
-    //     filePath: accountStatementXLSXFilePath,
-    //     worksheetName: "Cuentas de cobro",
-    //   });
-      return new ApiResponse(
-        Budget, //quitar
-        //accountStatementXLSXFilePath, 
-        EResponseCodes.OK);
-    }
+  public async generateXLSXBudget(filters: ICallBudgetFilters) {
+    const accountStatementsFound =
+      await this.budgetRepository.geCallBudgetFilter(
+        filters
+      );
+      console.log("********aa", accountStatementsFound)
+    await generateXLSX({
+      columns: furnitureXLSXcolumnNames,
+      filePath: furnitureXLSXFilePath,
+      worksheetName: "Cuentas de cobro",
+      data: furnitureXLSXRows(accountStatementsFound),
+    });
+    return new ApiResponse(furnitureXLSXFilePath, EResponseCodes.OK);
+  }
 
-  
 }
 
