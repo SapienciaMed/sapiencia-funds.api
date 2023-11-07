@@ -1,6 +1,5 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
-
 export default class AppProvider {
   constructor(protected app: ApplicationContract) {}
 
@@ -13,7 +12,7 @@ export default class AppProvider {
     const VotingResultsService = await import(
       "App/Services/VotingResultsService"
     );
-     const ResumenPriorizacionService = await import(
+    const ResumenPriorizacionService = await import(
       "App/Services/ResumenPriorizacionService"
     );
     const IMasterActivityService = await import(
@@ -41,7 +40,6 @@ export default class AppProvider {
 
     const ReglamentService = await import("App/Services/ReglamentService");
     const BudgetService = await import("App/Services/BudgetService");
-
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -89,9 +87,7 @@ export default class AppProvider {
       "App/Repositories/ReglamentRepository"
     );
 
-    const BudgetRepository = await import(
-      "App/Repositories/BudgetRepository"
-    );
+    const BudgetRepository = await import("App/Repositories/BudgetRepository");
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -109,7 +105,9 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ReumenPriorizacionProvider",
       () =>
-        new ResumenPriorizacionService.default(new ResumenPriorizacionRepository.default())
+        new ResumenPriorizacionService.default(
+          new ResumenPriorizacionRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.MasterActivityProvider",
@@ -166,7 +164,7 @@ export default class AppProvider {
       () => new RequerimentService.default(new RequerimentRepository.default())
     );
     this.app.container.singleton(
-      "core.ReglamentRepository",
+      "core.ReglamentProvider",
       () => new ReglamentService.default(new ReglamentRepository.default())
     );
     this.app.container.singleton(
