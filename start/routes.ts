@@ -136,7 +136,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/FondocomunaList/", "BudgetController.getFundList");
-}).prefix("/api/v1/presupuesto");
+    Route.post("/generate-xlsx", "BudgetController.generateXLSX");}).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
 Route.group(() => {

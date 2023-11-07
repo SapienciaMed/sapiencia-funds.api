@@ -40,6 +40,8 @@ export default class AppProvider {
     const RequerimentService = await import("App/Services/RequerimentService");
 
     const ReglamentService = await import("App/Services/ReglamentService");
+    const BudgetService = await import("App/Services/BudgetService");
+
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -78,12 +80,7 @@ export default class AppProvider {
     const StatusListRepository = await import(
       "App/Repositories/StatusListRepository"
     );
-    const RequerimentRepository = await import(
-      "App/Repositories/RequerimentRepository"
-    );
-    const ReglamentRepository = await import(
-      "App/Repositories/ReglamentRepository"
-    );
+    
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -152,14 +149,6 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.EmailProvider",
       () => new EmailService.default()
-    );
-    this.app.container.singleton(
-      "core.RequerimentProvider",
-      () => new RequerimentService.default(new RequerimentRepository.default())
-    );
-    this.app.container.singleton(
-      "core.ReglamentProvider",
-      () => new ReglamentService.default(new ReglamentRepository.default())
     );
   }
 

@@ -29,6 +29,7 @@
     "@adonisjs/repl": "^3.1.11",
     "@google-cloud/storage": "^7.3.0",
     "adonis5-swagger": "^1.4.1",
+    "excel4node": "^1.8.2",
     "japa": "^4.0.0",
     "jsonwebtoken": "^9.0.0",
     "luxon": "^3.3.0",

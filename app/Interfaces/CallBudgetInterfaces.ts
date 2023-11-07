@@ -8,10 +8,9 @@ export interface ICallBudget {
   puntaje_corte: number;
 }
 
-export interface ICallBudgetFilters{
-  id_comuna?: number;
+export interface ICallBudgetFilters {
+  id_comuna?: number | number[];  // Permite un número único o un array de números
   periodo: number;
   page: number;
   perPage: number;
 }
-   

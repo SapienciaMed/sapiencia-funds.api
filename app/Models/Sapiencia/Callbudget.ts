@@ -26,6 +26,4 @@ export default class CallBudget extends BaseModel {
   @column({  columnName: "puntaje_corte", serializeAs: "puntaje_corte" })
   public puntaje_corte: string;
 
-
-
 }
