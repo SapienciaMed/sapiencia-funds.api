@@ -9,7 +9,7 @@ export interface ICallBudget {
 }
 
 export interface ICallBudgetFilters {
-  id_comuna?: number | number[];  // Permite un número único o un array de números
+  id_comuna: number | number[];  // Permite un número único o un array de números
   periodo: number;
   page: number;
   perPage: number;
