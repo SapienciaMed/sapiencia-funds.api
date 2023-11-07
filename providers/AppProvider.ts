@@ -80,7 +80,18 @@ export default class AppProvider {
     const StatusListRepository = await import(
       "App/Repositories/StatusListRepository"
     );
-    
+
+    const RequerimentRepository = await import(
+      "App/Repositories/RequerimentRepository"
+    );
+
+    const ReglamentRepository = await import(
+      "App/Repositories/ReglamentRepository"
+    );
+
+    const BudgetRepository = await import(
+      "App/Repositories/BudgetRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -149,6 +160,18 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.EmailProvider",
       () => new EmailService.default()
+    );
+    this.app.container.singleton(
+      "core.RequerimentProvider",
+      () => new RequerimentService.default(new RequerimentRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ReglamentRepository",
+      () => new ReglamentService.default(new ReglamentRepository.default())
+    );
+    this.app.container.singleton(
+      "core.BudgetProvider",
+      () => new BudgetService.default(new BudgetRepository.default())
     );
   }
 
