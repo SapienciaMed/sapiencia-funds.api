@@ -21,3 +21,13 @@ export interface ISummaryPriorization {
   total456: number;
   total: number;
 }
+
+export interface ISummaryPriorizationXlsx {
+  Programa: string;
+  Porcentaje123: number;
+  Porcentaje456: number;
+  Cupos: number;
+  Valor_Porcentaje456: number;
+  Valor_Porcentaje123: number;
+  Total: number;
+}

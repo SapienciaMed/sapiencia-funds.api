@@ -3,7 +3,7 @@ import ReumenPriorizacionProvider from "@ioc:core.ReumenPriorizacionProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IResumPriorizacionFilters } from "App/Interfaces/SummaryPriorizacionInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import * as XLSX from "xlsx";
+
 
 export default class SummaryPriorizacionsController {
   public async getSummaryPriorizacionPaginate({
@@ -22,12 +22,27 @@ export default class SummaryPriorizacionsController {
     }
   }
 
-  async generateXlsx(rows: any): Promise<any> {
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+  public async getSummaryPriorizacionReportXLS({
+    response,
+    request,
+  }: HttpContextContract) {
+    try {
+      const data = request.body() as IResumPriorizacionFilters;
+      const objectresp = await ReumenPriorizacionProvider.getVotingXLSX(data)
+      response.header("Content-Type", "application/vnd.ms-excel");
+      response.header(
+        "Content-Disposition",
+        "attachment; filename=ReportePlanilla.xls"
+      );
+      const responsexlsx = await  ReumenPriorizacionProvider.generateXlsx(objectresp.data)
+      response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
 
-    const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
-    return buffer;
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
   }
+
+
 }

@@ -49,6 +49,8 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post("/get-paginated/", "SummaryPriorizacionsController.getSummaryPriorizacionPaginate");
+  Route.post("/get-report/", "SummaryPriorizacionsController.getSummaryPriorizacionReportXLS");
+
 })
   .prefix("/api/v1/summary-priorizacion")
   // .middleware("auth");
