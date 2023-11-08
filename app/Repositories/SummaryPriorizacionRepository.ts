@@ -1,5 +1,4 @@
 import { IVotingFilters } from "App/Interfaces/VotingResultsInterfaces";
-import VotingResults from "../Models/VotingResults";
 import { IPagingData } from "App/Utils/ApiResponses";
 import {
   IItemResults,
