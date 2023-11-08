@@ -13,5 +13,5 @@ export interface IActa {
     creationDate?: string;
     idStatus: number;
     items: IActaItems[];
-    citation: ICitation[];
+    citation?: ICitation[];
 }

@@ -34,14 +34,14 @@ export default class ActaValidator {
         idProgram: schema.number(),           
       })
     ),
-    citation: schema.array().members(
+    citation: schema.array.optional().members(
       schema.object().members({
-        dateCitation: schema.string(),
-        timeCitation: schema.string(),
-        user: schema.string(),
-        status: schema.number(),        
+        dateCitation: schema.string.optional(),
+        timeCitation: schema.string.optional(),
+        user: schema.string.optional(),
+        status: schema.number.optional(),        
         dateAprobation: schema.string.optional(),
-        email: schema.string(),
+        email: schema.string.optional(),
       })
     )
   });
