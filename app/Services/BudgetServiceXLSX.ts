@@ -5,23 +5,31 @@ import { IPagingData } from "App/Utils/ApiResponses";
 export const furnitureXLSXcolumnNames = [
   {
     name: "Fondo comuna",
-    size: 20,
+    size: 15,
   },
   {
     name: "Presupuesto fondo comuna",
-    size: 12,
+    size: 25,
   },
   {
     name: "Recurso otorgado de legalizacion",
-    size: 20,
+    size: 30,
   },
   {
     name: "Restante",
-    size: 20,
+    size: 15,
   },
   {
     name: "Usuarios por comuna",
-    size: 12,
+    size: 20,
+  },
+  {
+    name: "Total proyectado",
+    size: 20,
+  },
+  {
+    name: "Diferencia por comprometer",
+    size: 25,
   },
 
 ];
@@ -35,9 +43,11 @@ export const furnitureXLSXRows = (
       [
         String(curr.id_comuna),
         String(curr.presupuesto_comuna),
-        String(curr.legaliza_comuna),
-        String(curr.restante_presupuesto),
-        String(curr.usuarios_comuna)
+        String(curr.acumulado_legali_comuna),
+        String(curr.restante_presupuesto_comuna),
+        String(curr.numero_usuarios_comuna),
+        String(curr.total_proyectado),
+        String(curr.Diferencia),
 
       ],
     ];
