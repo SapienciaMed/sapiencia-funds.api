@@ -22,7 +22,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
   ): Promise<IPagingData<IItemResults>> {
     
     const res = VotingResults.query().preload('items', (itemQuery) => {
-      itemQuery.preload('activiti', (activitiQuery) => {
+      itemQuery.preload('activity', (activitiQuery) => {
         activitiQuery.preload('typesProgram');
       });
     });
