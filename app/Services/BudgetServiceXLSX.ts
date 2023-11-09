@@ -9,7 +9,7 @@ export const furnitureXLSXcolumnNames = [
   },
   {
     name: "Presupuesto fondo comuna",
-    size: 30,
+    size: 25,
   },
   {
     name: "Recurso otorgado de legalizacion",

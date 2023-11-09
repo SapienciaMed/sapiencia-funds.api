@@ -31,7 +31,7 @@ implements IBudgetService
     await generateXLSX({
       columns: furnitureXLSXcolumnNames,
       filePath: furnitureXLSXFilePath,
-      worksheetName: "Cuentas de cobro",
+      worksheetName: "Presupuesto",
       data: furnitureXLSXRows(accountStatementsFound),
     });
     return new ApiResponse(furnitureXLSXFilePath, EResponseCodes.OK);
