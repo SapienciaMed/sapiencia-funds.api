@@ -141,7 +141,6 @@ Route.group(() => {
     Route.post("/generate-xlsx", "BudgetController.generateXLSX");}).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
-<<<<<<< HEAD
 Route.group(() => {
   Route.post("/create", "RequerimentController.createRequeriment");
   Route.post("get-paginated", "RequerimentController.getRequerimentPaginate");
@@ -166,7 +165,6 @@ Route.group(() => {
 })
   .prefix("/api/v1/reglament")
   .middleware("auth");
-=======
   Route.group(() => {
     Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
     Route.get("/FondocomunaList/", "BudgetController.getFundList");
@@ -175,4 +173,3 @@ Route.group(() => {
   .prefix("/api/v1/presupuesto")
   //.middleware("auth");
   
->>>>>>> s3_hu3106
