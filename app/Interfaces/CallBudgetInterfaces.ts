@@ -1,15 +1,15 @@
 export interface ICallBudget {
   id_comuna: number;
   presupuesto_comuna: string;
-  legaliza_comuna: string;
-  restante_presupuesto: string;
-  usuarios_comuna: string;
-  periodo: number;
-  puntaje_corte: number;
+  acumulado_legali_comuna: string;
+  restante_presupuesto_comuna: string;
+  numero_usuarios_comuna: string;
+  total_proyectado: number;
+  Diferencia: number;
 }
 
 export interface ICallBudgetFilters {
-  id_comuna: number | number[];  // Permite un número único o un array de números
+  id_comuna: number | number[] | string;
   periodo: number;
   page: number;
   perPage: number;

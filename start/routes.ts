@@ -120,8 +120,10 @@ Route.group(() => {
 
 
   Route.group(() => {
+    Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
     Route.get("/FondocomunaList/", "BudgetController.getFundList");
-    Route.post("/generate-xlsx", "BudgetController.generateXLSX");
-  }).prefix("/api/v1/presupuesto")
+    Route.get("/generate-xlsx", "BudgetController.generateXLSX");
+  })
+  .prefix("/api/v1/presupuesto")
   //.middleware("auth");
   
