@@ -21,7 +21,6 @@ export default class BudgetController {
     }
 
     try {  
-      console.log("filter generateXLSX", filters)
       const resp = await BudgetProvider.generateXLSXBudget(filters)
       response.header(
         "Content-Disposition",

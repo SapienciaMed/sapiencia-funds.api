@@ -43,7 +43,6 @@ export default class BudgetRepository implements IBudgetRepository {
     const idComunaArray = Array.isArray(id_comuna) ? id_comuna : [id_comuna];
   
     const query = `call AuroraPresupuestoComuna('${idComunaArray.join(",")}', ${periodo})`;
-    console.log("************query", query);
   
     const result = await Database.connection("mysql_sapiencia").rawQuery(query);
   
@@ -66,7 +65,7 @@ export default class BudgetRepository implements IBudgetRepository {
       current_page: page,
       last_page: Math.ceil(cleanedData.length / perPage),
     };
-    console.log("Pase por el PL")
+   
     return { array: paginatedData as ICallBudget[], meta };
   }
   
