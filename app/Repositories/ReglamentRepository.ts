@@ -111,11 +111,72 @@ export default class ReglamentRepository implements IReglamentRepository {
   ): Promise<IReglamentInterface | null> {
     const toUpdate = await Reglament.find(id);
 
+    const buildUpdate = {
+      ...requeriment,
+      isOpenPeriod: requeriment?.isOpenPeriod ? true : false,
+      endPeriod: requeriment?.isOpenPeriod ? null : requeriment?.endPeriod,
+      applySocialService: requeriment?.applySocialService ? true : false,
+      socialServicePercentage: requeriment?.applySocialService
+        ? requeriment?.socialServicePercentage
+        : null,
+      socialServiceHours: requeriment?.applySocialService
+        ? requeriment?.socialServiceHours
+        : null,
+      knowledgeTransferApply: requeriment?.knowledgeTransferApply
+        ? true
+        : false,
+      knowledgeTransferPercentage: requeriment?.knowledgeTransferApply
+        ? requeriment?.knowledgeTransferPercentage
+        : null,
+      knowledgeTransferHours: requeriment?.knowledgeTransferApply
+        ? requeriment?.knowledgeTransferHours
+        : null,
+      gracePeriodApply: requeriment?.gracePeriodApply ? true : false,
+      gracePeriodMonths: requeriment?.gracePeriodApply
+        ? requeriment?.gracePeriodMonths
+        : null,
+      gracePeriodApplication: requeriment?.gracePeriodApply
+        ? requeriment?.gracePeriodApplication
+        : null,
+      continuousSuspensionApplies: requeriment?.continuousSuspensionApplies
+        ? true
+        : false,
+      continuosSuspencionQuantity: requeriment?.continuousSuspensionApplies
+        ? requeriment?.continuosSuspencionQuantity
+        : null,
+      applyDiscontinuousSuspension: requeriment?.applyDiscontinuousSuspension
+        ? true
+        : false,
+      discontinuousSuspensionQuantity: requeriment?.applyDiscontinuousSuspension
+        ? requeriment?.discontinuousSuspensionQuantity
+        : null,
+      applySpecialSuspensions: requeriment?.applySpecialSuspensions
+        ? true
+        : false,
+      applySpecialSuspensionsQuantity: requeriment?.applySpecialSuspensions
+        ? requeriment?.applySpecialSuspensionsQuantity
+        : null,
+      extensionApply: requeriment?.extensionApply ? true : false,
+      extensionApplyQuantity: requeriment?.extensionApply
+        ? requeriment?.extensionApplyQuantity
+        : null,
+      applyCondonationPerformancePeriod:
+        requeriment?.applyCondonationPerformancePeriod ? true : false,
+      performancePeriod: requeriment?.applyCondonationPerformancePeriod
+        ? requeriment?.performancePeriod
+        : null,
+      accomulatedIncomeCondonationApplies:
+        requeriment?.accomulatedIncomeCondonationApplies ? true : false,
+      accumulatedPerformance: requeriment?.accomulatedIncomeCondonationApplies
+        ? requeriment?.accumulatedPerformance
+        : null,
+    };
+
     if (!toUpdate) {
       return null;
     }
 
-    toUpdate.fill({ ...toUpdate, ...requeriment });
+    toUpdate.fill({ ...toUpdate, ...buildUpdate });
 
     await toUpdate.save();
 
