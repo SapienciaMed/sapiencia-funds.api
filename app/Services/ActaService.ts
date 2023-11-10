@@ -5,12 +5,13 @@ import { ApiResponse } from "App/Utils/ApiResponses";
 
 
 export interface IActaService {
-    createActa(acta: IActa): Promise<ApiResponse<IActa>>;    
+    createActa(acta: IActa): Promise<ApiResponse<IActa>>;
+    getActa(id: number): Promise<ApiResponse<IActa>>
 }
 
 export default class ActaService implements IActaService {
 
-    constructor(private actaRepository: IActaRepository) {}
+    constructor(private actaRepository: IActaRepository) { }
 
     async createActa(acta: IActa): Promise<ApiResponse<IActa>> {
         const res = await this.actaRepository.createActa(acta);
@@ -23,9 +24,13 @@ export default class ActaService implements IActaService {
         }
         return new ApiResponse(res, EResponseCodes.OK);
     }
-    
+
+
+    async getActa(id: number) {
+        const res = await this.actaRepository.getActa(id)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
 
 
 
-    
 }

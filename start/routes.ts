@@ -53,8 +53,8 @@ Route.group(() => {
 
 })
   .prefix("/api/v1/summary-priorizacion")
-  // .middleware("auth");
-  
+// .middleware("auth");
+
 Route.group(() => {
   Route.get("/get-by-id/:id", "ItemsController.getItemsById");
   Route.put("/update/:id", "ItemsController.updateItems");
@@ -121,6 +121,7 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/create", "ActaController.createActa");
   Route.post("get-paginated", "MasterController.getMasterPaginate");
+  Route.post("/getActa", "ActaController.getActa");
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
@@ -137,8 +138,9 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.get("/FondocomunaList/", "BudgetController.getFundList");
-    Route.post("/generate-xlsx", "BudgetController.generateXLSX");}).prefix("/api/v1/presupuesto");
+  // Route.get("/FondocomunaList/", "BudgetController.getFundList");
+  Route.post("/generate-xlsx", "BudgetController.generateXLSX");
+}).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
 Route.group(() => {
@@ -165,11 +167,11 @@ Route.group(() => {
 })
   .prefix("/api/v1/reglament")
   .middleware("auth");
-  Route.group(() => {
-    Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
-    Route.get("/FondocomunaList/", "BudgetController.getFundList");
-    Route.get("/generate-xlsx", "BudgetController.generateXLSX");
-  })
+Route.group(() => {
+  Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
+  Route.get("/FondocomunaList/", "BudgetController.getFundList");
+  Route.get("/generate-xlsx", "BudgetController.generateXLSX");
+})
   .prefix("/api/v1/presupuesto")
-  //.middleware("auth");
-  
+//.middleware("auth");
+

@@ -12,6 +12,7 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 export interface IActaRepository {
   createActa(acta: IActa): Promise<IActa>;
   noticacion(citations: ICitation[], id: number): Promise<ApiResponse<boolean | null>>;
+  getActa(id: number)
 }
 
 
@@ -23,22 +24,22 @@ export default class ActaRepository implements IActaRepository {
 
   async createActa(acta: IActa): Promise<IActa> {
     const toCreate = new Acta();
-  
+
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-  
+
     toCreate.fill({ ...acta, creationDate: formattedDate });
     await toCreate.save();
-  
+
     const saveItemPromises = acta.items!.map(itemData => {
       const item = new ActaItems();
       const serializedPeriods = JSON.stringify(itemData.periods);
       item.fill({ ...itemData, periods: serializedPeriods, idActa: toCreate.id.toString() });
       return item.save();
     });
-  
+
     await Promise.all(saveItemPromises);
-  
+
     // Solo procesar y guardar las citas si están presentes
     let savedCitations;
     if (acta.citation && acta.citation.length > 0) {
@@ -51,12 +52,12 @@ export default class ActaRepository implements IActaRepository {
       await toCreate.load('citation'); // Cargar las citas solo si fueron guardadas
       await this.noticacion(savedCitations, toCreate.id); // Notificar solo si hay citas
     }
-  
+
     await toCreate.load('items');
-  
+
     return toCreate.serialize() as IActa;
   }
-  
+
 
 
   async noticacion(citations: ICitation[], id: number): Promise<ApiResponse<boolean | null>> {
@@ -115,13 +116,16 @@ export default class ActaRepository implements IActaRepository {
   }
 
 
+  async getActa(id: number) {
 
+    const query = Acta.query()
+      .preload("typeMasterList")
+      .preload("items")
+      .preload("citation")
 
+    const res = query.where("id", id)
 
-
-
-
-
-
+    return res
+  }
 
 }
