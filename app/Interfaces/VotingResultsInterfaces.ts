@@ -7,19 +7,22 @@ export interface IVotingResults {
   validity: string;
   ideaProject: string;
   items?: IItemResults[];
+  generalRate?: number;
+  operatorCommissionAct?: number;
+  operatorCommissionBalance?: number;
+  operatorCommission?: number;
 }
-
 
 export interface IActivity {
   id?: number;
-  nombre: string
+  nombre: string;
 }
 
 export interface IVotingFilters {
   communeNeighborhood?: number;
   numberProject?: number;
   validity?: string;
-  ideaProject?: string;  
+  ideaProject?: string;
   page: number;
   perPage: number;
 }

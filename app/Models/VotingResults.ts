@@ -19,6 +19,18 @@ export default class VotingResults extends BaseModel {
   @column({ columnName: "RTV_IDEA_PROYECTO", serializeAs: "ideaProject" })
   public ideaProject: string;
 
+  @column({ columnName: "RTV_TASA_GENERAL_COSTOS_GASTOS", serializeAs: "generalRate" })
+  public generalRate: number;
+
+  @column({ columnName: "RTV_COMISION_OPERADOR_FINANCIERO_ACTA", serializeAs: "operatorCommissionAct" })
+  public operatorCommissionAct: number;
+  
+  @column({ columnName: "RTV_COMISION_OPERADOR_FINANCIERO_BALANCE", serializeAs: "operatorCommissionBalance" })
+  public operatorCommissionBalance: number;
+
+  @column({ columnName: "RTV_COMISION_OPERADOR_FINANCIERO", serializeAs: "operatorCommission" })
+  public operatorCommission: number;
+  
   @hasMany(() => Item, {
     localKey: "id",
     foreignKey: "codRtVotingResult",

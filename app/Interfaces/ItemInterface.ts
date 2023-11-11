@@ -10,6 +10,11 @@ export interface IItemResults {
   percentage123: string;
   percentage456: string;
   codRtVotingResult?: string;
+  balanceResources?: number;
+  financialPerformances?: number;
+  averageCost?: number;
+  generalRate?: number;
+  creditResource?: number;
 }
 
 export interface ISummaryPriorization {

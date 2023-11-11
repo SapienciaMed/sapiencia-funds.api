@@ -11,25 +11,16 @@ export default class Item extends BaseModel {
   @column({ columnName: "ITM_OBJETIVO_DIRECTO", serializeAs: "aimStraight" })
   public aimStraight: string;
 
-  @column({
-    columnName: "ITM_PRODUCTO_CATALOGO_DNP",
-    serializeAs: "productCatalogueDnp",
-  })
+  @column({columnName: "ITM_PRODUCTO_CATALOGO_DNP", serializeAs: "productCatalogueDnp"})
   public productCatalogueDnp: string;
 
-  @column({
-    columnName: "ITM_CODIGO_PRODUCTO_DNP",
-    serializeAs: "codProductgueDnp",
-  })
+  @column({columnName: "ITM_CODIGO_PRODUCTO_DNP",serializeAs: "codProductgueDnp"})
   public codProductgueDnp: string;
 
   @column({ columnName: "ITM_CODPMA_PROGRAMA", serializeAs: "codPmaProgram" })
   public codPmaProgram: number;
 
-  @column({
-    columnName: "ITM_CODMTA_MAESTRO_ACTIVIDAD",
-    serializeAs: "codMtaTeacherActivity",
-  })
+  @column({columnName: "ITM_CODMTA_MAESTRO_ACTIVIDAD",serializeAs: "codMtaTeacherActivity"})
   public codMtaTeacherActivity: number;
 
   @column({ columnName: "ITM_CANTIDAD", serializeAs: "amount" })
@@ -44,11 +35,23 @@ export default class Item extends BaseModel {
   @column({ columnName: "ITM_PORCENTAJE_456", serializeAs: "percentage456" })
   public percentage456: string;
 
-  @column({
-    columnName: "ITM_CODRTV_RESULTADO_VOTACION",
-    serializeAs: "codRtVotingResult",
-  })
+  @column({columnName: "ITM_CODRTV_RESULTADO_VOTACION",serializeAs: "codRtVotingResult"})
   public codRtVotingResult: string;
+
+  @column({columnName: "ITM_RECURSOS_BALANCE",serializeAs: "balanceResources"})
+  public balanceResources: number;
+
+  @column({columnName: "ITM_RENDIMIENTOS_FINANCIEROS",serializeAs: "financialPerformances"})
+  public financialPerformances: number;
+
+  @column({columnName: "ITM_COSTO_PROMEDIO",serializeAs: "averageCost"})
+  public averageCost: number;
+
+  @column({columnName: "ITM_TASA_GENERAL",serializeAs: "generalRate"})
+  public generalRate: number;
+
+  @column({columnName: "ITM_RECURSO_CREDITO",serializeAs: "creditResource"})
+  public creditResource: number;
 
   @hasOne(() => MasterActivity, {
     localKey: "codMtaTeacherActivity",
@@ -56,6 +59,7 @@ export default class Item extends BaseModel {
     serializeAs: "activity",
   })
   public activity: HasOne<typeof MasterActivity>;
+
 
   @hasOne(() => Programs, {
     localKey: "codPmaProgram",
