@@ -1,3 +1,5 @@
+import { IVotingResults } from "./VotingResultsInterfaces";
+
 export interface IItemResults {
   id?: number;
   aimStraight: string;
@@ -5,16 +7,18 @@ export interface IItemResults {
   codProductgueDnp: string;
   codPmaProgram: number;
   codMtaTeacherActivity: number;
-  amount: string;
-  costTotal: string;
-  percentage123: string;
-  percentage456: string;
-  codRtVotingResult?: string;
+  amount: number;
+  costTotal: number;
+  percentage123: number;
+  percentage456: number;
+  codRtVotingResult?: number;
   balanceResources?: number;
   financialPerformances?: number;
   averageCost?: number;
   generalRate?: number;
   creditResource?: number;
+
+  votingResult?: IVotingResults;
 }
 
 export interface ISummaryPriorization {
@@ -35,4 +39,12 @@ export interface ISummaryPriorizationXlsx {
   Valor_Porcentaje456: number;
   Valor_Porcentaje123: number;
   Total: number;
+}
+
+export interface IItemsFilters {
+  page: number;
+  perPage: number;
+  projectNumber?: number;
+  programId?: number;
+  validity?: number;
 }

@@ -79,7 +79,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
     const saveItemPromises = voting.items!.map(itemData => {
       const item = new Item();
-      item.fill({ ...itemData, codRtVotingResult: toCreate.id.toString() });
+      item.fill({ ...itemData, codRtVotingResult: toCreate.id });
       return item.save();
     });
 
@@ -108,7 +108,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
     const saveItemPromises = voting.items!.map(itemData => {
       const item = new Item();
-      item.fill({ ...itemData, codRtVotingResult: toUpdate.id.toString() });
+      item.fill({ ...itemData, codRtVotingResult: toUpdate.id });
       return item.save();
     });
 

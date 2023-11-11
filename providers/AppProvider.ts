@@ -100,7 +100,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.VotingResultsProvider",
       () =>
-        new VotingResultsService.default(new VotingResultsRepository.default())
+        new VotingResultsService.default(
+          new VotingResultsRepository.default(),
+          new ItemRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.ReumenPriorizacionProvider",

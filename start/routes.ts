@@ -35,6 +35,10 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
+  Route.post(
+    "resource-prioritization/get-paginated/",
+    "VotingResultsController.getResourcePrioritizationPaginate"
+  );
   Route.get(
     "/getActivityProgram/:id",
     "VotingResultsController.getActivityProgram"
@@ -48,11 +52,15 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.post("/get-paginated/", "SummaryPriorizacionsController.getSummaryPriorizacionPaginate");
-  Route.post("/get-report/", "SummaryPriorizacionsController.getSummaryPriorizacionReportXLS");
-
-})
-  .prefix("/api/v1/summary-priorizacion")
+  Route.post(
+    "/get-paginated/",
+    "SummaryPriorizacionsController.getSummaryPriorizacionPaginate"
+  );
+  Route.post(
+    "/get-report/",
+    "SummaryPriorizacionsController.getSummaryPriorizacionReportXLS"
+  );
+}).prefix("/api/v1/summary-priorizacion");
 // .middleware("auth");
 
 Route.group(() => {
@@ -171,7 +179,5 @@ Route.group(() => {
   Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
   Route.get("/FondocomunaList/", "BudgetController.getFundList");
   Route.get("/generate-xlsx", "BudgetController.generateXLSX");
-})
-  .prefix("/api/v1/presupuesto")
+}).prefix("/api/v1/presupuesto");
 //.middleware("auth");
-
