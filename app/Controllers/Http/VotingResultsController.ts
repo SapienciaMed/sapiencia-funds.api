@@ -23,6 +23,48 @@ export default class VotingResultsController {
     }
   }
 
+  public async getVotingPaginateXlsx({
+    response,
+    request,
+  }: HttpContextContract) {      
+    try {
+      const data = request.body() as IVotingFilters;
+     
+      response.header("Content-Type", "application/vnd.ms-excel");
+      response.header(
+        "Content-Disposition",
+        "attachment; filename=ReportePlanilla.xls"
+      );
+
+      const resp = await VotingResultsProvider.getVotingPaginateXlsx(data);
+
+      const responsexlsx = await VotingResultsProvider.generateXlsx(resp.data);
+      response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
+
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
+    public async getPaginatedtotal({
+    response,
+    request,
+  }: HttpContextContract) {      
+    try {
+      const data = request.body() as IVotingFilters;
+  
+      const resp = await VotingResultsProvider.getPaginatedtotal(data);
+      response.send(new ApiResponse(resp.data, EResponseCodes.OK));
+
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async getVotingResultsById({
     request,
     response,

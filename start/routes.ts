@@ -42,6 +42,8 @@ Route.group(() => {
   Route.post("/create", "VotingResultsController.createVotingResult");
   Route.put("/update/:id", "VotingResultsController.updateVotingResult");
   Route.post("/get-paginated/", "VotingResultsController.getVotingPaginate");
+  Route.post("/get-paginatedxlsx/", "VotingResultsController.getVotingPaginateXlsx");
+  Route.post("/get-paginatedtotal/", "VotingResultsController.getPaginatedtotal");
   Route.get("/search", "VotingResultsController.getActivityProgram");
 })
   .prefix("/api/v1/voting")
