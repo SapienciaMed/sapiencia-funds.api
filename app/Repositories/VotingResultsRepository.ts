@@ -87,7 +87,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
       999999999
     );
 
-    const { data, meta } = workerMasterActivityPaginated.serialize();
+    const { data } = workerMasterActivityPaginated.serialize();
     const dataArray = data ?? [];   
 
     const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
@@ -124,7 +124,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
       10
     );
 
-    const { data, meta } = workerMasterActivityPaginated.serialize();
+    const { data } = workerMasterActivityPaginated.serialize();
     const dataArray = data ?? [];   
 
     const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
