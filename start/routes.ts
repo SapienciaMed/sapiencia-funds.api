@@ -34,11 +34,14 @@ Route.group(() => {
 }).prefix("/api/v1/sapiencia");
 
 Route.group(() => {
-  Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.post(
-    "resource-prioritization/get-paginated/",
-    "VotingResultsController.getResourcePrioritizationPaginate"
+    "/get-paginated/",
+    "ResourcePrioritizationController.getResourcePrioritizationPaginate"
   );
+}).prefix("/api/v1/resource-prioritization");
+
+Route.group(() => {
+  Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get(
     "/getActivityProgram/:id",
     "VotingResultsController.getActivityProgram"

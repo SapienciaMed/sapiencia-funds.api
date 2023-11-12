@@ -51,26 +51,7 @@ export default class Item extends BaseModel {
   })
   public codRtVotingResult: number;
 
-  @column({
-    columnName: "ITM_RECURSOS_BALANCE",
-    serializeAs: "balanceResources",
-  })
-  public balanceResources: number;
 
-  @column({
-    columnName: "ITM_RENDIMIENTOS_FINANCIEROS",
-    serializeAs: "financialPerformances",
-  })
-  public financialPerformances: number;
-
-  @column({ columnName: "ITM_COSTO_PROMEDIO", serializeAs: "averageCost" })
-  public averageCost: number;
-
-  @column({ columnName: "ITM_TASA_GENERAL", serializeAs: "generalRate" })
-  public generalRate: number;
-
-  @column({ columnName: "ITM_RECURSO_CREDITO", serializeAs: "creditResource" })
-  public creditResource: number;
 
   @hasOne(() => MasterActivity, {
     localKey: "codMtaTeacherActivity",

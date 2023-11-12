@@ -7,10 +7,6 @@ export interface IVotingResults {
   validity: string;
   ideaProject: string;
   items?: IItemResults[];
-  generalRate?: number;
-  operatorCommissionAct?: number;
-  operatorCommissionBalance?: number;
-  operatorCommission?: number;
 }
 
 export interface IActivity {

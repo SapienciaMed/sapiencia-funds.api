@@ -12,11 +12,7 @@ export interface IItemResults {
   percentage123: number;
   percentage456: number;
   codRtVotingResult?: number;
-  balanceResources?: number;
-  financialPerformances?: number;
-  averageCost?: number;
-  generalRate?: number;
-  creditResource?: number;
+
 
   votingResult?: IVotingResults;
 }

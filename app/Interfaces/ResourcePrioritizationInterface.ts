@@ -4,10 +4,6 @@ export interface IResourcePrioritizationFilters {
   projectId?: number;
   programNumber?: number;
   validity?: number;
-  generalRate?: number;
-  operatorCommissionAct?: number;
-  operatorCommissionBalance?: number;
-  operatorCommission?: number;
 }
 
 export interface IResourcePrioritization {

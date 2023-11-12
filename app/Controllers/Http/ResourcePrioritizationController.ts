@@ -4,7 +4,7 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import { schema } from "@ioc:Adonis/Core/Validator";
 
-export default class VotingResultsController {
+export default class ResourcePrioritizationController {
   public async getResourcePrioritizationPaginate({
     response,
     request,
