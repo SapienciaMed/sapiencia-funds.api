@@ -4,38 +4,12 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IVotingFilters } from "App/Interfaces/VotingResultsInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import VotingResultsValidator from "App/Validators/VotingResultsValidator";
-import { schema } from "@ioc:Adonis/Core/Validator";
 
 export default class VotingResultsController {
   public async getVotingPaginate({ response, request }: HttpContextContract) {
     try {
       const data = request.body() as IVotingFilters;
       return response.send(await VotingResultsProvider.getVotingPaginate(data));
-    } catch (err) {
-      return response.badRequest(
-        new ApiResponse(null, EResponseCodes.FAIL, String(err))
-      );
-    }
-  }
-
-  public async getResourcePrioritizationPaginate({
-    response,
-    request,
-  }: HttpContextContract) {
-    try {
-      const data = await request.validate({
-        schema: schema.create({
-          page: schema.number(),
-          perPage: schema.number(),
-          projectNumber: schema.number.optional(),
-          programId: schema.number.optional(),
-          validity: schema.number.optional(),
-        }),
-      });
-
-      return response.send(
-        await VotingResultsProvider.getResourcePrioritizationPaginate(data)
-      );
     } catch (err) {
       return response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))

@@ -1,5 +1,4 @@
 import {
-  IResourcePrioritizationResult,
   IVotingFilters,
   IVotingResults,
 } from "App/Interfaces/VotingResultsInterfaces";
@@ -7,8 +6,7 @@ import { IVotingResultsRepository } from "App/Repositories/VotingResultsReposito
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "../Constants/ResponseCodesEnum";
 import { IMasterActivity } from "App/Interfaces/MasterActivityInterface";
-import { IItemRepository } from "../Repositories/ItemRepository";
-import { IItemResults, IItemsFilters } from "App/Interfaces/ItemInterface";
+import { IItemResults } from "App/Interfaces/ItemInterface";
 
 export interface IVotingResultsService {
   getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>>;
@@ -23,42 +21,10 @@ export interface IVotingResultsService {
   getVotingPaginate(
     filters: IVotingFilters
   ): Promise<ApiResponse<IPagingData<IItemResults>>>;
-  getResourcePrioritizationPaginate(
-    filters: IItemsFilters
-  ): Promise<ApiResponse<IPagingData<IResourcePrioritizationResult>>>;
 }
 
 export default class VotingResultsService implements IVotingResultsService {
-  constructor(
-    private votingResultsRepository: IVotingResultsRepository,
-    private itemRepository: IItemRepository
-  ) {}
-
-  async getResourcePrioritizationPaginate(
-    filters: IItemsFilters
-  ): Promise<ApiResponse<IPagingData<IResourcePrioritizationResult>>> {
-    const items = await this.itemRepository.getItemsPaginated(filters);
-
-    const toReturn: IResourcePrioritizationResult[] = [];
-
-    for (const item of items.array) {
-      toReturn.push({
-        communeName: String(item.votingResult?.communeNeighborhood),
-        percentage123: Number(item.percentage123),
-        percentage456: Number(item.percentage456),
-        value: item.costTotal,
-        places: item.amount,
-      });
-    }
-
-    return new ApiResponse(
-      {
-        array: toReturn,
-        meta: items.meta,
-      },
-      EResponseCodes.OK
-    );
-  }
+  constructor(private votingResultsRepository: IVotingResultsRepository) {}
 
   async getVotingPaginate(
     filters: IVotingFilters

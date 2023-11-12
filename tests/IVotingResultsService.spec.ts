@@ -1,15 +1,12 @@
 import test from "japa";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import VotingResultsService from "App/Services/VotingResultsService";
-import { ItemRepositoryFake } from "./FakeClass/ItemRepositoryFake";
+
 import { ApiResponse } from "App/Utils/ApiResponses";
 import VotingResultsRepository from "App/Repositories/VotingResultsRepository";
-import { VotingResultsRepositoryFake } from "./FakeClass/VotingResultsRepositoryFake copy";
+import { VotingResultsRepositoryFake } from "./FakeClass/VotingResultsRepositoryFake";
 
-const service = new VotingResultsService(
-  new VotingResultsRepositoryFake(),
-  new ItemRepositoryFake()
-);
+const service = new VotingResultsService(new VotingResultsRepositoryFake());
 
 test.group("RolService TEST for getVotingResultsById", () => {
   test("class service must have a method getVotingResultsById with a return", async (assert) => {

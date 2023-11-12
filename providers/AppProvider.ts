@@ -40,6 +40,7 @@ export default class AppProvider {
 
     const ReglamentService = await import("App/Services/ReglamentService");
     const BudgetService = await import("App/Services/BudgetService");
+    const ResourcePrioritizationService = await import("App/Services/ResourcePrioritizationService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -89,10 +90,16 @@ export default class AppProvider {
 
     const BudgetRepository = await import("App/Repositories/BudgetRepository");
 
+    const ResourcePrioritizationRepository = await import("App/Repositories/ResourcePrioritizationRepository");
+
+
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
-
+    this.app.container.singleton(
+      "core.ResourcePrioritizationProvider",
+      () => new ResourcePrioritizationService.default(new ResourcePrioritizationRepository.default())
+    );
     this.app.container.singleton(
       "core.SapienciaProvider",
       () => new SapienciaService.default(new CallPeriodRepository.default())
@@ -102,7 +109,6 @@ export default class AppProvider {
       () =>
         new VotingResultsService.default(
           new VotingResultsRepository.default(),
-          new ItemRepository.default()
         )
     );
     this.app.container.singleton(
