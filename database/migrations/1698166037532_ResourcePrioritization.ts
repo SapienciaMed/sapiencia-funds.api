@@ -36,7 +36,7 @@ export default class extends BaseSchema {
       table.decimal("PRR_ESTRATO_123", 15,2).notNullable().comment("");
       table.decimal("PRR_ESTRATO_456", 15,2).notNullable().comment("");
       table.decimal("PRR_VALOR", 15,2).notNullable().comment("");
-      table.decimal("PRR_CUPOS", 15,2).notNullable().comment("");
+      table.integer("PRR_CUPOS").notNullable().comment("");
       table.decimal("PRR_COSTO_PROMEDIO", 15,2).notNullable().comment("");
       table.decimal("PRR_TASA_GENERAL", 15,2).notNullable().comment("");
       table.decimal("PRR_VALOR_BRUTO", 15,2).notNullable().comment("");
