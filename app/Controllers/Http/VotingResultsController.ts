@@ -6,16 +6,10 @@ import { ApiResponse } from "App/Utils/ApiResponses";
 import VotingResultsValidator from "App/Validators/VotingResultsValidator";
 
 export default class VotingResultsController {
-
-  public async getVotingPaginate({
-    response,
-    request,
-  }: HttpContextContract) {      
+  public async getVotingPaginate({ response, request }: HttpContextContract) {
     try {
       const data = request.body() as IVotingFilters;
-      return response.send(
-        await VotingResultsProvider.getVotingPaginate(data)
-      );
+      return response.send(await VotingResultsProvider.getVotingPaginate(data));
     } catch (err) {
       return response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
@@ -81,11 +75,8 @@ export default class VotingResultsController {
     }
   }
 
-    public async getActivityProgram({
-      response,
-      request
-  }: HttpContextContract) {
-      try {
+  public async getActivityProgram({ response, request }: HttpContextContract) {
+    try {
       const { id } = request.params();
       return response.send(
         await VotingResultsProvider.getActivityProgram(Number(id))
@@ -96,36 +87,31 @@ export default class VotingResultsController {
       );
     }
   }
-  
-  public async createVotingResult({response, request }: HttpContextContract){
-    try {            
-      const voting = await request.validate(
-        VotingResultsValidator
-      );     
+
+  public async createVotingResult({ response, request }: HttpContextContract) {
+    try {
+      const voting = await request.validate(VotingResultsValidator);
       return response.send(
         await VotingResultsProvider.createVotingResult(voting)
-      );  
+      );
     } catch (err) {
       response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
-   
       );
     }
   }
 
-  public async updateVotingResult({response, request }: HttpContextContract){
-    try {            
-      const { id } = request.params();     
-      const voting = await request.validate(
-        VotingResultsValidator
-      );     
+  public async updateVotingResult({ response, request }: HttpContextContract) {
+    try {
+      const { id } = request.params();
+      const voting = await request.validate(VotingResultsValidator);
 
-      return response.send(await VotingResultsProvider.updateVotingResult(voting,id));  
-
+      return response.send(
+        await VotingResultsProvider.updateVotingResult(voting, id)
+      );
     } catch (err) {
       response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
-   
       );
     }
   }
