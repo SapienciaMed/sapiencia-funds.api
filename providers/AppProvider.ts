@@ -39,7 +39,10 @@ export default class AppProvider {
     const RequerimentService = await import("App/Services/RequerimentService");
 
     const ReglamentService = await import("App/Services/ReglamentService");
+
     const BudgetService = await import("App/Services/BudgetService");
+
+    const CutService = await import("App/Services/CutService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -88,6 +91,8 @@ export default class AppProvider {
     );
 
     const BudgetRepository = await import("App/Repositories/BudgetRepository");
+
+    const CutRepository = await import("App/Repositories/CutRepository");
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -170,6 +175,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.BudgetProvider",
       () => new BudgetService.default(new BudgetRepository.default())
+    );
+    this.app.container.singleton(
+      "core.CutsProvider",
+      () => new CutService.default(new CutRepository.default())
     );
   }
 
