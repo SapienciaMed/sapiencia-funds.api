@@ -1,19 +1,25 @@
 export interface IResourcePrioritizationFilters {
   page: number;
   perPage: number;
-  projectId?: number;
-  programNumber?: number;
-  validity?: number;
+  projectNumber: number;
+  programId: number;
+  validity: number;
+}
+
+export interface ITotalsPrioritizationFilters {
+  projectNumber: number;
+  programId: number;
+  validity: number;
 }
 
 export interface IResourcePrioritization {
   id?: number;
   programId: number;
   projectNumber: number;
-  validityYear: number;
-  communeId: string;
-  percentage123: number;
-  percentage456: number;
+  validity: number;
+  communeId: number;
+  total123: number;
+  total456: number;
   value: number;
   places: number;
   averageCost: number;
@@ -26,4 +32,13 @@ export interface IResourcePrioritization {
   operatorCommissionBalance: number;
   operatorCommission: number;
   resourceForCredit: number;
+}
+
+export interface IGroupedResults {
+  communeId: number;
+  programId: number;
+  value: number;
+  places: number;
+  total123: number;
+  total456: number;
 }

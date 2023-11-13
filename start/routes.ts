@@ -38,7 +38,17 @@ Route.group(() => {
     "/get-paginated/",
     "ResourcePrioritizationController.getResourcePrioritizationPaginate"
   );
-}).prefix("/api/v1/resource-prioritization");
+  Route.post(
+    "/get-totals/",
+    "ResourcePrioritizationController.getResourcePrioritizationTotals"
+  );
+  Route.post(
+    "/set/",
+    "ResourcePrioritizationController.setResourcePrioritization"
+  );
+})
+  .prefix("/api/v1/resource-prioritization")
+  .middleware("auth");
 
 Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
