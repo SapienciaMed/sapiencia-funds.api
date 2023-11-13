@@ -22,6 +22,9 @@ export interface IVotingResultsService {
   getVotingPaginate(
     filters: IVotingFilters
   ): Promise<ApiResponse<IPagingData<IItemResults>>>;
+  getVotingPaginateXlsx(filters: IVotingFilters): Promise<any>
+  generateXlsx(rows: any): Promise<any>
+  getPaginatedtotal(filters: IVotingFilters): Promise<any> 
 }
 
 export default class VotingResultsService implements IVotingResultsService {
