@@ -35,10 +35,10 @@ export default class VotingResultsValidator {
         codProductgueDnp: schema.string(),
         codPmaProgram: schema.number(),
         codMtaTeacherActivity: schema.number(),
-        amount: schema.string(),
-        costTotal: schema.string(),
-        percentage123: schema.string(),
-        percentage456: schema.string(),        
+        amount: schema.number(),
+        costTotal: schema.number(),
+        percentage123: schema.number(),
+        percentage456: schema.number(),        
       })
     )
   });

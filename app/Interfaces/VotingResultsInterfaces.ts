@@ -9,17 +9,16 @@ export interface IVotingResults {
   items?: IItemResults[];
 }
 
-
 export interface IActivity {
   id?: number;
-  nombre: string
+  nombre: string;
 }
 
 export interface IVotingFilters {
   communeNeighborhood?: number;
   numberProject?: number;
   validity?: string;
-  ideaProject?: string;  
+  ideaProject?: string;
   page: number;
   perPage: number;
 }
