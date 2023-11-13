@@ -8,14 +8,14 @@ export default class ResourcePrioritization extends BaseModel {
   public programId: number;
   @column({ columnName: "PRR_NUMERO_PROYECTO", serializeAs: "projectNumber" })
   public projectNumber: number;
-  @column({ columnName: "PRR_VIGENCIA", serializeAs: "validityYear" })
-  public validityYear: number;
+  @column({ columnName: "PRR_VIGENCIA", serializeAs: "validity" })
+  public validity: number;
   @column({ columnName: "PRR_COMUNA", serializeAs: "communeId" })
   public communeId: number;
-  @column({ columnName: "PRR_ESTRATO_123", serializeAs: "percentage123" })
-  public percentage123: number;
-  @column({ columnName: "PRR_ESTRATO_456", serializeAs: "percentage456" })
-  public percentage456: number;
+  @column({ columnName: "PRR_ESTRATO_123", serializeAs: "total123" })
+  public total123: number;
+  @column({ columnName: "PRR_ESTRATO_456", serializeAs: "total456" })
+  public total456: number;
   @column({ columnName: "PRR_VALOR", serializeAs: "value" })
   public value: number;
   @column({ columnName: "PRR_CUPOS", serializeAs: "places" })
@@ -40,7 +40,6 @@ export default class ResourcePrioritization extends BaseModel {
   public operatorCommission: number;
   @column({ columnName: "PRR_RECURSO_PARA_CREDITO", serializeAs: "resourceForCredit" })
   public resourceForCredit: number;
-
   @column({ columnName: "PRR_USUARIO_MODIFICO", serializeAs: "userModified" })
   public userModified: string;
   @column({ columnName: "PRR_FECHA_MODIFICO", serializeAs: "dateModified" })

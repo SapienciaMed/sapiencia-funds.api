@@ -66,7 +66,7 @@ export default class SummaryPriorizacionRepository
     res
       .map((i) => i.$extras)
       .forEach((i: any) => {
-        console.log("iterador ", i);
+
         toReturn.push({
           program: i.programa45,
           pct123: i.pct123,
@@ -78,7 +78,7 @@ export default class SummaryPriorizacionRepository
         });
       });
 
-    console.log(toReturn);
+
 
     const { meta } = res.serialize();
 
@@ -134,7 +134,7 @@ export default class SummaryPriorizacionRepository
     res
       .map((i) => i.$extras)
       .forEach((i: any) => {
-        console.log("iterador ", i);
+
         toReturn.push({
           Programa: i.programa45,
           Porcentaje123: i.pct123,
@@ -146,7 +146,7 @@ export default class SummaryPriorizacionRepository
         });
       });
 
-    console.log(toReturn);
+
 
 
     // const itemsArray = dataArray.flatMap((votingResult) => votingResult.items);
