@@ -8,9 +8,14 @@ import { IVotingResultsRepository } from "App/Repositories/VotingResultsReposito
 import { IPagingData } from "App/Utils/ApiResponses";
 
 export class VotingResultsRepositoryFake implements IVotingResultsRepository {
-  getVotingPaginate(
-    _filters: IVotingFilters
-  ): Promise<IPagingData<IItemResults>> {
+  getVotingPaginateXlsx(__filters: IVotingFilters): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+  getPaginatedtotal(__filters: IVotingFilters): Promise<any> {
+    throw new Error("Method not implemented.");
+  }
+
+  getVotingPaginate(): Promise<IPagingData<IItemResults>> {
     throw new Error("Method not implemented.");
   }
 
