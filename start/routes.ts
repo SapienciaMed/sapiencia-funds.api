@@ -122,6 +122,7 @@ Route.group(() => {
   Route.post("/create", "ActaController.createActa");
   Route.post("get-paginated", "MasterController.getMasterPaginate");
   Route.post("/getActa", "ActaController.getActa");
+  Route.put("/updateCitation", "ActaController.approveCitation");
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 

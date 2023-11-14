@@ -7,6 +7,7 @@ import { ApiResponse } from "App/Utils/ApiResponses";
 export interface IActaService {
     createActa(acta: IActa): Promise<ApiResponse<IActa>>;
     getActa(id: number): Promise<ApiResponse<IActa>>
+    approveCitation(id: number)
 }
 
 export default class ActaService implements IActaService {
@@ -31,6 +32,11 @@ export default class ActaService implements IActaService {
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
+
+    async approveCitation(id: number) {
+        const res = await this.actaRepository.approveCitation(id)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
 
 
 }
