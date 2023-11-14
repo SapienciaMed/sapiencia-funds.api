@@ -41,6 +41,8 @@ export default class AppProvider {
     const ReglamentService = await import("App/Services/ReglamentService");
     const BudgetService = await import("App/Services/BudgetService");
 
+    const RenewalService = await import("App/Services/RenewalService");
+
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -89,6 +91,9 @@ export default class AppProvider {
 
     const BudgetRepository = await import("App/Repositories/BudgetRepository");
 
+    const CallRenewalRepository = await import(
+      "App/Repositories/Sapiencia/CallRenewalRepository"
+    );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -170,6 +175,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.BudgetProvider",
       () => new BudgetService.default(new BudgetRepository.default())
+    );
+    this.app.container.singleton(
+      "core.RenewalProvider",
+      () => new RenewalService.default(new CallRenewalRepository.default())
     );
   }
 

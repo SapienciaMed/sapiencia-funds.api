@@ -175,3 +175,10 @@ Route.group(() => {
   .prefix("/api/v1/presupuesto")
 //.middleware("auth");
 
+
+Route.group(() => {
+  Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
+  Route.get("/generate-xlsx", "RenewalController.generateXLSX");
+})
+  .prefix("/api/v1/renovacion")
+//.middleware("auth");
