@@ -42,6 +42,8 @@ export default class AppProvider {
 
     const BudgetService = await import("App/Services/BudgetService");
 
+    const RenewalService = await import("App/Services/RenewalService");
+
     const ResourcePrioritizationService = await import(
       "App/Services/ResourcePrioritizationService"
     );
@@ -96,6 +98,9 @@ export default class AppProvider {
 
     const BudgetRepository = await import("App/Repositories/BudgetRepository");
 
+    const CallRenewalRepository = await import(
+      "App/Repositories/Sapiencia/CallRenewalRepository"
+    );
     const CutRepository = await import("App/Repositories/CutRepository");
 
     const ResourcePrioritizationRepository = await import(
@@ -193,6 +198,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.CutsProvider",
       () => new CutService.default(new CutRepository.default())
+    );
+    this.app.container.singleton(
+      "core.CutsProvider",
+      () => new RenewalService.default(new CallRenewalRepository.default())
     );
   }
 
