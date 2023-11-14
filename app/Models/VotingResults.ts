@@ -19,6 +19,7 @@ export default class VotingResults extends BaseModel {
   @column({ columnName: "RTV_IDEA_PROYECTO", serializeAs: "ideaProject" })
   public ideaProject: string;
 
+  
   @hasMany(() => Item, {
     localKey: "id",
     foreignKey: "codRtVotingResult",
