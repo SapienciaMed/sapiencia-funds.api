@@ -6,6 +6,7 @@ import { ICitation } from "App/Interfaces/CitationInterface";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import Mail from "@ioc:Adonis/Addons/Mail";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
+import Database from "@ioc:Adonis/Lucid/Database";
 
 
 
@@ -14,6 +15,7 @@ export interface IActaRepository {
   noticacion(citations: ICitation[], id: number): Promise<ApiResponse<boolean | null>>;
   getActa(id: number)
   approveCitation(id: number)
+  lastInsertId()
 }
 
 
@@ -137,4 +139,8 @@ export default class ActaRepository implements IActaRepository {
     return query
   }
 
+  async lastInsertId() {
+    const query = await Database.rawQuery('SELECT ATA_CODIGO FROM ATA_ACTA ORDER BY ATA_CODIGO DESC LIMIT 1;')
+    return query[0][0]
+  }
 }

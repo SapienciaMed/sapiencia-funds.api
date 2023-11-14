@@ -8,6 +8,7 @@ export interface IActaService {
     createActa(acta: IActa): Promise<ApiResponse<IActa>>;
     getActa(id: number): Promise<ApiResponse<IActa>>
     approveCitation(id: number)
+    lastInsertId()
 }
 
 export default class ActaService implements IActaService {
@@ -38,5 +39,8 @@ export default class ActaService implements IActaService {
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
-
+    async lastInsertId() {
+        const res = await this.actaRepository.lastInsertId()
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
 }
