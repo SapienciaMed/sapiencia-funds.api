@@ -13,6 +13,7 @@ export interface IActaRepository {
   createActa(acta: IActa): Promise<IActa>;
   noticacion(citations: ICitation[], id: number): Promise<ApiResponse<boolean | null>>;
   getActa(id: number)
+  approveCitation(id: number)
 }
 
 
@@ -126,6 +127,14 @@ export default class ActaRepository implements IActaRepository {
     const res = query.where("id", id)
 
     return res
+  }
+
+  async approveCitation(id: number) {
+    const currentDate = new Date();
+    const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
+
+    const query = await Citation.query().preload("acta").where("idCitation", id).update({ status: 1, dateAprobation: formattedDate })
+    return query
   }
 
 }

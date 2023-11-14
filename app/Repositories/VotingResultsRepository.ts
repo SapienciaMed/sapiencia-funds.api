@@ -12,6 +12,9 @@ export interface IVotingResultsRepository {
   createVotingResult(voting: IVotingResults): Promise<IVotingResults>;
   updateVotingResult(voting: IVotingResults, id: number): Promise<IVotingResults | null>;
   getVotingPaginate(filters: IVotingFilters): Promise<IPagingData<IItemResults>>;
+  getVotingPaginateXlsx(filters: IVotingFilters): Promise<any>;
+  getPaginatedtotal(filters: IVotingFilters): Promise<any>;
+
 }
 
 export default class VotingResultsRepository implements IVotingResultsRepository {
@@ -56,6 +59,80 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     };
   }
 
+  async getVotingPaginateXlsx(
+    filters: IVotingFilters
+    ): Promise<any> {
+    
+    const res = VotingResults.query().preload('items', (itemQuery) => {
+      itemQuery.preload('activity', (activitiQuery) => {
+        activitiQuery.preload('typesProgram');
+      });
+    });
+
+    if (filters.communeNeighborhood) {
+      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+    }
+    if (filters.numberProject) {
+      res.whereILike("numberProject", `%${filters.numberProject}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("validity", `%${filters.validity}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
+    }       
+
+    const workerMasterActivityPaginated = await res.paginate(
+      1,
+      999999999
+    );
+
+    const { data } = workerMasterActivityPaginated.serialize();
+    const dataArray = data ?? [];   
+
+    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+
+    return  itemsArray as any[]
+
+  }
+
+  async getPaginatedtotal(
+    filters: IVotingFilters
+    ): Promise<any> {
+    
+    const res = VotingResults.query().preload('items', (itemQuery) => {
+      itemQuery.preload('activity', (activitiQuery) => {
+        activitiQuery.preload('typesProgram');
+      });
+    });
+
+    if (filters.communeNeighborhood) {
+      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+    }
+    if (filters.numberProject) {
+      res.whereILike("numberProject", `%${filters.numberProject}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("validity", `%${filters.validity}%`);
+    }
+    if (filters.communeNeighborhood) {
+      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
+    }       
+
+    const workerMasterActivityPaginated = await res.paginate(
+      1,
+      10
+    );
+
+    const { data } = workerMasterActivityPaginated.serialize();
+    const dataArray = data ?? [];   
+
+    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+
+    return  itemsArray as any[]
+
+  }
+
   async getVotingResultsById(id: string): Promise<IVotingResults | null> {
     const res = await VotingResults.find(id);
     if (res) {
@@ -79,7 +156,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
     const saveItemPromises = voting.items!.map(itemData => {
       const item = new Item();
-      item.fill({ ...itemData, codRtVotingResult: toCreate.id.toString() });
+      item.fill({ ...itemData, codRtVotingResult: toCreate.id });
       return item.save();
     });
 
@@ -108,7 +185,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
     const saveItemPromises = voting.items!.map(itemData => {
       const item = new Item();
-      item.fill({ ...itemData, codRtVotingResult: toUpdate.id.toString() });
+      item.fill({ ...itemData, codRtVotingResult: toUpdate.id });
       return item.save();
     });
 

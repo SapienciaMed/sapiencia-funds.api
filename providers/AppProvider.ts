@@ -39,9 +39,16 @@ export default class AppProvider {
     const RequerimentService = await import("App/Services/RequerimentService");
 
     const ReglamentService = await import("App/Services/ReglamentService");
+
     const BudgetService = await import("App/Services/BudgetService");
 
     const RenewalService = await import("App/Services/RenewalService");
+
+    const ResourcePrioritizationService = await import(
+      "App/Services/ResourcePrioritizationService"
+    );
+
+    const CutService = await import("App/Services/CutService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -94,10 +101,22 @@ export default class AppProvider {
     const CallRenewalRepository = await import(
       "App/Repositories/Sapiencia/CallRenewalRepository"
     );
+    const CutRepository = await import("App/Repositories/CutRepository");
+
+    const ResourcePrioritizationRepository = await import(
+      "App/Repositories/ResourcePrioritizationRepository"
+    );
+
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
-
+    this.app.container.singleton(
+      "core.ResourcePrioritizationProvider",
+      () =>
+        new ResourcePrioritizationService.default(
+          new ResourcePrioritizationRepository.default()
+        )
+    );
     this.app.container.singleton(
       "core.SapienciaProvider",
       () => new SapienciaService.default(new CallPeriodRepository.default())
@@ -177,7 +196,11 @@ export default class AppProvider {
       () => new BudgetService.default(new BudgetRepository.default())
     );
     this.app.container.singleton(
-      "core.RenewalProvider",
+      "core.CutsProvider",
+      () => new CutService.default(new CutRepository.default())
+    );
+    this.app.container.singleton(
+      "core.CutsProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
     );
   }

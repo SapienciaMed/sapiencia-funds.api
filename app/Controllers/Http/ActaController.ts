@@ -33,4 +33,18 @@ export default class ActaController {
       return response.badRequest(apiResp);
     }
   }
+
+  async approveCitation(ctx: HttpContextContract) {
+    const { request, response, logger } = ctx;
+    const { id } = request.body()
+
+    try {
+      const approveCitation = await ActaProvider.approveCitation(id)
+      return response.ok(approveCitation)
+    } catch (err) {
+      logger.error(err)
+      const apiRes = new ApiResponse(null, EResponseCodes.FAIL, err.message)
+      return response.badRequest(apiRes)
+    }
+  }
 }
