@@ -92,7 +92,8 @@ export default class VotingResultsRepository implements IVotingResultsRepository
 
     const itemsArray = dataArray.flatMap(votingResult => votingResult);
     const arrayResp: any = [];
-    itemsArray.at(0)?.items.map((e : any) => {
+    itemsArray.map((i : any) => {
+      i.items.map((e : any) => {
       arrayResp.push({
         "Objetivo directo": e.aimStraight,
         "Código catalogo dnp": e.productCatalogueDnp,
@@ -107,6 +108,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
         "Porcentaje 456" : e.percentage456,
 
       });
+    })
     })
     return  arrayResp as any[]
 
