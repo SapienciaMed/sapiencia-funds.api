@@ -200,7 +200,7 @@ export default class AppProvider {
       () => new CutService.default(new CutRepository.default())
     );
     this.app.container.singleton(
-      "core.CutsProvider",
+      "core.RenewalProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
     );
   }

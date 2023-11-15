@@ -39,18 +39,8 @@ public async geCallRenewalPaginate({ response, request }: HttpContextContract) {
   try {
     const filters = request.body() as ICallRenewalFilters;
 
-    if (!Array.isArray(filters.id_comuna)) {
-      filters.id_comuna = [Number(filters.id_comuna)];
-    }
-    
-    // Formatea los valores de id_comuna como una cadena separada por comas
-    const idComunaList = filters.id_comuna.join(',');
-
-    filters.id_comuna = idComunaList; // Asigna la cadena formateada a id_comuna
-
     const resp = await RenewalProvider.geCallRenewalPaginate(filters);
 
-    
     return response.ok(resp);
   } catch (err) {
     return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
