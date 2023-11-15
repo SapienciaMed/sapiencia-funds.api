@@ -1,4 +1,4 @@
-import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany  } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, BelongsTo, HasMany, belongsTo, column, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import State from './State';
 import ActaItems from './ActaItems';
 import Citation from './Citation';
@@ -34,12 +34,15 @@ export default class Acta extends BaseModel {
   public creationDate: string;
 
   @column({ columnName: "ATA_CODETO_CODIGO", serializeAs: "idStatus" })
-  public idStatus: number; 
+  public idStatus: number;
+
+  @column({ columnName: "LAST_ATA_CODIGO", serializeAs: "lastId" })
+  public lastId: number;
 
 
   @belongsTo(() => State, {
-    foreignKey: 'idStatus', 
-    localKey: 'id',        
+    foreignKey: 'idStatus',
+    localKey: 'id',
   })
   public typeMasterList: BelongsTo<typeof State>
 

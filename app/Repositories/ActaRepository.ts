@@ -16,6 +16,7 @@ export interface IActaRepository {
   getActa(id: number)
   approveCitation(id: number)
   lastInsertId()
+  updateActa(acta: IActa)
 }
 
 
@@ -31,8 +32,13 @@ export default class ActaRepository implements IActaRepository {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
 
-    toCreate.fill({ ...acta, creationDate: formattedDate });
-    await toCreate.save();
+    if (acta.id) {
+      toCreate.fill({ ...acta, creationDate: formattedDate, lastId: acta.id });
+      await toCreate.save();
+    } else {
+      toCreate.fill({ ...acta, creationDate: formattedDate });
+      await toCreate.save();
+    }
 
     const saveItemPromises = acta.items!.map(itemData => {
       const item = new ActaItems();
@@ -143,4 +149,19 @@ export default class ActaRepository implements IActaRepository {
     const query = await Database.rawQuery('SELECT ATA_CODIGO FROM ATA_ACTA ORDER BY ATA_CODIGO DESC LIMIT 1;')
     return query[0][0]
   }
+
+  async updateActa(acta: IActa) {
+
+    const res = Acta.query().where("ATA_CODIGO", acta.id!).update({ numberProject: acta.numberProject, periodVigency: acta.periodVigency, announcementInitial: acta.announcementInitial, salaryMin: acta.salaryMin, costsExpenses: acta.costsExpenses, OperatorCommission: acta.OperatorCommission, financialOperation: acta.financialOperation, idStatus: acta.idStatus })
+    const items = acta.items!.map(itemData => {
+      ActaItems.query().where("id", itemData.id!).update({ idFound: itemData.idFound, idLine: itemData.idLine, idAnnouncement: itemData.idAnnouncement, idConcept: itemData.idConcept, costOperation: itemData.costOperation, subtotalVigency: itemData.subtotalVigency, costBillsOperation: itemData.costBillsOperation, net: itemData.net, financialOperatorCommission: itemData.financialOperatorCommission, resourcesCredit: itemData.resourcesCredit, idProgram: itemData.idProgram, idActa: itemData.idActa })
+    })
+
+    if (!res && !items) {
+      return "No se pudo actualizar la informacion"
+    } else {
+      return "Informacion actualizada"
+    }
+  }
+
 }
