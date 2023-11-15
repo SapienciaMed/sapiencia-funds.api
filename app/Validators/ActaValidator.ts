@@ -7,7 +7,7 @@ export default class ActaValidator {
   public schema = schema.create({
     numberProject: schema.number(),
     periodVigency: schema.number(),
-    announcementInitial: schema.number(),
+    announcementInitial: schema.string(),
     salaryMin: schema.number(),
     costsExpenses: schema.number(),
     OperatorCommission: schema.number(),

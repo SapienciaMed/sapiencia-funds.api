@@ -16,7 +16,7 @@ export default class Acta extends BaseModel {
   public periodVigency: number;
 
   @column({ columnName: "ATA_CONVOCATORIA_INICIAL", serializeAs: "announcementInitial" })
-  public announcementInitial: number;
+  public announcementInitial: string;
 
   @column({ columnName: "ATA_SALARIO_MINIMO", serializeAs: "salaryMin" })
   public salaryMin: number;
