@@ -2,19 +2,19 @@ import { schema, CustomMessages } from "@ioc:Adonis/Core/Validator";
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class ActaValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) { }
 
-  public schema = schema.create({    
+  public schema = schema.create({
     numberProject: schema.number(),
     periodVigency: schema.number(),
     announcementInitial: schema.string(),
     salaryMin: schema.number(),
     costsExpenses: schema.number(),
     OperatorCommission: schema.number(),
-    financialOperation: schema.number(),    
-    idStatus: schema.number(),    
+    financialOperation: schema.number(),
+    idStatus: schema.number(),
     items: schema.array().members(
-      schema.object().members({     
+      schema.object().members({
         idFound: schema.number(),
         idLine: schema.number(),
         idAnnouncement: schema.number(),
@@ -31,7 +31,7 @@ export default class ActaValidator {
         net: schema.number(),
         financialOperatorCommission: schema.number(),
         resourcesCredit: schema.number(),
-        idProgram: schema.number(),           
+        idProgram: schema.number(),
       })
     ),
     citation: schema.array.optional().members(
@@ -39,7 +39,7 @@ export default class ActaValidator {
         dateCitation: schema.string.optional(),
         timeCitation: schema.string.optional(),
         user: schema.string.optional(),
-        status: schema.number.optional(),        
+        status: schema.number.optional(),
         dateAprobation: schema.string.optional(),
         email: schema.string.optional(),
       })

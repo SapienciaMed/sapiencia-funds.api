@@ -34,6 +34,23 @@ Route.group(() => {
 }).prefix("/api/v1/sapiencia");
 
 Route.group(() => {
+  Route.post(
+    "/get-paginated/",
+    "ResourcePrioritizationController.getResourcePrioritizationPaginate"
+  );
+  Route.post(
+    "/get-totals/",
+    "ResourcePrioritizationController.getResourcePrioritizationTotals"
+  );
+  Route.post(
+    "/set/",
+    "ResourcePrioritizationController.setResourcePrioritization"
+  );
+})
+  .prefix("/api/v1/resource-prioritization")
+  .middleware("auth");
+
+Route.group(() => {
   Route.get("/get-by-id/:id", "VotingResultsController.getVotingResultsById");
   Route.get(
     "/getActivityProgram/:id",
@@ -42,17 +59,31 @@ Route.group(() => {
   Route.post("/create", "VotingResultsController.createVotingResult");
   Route.put("/update/:id", "VotingResultsController.updateVotingResult");
   Route.post("/get-paginated/", "VotingResultsController.getVotingPaginate");
+  Route.post(
+    "/get-paginatedxlsx/",
+    "VotingResultsController.getVotingPaginateXlsx"
+  );
+  Route.post(
+    "/get-paginatedtotal/",
+    "VotingResultsController.getPaginatedtotal"
+  );
   Route.get("/search", "VotingResultsController.getActivityProgram");
 })
   .prefix("/api/v1/voting")
   .middleware("auth");
 
 Route.group(() => {
-  Route.post("/get-paginated/", "SummaryPriorizacionsController.getSummaryPriorizacionPaginate");
-})
-  .prefix("/api/v1/summary-priorizacion")
-  // .middleware("auth");
-  
+  Route.post(
+    "/get-paginated/",
+    "SummaryPriorizacionsController.getSummaryPriorizacionPaginate"
+  );
+  Route.post(
+    "/get-report/",
+    "SummaryPriorizacionsController.getSummaryPriorizacionReportXLS"
+  );
+}).prefix("/api/v1/summary-priorizacion");
+// .middleware("auth");
+
 Route.group(() => {
   Route.get("/get-by-id/:id", "ItemsController.getItemsById");
   Route.put("/update/:id", "ItemsController.updateItems");
@@ -119,6 +150,9 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/create", "ActaController.createActa");
   Route.post("get-paginated", "MasterController.getMasterPaginate");
+  Route.post("/getActa", "ActaController.getActa");
+  Route.put("/updateCitation", "ActaController.approveCitation");
+  Route.get("/getLastId", "ActaController.lastInsertId");
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
@@ -135,8 +169,9 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.get("/FondocomunaList/", "BudgetController.getFundList");
-    Route.post("/generate-xlsx", "BudgetController.generateXLSX");}).prefix("/api/v1/presupuesto");
+  // Route.get("/FondocomunaList/", "BudgetController.getFundList");
+  Route.post("/generate-xlsx", "BudgetController.generateXLSX");
+}).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
 Route.group(() => {
@@ -162,4 +197,21 @@ Route.group(() => {
   Route.get("/programs", "ReglamentController.getPrograms");
 })
   .prefix("/api/v1/reglament")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
+  Route.get("/FondocomunaList/", "BudgetController.getFundList");
+  Route.get("/generate-xlsx", "BudgetController.generateXLSX");
+}).prefix("/api/v1/presupuesto");
+//.middleware("auth");
+
+Route.group(() => {
+  Route.get("/get-by-id/:id", "CutsController.getCutsById");
+  Route.post("/create", "CutsController.createCuts");
+  Route.post("get-paginated", "CutsController.getCutsPaginate");
+  Route.put("/edit/:id", "CutsController.updateCuts");
+  Route.delete("/delete/:id", "CutsController.deleteCuts");
+})
+  .prefix("/api/v1/cuts")
   .middleware("auth");

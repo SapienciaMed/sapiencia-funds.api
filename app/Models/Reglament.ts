@@ -83,7 +83,7 @@ export default class Reglament extends BaseModel {
   })
   public discontinuousSuspensionQuantity: number;
   @column({
-    columnName: "RCO_APLICA_SUSPENCION_ESPECIAl",
+    columnName: "RCO_APLICA_SUSPENCION_ESPECIAL",
     serializeAs: "applySpecialSuspensions",
   })
   public applySpecialSuspensions: boolean;

@@ -1,6 +1,7 @@
 import { BaseModel, HasOne, column, hasOne } from "@ioc:Adonis/Lucid/Orm";
 import MasterActivity from "./MasterActivity";
 import Programs from "./Programs";
+import VotingResults from "./VotingResults";
 
 export default class Item extends BaseModel {
   public static table = "ITM_ITEM";
@@ -33,22 +34,24 @@ export default class Item extends BaseModel {
   public codMtaTeacherActivity: number;
 
   @column({ columnName: "ITM_CANTIDAD", serializeAs: "amount" })
-  public amount: string;
+  public amount: number;
 
   @column({ columnName: "ITM_COSTO_TOTAL", serializeAs: "costTotal" })
-  public costTotal: string;
+  public costTotal: number;
 
   @column({ columnName: "ITM_PORCENTAJE_123", serializeAs: "percentage123" })
-  public percentage123: string;
+  public percentage123: number;
 
   @column({ columnName: "ITM_PORCENTAJE_456", serializeAs: "percentage456" })
-  public percentage456: string;
+  public percentage456: number;
 
   @column({
     columnName: "ITM_CODRTV_RESULTADO_VOTACION",
     serializeAs: "codRtVotingResult",
   })
-  public codRtVotingResult: string;
+  public codRtVotingResult: number;
+
+
 
   @hasOne(() => MasterActivity, {
     localKey: "codMtaTeacherActivity",
@@ -63,4 +66,11 @@ export default class Item extends BaseModel {
     serializeAs: "program",
   })
   public program: HasOne<typeof Programs>;
+
+  @hasOne(() => VotingResults, {
+    localKey: "codRtVotingResult",
+    foreignKey: "id",
+    serializeAs: "votingResult",
+  })
+  public votingResult: HasOne<typeof VotingResults>;
 }
