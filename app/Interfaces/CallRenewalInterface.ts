@@ -7,7 +7,6 @@ export interface ICallRenewal {
   }
   
   export interface ICallRenewalFilters {
-    id_comuna: number | number[] | string;
     periodo: number;
     page: number;
     perPage: number;

@@ -17,18 +17,19 @@ export default class RenewalRepository implements IRenewalRepository {
   constructor() { }
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
-    const { id_comuna, periodo } = filters;
-    const idComunaArray = Array.isArray(id_comuna) ? id_comuna : [id_comuna];
+    const { periodo } = filters;
   
-    const query = `call AuroraPresupuestoComuna('${idComunaArray.join(",")}', ${periodo})`;
+    const query = `call AuroraInformeRenovados('${periodo}')`;
   
     const result = await Database.connection("mysql_sapiencia").rawQuery(query);
   
     // Suponiendo que result contiene un arreglo de resultados
     const data = result[0];
   
-    // Elimina el primer elemento del array, que contiene el subarreglo innecesario
-    const cleanedData = data.shift();
+    console.log("****************", data);
+  
+    // Extrae el subarreglo necesario sin modificar el original
+    const cleanedData = data[0];
   
     const { page, perPage } = filters;
   
@@ -43,8 +44,9 @@ export default class RenewalRepository implements IRenewalRepository {
       current_page: page,
       last_page: Math.ceil(cleanedData.length / perPage),
     };
-   
+  
     return { array: paginatedData as ICallRenewal[], meta };
   }
+  
   
 }
