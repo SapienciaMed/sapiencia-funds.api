@@ -90,9 +90,25 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     const { data } = workerMasterActivityPaginated.serialize();
     const dataArray = data ?? [];   
 
-    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+    const itemsArray = dataArray.flatMap(votingResult => votingResult);
+    const arrayResp: any = [];
+    itemsArray.at(0)?.items.map((e : any) => {
+      arrayResp.push({
+        "Objetivo directo": e.aimStraight,
+        "Código catalogo dnp": e.productCatalogueDnp,
+        "Producto catalogo dnp": e.codProductgueDnp,
+        "Programa": e.activity.typesProgram.name,
+        "Actividad": e.activity.name,
+        "Valor Actividad" : e.activity.totalValue,
+        "Cantidad" : e.amount,
+        //"" : e.codRtVotingResult,
+        "Costo Total" : e.costTotal,
+        "Porcentaje 123" : e.percentage123,
+        "Porcentaje 456" : e.percentage456,
 
-    return  itemsArray as any[]
+      });
+    })
+    return  arrayResp as any[]
 
   }
 
