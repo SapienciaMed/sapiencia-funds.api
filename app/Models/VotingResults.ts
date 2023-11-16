@@ -14,7 +14,7 @@ export default class VotingResults extends BaseModel {
   public numberProject: number;
 
   @column({ columnName: "RTV_VIGENCIA", serializeAs: "validity" })
-  public validity: string;
+  public validity: number;
 
   @column({ columnName: "RTV_IDEA_PROYECTO", serializeAs: "ideaProject" })
   public ideaProject: string;

@@ -5,9 +5,10 @@ export default class ActaValidator {
   constructor(protected ctx: HttpContextContract) { }
 
   public schema = schema.create({
+    id: schema.number.optional(),
     numberProject: schema.number(),
     periodVigency: schema.number(),
-    announcementInitial: schema.number(),
+    announcementInitial: schema.string(),
     salaryMin: schema.number(),
     costsExpenses: schema.number(),
     OperatorCommission: schema.number(),

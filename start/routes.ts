@@ -152,6 +152,8 @@ Route.group(() => {
   Route.post("get-paginated", "MasterController.getMasterPaginate");
   Route.post("/getActa", "ActaController.getActa");
   Route.put("/updateCitation", "ActaController.approveCitation");
+  Route.get("/getLastId", "ActaController.lastInsertId");
+  Route.put("/updateActa", "ActaController.updateActa");
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
