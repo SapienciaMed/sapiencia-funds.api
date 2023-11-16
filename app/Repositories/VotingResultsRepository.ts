@@ -4,7 +4,7 @@ import MasterActivity from "App/Models/MasterActivity";
 import { IMasterActivityVoting } from "App/Interfaces/MasterActivityInterface";
 import Item from "App/Models/Item";
 import { IPagingData } from "App/Utils/ApiResponses";
-import { IItemResults } from "App/Interfaces/ItemInterface";
+import { IItemResults, ISVotinResultGrid } from "App/Interfaces/ItemInterface";
 
 export interface IVotingResultsRepository {
   getVotingResultsById(id: string): Promise<IVotingResults | null>;
@@ -23,38 +23,99 @@ export default class VotingResultsRepository implements IVotingResultsRepository
   async getVotingPaginate(
     filters: IVotingFilters
   ): Promise<IPagingData<IItemResults>> {
+    const toReturn: ISVotinResultGrid[] = [];
+
+    const query = Item.query()
+      .select(
+        "PMA_NOMBRE as programa45",
+        "ITM_CODIGO as iditem",
+        "ITM_PORCENTAJE_123 as pct123",
+        "ITM_PORCENTAJE_456 as pct456",
+        "ITM_OBJETIVO_DIRECTO as aimStraight",
+        "ITM_PRODUCTO_CATALOGO_DNP as productCatalogueDnp",
+        "ITM_CODIGO_PRODUCTO_DNP as codProductgueDnp",
+        "MTA_NOMBRE as activity454", 
+        "MTA_CODIGO as idactivity",
+        "MTA_VALOR as activitytotalValue",
+        "ITM_CANTIDAD as amountitem",
+        "ITM_COSTO_TOTAL as costTotaliten",
+        "RTV_CODIGO as codRtVotingResultid",
+        "PMA_CODIGO as codProgram",
+        "MTA_CODPMA_PROGRAMA as codProgramCoder",
+        "MTA_DESCRIPCION as descriptions",
+        "MTA_USUARIO_MODIFICO as userModifiedd",
+        "MTA_FECHA_MODIFICO as dateModifiedd",
+        "MTA_USUARIO_CREO as userCreater",
+        "MTA_FECHA_CREO as dateCreatee"
+      )
+      .leftJoin("RTV_RESULTADO_VOTACION", "ITM_CODRTV_RESULTADO_VOTACION", "RTV_RESULTADO_VOTACION.RTV_CODIGO")
+      .leftJoin("MTA_MAESTRO_ACTIVIDAD", "ITM_CODMTA_MAESTRO_ACTIVIDAD", "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO")
+      .leftJoin("PMA_PROGRAMA", "MTA_CODPMA_PROGRAMA", "PMA_PROGRAMA.PMA_CODIGO")
     
-    const res = VotingResults.query().preload('items', (itemQuery) => {
-      itemQuery.preload('activity', (activitiQuery) => {
-        activitiQuery.preload('typesProgram');
-      });
-    });
+  
 
     if (filters.communeNeighborhood) {
-      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+      query.whereILike(
+        "RTV_COMUNA_BARRIO",
+        `%${filters.communeNeighborhood}%`
+      );
     }
     if (filters.numberProject) {
-      res.whereILike("numberProject", `%${filters.numberProject}%`);
+      query.whereILike("RTV_NUMERO_PROYECTO", `%${filters.numberProject}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("validity", `%${filters.validity}%`);
+    if (filters.validity) {
+      query.whereILike("RTV_VIGENCIA", `%${filters.validity}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
-    }       
 
-    const workerMasterActivityPaginated = await res.paginate(
-      filters.page,
-      filters.perPage
-    );
+    if (filters.ideaProject) {
+      query.whereILike("RTV_IDEA_PROYECTO", `%${filters.ideaProject}%`);
+    }
 
-    const { data, meta } = workerMasterActivityPaginated.serialize();
-    const dataArray = data ?? [];   
 
-    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+    const res = await query.paginate(filters.page, filters.perPage);
+
+    res
+      .map((i) => i.$extras)
+      .forEach((i: any) => {
+
+        toReturn.push({
+          id: i.iditem ,
+          aimStraight: i.aimStraight,
+          productCatalogueDnp: i.productCatalogueDnp,
+          codProductgueDnp: i.codProductgueDnp ,
+          codPmaProgram: i.codProgram,
+          amount: i.amountitem,
+          costTotal: i.costTotaliten,
+          percentage123: i.pct123 ,
+          percentage456: i.pct456 ,
+          codMtaTeacherActivity: i.idactivity ,
+          codRtVotingResult: i.codRtVotingResultid ,
+          activity: {
+            userCreate: i.userCreater,
+            id: i.idactivity,
+            name: i.activity454,
+            totalValue: 9999999999,
+            codProgramCode: i.codProgramCoder,
+            description: i.descriptions,
+            userModified: i.asuserModifiedd,
+            dateModified: i.dateModifiedd,
+            dateCreate: i.dateCreatee,
+            typesProgram: {
+                id: i.codProgram,
+                name: i.programa45
+            }
+          }
+        });
+      });
+
+
+
+    const { meta } = res.serialize();
+
+    // const itemsArray = dataArray.flatMap((votingResult) => votingResult.items);
 
     return {
-      array: itemsArray as IItemResults[],
+      array: toReturn as any[],
       meta,
     };
   }
@@ -63,37 +124,91 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     filters: IVotingFilters
     ): Promise<any> {
     
-    const res = VotingResults.query().preload('items', (itemQuery) => {
-      itemQuery.preload('activity', (activitiQuery) => {
-        activitiQuery.preload('typesProgram');
-      });
-    });
+    const toReturn: ISVotinResultGrid[] = [];
 
+    const query = Item.query()
+      .select(
+        "PMA_NOMBRE as programa45",
+        "ITM_CODIGO as iditem",
+        "ITM_PORCENTAJE_123 as pct123",
+        "ITM_PORCENTAJE_456 as pct456",
+        "ITM_OBJETIVO_DIRECTO as aimStraight",
+        "ITM_PRODUCTO_CATALOGO_DNP as productCatalogueDnp",
+        "ITM_CODIGO_PRODUCTO_DNP as codProductgueDnp",
+        "MTA_NOMBRE as activity454", 
+        "MTA_CODIGO as idactivity",
+        "MTA_VALOR as activitytotalValue",
+        "ITM_CANTIDAD as amountitem",
+        "ITM_COSTO_TOTAL as costTotaliten",
+        "RTV_CODIGO as codRtVotingResultid",
+        "PMA_CODIGO as codProgram",
+        "MTA_CODPMA_PROGRAMA as codProgramCoder",
+        "MTA_DESCRIPCION as descriptions",
+        "MTA_USUARIO_MODIFICO as userModifiedd",
+        "MTA_FECHA_MODIFICO as dateModifiedd",
+        "MTA_USUARIO_CREO as userCreater",
+        "MTA_FECHA_CREO as dateCreatee"
+      )
+      .leftJoin("RTV_RESULTADO_VOTACION", "ITM_CODRTV_RESULTADO_VOTACION", "RTV_RESULTADO_VOTACION.RTV_CODIGO")
+      .leftJoin("MTA_MAESTRO_ACTIVIDAD", "ITM_CODMTA_MAESTRO_ACTIVIDAD", "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO")
+      .leftJoin("PMA_PROGRAMA", "MTA_CODPMA_PROGRAMA", "PMA_PROGRAMA.PMA_CODIGO")
+    
+    
     if (filters.communeNeighborhood) {
-      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+      query.whereILike(
+        "RTV_COMUNA_BARRIO",
+        `%${filters.communeNeighborhood}%`
+      );
     }
     if (filters.numberProject) {
-      res.whereILike("numberProject", `%${filters.numberProject}%`);
+      query.whereILike("RTV_NUMERO_PROYECTO", `%${filters.numberProject}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("validity", `%${filters.validity}%`);
+    if (filters.validity) {
+      query.whereILike("RTV_VIGENCIA", `%${filters.validity}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
-    }       
 
-    const workerMasterActivityPaginated = await res.paginate(
-      1,
-      999999999
-    );
+    if (filters.ideaProject) {
+      query.whereILike("RTV_IDEA_PROYECTO", `%${filters.ideaProject}%`);
+    }
 
-    const { data } = workerMasterActivityPaginated.serialize();
-    const dataArray = data ?? [];   
+    const res = await query;
 
-    const itemsArray = dataArray.flatMap(votingResult => votingResult);
-    const arrayResp: any = [];
-    itemsArray.map((i : any) => {
-      i.items.map((e : any) => {
+    res
+      .map((i) => i.$extras)
+      .forEach((i: any) => {
+
+        toReturn.push({
+          id: i.iditem ,
+          aimStraight: i.aimStraight,
+          productCatalogueDnp: i.productCatalogueDnp,
+          codProductgueDnp: i.codProductgueDnp ,
+          codPmaProgram: i.codProgram,
+          amount: i.amountitem,
+          costTotal: i.costTotaliten,
+          percentage123: i.pct123 ,
+          percentage456: i.pct456 ,
+          codMtaTeacherActivity: i.idactivity ,
+          codRtVotingResult: i.codRtVotingResultid ,
+          activity: {
+            userCreate: i.userCreater,
+            id: i.idactivity,
+            name: i.activity454,
+            totalValue: 9999999999,
+            codProgramCode: i.codProgramCoder,
+            description: i.descriptions,
+            userModified: i.asuserModifiedd,
+            dateModified: i.dateModifiedd,
+            dateCreate: i.dateCreatee,
+            typesProgram: {
+                id: i.codProgram,
+                name: i.programa45
+            }
+          }
+        });
+      });
+
+   const arrayResp: any = [];
+      toReturn.map((e : any) => {
       arrayResp.push({
         "Objetivo directo": e.aimStraight,
         "Código catalogo dnp": e.productCatalogueDnp,
@@ -102,15 +217,14 @@ export default class VotingResultsRepository implements IVotingResultsRepository
         "Actividad": e.activity.name,
         "Valor Actividad" : e.activity.totalValue,
         "Cantidad" : e.amount,
-        //"" : e.codRtVotingResult,
         "Costo Total" : e.costTotal,
         "Porcentaje 123" : e.percentage123,
         "Porcentaje 456" : e.percentage456,
 
       });
     })
-    })
-    return  arrayResp as any[]
+    return arrayResp as any[]
+    
 
   }
 
@@ -118,36 +232,94 @@ export default class VotingResultsRepository implements IVotingResultsRepository
     filters: IVotingFilters
     ): Promise<any> {
     
-    const res = VotingResults.query().preload('items', (itemQuery) => {
-      itemQuery.preload('activity', (activitiQuery) => {
-        activitiQuery.preload('typesProgram');
-      });
-    });
+    const toReturn: ISVotinResultGrid[] = [];
 
+    const query = Item.query()
+      .select(
+        "PMA_NOMBRE as programa45",
+        "ITM_CODIGO as iditem",
+        "ITM_PORCENTAJE_123 as pct123",
+        "ITM_PORCENTAJE_456 as pct456",
+        "ITM_OBJETIVO_DIRECTO as aimStraight",
+        "ITM_PRODUCTO_CATALOGO_DNP as productCatalogueDnp",
+        "ITM_CODIGO_PRODUCTO_DNP as codProductgueDnp",
+        "MTA_NOMBRE as activity454", 
+        "MTA_CODIGO as idactivity",
+        "MTA_VALOR as activitytotalValue",
+        "ITM_CANTIDAD as amountitem",
+        "ITM_COSTO_TOTAL as costTotaliten",
+        "RTV_CODIGO as codRtVotingResultid",
+        "PMA_CODIGO as codProgram",
+        "MTA_CODPMA_PROGRAMA as codProgramCoder",
+        "MTA_DESCRIPCION as descriptions",
+        "MTA_USUARIO_MODIFICO as userModifiedd",
+        "MTA_FECHA_MODIFICO as dateModifiedd",
+        "MTA_USUARIO_CREO as userCreater",
+        "MTA_FECHA_CREO as dateCreatee"
+      )
+      .leftJoin("RTV_RESULTADO_VOTACION", "ITM_CODRTV_RESULTADO_VOTACION", "RTV_RESULTADO_VOTACION.RTV_CODIGO")
+      .leftJoin("MTA_MAESTRO_ACTIVIDAD", "ITM_CODMTA_MAESTRO_ACTIVIDAD", "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO")
+      .leftJoin("PMA_PROGRAMA", "MTA_CODPMA_PROGRAMA", "PMA_PROGRAMA.PMA_CODIGO")
+    
+    
     if (filters.communeNeighborhood) {
-      res.whereILike("communeNeighborhood", `%${filters.communeNeighborhood}%`);
+      query.whereILike(
+        "RTV_COMUNA_BARRIO",
+        `%${filters.communeNeighborhood}%`
+      );
     }
     if (filters.numberProject) {
-      res.whereILike("numberProject", `%${filters.numberProject}%`);
+      query.whereILike("RTV_NUMERO_PROYECTO", `%${filters.numberProject}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("validity", `%${filters.validity}%`);
+    if (filters.validity) {
+      query.whereILike("RTV_VIGENCIA", `%${filters.validity}%`);
     }
-    if (filters.communeNeighborhood) {
-      res.whereILike("ideaProject", `%${filters.ideaProject}%`);
-    }       
 
-    const workerMasterActivityPaginated = await res.paginate(
-      1,
-      10
-    );
+    if (filters.ideaProject) {
+      query.whereILike("RTV_IDEA_PROYECTO", `%${filters.ideaProject}%`);
+    }
 
-    const { data } = workerMasterActivityPaginated.serialize();
-    const dataArray = data ?? [];   
+    const res = await query;
 
-    const itemsArray = dataArray.flatMap(votingResult => votingResult.items);
+    res
+      .map((i) => i.$extras)
+      .forEach((i: any) => {
 
-    return  itemsArray as any[]
+        toReturn.push({
+          id: i.iditem ,
+          aimStraight: i.aimStraight,
+          productCatalogueDnp: i.productCatalogueDnp,
+          codProductgueDnp: i.codProductgueDnp ,
+          codPmaProgram: i.codProgram,
+          amount: i.amountitem,
+          costTotal: i.costTotaliten,
+          percentage123: i.pct123 ,
+          percentage456: i.pct456 ,
+          codMtaTeacherActivity: i.idactivity ,
+          codRtVotingResult: i.codRtVotingResultid ,
+          activity: {
+            userCreate: i.userCreater,
+            id: i.idactivity,
+            name: i.activity454,
+            totalValue: 9999999999,
+            codProgramCode: i.codProgramCoder,
+            description: i.descriptions,
+            userModified: i.asuserModifiedd,
+            dateModified: i.dateModifiedd,
+            dateCreate: i.dateCreatee,
+            typesProgram: {
+                id: i.codProgram,
+                name: i.programa45
+            }
+          }
+        });
+      });
+
+
+
+    return {
+      data: toReturn as any[],
+    };
 
   }
 
