@@ -32,9 +32,11 @@ export default class ActaRepository implements IActaRepository {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
 
-    if (acta.id) {
-      toCreate.fill({ ...acta, creationDate: formattedDate, lastId: acta.id });
+
+    if (acta.lastId) {
+      toCreate.fill({ ...acta, creationDate: formattedDate, lastId: acta.lastId, idStatus: 3 });
       await toCreate.save();
+
     } else {
       toCreate.fill({ ...acta, creationDate: formattedDate });
       await toCreate.save();
@@ -140,8 +142,24 @@ export default class ActaRepository implements IActaRepository {
   async approveCitation(id: number) {
     const currentDate = new Date();
     const formattedDate = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`;
-
     const query = await Citation.query().preload("acta").where("idCitation", id).update({ status: 1, dateAprobation: formattedDate })
+    const query2 = await Database.rawQuery("SELECT CTA_CODATA_CODIGO FROM CTA_CITACION_ACTA WHERE CTA_CODIGO =:id", { id: id })
+    let codeActa = query2[0][0]['CTA_CODATA_CODIGO']
+    console.log(codeActa)
+    const query3 = await Database.rawQuery("SELECT CTA_ESTADO FROM CTA_CITACION_ACTA WHERE CTA_CODATA_CODIGO = :id", { id: codeActa })
+    let band = false
+    query3[0].forEach(status => {
+      if (status['CTA_ESTADO'] == 1) {
+        band = true
+      } else {
+        band = false
+      }
+    });
+
+    if (band) {
+      await Acta.query().where('id', codeActa).update({ idStatus: 2 })
+    }
+
     return query
   }
 
@@ -151,13 +169,39 @@ export default class ActaRepository implements IActaRepository {
   }
 
   async updateActa(acta: IActa) {
+    let id = acta.id!
 
-    const res = Acta.query().where("ATA_CODIGO", acta.id!).update({ numberProject: acta.numberProject, periodVigency: acta.periodVigency, announcementInitial: acta.announcementInitial, salaryMin: acta.salaryMin, costsExpenses: acta.costsExpenses, OperatorCommission: acta.OperatorCommission, financialOperation: acta.financialOperation, idStatus: acta.idStatus })
-    const items = acta.items!.map(itemData => {
-      ActaItems.query().where("id", itemData.id!).update({ idFound: itemData.idFound, idLine: itemData.idLine, idAnnouncement: itemData.idAnnouncement, idConcept: itemData.idConcept, costOperation: itemData.costOperation, subtotalVigency: itemData.subtotalVigency, costBillsOperation: itemData.costBillsOperation, net: itemData.net, financialOperatorCommission: itemData.financialOperatorCommission, resourcesCredit: itemData.resourcesCredit, idProgram: itemData.idProgram, idActa: itemData.idActa })
-    })
+    let payloadActa = { numberProject: acta.numberProject, periodVigency: acta.periodVigency, announcementInitial: acta.announcementInitial, costsExpenses: acta.costsExpenses, OperatorCommission: acta.OperatorCommission, financialOperation: acta.financialOperation }
 
-    if (!res && !items) {
+    const actaUpdate = await Acta.updateOrCreate({ id }, payloadActa)
+
+    const updateItemPromises = acta.items!.map(itemData => {
+      const item = ActaItems;
+      const serializedPeriods = JSON.stringify(itemData.periods);
+      let id = itemData.id!
+      let payload = {
+        idFound: itemData.idFound, idLine: itemData.idLine, idAnnouncement: itemData.idAnnouncement!, idConcept: itemData.idConcept, costOperation: itemData.costOperation, subtotalVigency: itemData.subtotalVigency, costBillsOperation: itemData.costBillsOperation, net: itemData.net, financialOperatorCommission: itemData.financialOperatorCommission, resourcesCredit: itemData.resourcesCredit, idProgram: itemData.idProgram, periods: serializedPeriods
+      }
+
+      console.log(payload)
+      item.updateOrCreate({ id }, payload)
+
+      return item
+    });
+
+    let savedCitations;
+    const saveCitationPromises = acta.citation!.map(citation => {
+      const savecitation = new Citation();
+      if (!citation.id) {
+        savecitation.fill({ ...citation, idActa: acta.id });
+        return savecitation.save();
+      }
+
+    });
+    savedCitations = await Promise.all(saveCitationPromises);
+
+
+    if (!actaUpdate && !updateItemPromises && !savedCitations) {
       return "No se pudo actualizar la informacion"
     } else {
       return "Informacion actualizada"

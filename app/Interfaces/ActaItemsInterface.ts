@@ -6,10 +6,10 @@ export interface IActaItems {
     idConcept: number;
     costOperation: string;
     periods?: {
-        valuePeriod1?:number,
-        valuePeriod2?:number,
-        quantityPeriod1?:number,
-        quantityPeriod2?:number,
+        valuePeriod1?: number,
+        valuePeriod2?: number,
+        quantityPeriod1?: number,
+        quantityPeriod2?: number,
     };
     subtotalVigency: number;
     costBillsOperation: number;
