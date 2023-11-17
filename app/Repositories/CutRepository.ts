@@ -4,6 +4,7 @@ import {
 } from "App/Interfaces/CutInterface";
 import Cut from "App/Models/Cut";
 import { IPagingData } from "App/Utils/ApiResponses";
+import moment from "moment";
 
 export interface ICutRepository {
   getCutById(id: number): Promise<ICutInterface[] | null>;
@@ -31,15 +32,23 @@ export default class CutRepository implements ICutRepository {
   async createCut(cut: ICutInterface): Promise<ICutInterface | null> {
     const existCut = Cut.query()
       .where("name", cut.name)
-      .andWhere("from", cut.from)
-      .andWhere("until", cut.until);
+      .orWhereBetween("from", [
+        moment(cut.from).startOf("day").toDate(),
+        moment(cut.until).startOf("day").toDate(),
+      ])
+      .orWhereBetween("until", [
+        moment(cut.from).startOf("day").toDate(),
+        moment(cut.until).startOf("day").toDate(),
+      ]);
 
     const execute = await existCut;
 
     if (execute.length > 0) return null;
 
     const toCreate = new Cut();
-    toCreate.fill({ ...cut });
+    toCreate.fill({
+      ...cut,
+    });
     await toCreate.save();
     return toCreate.serialize() as ICutInterface;
   }
@@ -53,12 +62,28 @@ export default class CutRepository implements ICutRepository {
       res.where("name", filters.name);
     }
 
-    if (filters.from) {
-      res.andWhere("from", filters.from);
-    }
+    if (filters.from && filters.until) {
+      res.whereBetween("from", [
+        moment(new Date(filters.from)).startOf("day").toDate(),
+        moment(new Date(filters.until)).startOf("day").toDate(),
+      ]);
 
-    if (filters.until) {
-      res.andWhere("until", filters.until);
+      res.orWhereBetween("until", [
+        moment(new Date(filters.from)).startOf("day").toDate(),
+        moment(new Date(filters.until)).startOf("day").toDate(),
+      ]);
+    } else if (filters.from) {
+      res.where(
+        "from",
+        ">=",
+        moment(new Date(filters.from)).startOf("day").toDate()
+      );
+    } else if (filters.until) {
+      res.where(
+        "until",
+        "<=",
+        moment(new Date(filters.until)).endOf("day").toDate()
+      );
     }
 
     const workerCutPaginated = await res.paginate(
@@ -76,7 +101,7 @@ export default class CutRepository implements ICutRepository {
   }
 
   async updateCut(
-    requeriment: ICutInterface,
+    cut: ICutInterface,
     id: number
   ): Promise<ICutInterface | null> {
     const toUpdate = await Cut.find(id);
@@ -85,7 +110,29 @@ export default class CutRepository implements ICutRepository {
       return null;
     }
 
-    toUpdate.fill({ ...toUpdate, ...requeriment });
+    const existCut = Cut.query()
+      .where("name", cut.name)
+      .orWhereBetween("from", [
+        moment(cut.from).startOf("day").toDate(),
+        moment(cut.until).startOf("day").toDate(),
+      ])
+      .orWhereBetween("until", [
+        moment(cut.from).startOf("day").toDate(),
+        moment(cut.until).startOf("day").toDate(),
+      ]);
+
+    let execute = await existCut;
+    const index: number = execute.findIndex((item: Cut, index: number) => {
+      return item.id === id ? index : 0;
+    });
+
+    if (index) {
+      execute.splice(index, 1);
+    }
+
+    if (execute.length > 0) return null;
+
+    toUpdate.fill({ ...toUpdate, ...cut });
 
     await toUpdate.save();
 

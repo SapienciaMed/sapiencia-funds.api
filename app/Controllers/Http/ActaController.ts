@@ -47,4 +47,29 @@ export default class ActaController {
       return response.badRequest(apiRes)
     }
   }
+
+  async lastInsertId(ctx: HttpContextContract) {
+    const { response, logger } = ctx;
+    try {
+      const lastId = await ActaProvider.lastInsertId()
+      return response.ok(lastId)
+    } catch (err) {
+      logger.error(err)
+      const apiRes = new ApiResponse(null, EResponseCodes.FAIL, err.message)
+      return response.badRequest(apiRes)
+    }
+  }
+
+  async updateActa(ctx: HttpContextContract) {
+    const { request, response, logger } = ctx;
+    try {
+      return response.send(
+        await ActaProvider.updateActa(request.body())
+      );
+    } catch (err) {
+      logger.error(err)
+      const apiRes = new ApiResponse(null, EResponseCodes.FAIL, err.message)
+      return response.badRequest(apiRes)
+    }
+  }
 }

@@ -26,7 +26,7 @@ export default class VotingResultsValidator {
   public schema = schema.create({
     communeNeighborhood: schema.number(),
     numberProject: schema.number(),
-    validity: schema.string(),
+    validity: schema.number(),
     ideaProject: schema.string(),
     items: schema.array().members(
       schema.object().members({

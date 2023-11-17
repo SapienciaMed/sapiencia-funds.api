@@ -5,7 +5,7 @@ export interface IActa {
     id?: number;
     numberProject: number;
     periodVigency: number;
-    announcementInitial: number;
+    announcementInitial: string;
     salaryMin: number;
     costsExpenses: number;
     OperatorCommission: number;

@@ -47,7 +47,7 @@ test.group("RolService TEST for getVotingResultsById", () => {
   const datos = {
     communeNeighborhood: 1,
     numberProject: 1,
-    validity: "2024",
+    validity: 2024,
     ideaProject: "pruebas",
   };
 

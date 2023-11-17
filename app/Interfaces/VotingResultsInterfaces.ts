@@ -4,7 +4,7 @@ export interface IVotingResults {
   id?: number;
   communeNeighborhood: number;
   numberProject: number;
-  validity: string;
+  validity: number;
   ideaProject: string;
   items?: IItemResults[];
 }
