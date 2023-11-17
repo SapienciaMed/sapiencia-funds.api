@@ -27,6 +27,22 @@ export interface ISummaryPriorization {
   total: number;
 }
 
+
+export interface ISVotinResultGrid {
+    id: number,
+    aimStraight: string,
+    productCatalogueDnp: string,
+    codProductgueDnp: string,
+    codPmaProgram: number,
+    amount: number,
+    costTotal: number,
+    percentage123: number,
+    percentage456: number,
+    codMtaTeacherActivity: number,
+    codRtVotingResult: number,
+    activity: any
+}
+
 export interface ISummaryPriorizationXlsx {
   Programa: string;
   Porcentaje123: number;

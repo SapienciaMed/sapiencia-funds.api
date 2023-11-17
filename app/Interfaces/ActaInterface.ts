@@ -3,6 +3,7 @@ import { ICitation } from "./CitationInterface";
 
 export interface IActa {
     id?: number;
+    lastId?: number;
     numberProject: number;
     periodVigency: number;
     announcementInitial: string;

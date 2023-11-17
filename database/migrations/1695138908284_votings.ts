@@ -20,6 +20,7 @@ export default class extends BaseSchema {
       table.integer("RTV_NUMERO_PROYECTO").notNullable().comment(" ");
       table.integer("RTV_VIGENCIA", 10).notNullable().comment(" ");
       table.string("RTV_IDEA_PROYECTO", 500).notNullable().comment(" ")
+      table.string("RTV_OBSERVACION", 500).comment(" ")
       
     })
   }

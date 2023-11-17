@@ -18,12 +18,15 @@ export const generateXLSX = (config: IGenerateXLSX) => {
     const workbook = new excel4node.Workbook();
     const worksheet = workbook.addWorksheet(worksheetName ?? "worksheet");
     let headingColumnIndex = 1;
+
+    // Escribir encabezados
     columns.forEach((column) => {
       const { name, size } = column;
       worksheet.column(headingColumnIndex).setWidth(size);
       worksheet.cell(1, headingColumnIndex++).string(name);
     });
-    // WRITE DATA IN EXCEL FILE
+
+    // Escribir datos
     let rowIndex = 2;
     data.forEach((rowData) => {
       let columnIndex = 1;
@@ -32,6 +35,7 @@ export const generateXLSX = (config: IGenerateXLSX) => {
       });
       rowIndex++;
     });
+
     workbook.write(filePath, (err) => {
       if (err) reject(err);
       resolve(filePath);
