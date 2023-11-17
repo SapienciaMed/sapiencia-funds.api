@@ -94,7 +94,7 @@ export default class VotingResultsRepository implements IVotingResultsRepository
             userCreate: i.userCreater,
             id: i.idactivity,
             name: i.activity454,
-            totalValue: 9999999999,
+            totalValue: i.activitytotalValue,
             codProgramCode: i.codProgramCoder,
             description: i.descriptions,
             userModified: i.asuserModifiedd,
@@ -211,8 +211,8 @@ export default class VotingResultsRepository implements IVotingResultsRepository
       toReturn.map((e : any) => {
       arrayResp.push({
         "Objetivo directo": e.aimStraight,
-        "Código catalogo dnp": e.productCatalogueDnp,
         "Producto catalogo dnp": e.codProductgueDnp,
+        "Código catalogo dnp": e.productCatalogueDnp,
         "Programa": e.activity.typesProgram.name,
         "Actividad": e.activity.name,
         "Valor Actividad" : e.activity.totalValue,

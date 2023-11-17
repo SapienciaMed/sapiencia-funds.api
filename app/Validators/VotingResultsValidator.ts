@@ -28,6 +28,7 @@ export default class VotingResultsValidator {
     numberProject: schema.number(),
     validity: schema.number(),
     ideaProject: schema.string(),
+    observation: schema.string.optional(),
     items: schema.array().members(
       schema.object().members({
         aimStraight: schema.string(),
