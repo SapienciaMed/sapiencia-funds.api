@@ -20,7 +20,7 @@ export default class BudgetController {
       return DBException.badRequest(ctx, err);
     }
 
-    try {  
+    try {
       const resp = await BudgetProvider.generateXLSXBudget(filters)
       response.header(
         "Content-Disposition",

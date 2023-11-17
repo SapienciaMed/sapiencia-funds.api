@@ -1,9 +1,9 @@
 export interface ICallBudget {
   id_comuna: number;
-  presupuesto_comuna: string;
-  acumulado_legali_comuna: string;
-  restante_presupuesto_comuna: string;
-  numero_usuarios_comuna: string;
+  presupuesto_comuna: number;
+  acumulado_legali_comuna: number;
+  restante_presupuesto_comuna: number;
+  numero_usuarios_comuna: number;
   total_proyectado: number;
   Diferencia: number;
 }

@@ -1,6 +1,7 @@
 import Application from "@ioc:Adonis/Core/Application";
 import { ICallBudget } from "App/Interfaces/CallBudgetInterfaces";
 import { IPagingData } from "App/Utils/ApiResponses";
+import { formaterNumberToCurrency } from "App/Utils/helpers";
 
 export const furnitureXLSXcolumnNames = [
   {
@@ -42,12 +43,12 @@ export const furnitureXLSXRows = (
       ...prev,
       [
         String(curr.id_comuna),
-        String(curr.presupuesto_comuna),
-        String(curr.acumulado_legali_comuna),
-        String(curr.restante_presupuesto_comuna),
+        formaterNumberToCurrency(curr.presupuesto_comuna),
+        formaterNumberToCurrency(curr.acumulado_legali_comuna),
+        formaterNumberToCurrency(curr.restante_presupuesto_comuna),
         String(curr.numero_usuarios_comuna),
-        String(curr.total_proyectado),
-        String(curr.Diferencia),
+        formaterNumberToCurrency(curr.total_proyectado),
+        formaterNumberToCurrency(curr.Diferencia),
 
       ],
     ];
