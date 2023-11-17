@@ -60,8 +60,6 @@ export default class ResourcePrioritizationService
         filters
       );
 
-    console.log(total1, total2);
-
     if (!total1) {
       const toReturn: IResourcePrioritization = {
         programId: 0,
@@ -81,7 +79,7 @@ export default class ResourcePrioritizationService
         operatorCommissionAct: 0,
         operatorCommissionBalance: 0,
         operatorCommission: 0,
-        resourceForCredit: 0,
+        resourceForCredit: Number(total2.value),
       };
       return new ApiResponse(toReturn, EResponseCodes.OK);
     } else {
@@ -139,7 +137,7 @@ export default class ResourcePrioritizationService
           operatorCommissionAct: 0,
           operatorCommissionBalance: 0,
           operatorCommission: 0,
-          resourceForCredit: 0,
+          resourceForCredit: item.value,
         });
       }
     }
