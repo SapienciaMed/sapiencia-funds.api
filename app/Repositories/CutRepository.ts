@@ -39,7 +39,20 @@ export default class CutRepository implements ICutRepository {
       .orWhereBetween("until", [
         moment(cut.from).startOf("day").toDate(),
         moment(cut.until).startOf("day").toDate(),
-      ]);
+      ])
+      .orWhere((subquery) => {
+        subquery
+          .where(
+            "from",
+            "<=",
+            moment(new Date(cut.from)).startOf("day").toDate()
+          )
+          .andWhere(
+            "until",
+            ">=",
+            moment(new Date(cut.until)).endOf("day").toDate()
+          );
+      });
 
     const execute = await existCut;
 
@@ -119,7 +132,20 @@ export default class CutRepository implements ICutRepository {
       .orWhereBetween("until", [
         moment(cut.from).startOf("day").toDate(),
         moment(cut.until).startOf("day").toDate(),
-      ]);
+      ])
+      .orWhere((subquery) => {
+        subquery
+          .where(
+            "from",
+            "<=",
+            moment(new Date(cut.from)).startOf("day").toDate()
+          )
+          .andWhere(
+            "until",
+            ">=",
+            moment(new Date(cut.until)).endOf("day").toDate()
+          );
+      });
 
     let execute = await existCut;
     const index: number = execute.findIndex((item: Cut, index: number) => {
