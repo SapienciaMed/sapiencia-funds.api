@@ -2,11 +2,14 @@ import { IPagingData } from "App/Utils/ApiResponses";
 import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 // import CallBudget from "App/Models/Sapiencia/Callbudget";
 import Database from "@ioc:Adonis/Lucid/Database";
+import Renewal from "App/Models/Renewal";
 
 
 
 export interface IRenewalRepository {
-
+  createRenewal(
+    renewal: ICallRenewal
+  ): Promise<ICallRenewal>;
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<IPagingData<ICallRenewal>>;
@@ -15,6 +18,16 @@ export interface IRenewalRepository {
 
 export default class RenewalRepository implements IRenewalRepository {
   constructor() { }
+
+  async createRenewal(
+    renewal: ICallRenewal
+  ): Promise<ICallRenewal> {
+    const toCreate = new Renewal();
+
+    toCreate.fill({ ...renewal });
+    await toCreate.save();
+    return toCreate.serialize() as ICallRenewal;
+  }
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
     const { periodo } = filters;

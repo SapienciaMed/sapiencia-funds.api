@@ -5,6 +5,7 @@ import {ICallRenewalFilters} from "App/Interfaces/CallRenewalInterface";
 import RenewalProvider from '@ioc:core.RenewalProvider';
 import { DBException } from 'App/Utils/DbHandlerError';
 import RenewalValidatorFilter from 'App/Validators/RenewalValidator';
+import RenewalValidator from 'App/Validators/CreteRenewalValidator';
 
 
 export default class RenewalController {
@@ -35,6 +36,25 @@ export default class RenewalController {
     }
   }
 
+  public async createCallRenewal({ 
+    request, 
+    response
+  }: HttpContextContract) {
+    try {
+      //const filter = request.body() as IMasterActivity;
+      const renewal = await request.validate(
+        RenewalValidator
+      );
+      return response.send(
+        await RenewalProvider.createRenewal(renewal)
+      );
+    } catch (err) {
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+   
+      );
+    }
+  }
 
 public async geCallRenewalPaginate({ response, request }: HttpContextContract) {
   try {

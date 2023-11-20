@@ -11,6 +11,9 @@ import {
 
 
 export interface IRenewalService {
+  createRenewal(
+    renewal: ICallRenewal
+  ): Promise<ApiResponse<ICallRenewal>>;
   generateXLSXRenewal(
     filters: ICallRenewalFilters
   ): Promise<ApiResponse<string>>
@@ -19,11 +22,23 @@ export interface IRenewalService {
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
 }
 
-export default class RenewalService implements IRenewalService 
-{
+export default class RenewalService implements IRenewalService {
   constructor(
     private renewalRepository: IRenewalRepository
   ) { }
+
+  //crear Renewal
+  async createRenewal(renewal: ICallRenewal): Promise<ApiResponse<ICallRenewal>> {
+    const res = await this.renewalRepository.createRenewal(renewal);
+    if (!res) {
+      return new ApiResponse(
+        {} as ICallRenewal,
+        EResponseCodes.FAIL,
+        "*Ocurrió un error en su Transacción "
+      );
+    }
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
 
   public async generateXLSXRenewal(filters: ICallRenewalFilters) {
     const accountStatementsFound = await this.renewalRepository.geCallRenewalPaginate(filters);
@@ -39,11 +54,11 @@ export default class RenewalService implements IRenewalService
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
     const accountStatementsFound =
-    await this.renewalRepository.geCallRenewalPaginate(
-      filters
-    );
-  return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
+      await this.renewalRepository.geCallRenewalPaginate(
+        filters
+      );
+    return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
 
-}
+  }
 }
 

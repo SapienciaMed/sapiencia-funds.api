@@ -29,10 +29,10 @@ export const furnitureXLSXRows = (
     return [
       ...prev,
       [
-        String(curr.Fondo),
-        String(curr.No_Habilitados),
-        String(curr.No_Renovados),
-        String(curr.Porcentaje),
+        String(curr.fund),
+        String(curr.enabled),
+        String(curr.renewed),
+        String(curr.percentage),
       ],
     ];
   }, []);

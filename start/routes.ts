@@ -208,6 +208,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
+  Route.post("/create", "RenewalController.createCallRenewal");
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
 })
   .prefix("/api/v1/renovacion")

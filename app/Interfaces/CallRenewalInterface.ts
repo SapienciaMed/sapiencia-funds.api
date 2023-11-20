@@ -1,8 +1,9 @@
 export interface ICallRenewal {
-    Fondo: number;
-    No_Habilitados: number;
-    No_Renovados: number;
-    Porcentaje: number;
+  period: string;
+  fund: string;
+  enabled: number;
+  renewed: number;
+  percentage: string;
   }
   
   export interface ICallRenewalFilters {
