@@ -30,9 +30,9 @@ export default class RenewalRepository implements IRenewalRepository {
   }
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
-    const { periodo } = filters;
+    const { period } = filters;
   
-    const query = `call AuroraInformeRenovados('${periodo}')`;
+    const query = `call AuroraInformeRenovados('${period}')`;
   
     const result = await Database.connection("mysql_sapiencia").rawQuery(query);
   

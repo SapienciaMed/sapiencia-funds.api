@@ -8,7 +8,7 @@ export default class RenewalValidatorFilter {
     public schema = schema.create({
         page: schema.number([rules.required(), rules.unsigned()]),
         perPage: schema.number([rules.required(), rules.unsigned()]),
-        periodo: schema.number(),
+        period: schema.number(),
 
   });
 

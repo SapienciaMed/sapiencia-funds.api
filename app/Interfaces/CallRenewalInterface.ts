@@ -7,7 +7,7 @@ export interface ICallRenewal {
   }
   
   export interface ICallRenewalFilters {
-    periodo: number;
+    period: number;
     page: number;
     perPage: number;
   }
