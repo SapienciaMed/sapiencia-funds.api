@@ -150,10 +150,10 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/create", "ActaController.createActa");
   Route.post("get-paginated", "MasterController.getMasterPaginate");
-  Route.post("/getActa", "ActaController.getActa");
+  Route.post("/getActa", "ActaController.getActa").middleware("auth:CONSULTAR_ACTAS")
   Route.put("/updateCitation", "ActaController.approveCitation");
   Route.get("/getLastId", "ActaController.lastInsertId");
-  Route.put("/updateActa", "ActaController.updateActa");
+  Route.put("/updateActa", "ActaController.updateActa").middleware("auth:EDITAR_ACTAS")
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
