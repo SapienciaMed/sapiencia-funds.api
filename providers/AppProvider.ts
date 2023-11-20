@@ -1,7 +1,7 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
 export default class AppProvider {
-  constructor(protected app: ApplicationContract) {}
+  constructor(protected app: ApplicationContract) { }
 
   public async register() {
     // Register your own bindings
@@ -49,6 +49,8 @@ export default class AppProvider {
     );
 
     const CutService = await import("App/Services/CutService");
+
+    const ControlSelectService = await import("App/Services/ControlSelect")
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -106,6 +108,10 @@ export default class AppProvider {
     const ResourcePrioritizationRepository = await import(
       "App/Repositories/ResourcePrioritizationRepository"
     );
+
+    const ControlSelectRepository = await import(
+      "App/Repositories/ControlSelectRepository"
+    )
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -203,6 +209,9 @@ export default class AppProvider {
       "core.RenewalProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
     );
+
+    this.app.container.singleton("core.ControlSelectProvider",
+      () => new ControlSelectService.default(new ControlSelectRepository.default()))
   }
 
   public async boot() {
