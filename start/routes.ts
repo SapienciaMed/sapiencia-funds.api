@@ -27,6 +27,7 @@ Route.get("/", async () => {
 Route.group(() => {
   Route.get("/call-periods/get-all", "SapienciaController.getAllCallPeriod");
   Route.get("/call-budget/get-all", "SapienciaController.getAllCallBudget");
+  Route.get("/call-fondo/get-all", "SapienciaController.getAllCallfondo");
   Route.post(
     "/getbudget-paginated/",
     "SapienciaController.geCallBudgetPaginate"
