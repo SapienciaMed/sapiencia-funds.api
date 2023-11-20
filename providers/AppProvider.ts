@@ -50,6 +50,8 @@ export default class AppProvider {
 
     const CutService = await import("App/Services/CutService");
 
+    const DatingService = await import("App/Services/DatingService");
+
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -105,6 +107,10 @@ export default class AppProvider {
 
     const ResourcePrioritizationRepository = await import(
       "App/Repositories/ResourcePrioritizationRepository"
+    );
+
+    const DatingRepository = await import(
+      "App/Repositories/Sapiencia/CallDatingRepository"
     );
 
     /**************************************************************************/
@@ -202,6 +208,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.RenewalProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
+    );
+    this.app.container.singleton(
+      "core.DatingProvider",
+      () => new DatingService.default(new DatingRepository.default())
     );
   }
 

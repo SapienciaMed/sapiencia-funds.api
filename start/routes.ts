@@ -207,7 +207,6 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
-
 Route.group(() => {
   Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
@@ -223,3 +222,10 @@ Route.group(() => {
 })
   .prefix("/api/v1/cuts")
   .middleware("auth");
+
+  Route.group(() => {
+    Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
+    Route.get("/generate-xlsx", "DatingController.generateXLSX");
+  })
+    .prefix("/api/v1/citas")
+  //.middleware("auth");
