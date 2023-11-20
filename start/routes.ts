@@ -148,7 +148,7 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.post("/create", "ActaController.createActa");
+  Route.post("/create", "ActaController.createActa").middleware("auth:CREAR_ACTAS");;
   Route.post("get-paginated", "MasterController.getMasterPaginate");
   Route.post("/getActa", "ActaController.getActa").middleware("auth:CONSULTAR_ACTAS")
   Route.put("/updateCitation", "ActaController.approveCitation");
