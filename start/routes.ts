@@ -207,12 +207,13 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
-
 Route.group(() => {
-  Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
+  Route.post(
+    "/getrenewal-paginated/",
+    "RenewalController.geCallRenewalPaginate"
+  );
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
-})
-  .prefix("/api/v1/renovacion")
+}).prefix("/api/v1/renovacion");
 //.middleware("auth");
 Route.group(() => {
   Route.get("/get-by-id/:id", "CutsController.getCutsById");
@@ -222,4 +223,29 @@ Route.group(() => {
   Route.delete("/delete/:id", "CutsController.deleteCuts");
 })
   .prefix("/api/v1/cuts")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.get(
+    "/get-by-id/:id",
+    "BeneficiariesConsolidateContoller.getBeneficiariesConsolidateById"
+  );
+  Route.post(
+    "/create",
+    "BeneficiariesConsolidateContoller.createBeneficiariesConsolidate"
+  );
+  Route.post(
+    "get-paginated",
+    "BeneficiariesConsolidateContoller.getBeneficiariesConsolidatePaginate"
+  );
+  Route.put(
+    "/edit/:id",
+    "BeneficiariesConsolidateContoller.updateBeneficiariesConsolidate"
+  );
+  Route.delete(
+    "/delete/:id",
+    "BeneficiariesConsolidateContoller.deleteBeneficiariesConsolidate"
+  );
+})
+  .prefix("/api/v1/beneficiaries-consolidate")
   .middleware("auth");

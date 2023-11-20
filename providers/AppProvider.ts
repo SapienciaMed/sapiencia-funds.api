@@ -50,6 +50,10 @@ export default class AppProvider {
 
     const CutService = await import("App/Services/CutService");
 
+    const BeneficiariesConsolidateService = await import(
+      "App/Services/BeneficiariesConsolidateService"
+    );
+
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -105,6 +109,10 @@ export default class AppProvider {
 
     const ResourcePrioritizationRepository = await import(
       "App/Repositories/ResourcePrioritizationRepository"
+    );
+
+    const BeneficiariesConsolidateRepository = await import(
+      "App/Repositories/BeneficiariesConsolidateRepository"
     );
 
     /**************************************************************************/
@@ -202,6 +210,13 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.RenewalProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
+    );
+    this.app.container.singleton(
+      "core.BeneficiariesConsolidateProvider",
+      () =>
+        new BeneficiariesConsolidateService.default(
+          new BeneficiariesConsolidateRepository.default()
+        )
     );
   }
 
