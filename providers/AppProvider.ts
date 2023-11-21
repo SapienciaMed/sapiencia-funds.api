@@ -53,6 +53,8 @@ export default class AppProvider {
     const BeneficiariesConsolidateService = await import(
       "App/Services/BeneficiariesConsolidateService"
     );
+    
+    const DatingService = await import("App/Services/DatingService");
 
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
@@ -113,6 +115,10 @@ export default class AppProvider {
 
     const BeneficiariesConsolidateRepository = await import(
       "App/Repositories/BeneficiariesConsolidateRepository"
+    );
+
+    const DatingRepository = await import(
+      "App/Repositories/Sapiencia/CallDatingRepository"
     );
 
     /**************************************************************************/
@@ -217,6 +223,10 @@ export default class AppProvider {
         new BeneficiariesConsolidateService.default(
           new BeneficiariesConsolidateRepository.default()
         )
+    );
+    this.app.container.singleton(
+      "core.DatingProvider",
+      () => new DatingService.default(new DatingRepository.default())
     );
   }
 

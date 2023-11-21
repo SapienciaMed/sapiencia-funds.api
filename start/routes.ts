@@ -27,6 +27,7 @@ Route.get("/", async () => {
 Route.group(() => {
   Route.get("/call-periods/get-all", "SapienciaController.getAllCallPeriod");
   Route.get("/call-budget/get-all", "SapienciaController.getAllCallBudget");
+  Route.get("/call-fondo/get-all", "SapienciaController.getAllCallfondo");
   Route.post(
     "/getbudget-paginated/",
     "SapienciaController.geCallBudgetPaginate"
@@ -208,10 +209,8 @@ Route.group(() => {
 //.middleware("auth");
 
 Route.group(() => {
-  Route.post(
-    "/getrenewal-paginated/",
-    "RenewalController.geCallRenewalPaginate"
-  );
+  Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
+  Route.post("/create", "RenewalController.createCallRenewal");
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
 }).prefix("/api/v1/renovacion");
 //.middleware("auth");
@@ -249,3 +248,10 @@ Route.group(() => {
 })
   .prefix("/api/v1/beneficiaries-consolidate")
   .middleware("auth");
+  
+  Route.group(() => {
+    Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
+    Route.get("/generate-xlsx", "DatingController.generateXLSX");
+  })
+    .prefix("/api/v1/citas")
+  //.middleware("auth");
