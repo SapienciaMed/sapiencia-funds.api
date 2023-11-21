@@ -138,11 +138,11 @@ export default class SummaryPriorizacionRepository
         toReturn.push({
           Programa: i.programa45,
           Porcentaje123: i.pct123,
+          Valor_Porcentaje123: Number(i.total) * (Number(i.pct123) / 100),
           Porcentaje456: i.pct456,
+          Valor_Porcentaje456: Number(i.total) * (Number(i.pct456) / 100),
           Cupos: i.quota,
           Total: i.total,
-          Valor_Porcentaje123: Number(i.total) * (Number(i.pct123) / 100),
-          Valor_Porcentaje456: Number(i.total) * (Number(i.pct456) / 100),
         });
       });
 

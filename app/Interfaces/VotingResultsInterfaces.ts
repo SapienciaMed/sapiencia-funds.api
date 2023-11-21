@@ -7,6 +7,7 @@ export interface IVotingResults {
   validity: number;
   ideaProject: string;
   items?: IItemResults[];
+  observation?: string;
 }
 
 export interface IActivity {
