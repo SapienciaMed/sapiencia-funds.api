@@ -8,10 +8,9 @@ export default class RenewalValidatorFilter {
     public schema = schema.create({
         page: schema.number([rules.required(), rules.unsigned()]),
         perPage: schema.number([rules.required(), rules.unsigned()]),
-        id_comuna: schema.number(),
-        periodo: schema.number(),
+        period: schema.number(),
 
   });
 
   public messages: CustomMessages = { err: "error" };
-} 
+}
