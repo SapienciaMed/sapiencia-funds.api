@@ -207,7 +207,11 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 
-
+Route.group(() => {
+  Route.post("/getInfo", "ControlSelectController.getInfo")
+  Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
+  Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
+}).prefix("/api/v1/controlSelect")
 Route.group(() => {
   Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");

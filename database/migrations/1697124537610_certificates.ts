@@ -12,8 +12,11 @@ export default class extends BaseSchema {
       table.increments('ATA_CODIGO')
         .unsigned()
         .primary()
-        .comment("llave primaria");     
+        .comment("llave primaria");
 
+      table
+        .integer('LAST_ATA_CODIGO')
+        .comment('Llave primaria anterior')
       table
         .integer("ATA_NUMERO_PROYECTO")
         .notNullable()
