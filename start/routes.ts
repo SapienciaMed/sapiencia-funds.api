@@ -148,7 +148,7 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-  Route.post("/create", "ActaController.createActa");
+  Route.post("/create", "ActaController.createActa").middleware("auth:CREAR_ACTAS");;
   Route.post("get-paginated", "MasterController.getMasterPaginate");
   Route.post("/getActa", "ActaController.getActa").middleware("auth:CONSULTAR_ACTAS")
   Route.put("/updateCitation", "ActaController.approveCitation");
@@ -206,17 +206,18 @@ Route.group(() => {
   Route.get("/generate-xlsx", "BudgetController.generateXLSX");
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
-
 Route.group(() => {
   Route.post("/getInfo", "ControlSelectController.getInfo")
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
 }).prefix("/api/v1/controlSelect")
 Route.group(() => {
-  Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
+  Route.post(
+    "/getrenewal-paginated/",
+    "RenewalController.geCallRenewalPaginate"
+  );
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
-})
-  .prefix("/api/v1/renovacion")
+}).prefix("/api/v1/renovacion");
 //.middleware("auth");
 Route.group(() => {
   Route.get("/get-by-id/:id", "CutsController.getCutsById");
@@ -226,4 +227,29 @@ Route.group(() => {
   Route.delete("/delete/:id", "CutsController.deleteCuts");
 })
   .prefix("/api/v1/cuts")
+  .middleware("auth");
+
+Route.group(() => {
+  Route.get(
+    "/get-by-id/:id",
+    "BeneficiariesConsolidateContoller.getBeneficiariesConsolidateById"
+  );
+  Route.post(
+    "/create",
+    "BeneficiariesConsolidateContoller.createBeneficiariesConsolidate"
+  );
+  Route.post(
+    "get-paginated",
+    "BeneficiariesConsolidateContoller.getBeneficiariesConsolidatePaginate"
+  );
+  Route.put(
+    "/edit/:id",
+    "BeneficiariesConsolidateContoller.updateBeneficiariesConsolidate"
+  );
+  Route.delete(
+    "/delete/:id",
+    "BeneficiariesConsolidateContoller.deleteBeneficiariesConsolidate"
+  );
+})
+  .prefix("/api/v1/beneficiaries-consolidate")
   .middleware("auth");

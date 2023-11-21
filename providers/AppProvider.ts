@@ -52,6 +52,10 @@ export default class AppProvider {
 
     const ControlSelectService = await import("App/Services/ControlSelect")
 
+    const BeneficiariesConsolidateService = await import(
+      "App/Services/BeneficiariesConsolidateService"
+    );
+
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -109,9 +113,9 @@ export default class AppProvider {
       "App/Repositories/ResourcePrioritizationRepository"
     );
 
-    const ControlSelectRepository = await import(
-      "App/Repositories/ControlSelectRepository"
-    )
+    const BeneficiariesConsolidateRepository = await import(
+      "App/Repositories/BeneficiariesConsolidateRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -209,9 +213,13 @@ export default class AppProvider {
       "core.RenewalProvider",
       () => new RenewalService.default(new CallRenewalRepository.default())
     );
-
-    this.app.container.singleton("core.ControlSelectProvider",
-      () => new ControlSelectService.default(new ControlSelectRepository.default()))
+    this.app.container.singleton(
+      "core.BeneficiariesConsolidateProvider",
+      () =>
+        new BeneficiariesConsolidateService.default(
+          new BeneficiariesConsolidateRepository.default()
+        )
+    );
   }
 
   public async boot() {
