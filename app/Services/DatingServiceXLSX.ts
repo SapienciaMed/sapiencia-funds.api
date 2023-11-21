@@ -9,11 +9,11 @@ export const furnitureXLSXcolumnNames = [
   },
   {
     name: "Taquilla",
-    size: 25,
+    size: 10,
   },
   {
     name: "Fecha",
-    size: 30,
+    size: 15,
   },
   {
     name: "Hora inicio",
@@ -21,15 +21,15 @@ export const furnitureXLSXcolumnNames = [
   },
   {
     name: "Estado",
-    size: 20,
+    size: 12,
   },
   {
     name: "Nombre",
-    size: 20,
+    size: 40,
   },
   {
     name: "identificación",
-    size: 25,
+    size: 15,
   },
 
 ];
@@ -41,13 +41,13 @@ export const furnitureXLSXRows = (
     return [
       ...prev,
       [
-        String(curr.usuario),
+        String(curr.id_usuario),
         String(curr.taquilla),
         String(curr.fecha),
         String(curr.hora_inicio),
         String(curr.estado),
         String(curr.nombre),
-        String(curr.identificacion),
+        String(curr.cedula),
 
       ],
     ];

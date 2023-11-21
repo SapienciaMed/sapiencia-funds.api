@@ -25,7 +25,7 @@ export default class DatingController {
       const resp = await DatingProvider.generateXLSXDating(filters)
       response.header(
         "Content-Disposition",
-        "attachment; filename=Presupuesto_convocatoria.xlsx"
+        "attachment; filename=Informe_citas.xlsx"
       )
       return response.download(resp.data)
     } catch (err) {

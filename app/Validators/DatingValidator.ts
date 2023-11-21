@@ -8,7 +8,7 @@ export default class DatingValidatorFilter {
     public schema = schema.create({
       page: schema.number([rules.required(), rules.unsigned()]),
       perPage: schema.number([rules.required(), rules.unsigned()]),
-      convocatoria: schema.number(),
+      convocatoria: schema.number.optional(),
       programa: schema.string(),
   });
 

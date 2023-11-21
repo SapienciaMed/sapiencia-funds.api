@@ -21,14 +21,12 @@ export default class DatingRepository implements IDatingRepository {
       programa 
     } = filters;
   
-    const query = `call AuroraInformeRenovados('${programa}')`;
+    const query = `call AuroraControlCitas('${programa}')`;
   
     const result = await Database.connection("mysql_sapiencia").rawQuery(query);
   
     // Suponiendo que result contiene un arreglo de resultados
     const data = result[0];
-  
-    console.log("****************", data);
   
     // Extrae el subarreglo necesario sin modificar el original
     const cleanedData = data[0];

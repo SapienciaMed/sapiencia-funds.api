@@ -26,8 +26,6 @@ export default class RenewalRepository implements IRenewalRepository {
     // Suponiendo que result contiene un arreglo de resultados
     const data = result[0];
   
-    console.log("****************", data);
-  
     // Extrae el subarreglo necesario sin modificar el original
     const cleanedData = data[0];
   
