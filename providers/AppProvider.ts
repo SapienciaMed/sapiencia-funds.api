@@ -55,7 +55,7 @@ export default class AppProvider {
     const BeneficiariesConsolidateService = await import(
       "App/Services/BeneficiariesConsolidateService"
     );
-    
+
     const DatingService = await import("App/Services/DatingService");
 
     /**************************************************************************/
@@ -122,6 +122,8 @@ export default class AppProvider {
     const DatingRepository = await import(
       "App/Repositories/Sapiencia/CallDatingRepository"
     );
+
+    const ControlSelectRepository = await import("App/Repositories/ControlSelectRepository")
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -230,6 +232,10 @@ export default class AppProvider {
       "core.DatingProvider",
       () => new DatingService.default(new DatingRepository.default())
     );
+    this.app.container.singleton(
+      "core.ControlSelectProvider",
+      () => new ControlSelectService.default(new ControlSelectRepository.default())
+    )
   }
 
   public async boot() {
