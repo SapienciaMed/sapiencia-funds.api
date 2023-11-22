@@ -107,6 +107,10 @@ export default class AppProvider {
       "App/Repositories/ResourcePrioritizationRepository"
     );
 
+    const ConsolidationTrayTechnicianCollectionRepository = await import(
+      "App/Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository"
+    );
+
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -119,7 +123,10 @@ export default class AppProvider {
     );
     this.app.container.singleton(
       "core.SapienciaProvider",
-      () => new SapienciaService.default(new CallPeriodRepository.default())
+      () => new SapienciaService.default(
+        new CallPeriodRepository.default(),
+        new ConsolidationTrayTechnicianCollectionRepository.default()
+      )
     );
     this.app.container.singleton(
       "core.VotingResultsProvider",
