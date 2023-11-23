@@ -57,7 +57,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
         const res = await queryControlSelect.paginate(1, 100)
         const { data, meta } = res.serialize()
-        return { Array: data, meta }
+        return { array: data, meta }
     }
 
     async createInfoConsolidado(payload: any) {
