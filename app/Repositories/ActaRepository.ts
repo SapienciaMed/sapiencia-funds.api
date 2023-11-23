@@ -183,7 +183,6 @@ export default class ActaRepository implements IActaRepository {
         idFound: itemData.idFound, idLine: itemData.idLine, idAnnouncement: itemData.idAnnouncement!, idConcept: itemData.idConcept, costOperation: itemData.costOperation, subtotalVigency: itemData.subtotalVigency, costBillsOperation: itemData.costBillsOperation, net: itemData.net, financialOperatorCommission: itemData.financialOperatorCommission, resourcesCredit: itemData.resourcesCredit, idProgram: itemData.idProgram, periods: serializedPeriods
       }
 
-      console.log(payload)
       item.updateOrCreate({ id }, payload)
 
       return item

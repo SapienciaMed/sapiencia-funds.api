@@ -207,13 +207,18 @@ Route.group(() => {
   Route.get("/generate-xlsx", "BudgetController.generateXLSX");
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
-
+Route.group(() => {
+  Route.post("/getInfo", "ControlSelectController.getInfo")
+  Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
+  Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
+}).prefix("/api/v1/controlSelect")
 Route.group(() => {
   Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
   Route.post("/create", "RenewalController.createCallRenewal");
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
 }).prefix("/api/v1/renovacion");
 //.middleware("auth");
+
 Route.group(() => {
   Route.get("/get-by-id/:id", "CutsController.getCutsById");
   Route.post("/create", "CutsController.createCuts");
@@ -222,6 +227,15 @@ Route.group(() => {
   Route.delete("/delete/:id", "CutsController.deleteCuts");
 })
   .prefix("/api/v1/cuts")
+  .middleware("auth");
+
+
+Route.group(() => {
+  Route.get("/get-cuts-generic", "ConsolidationTrayController.getCutsForConsolidationTray").middleware("auth:TECNICO_PASO_COBRO");
+  Route.post("/get-consolidation-tray-technician-collection", "ConsolidationTrayController.geConsolidationTrayTechnicianCollection").middleware("auth:TECNICO_PASO_COBRO");
+  Route.post("/get-consolidation-tray-technician-collection-by-cut", "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut").middleware("auth:TECNICO_PASO_COBRO");
+})
+  .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
 
 Route.group(() => {
@@ -248,7 +262,7 @@ Route.group(() => {
 })
   .prefix("/api/v1/beneficiaries-consolidate")
   .middleware("auth");
-  
+
   Route.group(() => {
     Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
     Route.get("/generate-xlsx", "DatingController.generateXLSX");
