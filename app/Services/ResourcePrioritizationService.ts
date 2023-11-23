@@ -6,8 +6,12 @@ import {
   IResourcePrioritizationFilters,
   ITotalsPrioritizationFilters,
 } from "App/Interfaces/ResourcePrioritizationInterface";
+import * as XLSX from "xlsx";
 
 export interface IResourcePrioritizationService {
+  getResourcePrioritizationExcel(
+    filters: ITotalsPrioritizationFilters
+  ): Promise<ApiResponse<string>>;
   setResourcePrioritization(
     data: IResourcePrioritization
   ): Promise<ApiResponse<IResourcePrioritization>>;
@@ -25,6 +29,64 @@ export default class ResourcePrioritizationService
   constructor(
     private resourcePrioritizationRepository: IResourcePrioritizationRepository
   ) {}
+
+  async getResourcePrioritizationExcel(
+    filters: ITotalsPrioritizationFilters
+  ): Promise<ApiResponse<IResourcePrioritization>> {
+    const items =
+      await this.resourcePrioritizationRepository.getResourcePrioritizationPaginated(
+        {
+          ...filters,
+          page: 1,
+          perPage: 10000,
+        }
+      );
+
+    const prioritizations =
+      await this.resourcePrioritizationRepository.getPrioritizationsToReplace(
+        {
+          ...filters,
+          page: 1,
+          perPage: 10000,
+        },
+        items.array.map((i) => i.communeId)
+      );
+
+    const toReturn: IResourcePrioritization[] = [];
+
+    for (const item of items.array) {
+      const toReplace = prioritizations.find(
+        (i) => i.communeId == item.communeId
+      );
+
+      if (toReplace) {
+        toReturn.push(toReplace);
+      } else {
+        toReturn.push({
+          programId: item.programId,
+          projectNumber: filters.projectNumber,
+          validity: filters.validity,
+          communeId: item.communeId,
+          total123: Number(item.total123),
+          total456: Number(item.total456),
+          value: item.value,
+          places: item.places,
+          averageCost: 0,
+          generalRate: 0,
+          operatingCostAndExpense: 0,
+          grossValue: item.value,
+          financialPerformances: 0,
+          balanceResources: 0,
+          operatorCommissionAct: 0,
+          operatorCommissionBalance: 0,
+          operatorCommission: 0,
+          resourceForCredit: item.value,
+        });
+      }
+    }
+
+    ApiResponse("", EResponseCodes.OK);
+  }
 
   async setResourcePrioritization(
     data: IResourcePrioritization
