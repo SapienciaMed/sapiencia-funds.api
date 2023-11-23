@@ -6,6 +6,7 @@ import {IProgramTypes} from "app/Interfaces/TypesProgramInterface"
 import MasterActivity from "../Models/MasterActivity";
 import { IPagingData } from "App/Utils/ApiResponses";
 import TypesProgram from "App/Models/TypeProgram";
+import { DateTime } from "luxon";
 
 export interface IMasterActivityRepository {
   createMasterActivity(
@@ -33,7 +34,12 @@ export default class MasterActivityRepository
   ): Promise<IMasterActivity> {
     const toCreate = new MasterActivity();
 
-    toCreate.fill({ ...manualDeduction });
+    toCreate.fill({ 
+      ...manualDeduction,
+      dateCreate:DateTime.local(), 
+      userCreate: process.env.CURRENT_USER_DOCUMENT,
+      
+    });
     await toCreate.save();
     return toCreate.serialize() as IMasterActivity;
   }
