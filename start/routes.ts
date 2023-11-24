@@ -259,3 +259,9 @@ Route.group(() => {
   })
     .prefix("/api/v1/citas")
   //.middleware("auth");
+
+Route.group(() => {
+  Route.get("/import", "ServiceSocialController.import");  
+})
+.prefix("/api/v1/service-social")
+//.middleware("auth");
