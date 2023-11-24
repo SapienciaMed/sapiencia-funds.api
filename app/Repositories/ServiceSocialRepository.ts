@@ -1,4 +1,5 @@
-import Master from "App/Models/Master";
+
+import AuroraEpmRenovado from "App/Models/Sapiencia/AuroraEpmRenovado";
 
 
 export interface IServiceSocialRepository {   
@@ -12,7 +13,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
   
 
     async import(): Promise<any[]> {
-       const res = await Master.query();
+       const res = await AuroraEpmRenovado.query();
         return res.map((i) => i.serialize() as any);         
     }
 
