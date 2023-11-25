@@ -231,12 +231,14 @@ Route.group(() => {
 
 
 Route.group(() => {
-  Route.get("/get-cuts-generic", "ConsolidationTrayController.getCutsForConsolidationTray").middleware("auth:TECNICO_PASO_COBRO");
-  Route.post("/get-consolidation-tray-technician-collection", "ConsolidationTrayController.geConsolidationTrayTechnicianCollection").middleware("auth:TECNICO_PASO_COBRO");
-  Route.post("/get-consolidation-tray-technician-collection-by-cut", "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut").middleware("auth:TECNICO_PASO_COBRO");
+  Route.get("/get-cuts-generic", "ConsolidationTrayController.getCutsForConsolidationTray")/*.middleware("auth:TECNICO_PASO_COBRO")*/;
+  Route.post("/get-consolidation-tray-technician-collection", "ConsolidationTrayController.geConsolidationTrayTechnicianCollection")/*.middleware("auth:TECNICO_PASO_COBRO");*/
+  Route.post("/get-consolidation-tray-technician-collection-by-cut", "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut")/*.middleware("auth:TECNICO_PASO_COBRO");*/
+  Route.get("/get-beneficiary-by-id/:id", "ConsolidationTrayController.geBeneficiaryById")/*.middleware("auth:TECNICO_PASO_COBRO");*/
+  Route.post("/update-cut-beneficiary", "ConsolidationTrayController.updateCutBeneficiary")/*.middleware("auth:TECNICO_PASO_COBRO");*/
 })
   .prefix("/api/v1/consolidation-tray")
-  .middleware("auth");
+  // .middleware("auth");
 
 Route.group(() => {
   Route.get(
