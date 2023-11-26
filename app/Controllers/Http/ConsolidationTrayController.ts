@@ -91,4 +91,21 @@ export default class ConsolidationTrayController {
 
   }
 
+  public async getPQRSDFExternal({ request, response }: HttpContextContract) {
+
+    try {
+
+      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      return response.send(await SapienciaProvider.getPQRSDFExternal(data));
+
+    } catch (err) {
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
 }
