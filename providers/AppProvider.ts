@@ -1,7 +1,7 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
 export default class AppProvider {
-  constructor(protected app: ApplicationContract) {}
+  constructor(protected app: ApplicationContract) { }
 
   public async register() {
     // Register your own bindings
@@ -50,10 +50,15 @@ export default class AppProvider {
 
     const CutService = await import("App/Services/CutService");
 
+    const ControlSelectService = await import("App/Services/ControlSelect")
+
     const BeneficiariesConsolidateService = await import(
       "App/Services/BeneficiariesConsolidateService"
     );
 
+    const DatingService = await import("App/Services/DatingService");
+    
+    const ServiceSocialService = await import("App/Services/ServiceSocialService");
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -111,9 +116,21 @@ export default class AppProvider {
       "App/Repositories/ResourcePrioritizationRepository"
     );
 
+    const ConsolidationTrayTechnicianCollectionRepository = await import(
+      "App/Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository"
+    );
+
     const BeneficiariesConsolidateRepository = await import(
       "App/Repositories/BeneficiariesConsolidateRepository"
     );
+
+    const DatingRepository = await import(
+      "App/Repositories/Sapiencia/CallDatingRepository"
+    );
+
+    const ControlSelectRepository = await import("App/Repositories/ControlSelectRepository")
+
+    const ServiceSocialRepository = await import("App/Repositories/ServiceSocialRepository")
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -127,7 +144,10 @@ export default class AppProvider {
     );
     this.app.container.singleton(
       "core.SapienciaProvider",
-      () => new SapienciaService.default(new CallPeriodRepository.default())
+      () => new SapienciaService.default(
+        new CallPeriodRepository.default(),
+        new ConsolidationTrayTechnicianCollectionRepository.default()
+      )
     );
     this.app.container.singleton(
       "core.VotingResultsProvider",
@@ -156,7 +176,7 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.MasterProvider",
       () => new MasterService.default(new MasterRepository.default())
-    );
+    );  
     this.app.container.singleton(
       "core.TypeMasterListProvider",
       () =>
@@ -217,6 +237,18 @@ export default class AppProvider {
         new BeneficiariesConsolidateService.default(
           new BeneficiariesConsolidateRepository.default()
         )
+    );
+    this.app.container.singleton(
+      "core.DatingProvider",
+      () => new DatingService.default(new DatingRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ControlSelectProvider",
+      () => new ControlSelectService.default(new ControlSelectRepository.default())
+    )
+    this.app.container.singleton(
+      "core.ServiceSocialProvider",
+      () => new ServiceSocialService.default(new ServiceSocialRepository.default())
     );
   }
 

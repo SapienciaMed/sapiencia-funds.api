@@ -21,7 +21,7 @@ export default class extends BaseSchema {
       table.string("ITM_CODIGO_PRODUCTO_DNP", 20).notNullable().comment(" ");
       table.integer("ITM_CODPMA_PROGRAMA").notNullable().comment(" ");
       table.integer("ITM_CANTIDAD").notNullable().comment(" ");
-      table.decimal("ITM_COSTO_TOTAL").notNullable().comment(" ");
+      table.decimal("ITM_COSTO_TOTAL", 65,0).notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_123").notNullable().comment(" ");
       table.integer("ITM_PORCENTAJE_456").notNullable().comment(" ");
       // table.integer("ITM_CODRTV_RESULTADO_VOTACION").notNullable().comment(" ");

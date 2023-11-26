@@ -23,6 +23,16 @@ export default class SapienciaController {
       );
     }
   }
+
+  public async getAllCallfondo({ response }: HttpContextContract) {
+    try {
+      return response.send(await SapienciaProvider.getAllCallfond());
+    } catch (err) {
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
   public async geCallBudgetPaginate({ response, request }: HttpContextContract) {
     try {
       const data = request.body() as ICallBudgetFilters;
