@@ -208,6 +208,7 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 Route.group(() => {
+  Route.post("/getInfopay", "ControlSelectController.getInfopay")
   Route.post("/getInfo", "ControlSelectController.getInfo")
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")

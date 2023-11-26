@@ -4,6 +4,7 @@ import ControlSelectRepository from "App/Repositories/ControlSelectRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
 export interface IControlSelectService {
+    getInfopay(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getinfo(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
@@ -24,5 +25,11 @@ export default class ControlSelectServices implements IControlSelectService {
     async createInfoConsolidado(payload: controlSelectConsolidado) {
         const res = await this.controlSelectRepository.createInfoConsolidado(payload)
         return new ApiResponse(res, EResponseCodes.OK)
+    }
+    async getInfopay(payload: controlSelectFilter) {
+        const infopaystatefound =
+        await this.controlSelectRepository.getInfopay(payload);
+        //const res = await this.controlSelectRepository.getInfoBeforeCreate(payload)
+        return new ApiResponse(infopaystatefound, EResponseCodes.OK)
     }
 }

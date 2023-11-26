@@ -53,4 +53,23 @@ export default class ControlSelectController {
         }
     }
 
+    public async getInfopay(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfopay(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
 }
