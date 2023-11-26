@@ -20,7 +20,7 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
   geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
-  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<PqrsdfResultSimple[] | null>;
+  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>>;
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
@@ -347,13 +347,19 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<PqrsdfResultSimple[] | null> {
+  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>> {
 
     const urlConsumer = `/api/v1/pqrsdf/get-paginated/`;
     const resultFilter: PqrsdfResultSimple[] = [];
 
+    const privateFiltersForCitizen: IConsolidationTrayForTechnicianCollection = {
+      identification: filters.identification,
+      page: 1,
+      perPage: 100000
+    }
+
     const dataCitizen = await this.axiosInstance.post<
-      CitizenAttentionDataExternal[]>(urlConsumer, filters, {
+      CitizenAttentionDataExternal[]>(urlConsumer, privateFiltersForCitizen, {
       headers: {
         Authorization: process.env.CURRENT_AUTHORIZATION,
       },
@@ -436,7 +442,26 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     })
 
-    return resultFilter;
+    //* ************************************* //*
+    //* Aplicamos paginación de manera manual //*
+    //* ************************************* //*
+    let infoPaginated: PqrsdfResultSimple[] = [];
+
+    const { page, perPage } = filters;
+    const start: number = (page - 1) * perPage;
+    const end: number = start + perPage;
+
+    infoPaginated = resultFilter.slice(start, end);
+
+    const meta = {
+      total: resultFilter.length,
+      total_general: resultFilter.length,
+      per_page: perPage,
+      current_page: page,
+      last_page: Math.ceil(resultFilter.length / perPage),
+    };
+
+    return { array: infoPaginated as PqrsdfResultSimple[], meta };
 
   }
 
