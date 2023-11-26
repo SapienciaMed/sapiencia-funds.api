@@ -249,30 +249,6 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
-<<<<<<< HEAD
-  Route.get(
-    "/get-cuts-generic",
-    "ConsolidationTrayController.getCutsForConsolidationTray"
-  ) /*.middleware("auth:TECNICO_PASO_COBRO")*/;
-  Route.post(
-    "/get-consolidation-tray-technician-collection",
-    "ConsolidationTrayController.geConsolidationTrayTechnicianCollection"
-  ); /*.middleware("auth:TECNICO_PASO_COBRO");*/
-  Route.post(
-    "/get-consolidation-tray-technician-collection-by-cut",
-    "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut"
-  ); /*.middleware("auth:TECNICO_PASO_COBRO");*/
-  Route.get(
-    "/get-beneficiary-by-id/:id",
-    "ConsolidationTrayController.geBeneficiaryById"
-  ); /*.middleware("auth:TECNICO_PASO_COBRO");*/
-  Route.post(
-    "/update-cut-beneficiary",
-    "ConsolidationTrayController.updateCutBeneficiary"
-  ); /*.middleware("auth:TECNICO_PASO_COBRO");*/
-}).prefix("/api/v1/consolidation-tray");
-// .middleware("auth");
-=======
   Route.get("/get-cuts-generic", "ConsolidationTrayController.getCutsForConsolidationTray").middleware("auth:TECNICO_PASO_COBRO");
   Route.post("/get-consolidation-tray-technician-collection", "ConsolidationTrayController.geConsolidationTrayTechnicianCollection").middleware("auth:TECNICO_PASO_COBRO");
   Route.post("/get-consolidation-tray-technician-collection-by-cut", "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut").middleware("auth:TECNICO_PASO_COBRO");
@@ -282,7 +258,6 @@ Route.group(() => {
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
->>>>>>> dev
 
 Route.group(() => {
   Route.get(
@@ -312,15 +287,10 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
   Route.get("/generate-xlsx", "DatingController.generateXLSX");
-}).prefix("/api/v1/citas");
-//.middleware("auth");
+}).prefix("/api/v1/citas")
+  .middleware("auth");
 
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
-<<<<<<< HEAD
-}).prefix("/api/v1/service-social");
-=======
-})
-.prefix("/api/v1/service-social")
->>>>>>> dev
-//.middleware("auth");
+}).prefix("/api/v1/service-social")
+  .middleware("auth");
