@@ -16,19 +16,34 @@ export default class BeneficiariesConsolidate extends BaseModel {
   })
   public dateCarry: DateTime;
 
-  @column({ columnName: "BAC_FECHA_MARCACION", serializeAs: "dateMark" })
+  @column({
+    columnName: "BAC_FECHA_MARCACION",
+    serializeAs: "dateMark"
+  })
   public dateMark: Date;
 
-  @column({ columnName: "BAC_CODPMA_PROGRAMA", serializeAs: "idProgram" })
+  @column({
+    columnName: "BAC_CODPMA_PROGRAMA",
+    serializeAs: "idProgram"
+  })
   public idProgram: number;
 
-  @column({ columnName: "BAC_CODPCRT_CORTE", serializeAs: "idCut" })
+  @column({
+    columnName: "BAC_CODPCRT_CORTE",
+    serializeAs: "idCut"
+  })
   public idCut: number;
 
-  @column({ columnName: "BAC_NUMERO_DOCUMENTO", serializeAs: "numberDocument" })
+  @column({
+    columnName: "BAC_NUMERO_DOCUMENTO",
+    serializeAs: "numberDocument"
+  })
   public numberDocument: string;
 
-  @column({ columnName: "BAC_NUMERO_CREDITO", serializeAs: "creditNumber" })
+  @column({
+    columnName: "BAC_NUMERO_CREDITO",
+    serializeAs: "creditNumber"
+  })
   public creditNumber: number;
 
   @column({
@@ -61,7 +76,10 @@ export default class BeneficiariesConsolidate extends BaseModel {
   })
   public countSuspendSpecials: number;
 
-  @column({ columnName: "BAC_ESTADO_PROCESO", serializeAs: "statusProcess" })
+  @column({
+    columnName: "BAC_ESTADO_PROCESO",
+    serializeAs: "statusProcess"
+  })
   public statusProcess: string;
 
   @column({
@@ -76,7 +94,16 @@ export default class BeneficiariesConsolidate extends BaseModel {
   })
   public countSemesterProjected: number;
 
-  @column({ columnName: "BAC_CANTIDAD_GIROS", serializeAs: "countSpins" })
+  @column({
+    columnName: "BAC_GIROS_PROYECTADOS",
+    serializeAs: "countSpinProjected",
+  })
+  public countSpinProjected: number;
+
+  @column({
+    columnName: "BAC_CANTIDAD_GIROS",
+    serializeAs: "countSpins"
+  })
   public countSpins: number;
 
   @column({
@@ -90,6 +117,87 @@ export default class BeneficiariesConsolidate extends BaseModel {
     serializeAs: "countRenew",
   })
   public countRenew: number;
+
+  @column({
+    columnName: "BAC_NRO_CONTRATO_FIDUCIARIO",
+    serializeAs: "nroFiducyContract",
+  })
+  public nroFiducyContract: number;
+
+  @column({
+    columnName: "BAC_FECHA_REGRESO_DEPARTAMENTO",
+    serializeAs: "dateDepartmentReturn"
+  })
+  public dateDepartmentReturn: Date;
+
+  @column({
+    columnName: "BAC_FECHA_INGRESO",
+    serializeAs: "dateIncome"
+  })
+  public dateIncome: Date;
+
+  @column({
+    columnName: "BAC_PERIODO_GRACIA",
+    serializeAs: "gracePeriod"
+  })
+  public gracePeriod: string;
+
+  @column({
+    columnName: "BAC_INICIO_PERIODO_GRACIA",
+    serializeAs: "dateInitialGracePeriod"
+  })
+  public dateInitialGracePeriod: Date;
+
+  @column({
+    columnName: "BAC_FIN_PERIODO_GRACIA",
+    serializeAs: "dateEndGracePeriod"
+  })
+  public dateEndGracePeriod: Date;
+
+  //----------------------------------------------------------------------------- 24/11/2023
+  //------ //TODO: Revisar (Más adelante no deberíamos tomar los datos de acá)//
+  //------ //TODO: Se supone que esto vendrá de otras vistas que proporcione Sapiencia
+  //----------------------------------------------------------------------------------------
+
+  @column({
+    columnName: "BAC_NOMBRES",
+    serializeAs: "fullName",
+  })
+  public fullName: string;
+
+  @column({
+    columnName: "BAC_CORREO",
+    serializeAs: "email",
+  })
+  public email: string;
+
+  @column({
+    columnName: "BAC_NRO_CONTACTO",
+    serializeAs: "contactNumber",
+  })
+  public contactNumber: string;
+
+  @column({
+    columnName: "BAC_MOTIVO",
+    serializeAs: "reason",
+  })
+  public reason: string;
+
+  @column({
+    columnName: "BAC_CARACTERIZACION",
+    serializeAs: "characterization",
+  })
+  public characterization: string;
+
+  @column({
+    columnName: "BAC_RESPONSABLE_ACTUAL",
+    serializeAs: "currentManager",
+  })
+  public currentManager: string;
+
+  //-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------
 
   @hasOne(() => Programs, {
     localKey: "idProgram",

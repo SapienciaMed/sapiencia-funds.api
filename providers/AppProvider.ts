@@ -9,6 +9,9 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** SERVICES ********************************/
     /**************************************************************************/
+    const CoreService = await import(
+      "App/Services/External/CoreService"
+    );
     const VotingResultsService = await import(
       "App/Services/VotingResultsService"
     );
@@ -116,6 +119,10 @@ export default class AppProvider {
       "App/Repositories/ResourcePrioritizationRepository"
     );
 
+    const ConsolidationTrayTechnicianCollectionRepository = await import(
+      "App/Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository"
+    );
+
     const BeneficiariesConsolidateRepository = await import(
       "App/Repositories/BeneficiariesConsolidateRepository"
     );
@@ -135,12 +142,16 @@ export default class AppProvider {
       "core.ResourcePrioritizationProvider",
       () =>
         new ResourcePrioritizationService.default(
-          new ResourcePrioritizationRepository.default()
+          new ResourcePrioritizationRepository.default(), 
+          new CoreService.default()
         )
     );
     this.app.container.singleton(
       "core.SapienciaProvider",
-      () => new SapienciaService.default(new CallPeriodRepository.default())
+      () => new SapienciaService.default(
+        new CallPeriodRepository.default(),
+        new ConsolidationTrayTechnicianCollectionRepository.default()
+      )
     );
     this.app.container.singleton(
       "core.VotingResultsProvider",

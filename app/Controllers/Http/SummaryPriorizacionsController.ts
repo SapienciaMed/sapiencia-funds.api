@@ -3,6 +3,7 @@ import ReumenPriorizacionProvider from "@ioc:core.ReumenPriorizacionProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IResumPriorizacionFilters } from "App/Interfaces/SummaryPriorizacionInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
+import { generateExcel } from "App/Utils/generateXLSX";
 
 
 export default class SummaryPriorizacionsController {
@@ -34,7 +35,7 @@ export default class SummaryPriorizacionsController {
         "Content-Disposition",
         "attachment; filename=ReportePlanilla.xls"
       );
-      const responsexlsx = await  ReumenPriorizacionProvider.generateXlsx(objectresp.data)
+      const responsexlsx = await  generateExcel(objectresp.data)
       response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
 
     } catch (err) {

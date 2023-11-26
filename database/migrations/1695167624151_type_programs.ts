@@ -10,7 +10,7 @@ export default class extends BaseSchema {
 
       table.increments("PMA_CODIGO").primary();
       table
-        .string("PMA_NOMBRE", 20)
+        .string("PMA_NOMBRE", 100)
         .notNullable()
         .comment("Nombre del programa");
 
