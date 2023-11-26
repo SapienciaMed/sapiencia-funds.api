@@ -66,18 +66,18 @@ export default class ControlSelectRepository implements IControlSelectRepository
 
     async updateinfoConsolidado(payload: any) {
         const id = payload.id!
-        // if (payload.ResourcePrioritization) {
-        //     payload.ResourcePrioritization!.map(data => {
-        //         const RP = ResourcePrioritization
-        //         let id = data.id
-        //         let payload: any = {
-        //             places: data.place
-        //         }
-        //         RP.updateOrCreate({ id }, payload)
+        if (payload.ResourcePrioritization) {
+            payload.ResourcePrioritization!.map(data => {
+                const RP = ResourcePrioritization
+                let id = data.id
+                let payload: any = {
+                    places: data.place
+                }
+                RP.updateOrCreate({ id }, payload)
 
-        //         return RP
-        //     })
-        // }
+                return RP
+            })
+        }
         let data = {
             consolidatedPreselected: payload.consolidatedPreselected,
             consolidatedResourceAvailable: payload.consolidatedResourceAvailable,

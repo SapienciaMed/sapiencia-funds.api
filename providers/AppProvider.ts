@@ -57,7 +57,8 @@ export default class AppProvider {
     );
 
     const DatingService = await import("App/Services/DatingService");
-
+    
+    const ServiceSocialService = await import("App/Services/ServiceSocialService");
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -129,6 +130,8 @@ export default class AppProvider {
 
     const ControlSelectRepository = await import("App/Repositories/ControlSelectRepository")
 
+    const ServiceSocialRepository = await import("App/Repositories/ServiceSocialRepository")
+
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -173,7 +176,7 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.MasterProvider",
       () => new MasterService.default(new MasterRepository.default())
-    );
+    );  
     this.app.container.singleton(
       "core.TypeMasterListProvider",
       () =>
@@ -243,6 +246,10 @@ export default class AppProvider {
       "core.ControlSelectProvider",
       () => new ControlSelectService.default(new ControlSelectRepository.default())
     )
+    this.app.container.singleton(
+      "core.ServiceSocialProvider",
+      () => new ServiceSocialService.default(new ServiceSocialRepository.default())
+    );
   }
 
   public async boot() {
