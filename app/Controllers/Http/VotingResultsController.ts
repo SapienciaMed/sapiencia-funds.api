@@ -3,6 +3,7 @@ import VotingResultsProvider from "@ioc:core.VotingResultsProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IVotingFilters } from "App/Interfaces/VotingResultsInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
+import { generateExcel } from "App/Utils/generateXLSX";
 import VotingResultsValidator from "App/Validators/VotingResultsValidator";
 
 export default class VotingResultsController {
@@ -32,7 +33,7 @@ export default class VotingResultsController {
 
       const resp = await VotingResultsProvider.getVotingPaginateXlsx(data);
 
-      const responsexlsx = await VotingResultsProvider.generateXlsx(resp.data);
+      const responsexlsx = await generateExcel(resp.data);
       response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
 
     } catch (err) {

@@ -1,12 +1,16 @@
+import axios, { AxiosInstance } from "axios";
 // import Database from "@ioc:Adonis/Lucid/Database";
 import { IConsolidationTrayForTechnicianCollection,
          IConsolidationTrayForTechnicianCollectionParams,
          IConsolidationTrayForTransactions,
-         InitialBeneficiaryInformation } from '../../Interfaces/ConsolidationTrayInterface';
+         InitialBeneficiaryInformation,
+         CitizenAttentionDataExternal,
+         PqrsdfResultSimple} from '../../Interfaces/ConsolidationTrayInterface';
 import { IPagingData } from "App/Utils/ApiResponses";
 import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
 import { ICutInterface } from '../../Interfaces/CutInterface';
 import Cut from '../../Models/Cut';
+import { PqrsdfResult } from '../../Interfaces/ConsolidationTrayInterface';
 
 
 export interface IConsolidationTrayTechnicianCollectionRepository {
@@ -16,11 +20,20 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
   geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
+  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>>;
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
 
-  constructor() { }
+  private axiosInstance: AxiosInstance;
+
+  constructor() {
+    //**Instanciamos Axios para atención ciudadana */
+    this.axiosInstance = axios.create({
+      baseURL: process.env.URL_API_CITIZEN_ATTENTION,
+    });
+
+  }
 
   async getHellow(filters: IConsolidationTrayForTechnicianCollection): Promise<any> {
 
@@ -260,7 +273,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     }
 
     const meta = {
-      total: infoPaginated.length,
+      total: filterForSearch.length,
       total_general: filterForSearch.length,
       per_page: perPage,
       current_page: page,
@@ -301,6 +314,13 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       reason: convertResAurora[0].reason,
       characterization: convertResAurora[0].characterization,
       currentResponsible: convertResAurora[0].currentManager,
+
+      countSpinProjected: convertResAurora[0].countSpinProjected,
+      countSpins: convertResAurora[0].countSpins,
+      contactNumber: convertResAurora[0].contactNumber,
+      email: convertResAurora[0].email,
+      dateIncome: convertResAurora[0].dateIncome,
+
     }
 
     return objResult;
@@ -324,6 +344,124 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     await toBeneficiary.save();
 
     return toBeneficiary.serialize() as IConsolidationTrayForTechnicianCollectionParams;
+
+  }
+
+  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>> {
+
+    const urlConsumer = `/api/v1/pqrsdf/get-paginated/`;
+    const resultFilter: PqrsdfResultSimple[] = [];
+
+    const privateFiltersForCitizen: IConsolidationTrayForTechnicianCollection = {
+      identification: filters.identification,
+      page: 1,
+      perPage: 100000
+    }
+
+    const dataCitizen = await this.axiosInstance.post<
+      CitizenAttentionDataExternal[]>(urlConsumer, privateFiltersForCitizen, {
+      headers: {
+        Authorization: process.env.CURRENT_AUTHORIZATION,
+      },
+    });
+
+    const dataResult: CitizenAttentionDataExternal | any = dataCitizen;
+    const dataCaptured: PqrsdfResult[] = dataResult.data.data.array;
+
+    dataCaptured.forEach( (pqrsdf) => {
+
+      let program: string = "";
+      let clasify: string = "";
+      let reason: string = "";
+      let state: string = "";
+      let numberPqrsdf: number;
+      let dateFiled: Date | string;
+      let answerDate: Date | string;
+      let answer: string = "";
+
+      if( !pqrsdf.filingNumber || pqrsdf.filingNumber == null ){
+        numberPqrsdf = 0;
+      }else{
+        numberPqrsdf = pqrsdf.filingNumber;
+      }
+
+      if( !pqrsdf.createdAt || pqrsdf.createdAt == null ){
+        dateFiled = "";
+      }else{
+        dateFiled = pqrsdf.createdAt;
+      }
+
+      if( !pqrsdf.program || pqrsdf.program == null ){
+        program = "";
+      }else{
+        program = pqrsdf.program.prg_descripcion;
+      }
+
+      if( !pqrsdf.clasification || pqrsdf.clasification == null ){
+        clasify = "";
+      }else{
+        clasify = pqrsdf.clasification;
+      }
+
+      if( !pqrsdf.requestSubject || pqrsdf.requestSubject == null ){
+        reason = "";
+      }else{
+        reason = pqrsdf.requestSubject!.aso_asunto;
+      }
+
+      if( !pqrsdf.status || pqrsdf.status == null ){
+        state = "";
+      }else{
+        state = pqrsdf.status!.lep_estado;
+      }
+
+      if( !pqrsdf.answerDate || pqrsdf.answerDate == null ){
+        answerDate = "";
+      }else{
+        answerDate = pqrsdf.answerDate;
+      }
+
+      if( !pqrsdf.answer || pqrsdf.answer == null ){
+        answer = "";
+      }else{
+        answer = pqrsdf.answer;
+      }
+
+      const objResult: PqrsdfResultSimple = {
+        numberPqrsdf,
+        dateFiled,
+        program,
+        clasify,
+        reason,
+        state,
+        answerDate,
+        answer,
+      }
+
+      resultFilter.push(objResult);
+
+    })
+
+    //* ************************************* //*
+    //* Aplicamos paginación de manera manual //*
+    //* ************************************* //*
+    let infoPaginated: PqrsdfResultSimple[] = [];
+
+    const { page, perPage } = filters;
+    const start: number = (page - 1) * perPage;
+    const end: number = start + perPage;
+
+    infoPaginated = resultFilter.slice(start, end);
+
+    const meta = {
+      total: resultFilter.length,
+      total_general: resultFilter.length,
+      per_page: perPage,
+      current_page: page,
+      last_page: Math.ceil(resultFilter.length / perPage),
+    };
+
+    return { array: infoPaginated as PqrsdfResultSimple[], meta };
 
   }
 

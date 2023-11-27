@@ -1,7 +1,7 @@
 import type { ApplicationContract } from "@ioc:Adonis/Core/Application";
 
 export default class AppProvider {
-  constructor(protected app: ApplicationContract) { }
+  constructor(protected app: ApplicationContract) {}
 
   public async register() {
     // Register your own bindings
@@ -9,6 +9,7 @@ export default class AppProvider {
     /**************************************************************************/
     /******************************** SERVICES ********************************/
     /**************************************************************************/
+    const CoreService = await import("App/Services/External/CoreService");
     const VotingResultsService = await import(
       "App/Services/VotingResultsService"
     );
@@ -50,15 +51,21 @@ export default class AppProvider {
 
     const CutService = await import("App/Services/CutService");
 
-    const ControlSelectService = await import("App/Services/ControlSelect")
+    const ControlSelectService = await import("App/Services/ControlSelect");
 
     const BeneficiariesConsolidateService = await import(
       "App/Services/BeneficiariesConsolidateService"
     );
 
     const DatingService = await import("App/Services/DatingService");
-    
-    const ServiceSocialService = await import("App/Services/ServiceSocialService");
+
+    const ServiceSocialService = await import(
+      "App/Services/ServiceSocialService"
+    );
+
+    const ConsolidationService = await import(
+      "App/Services/ConsolidationService"
+    );
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -128,9 +135,17 @@ export default class AppProvider {
       "App/Repositories/Sapiencia/CallDatingRepository"
     );
 
-    const ControlSelectRepository = await import("App/Repositories/ControlSelectRepository")
+    const ControlSelectRepository = await import(
+      "App/Repositories/ControlSelectRepository"
+    );
 
-    const ServiceSocialRepository = await import("App/Repositories/ServiceSocialRepository")
+    const ServiceSocialRepository = await import(
+      "App/Repositories/ServiceSocialRepository"
+    );
+
+    const ConsolidationRepository = await import(
+      "App/Repositories/ConsolidationRepository"
+    );
 
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -139,15 +154,17 @@ export default class AppProvider {
       "core.ResourcePrioritizationProvider",
       () =>
         new ResourcePrioritizationService.default(
-          new ResourcePrioritizationRepository.default()
+          new ResourcePrioritizationRepository.default(),
+          new CoreService.default()
         )
     );
     this.app.container.singleton(
       "core.SapienciaProvider",
-      () => new SapienciaService.default(
-        new CallPeriodRepository.default(),
-        new ConsolidationTrayTechnicianCollectionRepository.default()
-      )
+      () =>
+        new SapienciaService.default(
+          new CallPeriodRepository.default(),
+          new ConsolidationTrayTechnicianCollectionRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.VotingResultsProvider",
@@ -176,7 +193,7 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.MasterProvider",
       () => new MasterService.default(new MasterRepository.default())
-    );  
+    );
     this.app.container.singleton(
       "core.TypeMasterListProvider",
       () =>
@@ -244,11 +261,18 @@ export default class AppProvider {
     );
     this.app.container.singleton(
       "core.ControlSelectProvider",
-      () => new ControlSelectService.default(new ControlSelectRepository.default())
-    )
+      () =>
+        new ControlSelectService.default(new ControlSelectRepository.default())
+    );
     this.app.container.singleton(
       "core.ServiceSocialProvider",
-      () => new ServiceSocialService.default(new ServiceSocialRepository.default())
+      () =>
+        new ServiceSocialService.default(new ServiceSocialRepository.default())
+    );
+    this.app.container.singleton(
+      "core.ConsolidationProvider",
+      () =>
+        new ConsolidationService.default(new ConsolidationRepository.default())
     );
   }
 

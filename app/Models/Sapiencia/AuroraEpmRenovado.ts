@@ -1,4 +1,4 @@
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
 
 export default class AuroraEpmRenovado extends BaseModel {
   public static table = "vw_aurora_epm_renovados";
@@ -7,36 +7,48 @@ export default class AuroraEpmRenovado extends BaseModel {
   @column({ isPrimary: true, columnName: "id_usuario", serializeAs: "id" })
   public id: number;
 
-  @column({  columnName: "periodo", serializeAs: "period" })
+  @column({ columnName: "periodo", serializeAs: "period" })
   public period: number;
 
-  @column({  columnName: "Pseleccion", serializeAs: "pSelection" })
+  @column({ columnName: "Pseleccion", serializeAs: "pSelection" })
   public pSelection: number;
-  
-  @column({  columnName: "Document", serializeAs: "document" })
-  public number: string;
-  
-  @column({  columnName: "Nombre", serializeAs: "name" })
+
+  @column({ columnName: "Document", serializeAs: "document" })
+  public document: string;
+
+  @column({ columnName: "Nombre", serializeAs: "name" })
   public name: string;
-  
-  @column({  columnName: "Modalidad_beneficio", serializeAs: "modalityBenefit" })
+
+  @column({ columnName: "Modalidad_beneficio", serializeAs: "modalityBenefit" })
   public modalityBenefit: string;
 
-  @column({  columnName: "Periodo_renovar", serializeAs: "periodRenew" })
+  @column({ columnName: "Periodo_renovar", serializeAs: "periodRenew" })
   public periodRenew: number;
 
-  @column({  columnName: "Semestre_o_nivel_a_renovar", serializeAs: "semesterLevelRenew" })
+  @column({
+    columnName: "Semestre_o_nivel_a_renovar",
+    serializeAs: "semesterLevelRenew",
+  })
   public semesterLevelRenew: string;
 
-  @column({  columnName: "Promedio_Acumulado", serializeAs: "accumulatedAverage" })
+  @column({
+    columnName: "Promedio_Acumulado",
+    serializeAs: "accumulatedAverage",
+  })
   public accumulatedAverage: string;
 
-  @column({  columnName: "Realiza_servicio_social", serializeAs: "performServiceSocial" })
+  @column({
+    columnName: "Realiza_servicio_social",
+    serializeAs: "performServiceSocial",
+  })
   public performService: string;
 
-  @column({  columnName: "Total_horas_servicio_social", serializeAs: "totalHoursServicePerform" })
+  @column({
+    columnName: "Total_horas_servicio_social",
+    serializeAs: "totalHoursServicePerform",
+  })
   public hoursServicePerform: string;
 
-  @column({  columnName: "Operador", serializeAs: "operator" })
+  @column({ columnName: "Operador", serializeAs: "operator" })
   public operator: string;
 }
