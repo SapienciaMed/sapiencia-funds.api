@@ -15,7 +15,6 @@ export default class ServiceSocialService implements IServiceSocialService {
     constructor(
         private serviceSocialRepository: IServiceSocialRepository
     ) { }
-   
 
     async import(): Promise<ApiResponse<any[]>> {
         try {
@@ -27,17 +26,14 @@ export default class ServiceSocialService implements IServiceSocialService {
                     EResponseCodes.FAIL,
                     "Registro no encontrado"
                 );
-            }
-                      
+            }                      
 
             const validateResponse = await this.validate({ data: resPP });
 
             if (validateResponse.data.length > 0) {
                 const insertResponse = await this.insert({ data: validateResponse.data });
                 return insertResponse;
-            } else {
-                // Manejar el caso donde no hay datos válidos
-            }
+            } 
 
             return validateResponse;
            
@@ -52,7 +48,6 @@ export default class ServiceSocialService implements IServiceSocialService {
     }
 
     async insert(receivedData: any): Promise<ApiResponse<any[]>> {
-
        
         if (!receivedData || !Array.isArray(receivedData.data)) {
             return new ApiResponse(
@@ -70,7 +65,6 @@ export default class ServiceSocialService implements IServiceSocialService {
             hoursBorrowed: item.hoursServicePerform,
             // Agrega aquí cualquier otro campo que necesites
         }));
-       // return new ApiResponse(transformedData, EResponseCodes.OK);
 
        try {
             const res = await this.serviceSocialRepository.insert(transformedData);
@@ -84,14 +78,11 @@ export default class ServiceSocialService implements IServiceSocialService {
             );
         }      
     }
-    
-     
 
     async validate(receivedData): Promise<ApiResponse<any[]>> {
+
         // Extraer los registros del JSON
         const records = receivedData.data;
-
-        console.log(records)
     
         // Lista para almacenar los registros nuevos
         let newRecords = [];
@@ -111,14 +102,10 @@ export default class ServiceSocialService implements IServiceSocialService {
                 if (!existingRecord) {
                     newRecords.push(record as never);
                 }
-            }
-
-    
-        }
-    
+            }    
+        }    
         // Retornar la lista de registros nuevos
         return new ApiResponse(newRecords, EResponseCodes.OK);
-    }
-    
+    }    
 
 }
