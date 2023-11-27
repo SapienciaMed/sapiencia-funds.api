@@ -16,10 +16,26 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
 
     constructor() { }  
 
-    async import(): Promise<any[]> {
+  /*   async import(): Promise<any[]> {
        const dataAuroraPpRenovado = await AuroraPpRenovado.query().limit(10);
         return dataAuroraPpRenovado.map((i) => i.serialize() as any);         
+    } */
+
+    async import(): Promise<any[]> {
+        // Consulta para el modelo AuroraPpRenovado
+        const dataAuroraPpRenovado = await AuroraPpRenovado.query().limit(10);
+        const serializedDataAuroraPpRenovado = dataAuroraPpRenovado.map((item) => item.serialize());
+    
+        // Consulta para el modelo AuroraEpmRenovado
+        const dataAuroraEpmRenovado = await AuroraEpmRenovado.query().limit(10);
+        const serializedDataAuroraEpmRenovado = dataAuroraEpmRenovado.map((item) => item.serialize());
+    
+        // Combinando ambos conjuntos de datos en una sola lista
+        const combinedData = [...serializedDataAuroraPpRenovado, ...serializedDataAuroraEpmRenovado];
+    
+        return combinedData;
     }
+    
 
 
     async consultPP(): Promise<any[]> {
