@@ -3,6 +3,7 @@ export interface controlSelectFilter {
     validity: string
     idControlSelect: number
     valueConvocatoria: string
+    
 }
 
 export interface controlSelectConsolidado {
@@ -24,4 +25,12 @@ export interface controlSelectConsolidado {
 
 export interface consolidado {
     consolidado?: controlSelectConsolidado[]
+}
+export interface controlSelectFilterPag  {
+    noProject: number
+    validity: string
+    idControlSelect: number
+    valueConvocatoria: string
+    page: number;
+    perPage: number;
 }
