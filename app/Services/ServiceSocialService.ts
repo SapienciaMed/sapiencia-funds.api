@@ -28,10 +28,7 @@ export default class ServiceSocialService implements IServiceSocialService {
                     "Registro no encontrado"
                 );
             }
-            
-            // Aquí asumo que 'res' es un array de objetos que se debe pasar tal cual al 'insert'
-            //const validateResponse = await this.validate({ data: resPP });
-            //const insertResponse = await this.insert({ data: resPP });
+                      
 
             const validateResponse = await this.validate({ data: resPP });
 
@@ -68,7 +65,7 @@ export default class ServiceSocialService implements IServiceSocialService {
         const dataArray = receivedData.data;
 
         const transformedData = dataArray.map(item => ({
-            legalizationPeriod: item.semesterLevelRenew,
+            legalizationPeriod: item.periodRenew,
             consolidationBeneficiary: item.id,
             hoursBorrowed: item.hoursServicePerform,
             // Agrega aquí cualquier otro campo que necesites
@@ -93,6 +90,8 @@ export default class ServiceSocialService implements IServiceSocialService {
     async validate(receivedData): Promise<ApiResponse<any[]>> {
         // Extraer los registros del JSON
         const records = receivedData.data;
+
+        console.log(records)
     
         // Lista para almacenar los registros nuevos
         let newRecords = [];
@@ -102,15 +101,19 @@ export default class ServiceSocialService implements IServiceSocialService {
             // Extraer los campos necesarios para la validación
             const consolidationBeneficiary = record.id; 
             const legalizationPeriod = record.periodRenew;
-            const hoursBorrowed = record.hoursServicePerform;
-    
-            // Verificar si el registro existe en la base de datos
-            const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);
-    
-            // Si el registro no existe, añadirlo a la lista de nuevos registros
-            if (!existingRecord) {
-                newRecords.push(record as never);
+            const hoursBorrowed = record.hoursServicePerform;           
+         
+            if (consolidationBeneficiary != null && legalizationPeriod != null) {
+                // Verificar si el registro existe en la base de datos
+                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);
+                
+                // Si el registro no existe, añadirlo a la lista de nuevos registros
+                if (!existingRecord) {
+                    newRecords.push(record as never);
+                }
             }
+
+    
         }
     
         // Retornar la lista de registros nuevos

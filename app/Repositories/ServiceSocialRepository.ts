@@ -33,16 +33,33 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
     }
 
     async validate(consolidationBeneficiary: string, legalizationPeriod: string, hoursBorrowed: string): Promise<any | null> {
-        console.log(consolidationBeneficiary,legalizationPeriod,hoursBorrowed)
-
-        const data = await ServiceSocialBeneficiary.query()
-            .where('consolidationBeneficiary', consolidationBeneficiary)            
-            .where('legalizationPeriod', legalizationPeriod)            
-            .where('hoursBorrowed', hoursBorrowed)            
-            .first();
-        console.log(data)
-        return data?.serialize() as any;
+        console.log(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);
+    
+        try {
+            // Construir la consulta base con las condiciones siempre presentes
+            let query = ServiceSocialBeneficiary.query()
+                .where('consolidationBeneficiary', consolidationBeneficiary)            
+                .where('legalizationPeriod', legalizationPeriod);
+    
+            // Añadir la condición para hoursBorrowed solo si no es null ni undefined
+            if (hoursBorrowed !== null && hoursBorrowed !== undefined) { // Esto cubre null y undefined, pero permite 0
+                query = query.where('hoursBorrowed', Number(hoursBorrowed));
+            }
+    
+            // Ejecutar la consulta
+            const data = await query.first();
+            console.log(data);
+    
+            // Devolver los datos serializados si existen
+            return data?.serialize() as any;
+        } catch (error) {
+            console.error("Error en la función validate:", error);
+            // Manejar el error como consideres necesario
+            return null;
+        }
     }
+    
+    
     
 
 
