@@ -243,11 +243,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     //* Revisamos si vienen elementos para consultar //*
     //* ******************************************** //*
-    let bandParamSearch: boolean = false;
     let totalDataContent: number = 0;
     if (searchParam && searchParam !== null && searchParam !== ""){
 
-      bandParamSearch = true;
       const filter: IConsolidationTrayForTechnicianCollectionParams[] =
 
       filterForSearch.filter(f =>
