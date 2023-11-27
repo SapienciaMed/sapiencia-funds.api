@@ -243,8 +243,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     //* Revisamos si vienen elementos para consultar //*
     //* ******************************************** //*
+    let bandParamSearch: boolean = false;
+    let totalDataContent: number = 0;
     if (searchParam && searchParam !== null && searchParam !== ""){
 
+      bandParamSearch = true;
       const filter: IConsolidationTrayForTechnicianCollectionParams[] =
 
       filterForSearch.filter(f =>
@@ -265,19 +268,21 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
         );
 
       infoPaginated = filter.slice(start, end);
+      totalDataContent = infoPaginated.length;
 
     }else{
 
       infoPaginated = filterForSearch.slice(start, end);
+      totalDataContent = infoPaginated.length;
 
     }
 
     const meta = {
-      total: filterForSearch.length,
+      total: totalDataContent,
       total_general: filterForSearch.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(filterForSearch.length / perPage),
+      last_page: Math.ceil(totalDataContent / perPage),
     };
 
     return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
