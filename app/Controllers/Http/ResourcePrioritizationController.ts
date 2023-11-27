@@ -44,6 +44,37 @@ export default class ResourcePrioritizationController {
     }
   }
 
+  public async getResourcePrioritizationExcel({
+    response,
+    request,
+  }: HttpContextContract) {
+    try {
+      const data = await request.validate({
+        schema: schema.create({
+          projectNumber: schema.number(),
+          programId: schema.number(),
+          validity: schema.number(),
+        }),
+      });
+
+      response.header("Content-Type", "application/vnd.ms-excel");
+      response.header(
+        "Content-Disposition",
+        "attachment; filename=report.xlsx"
+      );
+
+      return response.send(
+        await ResourcePrioritizationProvider.getResourcePrioritizationExcel(
+          data
+        )
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
   public async getResourcePrioritizationPaginate({
     response,
     request,

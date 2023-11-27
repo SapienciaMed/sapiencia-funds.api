@@ -1,9 +1,16 @@
+import axios, { AxiosInstance } from "axios";
 // import Database from "@ioc:Adonis/Lucid/Database";
-import { IConsolidationTrayForTechnicianCollection, IConsolidationTrayForTechnicianCollectionParams } from '../../Interfaces/ConsolidationTrayInterface';
+import { IConsolidationTrayForTechnicianCollection,
+         IConsolidationTrayForTechnicianCollectionParams,
+         IConsolidationTrayForTransactions,
+         InitialBeneficiaryInformation,
+         CitizenAttentionDataExternal,
+         PqrsdfResultSimple} from '../../Interfaces/ConsolidationTrayInterface';
 import { IPagingData } from "App/Utils/ApiResponses";
-// import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
+import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
 import { ICutInterface } from '../../Interfaces/CutInterface';
 import Cut from '../../Models/Cut';
+import { PqrsdfResult } from '../../Interfaces/ConsolidationTrayInterface';
 
 
 export interface IConsolidationTrayTechnicianCollectionRepository {
@@ -11,254 +18,22 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
   getCutGeneric(): Promise<ICutInterface[] | null>;
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
+  geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
+  updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
+  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>>;
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
 
-  constructor() { }
+  private axiosInstance: AxiosInstance;
 
-  public staticData: IConsolidationTrayForTechnicianCollectionParams[] = [
-    {
-      creditId: "44930249-433481123-22",
-      nroFiducy: "7820328234",
-      document: "1289444309",
-      fullName: "Tania Manuela Muñoz Ocampo",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-01-01",
-      cut: "Corte 1",
-      dateFinallyCut: "2023-04-30",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Et ea quis eu aute ullamco id tempor in proident in.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "87630249-126491123-55",
-      nroFiducy: "7511329981",
-      document: "1327891109",
-      fullName: "Hellen Yasury Bedoya",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-05-03",
-      cut: "Corte 2",
-      dateFinallyCut: "2023-07-28",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Consectetur deserunt consectetur aliquip veniam esse ut.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "28930665-776123123-22",
-      nroFiducy: "9320118288",
-      document: "1216717432",
-      fullName: "Fabio de Jesus Medina Henao",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-02-01",
-      cut: "Corte 1",
-      dateFinallyCut: "2023-04-29",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Aliquip voluptate voluptate eu occaecat cupidatat consequat minim tempor labore.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "66786659-349983129-55",
-      nroFiducy: "4189228282",
-      document: "1327091234",
-      fullName: "Anjellin Manuela Morales Panesso",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-02-01",
-      cut: "Corte 1",
-      dateFinallyCut: "2023-04-30",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Proident culpa voluptate anim sint nisi sunt aliquip incididunt minim.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "76547213-999883990-95",
-      nroFiducy: "9941118289",
-      document: "1216717979",
-      fullName: "Juan Sebastian Medina Toro",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-05-15",
-      cut: "Corte 2",
-      dateFinallyCut: "2023-07-18",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Sint incididunt dolore enim occaecat cupidatat consectetur nisi exercitation labore labore nostrud esse in.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "77645266-326713991-97",
-      nroFiducy: "1221228279",
-      document: "1093221894",
-      fullName: "Andres Dario Otalvaro",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-05-10",
-      cut: "Corte 2",
-      dateFinallyCut: "2023-07-28",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Eu reprehenderit amet commodo culpa do fugiat est Lorem eiusmod officia labore pariatur.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "59824221-765788142-11",
-      nroFiducy: "6548227980",
-      document: "1324567812",
-      fullName: "Sandra Milena Castañeda",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-09-02",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-12-31",
-      dateEndGracePeriod: "2023-11-05",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Minim enim duis adipisicing qui sit.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "980001227-886711465-05",
-      nroFiducy: "3421227141",
-      document: "1119433209",
-      fullName: "Cristian Fernando Badillo",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-07-09",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-11-31",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Nulla dolor dolore ipsum dolor cupidatat exercitation amet id consectetur.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "835491299-321289000-11",
-      nroFiducy: "4556989849",
-      document: "1003217839",
-      fullName: "Abraham Hernadez Munera",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-03-01",
-      cut: "Corte 1",
-      dateFinallyCut: "2023-04-01",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Proident ad aliquip nulla exercitation eiusmod esse reprehenderit adipisicing ipsum consequat dolor.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "345414499-771289888-82",
-      nroFiducy: "7483920137",
-      document: "1784320912",
-      fullName: "German Antonio Dominguez Perez",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-09-07",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-12-16",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Pariatur proident sit laborum cupidatat ipsum et amet.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "654099992-090911888-12",
-      nroFiducy: "5433980912",
-      document: "1784320998",
-      fullName: "Jackson Arley Torres Barrientos",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-09-11",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-12-24",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Est aute do amet veniam nulla est commodo cupidatat nisi in ut.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "109328892-090901221-13",
-      nroFiducy: "2328915478",
-      document: "1216717032",
-      fullName: "Lorena Poms Buritica",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-05-26",
-      cut: "Corte 2",
-      dateFinallyCut: "2023-07-24",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Aliqua laboris adipisicing voluptate ad quis ea amet tempor officia voluptate minim.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "254890192-334901991-13",
-      nroFiducy: "3278109432",
-      document: "1327811093",
-      fullName: "Victor Morales Arrieta",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-09-05",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-12-19",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Proident veniam aliqua laboris ullamco laborum velit magna id reprehenderit.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "232777782-90901291-01",
-      nroFiducy: "2345609123",
-      document: "1217832109",
-      fullName: "Veronica Velez Ocampo",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-02-01",
-      cut: "Corte 1",
-      dateFinallyCut: "2023-03-29",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Ex consequat aute ullamco laborum cillum sit velit.",
-      currentResponsible: "-",
-    },
-    {
-      creditId: "238874122-90001291-02",
-      nroFiducy: "1672182901",
-      document: "1002190343",
-      fullName: "Carlos Alberto Buriticá",
-      program: "FONDO PRESUPUESTO PARTICIPATIVO",
-      legalDate: "2023-01-01",
-      dateIncomeCut: "2023-09-05",
-      cut: "Corte 3",
-      dateFinallyCut: "2023-12-29",
-      dateEndGracePeriod: "2023-12-31",
-      status: "EN PROCESO",
-      reason: "NO APLICA",
-      characterization: "Incididunt aute ad adipisicing est reprehenderit consequat tempor cupidatat ad ipsum.",
-      currentResponsible: "-",
-    }
-  ]
+  constructor() {
+    //**Instanciamos Axios para atención ciudadana */
+    this.axiosInstance = axios.create({
+      baseURL: process.env.URL_API_CITIZEN_ATTENTION,
+    });
+
+  }
 
   async getHellow(filters: IConsolidationTrayForTechnicianCollection): Promise<any> {
 
@@ -267,14 +42,17 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>> {
+  async geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams | any>> {
 
     //* ********************************************** *//
     //* *** Llamado tabla Aurora (SI ES REQUERIDO) *** *//
     //* ********************************************** *//
-    //TODO!
-    // const resAurora = await BeneficiariesConsolidate.query();
-    // const convertResAurora = resAurora.map((i) => i.serialize() as any);
+    const resAurora = await BeneficiariesConsolidate
+      .query()
+      .preload("cuts")
+      .preload("programs")
+      .orderBy("id", "asc");
+    const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
     // console.log(convertResAurora);
 
     //* ************************************************* *//
@@ -294,7 +72,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     // --------------------------------------------------- //
     const { page, perPage } = filters;
     let infoPaginated: IConsolidationTrayForTechnicianCollectionParams[] = [];
-    const infoWithCut: IConsolidationTrayForTechnicianCollectionParams[] = [];
+    const infoWithCutAndProgram: IConsolidationTrayForTechnicianCollectionParams[] = [];
 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
@@ -305,25 +83,46 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     //* Ordenemos por el corte según la fecha actual //*
     //* ******************************************** //*
-    for (const data of this.staticData) {
+    for (const data of convertResAurora) {
 
-      const getNumericDateNow = Date.parse(Date());
-      const getNumericDateIncomeCut = Date.parse(data.dateIncomeCut);
-      const getNumericDateFinallyCut = Date.parse(data.dateFinallyCut);
+      const getNumericDateNow: number = Date.parse(Date());
+      const getNumericDateIncomeCut: number = Date.parse( data.cuts.from );
+      const getNumericDateFinallyCut: number = Date.parse( data.cuts.until );
 
       if (getNumericDateNow >= getNumericDateIncomeCut && getNumericDateNow <= getNumericDateFinallyCut) {
-        infoWithCut.push(data);
+
+        const objParams: IConsolidationTrayForTechnicianCollectionParams = {
+          idBenef: data.id,
+          idCut: data.idCut,
+          idProgram: data.idProgram,
+          creditId: data.creditNumber,
+          nroFiducy: data.fiducyContractNumber,
+          document: data.numberDocument,
+          fullName: data.fullName,
+          program: data.programs.value,
+          legalDate: data.legalPeriod,
+          dateIncomeCut: data.cuts.from,
+          cut: data.cuts.name,
+          dateFinallyCut: data.cuts.until,
+          dateEndGracePeriod: data.dateEndGracePeriod,
+          status: data.statusProcess,
+          reason: data.reason,
+          characterization: data.characterization,
+          currentResponsible: data.currentManager,
+        }
+
+        infoWithCutAndProgram.push(objParams);
       }
 
     }
 
-    infoPaginated = infoWithCut.slice(start, end);
+    infoPaginated = infoWithCutAndProgram.slice(start, end);
 
     const meta = {
-      total: infoPaginated.length,
+      total: infoWithCutAndProgram.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(infoPaginated.length / perPage),
+      last_page: Math.ceil(infoWithCutAndProgram.length / perPage),
     };
 
     return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
@@ -363,7 +162,18 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   async geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>> {
 
+    //* ********************************************** *//
+    //* *** Llamado tabla Aurora (SI ES REQUERIDO) *** *//
+    //* ********************************************** *//
+    const resAurora = await BeneficiariesConsolidate
+      .query()
+      .preload("cuts")
+      .preload("programs")
+      .orderBy("id", "asc");
+    const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
+
     let infoFiltered: IConsolidationTrayForTechnicianCollectionParams[] = [];
+    let infoAllData: IConsolidationTrayForTechnicianCollectionParams[] = [];
     let infoPaginated: IConsolidationTrayForTechnicianCollectionParams[] = [];
 
     //* ************************************* //*
@@ -373,57 +183,288 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     const start: number = (page - 1) * perPage;
     const end: number = start + perPage;
 
-    //* ********************************************* //*
-    //* Ordenemos por el corte que llega de parámetro //*
-    //* ********************************************* //*
-    for (const data of this.staticData) {
+    //* ************************************************************************ //*
+    //* **** Ordenemos por el corte que llega de parámetro                       //*
+    //* **** Contravalidamos si llega la opción de 'TODOS' sin importar corte    //*
+    //* ************************************************************************ //*
+    for (const data of convertResAurora) {
 
-      if (data.cut === cutParamName || data.cut === cutParamId?.toString()) {
-        infoFiltered.push(data);
+      const objParams: IConsolidationTrayForTechnicianCollectionParams = {
+        idBenef: data.id,
+        idCut: data.idCut,
+        idProgram: data.idProgram,
+        creditId: data.creditNumber,
+        nroFiducy: data.fiducyContractNumber,
+        document: data.numberDocument,
+        fullName: data.fullName,
+        program: data.programs.value,
+        legalDate: data.legalPeriod,
+        dateIncomeCut: data.cuts.from,
+        cut: data.cuts.name,
+        dateFinallyCut: data.cuts.until,
+        dateEndGracePeriod: data.dateEndGracePeriod,
+        status: data.statusProcess,
+        reason: data.reason,
+        characterization: data.characterization,
+        currentResponsible: data.currentManager,
       }
 
+      if( !cutParamName || cutParamName == null || cutParamName == "" ){
+
+        if (data.cuts.id === cutParamId){
+
+          infoFiltered.push(objParams);
+
+        }
+
+      }else{
+
+        if( cutParamName === "TODOS" ){
+
+          infoAllData.push(objParams);
+
+        }
+
+      }
+
+    }
+
+    //* ******************************************************** //*
+    //* Defino que tipo de filtro usaré del condicional anterior //*
+    //* ******************************************************** //*
+    let filterForSearch: IConsolidationTrayForTechnicianCollectionParams[] = [];
+
+    if( cutParamName && cutParamName !== "" && cutParamName === "TODOS" ){
+      filterForSearch = infoAllData;
+    }else{
+      filterForSearch = infoFiltered;
     }
 
     //* ******************************************** //*
     //* Revisamos si vienen elementos para consultar //*
     //* ******************************************** //*
+    let totalDataContent: number = 0;
     if (searchParam && searchParam !== null && searchParam !== ""){
 
       const filter: IConsolidationTrayForTechnicianCollectionParams[] =
 
-        infoFiltered.filter(f =>
-          f.creditId.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.nroFiducy.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.document.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.fullName.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.program.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.legalDate.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.dateIncomeCut.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.cut.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.dateFinallyCut.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.dateEndGracePeriod.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.status.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.reason.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.characterization.toLowerCase().includes(searchParam.toLowerCase()) ||
-          f.currentResponsible.toLowerCase().includes(searchParam.toLowerCase())
+      filterForSearch.filter(f =>
+          f.creditId.toString().includes(searchParam.toLowerCase()) ||
+          f.nroFiducy.toString().includes(searchParam.toLowerCase()) ||
+          f.document.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.fullName.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.program.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.legalDate.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.dateIncomeCut.toString().includes(searchParam.toLowerCase()) ||
+          f.cut.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.dateFinallyCut.toString().includes(searchParam.toLowerCase()) ||
+          f.dateEndGracePeriod?.toString().includes(searchParam.toLowerCase()) ||
+          f.status.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.reason.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.characterization.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
+          f.currentResponsible.toLowerCase().toString().includes(searchParam.toLowerCase())
         );
 
       infoPaginated = filter.slice(start, end);
+      totalDataContent = infoPaginated.length;
 
     }else{
 
-      infoPaginated = infoFiltered.slice(start, end);
+      infoPaginated = filterForSearch.slice(start, end);
+      totalDataContent = infoPaginated.length;
 
     }
 
     const meta = {
-      total: infoPaginated.length,
+      total: totalDataContent,
+      total_general: filterForSearch.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(infoPaginated.length / perPage),
+      last_page: Math.ceil(totalDataContent / perPage),
     };
 
     return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
+
+  }
+
+  async geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null> {
+
+    const resAurora = await BeneficiariesConsolidate
+      .query()
+      .where("id", id)
+      .preload("cuts")
+      .preload("programs")
+      .orderBy("id", "asc");
+    const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
+
+    if(convertResAurora.length === 0) return null;
+
+    const objResult: IConsolidationTrayForTechnicianCollectionParams = {
+      idBenef: convertResAurora[0].id,
+      idCut: convertResAurora[0].idCut,
+      idProgram: convertResAurora[0].idProgram,
+      creditId: convertResAurora[0].creditNumber,
+      nroFiducy: convertResAurora[0].fiducyContractNumber,
+      document: convertResAurora[0].numberDocument,
+      fullName: convertResAurora[0].fullName,
+      program: convertResAurora[0].programs.value,
+      legalDate: convertResAurora[0].legalPeriod,
+      dateIncomeCut: convertResAurora[0].cuts.from,
+      cut: convertResAurora[0].cuts.name,
+      dateFinallyCut: convertResAurora[0].cuts.until,
+      dateEndGracePeriod: convertResAurora[0].dateEndGracePeriod,
+      status: convertResAurora[0].statusProcess,
+      reason: convertResAurora[0].reason,
+      characterization: convertResAurora[0].characterization,
+      currentResponsible: convertResAurora[0].currentManager,
+
+      countSpinProjected: convertResAurora[0].countSpinProjected,
+      countSpins: convertResAurora[0].countSpins,
+      contactNumber: convertResAurora[0].contactNumber,
+      email: convertResAurora[0].email,
+      dateIncome: convertResAurora[0].dateIncome,
+
+    }
+
+    return objResult;
+
+  }
+
+  async updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null> {
+
+    const { id , cut } = data;
+
+    if( !id || id == null || id == undefined ||
+        !cut || cut == null || cut == undefined) return null;
+
+    const toBeneficiary = await BeneficiariesConsolidate.find(id);
+
+    if (!toBeneficiary) {
+      return null;
+    }
+
+    toBeneficiary.idCut = Number(cut);
+    await toBeneficiary.save();
+
+    return toBeneficiary.serialize() as IConsolidationTrayForTechnicianCollectionParams;
+
+  }
+
+  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<PqrsdfResultSimple>> {
+
+    const urlConsumer = `/api/v1/pqrsdf/get-paginated/`;
+    const resultFilter: PqrsdfResultSimple[] = [];
+
+    const privateFiltersForCitizen: IConsolidationTrayForTechnicianCollection = {
+      identification: filters.identification,
+      page: 1,
+      perPage: 100000
+    }
+
+    const dataCitizen = await this.axiosInstance.post<
+      CitizenAttentionDataExternal[]>(urlConsumer, privateFiltersForCitizen, {
+      headers: {
+        Authorization: process.env.CURRENT_AUTHORIZATION,
+      },
+    });
+
+    const dataResult: CitizenAttentionDataExternal | any = dataCitizen;
+    const dataCaptured: PqrsdfResult[] = dataResult.data.data.array;
+
+    dataCaptured.forEach( (pqrsdf) => {
+
+      let program: string = "";
+      let clasify: string = "";
+      let reason: string = "";
+      let state: string = "";
+      let numberPqrsdf: number;
+      let dateFiled: Date | string;
+      let answerDate: Date | string;
+      let answer: string = "";
+
+      if( !pqrsdf.filingNumber || pqrsdf.filingNumber == null ){
+        numberPqrsdf = 0;
+      }else{
+        numberPqrsdf = pqrsdf.filingNumber;
+      }
+
+      if( !pqrsdf.createdAt || pqrsdf.createdAt == null ){
+        dateFiled = "";
+      }else{
+        dateFiled = pqrsdf.createdAt;
+      }
+
+      if( !pqrsdf.program || pqrsdf.program == null ){
+        program = "";
+      }else{
+        program = pqrsdf.program.prg_descripcion;
+      }
+
+      if( !pqrsdf.clasification || pqrsdf.clasification == null ){
+        clasify = "";
+      }else{
+        clasify = pqrsdf.clasification;
+      }
+
+      if( !pqrsdf.requestSubject || pqrsdf.requestSubject == null ){
+        reason = "";
+      }else{
+        reason = pqrsdf.requestSubject!.aso_asunto;
+      }
+
+      if( !pqrsdf.status || pqrsdf.status == null ){
+        state = "";
+      }else{
+        state = pqrsdf.status!.lep_estado;
+      }
+
+      if( !pqrsdf.answerDate || pqrsdf.answerDate == null ){
+        answerDate = "";
+      }else{
+        answerDate = pqrsdf.answerDate;
+      }
+
+      if( !pqrsdf.answer || pqrsdf.answer == null ){
+        answer = "";
+      }else{
+        answer = pqrsdf.answer;
+      }
+
+      const objResult: PqrsdfResultSimple = {
+        numberPqrsdf,
+        dateFiled,
+        program,
+        clasify,
+        reason,
+        state,
+        answerDate,
+        answer,
+      }
+
+      resultFilter.push(objResult);
+
+    })
+
+    //* ************************************* //*
+    //* Aplicamos paginación de manera manual //*
+    //* ************************************* //*
+    let infoPaginated: PqrsdfResultSimple[] = [];
+
+    const { page, perPage } = filters;
+    const start: number = (page - 1) * perPage;
+    const end: number = start + perPage;
+
+    infoPaginated = resultFilter.slice(start, end);
+
+    const meta = {
+      total: resultFilter.length,
+      total_general: resultFilter.length,
+      per_page: perPage,
+      current_page: page,
+      last_page: Math.ceil(resultFilter.length / perPage),
+    };
+
+    return { array: infoPaginated as PqrsdfResultSimple[], meta };
 
   }
 
