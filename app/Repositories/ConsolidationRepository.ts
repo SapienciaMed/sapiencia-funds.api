@@ -42,24 +42,24 @@ export default class ConsolidationRepository
 
         if (executeRegulation.length === 0) return;
 
-        const buildData = {
-          numberDocument: student.document,
-          //idcredito
-          // Nro suspensiones continuas.
-          // Nro suspensiones discontinuas.
-          // Nro suspensiones especiales.
-          // estado
-          // Caracterización.
-          // Motivo estado.
-          // Id Fondo.
-          // Nombre fondo.
-          // Cantidad semestres proyectados.
-          // Cantidad de giros.
-          // Periodo último giro.
-          // Cantidad de renovaciones.
-          // Número de contrato fiduciario.
-          legalPeriod: student.period,
-        };
+        // const buildData = {
+        //   numberDocument: student.document,
+        //   //idcredito
+        //   // Nro suspensiones continuas.
+        //   // Nro suspensiones discontinuas.
+        //   // Nro suspensiones especiales.
+        //   // estado
+        //   // Caracterización.
+        //   // Motivo estado.
+        //   // Id Fondo.
+        //   // Nombre fondo.
+        //   // Cantidad semestres proyectados.
+        //   // Cantidad de giros.
+        //   // Periodo último giro.
+        //   // Cantidad de renovaciones.
+        //   // Número de contrato fiduciario.
+        //   legalPeriod: student.period,
+        // };
 
         // se debe de almacenar gracePeriodApplication en el campo en gracePeriod
         console.log(regulations);
@@ -115,24 +115,24 @@ export default class ConsolidationRepository
 
         if (executeRegulation.length === 0) return;
 
-        const buildData = {
-          numberDocument: student.document,
-          //idcredito
-          // Nro suspensiones continuas.
-          // Nro suspensiones discontinuas.
-          // Nro suspensiones especiales.
-          // estado
-          // Caracterización.
-          // Motivo estado.
-          // Id Fondo.
-          // Nombre fondo.
-          // Cantidad semestres proyectados.
-          // Cantidad de giros.
-          // Periodo último giro.
-          // Cantidad de renovaciones.
-          // Número de contrato fiduciario.
-          legalPeriod: student.period,
-        };
+        // const buildData = {
+        //   numberDocument: student.document,
+        //   //idcredito
+        //   // Nro suspensiones continuas.
+        //   // Nro suspensiones discontinuas.
+        //   // Nro suspensiones especiales.
+        //   // estado
+        //   // Caracterización.
+        //   // Motivo estado.
+        //   // Id Fondo.
+        //   // Nombre fondo.
+        //   // Cantidad semestres proyectados.
+        //   // Cantidad de giros.
+        //   // Periodo último giro.
+        //   // Cantidad de renovaciones.
+        //   // Número de contrato fiduciario.
+        //   legalPeriod: student.period,
+        // };
 
         // se debe de almacenar gracePeriodApplication en el campo en gracePeriod
         console.log(regulations);
