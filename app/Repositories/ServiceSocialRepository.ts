@@ -1,13 +1,14 @@
 
+import { IImportServiceSocial, IInsertServiceSocial, IValidateServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
 import AuroraEpmRenovado from "App/Models/Sapiencia/AuroraEpmRenovado";
 import AuroraPpRenovado from "App/Models/Sapiencia/AuroraPpRenovado";
 import ServiceSocialBeneficiary from "App/Models/ServiceSocialBeneficiary";
 
 
 export interface IServiceSocialRepository {   
-    import(): Promise<any[]>;       
-    insert(data:any): Promise<any[]>;    
-    validate(consolidationBeneficiary: string,legalizationPeriod: string,hoursBorrowed:string): Promise<any | null>;
+    import(): Promise<IImportServiceSocial[]>;       
+    insert(data:any): Promise<IInsertServiceSocial[]>;    
+    validate(consolidationBeneficiary: string,legalizationPeriod: string,hoursBorrowed:string): Promise<IValidateServiceSocial | null>;
 }
 
 export default class ServiceSocialRepository implements IServiceSocialRepository {
@@ -19,7 +20,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
         return dataAuroraPpRenovado.map((i) => i.serialize() as any);         
     } */
 
-    async import(): Promise<any[]> {
+    async import(): Promise<IImportServiceSocial[]> {
         // Consulta para el modelo AuroraPpRenovado
         const dataAuroraPpRenovado = await AuroraPpRenovado.query().limit(10);
         const serializedDataAuroraPpRenovado = dataAuroraPpRenovado.map((item) => item.serialize());
@@ -35,7 +36,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
     }
   
 
-    async validate(consolidationBeneficiary: string, legalizationPeriod: string, hoursBorrowed: string): Promise<any | null> {    
+    async validate(consolidationBeneficiary: string, legalizationPeriod: string, hoursBorrowed: string): Promise<IValidateServiceSocial | null> {    
         try {
             // Construir la consulta base con las condiciones siempre presentes
             let query = ServiceSocialBeneficiary.query()
@@ -59,7 +60,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
         }
     }
 
-    async insert(data: {legalizationPeriod: string;consolidationBeneficiary: number; hoursBorrowed: number;supportDocumentRoute: string} []): Promise<any[]> {
+    async insert(data: {legalizationPeriod: string;consolidationBeneficiary: number; hoursBorrowed: number;supportDocumentRoute: string} []): Promise<IInsertServiceSocial[]> {
         // Inserta los datos en la base de datos usando el modelo
         const insertedItems = await ServiceSocialBeneficiary.createMany(data);
 

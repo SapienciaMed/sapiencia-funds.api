@@ -1,11 +1,12 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
+import { IImportServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
 import { IServiceSocialRepository } from "App/Repositories/ServiceSocialRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
 
 
 export interface IServiceSocialService {   
-    import(): Promise<ApiResponse<any[]>>;   
+    import(): Promise<ApiResponse<IImportServiceSocial[]>>;   
     insert(data: any[]): Promise<ApiResponse<any[]>>; 
 }
 
@@ -16,7 +17,7 @@ export default class ServiceSocialService implements IServiceSocialService {
         private serviceSocialRepository: IServiceSocialRepository
     ) { }
 
-    async import(): Promise<ApiResponse<any[]>> {
+    async import(): Promise<ApiResponse<IImportServiceSocial[]>> {
         try {
             const resPP = await this.serviceSocialRepository.import();
 
@@ -96,7 +97,7 @@ export default class ServiceSocialService implements IServiceSocialService {
          
             if (consolidationBeneficiary != null && legalizationPeriod != null) {
                 // Verificar si el registro existe en la base de datos
-                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);
+                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);             
                 
                 // Si el registro no existe, añadirlo a la lista de nuevos registros
                 if (!existingRecord) {
