@@ -218,16 +218,13 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 Route.group(() => {
-  Route.post("/getInfo", "ControlSelectController.getInfo");
-  Route.post(
-    "/createInfoConsolidado",
-    "ControlSelectController.createInfoConsolidado"
-  );
-  Route.put(
-    "/updateInfoConsolidado",
-    "ControlSelectController.updateinfoConsolidado"
-  );
-}).prefix("/api/v1/controlSelect");
+  Route.post("/getInfoConsolidate", "ControlSelectController.getInfo")
+  Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
+  Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
+  Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
+  Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
+  Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
+}).prefix("/api/v1/controlSelect")
 Route.group(() => {
   Route.post(
     "/getrenewal-paginated/",
@@ -273,7 +270,7 @@ Route.group(() => {
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
   ).middleware("auth:TECNICO_PASO_COBRO")
-   .middleware("auth:VER_SOPORTES_PQRSDF");
+    .middleware("auth:VER_SOPORTES_PQRSDF");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
@@ -311,6 +308,7 @@ Route.group(() => {
   .middleware("auth");
 
 Route.group(() => {
+  Route.get("/import", "ServiceSocialController.import");
   Route.get("/import", "ServiceSocialController.import");
 })
   .prefix("/api/v1/service-social")

@@ -7,6 +7,9 @@ export interface IControlSelectService {
     getinfo(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
+    getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoControl(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    updateInfoLegalization(payload: any): Promise<ApiResponse<any>>
 }
 export default class ControlSelectServices implements IControlSelectService {
     constructor(private controlSelectRepository: ControlSelectRepository) { }
@@ -17,12 +20,26 @@ export default class ControlSelectServices implements IControlSelectService {
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
-    async updateinfoConsolidado(payload: controlSelectConsolidado) {
+    async updateinfoConsolidado(payload: any) {
         const res = await this.controlSelectRepository.updateinfoConsolidado(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
     async createInfoConsolidado(payload: controlSelectConsolidado) {
         const res = await this.controlSelectRepository.createInfoConsolidado(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async getInfoLegalization(payload: controlSelectFilter) {
+        const res = await this.controlSelectRepository.getInfoLegalization(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+    async getInfoControl(payload: controlSelectFilter) {
+        const res = await this.controlSelectRepository.getInfoControl(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async updateInfoLegalization(payload: any) {
+        const res = await this.controlSelectRepository.updateInfoLegalization(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 }
