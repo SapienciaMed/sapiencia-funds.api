@@ -208,9 +208,12 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 Route.group(() => {
-  Route.post("/getInfo", "ControlSelectController.getInfo")
+  Route.post("/getInfoConsolidate", "ControlSelectController.getInfo")
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
+  Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
+  Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
+  Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
 }).prefix("/api/v1/controlSelect")
 Route.group(() => {
   Route.post("/getrenewal-paginated/", "RenewalController.geCallRenewalPaginate");
@@ -238,7 +241,7 @@ Route.group(() => {
   Route.post("/update-cut-beneficiary", "ConsolidationTrayController.updateCutBeneficiary")/*.middleware("auth:TECNICO_PASO_COBRO");*/
 })
   .prefix("/api/v1/consolidation-tray")
-  // .middleware("auth");
+// .middleware("auth");
 
 Route.group(() => {
   Route.get(
@@ -265,15 +268,15 @@ Route.group(() => {
   .prefix("/api/v1/beneficiaries-consolidate")
   .middleware("auth");
 
-  Route.group(() => {
-    Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
-    Route.get("/generate-xlsx", "DatingController.generateXLSX");
-  })
-    .prefix("/api/v1/citas")
-  //.middleware("auth");
+Route.group(() => {
+  Route.post("/getdating-paginated/", "DatingController.geCallDatingPaginate");
+  Route.get("/generate-xlsx", "DatingController.generateXLSX");
+})
+  .prefix("/api/v1/citas")
+//.middleware("auth");
 
 Route.group(() => {
-  Route.get("/import", "ServiceSocialController.import");  
+  Route.get("/import", "ServiceSocialController.import");
 })
-.prefix("/api/v1/service-social")
+  .prefix("/api/v1/service-social")
 //.middleware("auth");
