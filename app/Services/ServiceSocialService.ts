@@ -93,11 +93,11 @@ export default class ServiceSocialService implements IServiceSocialService {
             // Extraer los campos necesarios para la validación
             const consolidationBeneficiary = record.id; 
             const legalizationPeriod = record.periodRenew;
-            const hoursBorrowed = record.hoursServicePerform;           
+           // const hoursBorrowed = record.hoursServicePerform;           
          
             if (consolidationBeneficiary != null && legalizationPeriod != null) {
                 // Verificar si el registro existe en la base de datos
-                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod, hoursBorrowed);             
+                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod);             
                 
                 // Si el registro no existe, añadirlo a la lista de nuevos registros
                 if (!existingRecord) {
@@ -105,7 +105,7 @@ export default class ServiceSocialService implements IServiceSocialService {
                 }
             }    
         }    
-        // Retornar la lista de registros nuevos
+       
         return new ApiResponse(newRecords, EResponseCodes.OK);
     }    
 
