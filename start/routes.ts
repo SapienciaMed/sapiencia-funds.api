@@ -218,14 +218,16 @@ Route.group(() => {
 }).prefix("/api/v1/presupuesto");
 //.middleware("auth");
 Route.group(() => {
-  Route.post("/getInfopay", "ControlSelectController.getInfopay")
-  Route.post("/getInfoConsolidate", "ControlSelectController.getInfo")
-  Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado")
-  Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado")
+  Route.post("/getInfoConsolidatepay", "ControlSelectController.getInfopay")
+  Route.post("/getInfoConsolidate", "ControlSelectController.getInfoConsolidate");
+  Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado");
+  Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado");
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
-}).prefix("/api/v1/controlSelect")
+  Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
+}).prefix("/api/v1/controlSelect");
+//.middleware("auth");
 Route.group(() => {
   Route.post(
     "/getrenewal-paginated/",
