@@ -219,7 +219,7 @@ Route.group(() => {
 //.middleware("auth");
 Route.group(() => {
   Route.post("/getInfoConsolidatepay", "ControlSelectController.getInfopay")
-  Route.post("/getInfoConsolidate", "ControlSelectController.getInfo");
+  Route.post("/getInfoConsolidate", "ControlSelectController.getInfoConsolidate");
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado");
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado");
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
