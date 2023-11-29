@@ -35,9 +35,9 @@ export default class extends BaseSchema {
       table
         .integer("BAC_CODPCRT_CORTE")
         .nullable()
-        // .unsigned()
-        // .references("CRT_CODIGO")
-        // .inTable("CRT_CORTES")
+        .unsigned()
+        .references("CRT_CODIGO")
+        .inTable("CRT_CORTES")
         .comment("Codigo del corte (FK CRT)");
 
       table
@@ -91,6 +91,11 @@ export default class extends BaseSchema {
         .comment("Cantidad semestres proyectados.");
 
       table
+        .integer("BAC_GIROS_PROYECTADOS" )
+        .nullable()
+        .comment("Giros proyectados al Beneficiario.");
+
+      table
         .integer("BAC_CANTIDAD_GIROS")
         .notNullable()
         .comment("Cantidad de giros.");
@@ -104,6 +109,74 @@ export default class extends BaseSchema {
         .integer("BAC_CANTIDAD_RENOVACIONES")
         .notNullable()
         .comment("Cantidad de renovaciones.");
+
+      table
+        .integer("BAC_NRO_CONTRATO_FIDUCIARIO")
+        .notNullable()
+        .comment("Número de contrato fiduciario.");
+
+      table
+        .date("BAC_FECHA_REGRESO_DEPARTAMENTO")
+        .notNullable()
+        .comment("Fecha regreso departamento.");
+
+      table
+        .date("BAC_FECHA_INGRESO")
+        .nullable()
+        .comment("Fecha de Ingreso Beneficiario.");
+
+        table
+        .string("BAC_PERIODO_GRACIA")
+        .notNullable()
+        .comment("Periodo de Gracia");
+
+        table
+        .date("BAC_INICIO_PERIODO_GRACIA")
+        .nullable()
+        .comment("Fecha de Inicio de Periodo de Gracia");
+
+        table
+        .date("BAC_FIN_PERIODO_GRACIA")
+        .nullable()
+        .comment("Fecha de Fin de Periodo de Gracia");
+
+      //----------------------------------------------------------------------------- 24/11/2023
+      //------ //TODO: Revisar (Más adelante no deberíamos tomar los datos de acá)//
+      //------ //TODO: Se supone que esto vendrá de otras vistas que proporcione Sapiencia
+      //----------------------------------------------------------------------------------------
+      table
+        .string("BAC_NOMBRES", 150)
+        .nullable()
+        .comment("Nombre del Beneficiario. (Eliminar para cuando tengamos views)");
+
+      table
+        .string("BAC_CORREO", 150)
+        .nullable()
+        .comment("Correo Electrónico Beneficiario. (Eliminar para cuando tengamos views)");
+
+      table
+        .string("BAC_NRO_CONTACTO", 30)
+        .nullable()
+        .comment("Número Contacto del Beneficiario. (Eliminar para cuando tengamos views)");
+
+      table
+        .string("BAC_MOTIVO", 100)
+        .nullable()
+        .comment("Motivo Sapiencia. (Eliminar para cuanto tengamos views)");
+
+      table
+        .string("BAC_CARACTERIZACION", 100)
+        .nullable()
+        .comment("Caracterización Sapiencia. (Eliminar para cuanto tengamos views)");
+
+      table
+        .string("BAC_RESPONSABLE_ACTUAL", 100)
+        .nullable()
+        .comment("Responsable Actual Sapiencia. (Eliminar para cuanto tengamos views)");
+
+      //-----------------------------------------------------------------------------
+      //-----------------------------------------------------------------------------
+      //-----------------------------------------------------------------------------
 
     })
   }

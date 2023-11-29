@@ -5,4 +5,13 @@ export interface IParameter {
     value: string;
     aplicationId: number;
   }
+
+
+  export interface IGenericList {
+    id: number;
+    grouper: string;
+    itemCode: string;
+    itemDescription: string;
+    additionalFields?: object
+  }
   

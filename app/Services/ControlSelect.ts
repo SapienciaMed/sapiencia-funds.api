@@ -12,7 +12,8 @@ export default class ControlSelectServices implements IControlSelectService {
     constructor(private controlSelectRepository: ControlSelectRepository) { }
 
     async getinfo(payload: controlSelectFilter) {
-        const res = await this.controlSelectRepository.getInfo(payload)
+        await this.controlSelectRepository.getInfo(payload)
+        const res = await this.controlSelectRepository.getInfoBeforeCreate(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
