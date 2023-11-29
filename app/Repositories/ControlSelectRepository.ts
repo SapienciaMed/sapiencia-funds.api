@@ -1,5 +1,5 @@
 import Database from "@ioc:Adonis/Lucid/Database";
-import { controlSelectConsolidado, controlSelectFilter } from "App/Interfaces/ControlSelectInterface";
+import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
 import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ControlSelectLegalization from "App/Models/ControlSelectLegalization";
 import ResourcePrioritization from "App/Models/ResourcePrioritization";
@@ -10,7 +10,7 @@ export interface IControlSelectRepository {
     getInfoBeforeCreate(payload: controlSelectFilter): Promise<any>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<any>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<any>
-
+    getInfopay(payload: controlSelectFilter): Promise<any>
 }
 
 export default class ControlSelectRepository implements IControlSelectRepository {
@@ -151,4 +151,36 @@ export default class ControlSelectRepository implements IControlSelectRepository
 
         return { array: data }
     }
+
+    async getInfopay(payload: controlSelectFilterPag) {
+        if (payload.idControlSelect == 5) {
+            const { validity } = payload;
+            const query = `call AuroraControlFinancieroPagare('${validity}')`;
+            const result = await Database.connection("mysql_sapiencia").rawQuery(query);
+
+            // Suponiendo que result contiene un arreglo de resultados
+            const data = result[0];
+
+            // Extrae el subarreglo necesario sin modificar el original
+            const cleanedData = data.map(entry => entry);
+
+            const { page, perPage } = payload;
+
+            // Realiza la paginación manualmente
+            const start = (page - 1) * perPage;
+            const end = start + perPage;
+            const paginatedData = cleanedData.slice(start, end);
+
+            const meta = {
+                total: cleanedData.length,
+                per_page: perPage,
+                current_page: page,
+                last_page: Math.ceil(cleanedData.length / perPage),
+            };
+
+            return { array: cleanedData as controlSelectFilterPag[], meta };
+        }
+
+    }
+
 }
