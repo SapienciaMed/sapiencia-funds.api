@@ -1,9 +1,9 @@
 export interface controlSelectFilter {
-    noProject: number
-    validity: string
-    idControlSelect: number
-    valueConvocatoria: string
-    
+    noProject?: number
+    validity?: string
+    idControlSelect?: number
+    idConvocatoria?: number
+    id_comuna?: number | number[] | string;
 }
 
 export interface controlSelectConsolidado {
