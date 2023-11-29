@@ -314,6 +314,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .where("id", id)
       .preload("cuts")
       .preload("programs")
+      .preload("statusPacc")
       .orderBy("id", "asc");
     const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
