@@ -76,9 +76,12 @@ export default class extends BaseSchema {
         .comment("Nro suspensiones especiales.");
 
       table
-        .string("BAC_ESTADO_PROCESO", 10)
-        .notNullable()
-        .comment("Estado (Listados genericos).");
+        .integer("BAC_CODEPP_ESTADO_PROCESO")
+        .nullable()
+        .unsigned()
+        .references("EPP_CODIGO")
+        .inTable("EPP_ESTADOS_PROCESOS_PACC")
+        .comment("Codigo de Maestro Proceso Pacc (FK EPP)");
 
       table
         .integer("BAC_ESTADO_SAPIENCIA")
