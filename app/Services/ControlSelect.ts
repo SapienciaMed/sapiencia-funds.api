@@ -5,7 +5,7 @@ import { ApiResponse } from "App/Utils/ApiResponses";
 
 export interface IControlSelectService {
     getInfopay(payload: controlSelectFilterPag): Promise<ApiResponse<any>>
-    getinfo(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getinfoConsolidate(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
@@ -15,7 +15,7 @@ export interface IControlSelectService {
 export default class ControlSelectServices implements IControlSelectService {
     constructor(private controlSelectRepository: ControlSelectRepository) { }
 
-    async getinfo(payload: controlSelectFilter) {
+    async getinfoConsolidate(payload: controlSelectFilter) {
         await this.controlSelectRepository.getInfoConsolidate(payload)
         const res = await this.controlSelectRepository.getInfoBeforeCreate(payload)
         return new ApiResponse(res, EResponseCodes.OK)
@@ -45,10 +45,10 @@ export default class ControlSelectServices implements IControlSelectService {
     }
 
     async getInfopay(payload: controlSelectFilterPag) {
-        const accountStatementsFound = 
-        await this.controlSelectRepository.getInfopay(
-            payload
-        );
+        const accountStatementsFound =
+            await this.controlSelectRepository.getInfopay(
+                payload
+            );
         //const res = await this.controlSelectRepository.getInfopay(payload)
         return new ApiResponse(accountStatementsFound, EResponseCodes.OK)
     }

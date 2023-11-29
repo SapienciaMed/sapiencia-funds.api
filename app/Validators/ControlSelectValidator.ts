@@ -4,5 +4,7 @@ export const controlSelectSchema = schema.create({
     validity: schema.string.optional(),
     idControlSelect: schema.number.optional(),
     idConvocatoria: schema.number.optional(),
-    id_comuna: schema.number.optional()
+    id_comuna: schema.number.optional(),
+    perPage: schema.number.optional(),
+    page: schema.number.optional(),
 })

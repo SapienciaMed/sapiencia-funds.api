@@ -167,15 +167,16 @@ export default class ControlSelectRepository implements IControlSelectRepository
             const { page, perPage } = payload;
 
             // Realiza la paginación manualmente
-            const start = (page - 1) * perPage;
-            const end = start + perPage;
+            const start = (payload.page! - 1) * payload.perPage!;
+            const end = start + payload.perPage!;
             const paginatedData = cleanedData.slice(start, end);
 
+            console.log(paginatedData)
             const meta = {
                 total: cleanedData.length,
                 per_page: perPage,
                 current_page: page,
-                last_page: Math.ceil(cleanedData.length / perPage),
+                last_page: Math.ceil(cleanedData.length / payload.perPage!),
             };
 
             return { array: cleanedData as controlSelectFilterPag[], meta };

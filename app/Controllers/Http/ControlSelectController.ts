@@ -1,17 +1,17 @@
 import { HttpContext } from '@adonisjs/core/build/standalone';
 import ControlSelectProvider from "@ioc:core.ControlSelectProvider"
 import { EResponseCodes } from 'App/Constants/ResponseCodesEnum';
-import { controlSelectFilter } from 'App/Interfaces/ControlSelectInterface';
+import { controlSelectFilterPag } from 'App/Interfaces/ControlSelectInterface';
 import { ApiResponse } from 'App/Utils/ApiResponses';
 import { DBException } from 'App/Utils/DbHandlerError';
 import { controlSelectSchema } from 'App/Validators/ControlSelectValidator';
 export default class ControlSelectController {
 
-    public async getInfo(ctx: HttpContext) {
+    public async getInfoConsolidate(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         const payload = request.body()
         try {
-            const res = await ControlSelectProvider.getinfo(payload)
+            const res = await ControlSelectProvider.getinfoConsolidate(payload)
 
             return response.ok(res)
         } catch (err) {
@@ -100,7 +100,7 @@ export default class ControlSelectController {
 
     public async getInfopay(ctx: HttpContext) {
         const { request, response, logger } = ctx;
-        let payload: controlSelectFilter
+        let payload: controlSelectFilterPag
         try {
             payload = await request.validate({ schema: controlSelectSchema })
         } catch (err) {
