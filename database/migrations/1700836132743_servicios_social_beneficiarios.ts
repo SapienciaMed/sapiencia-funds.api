@@ -21,8 +21,12 @@ export default class extends BaseSchema {
 
       table
         .integer('SSB_CODBAC_BENEFICIARIO_CONSOLIDACION')
+        .unsigned().references("BAC_CODIGO")
+        .inTable("BAC_BENEFICIARIOS_A_CONSOLIDAR")
+        .unsigned()
         .notNullable()
-        .comment('Codigo de beneficiarios ')
+        .withKeyName('ssb_bac_fk') 
+        .comment("Codigo de beneficiarios");
       table
         .integer('SSB_HORAS_PRESTADAS')
         .notNullable()
@@ -38,3 +42,14 @@ export default class extends BaseSchema {
     this.schema.dropTable(this.tableName)
   }
 }
+
+/* 
+
+   table
+        .integer("ATA_CODETO_CODIGO ")
+        .unsigned().references("ETO_CODIGO ")
+        .inTable("ETO_ESTADO")
+        .unsigned()
+        .notNullable()
+        .comment("Valor del estado del acta FK(Tbl estados)");
+*/
