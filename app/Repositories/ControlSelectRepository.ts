@@ -21,6 +21,8 @@ export default class ControlSelectRepository implements IControlSelectRepository
         const queryControlSelect = ControlSelectConsolidateModel.query()
             .preload("resourcePrioritization")
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
+        queryControlSelect.where("validity", payload.validity!)
+        queryControlSelect.where("announcement", payload.idConvocatoria!)
         let res = await queryControlSelect.paginate(1, 100)
         if (res) {
             const { data } = res.serialize()
@@ -35,7 +37,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                     let query = `select COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
                         from giro_vwbeneficiario_proyec_renova_giro 
                         where comunagiros IN ( (${data.communeId}*1000) + 123, (${data.communeId}*1000) + 456)
-                        and id_perido_legalizacion  = '${payload.idConvocatoria}'`
+                        and id_perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1`
                     const dataBase = await Database.connection("mysql_sapiencia").rawQuery(query)
 
                     let dataInsert = {
