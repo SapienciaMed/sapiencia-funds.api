@@ -1,4 +1,5 @@
 import excel4node from "excel4node";
+import * as XLSX from "xlsx";
 
 type IColumn = {
   size?: number;
@@ -41,4 +42,13 @@ export const generateXLSX = (config: IGenerateXLSX) => {
       resolve(filePath);
     });
   });
+};
+
+export const generateExcel = (rows: any): Promise<any> => {
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Data");
+
+  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+  return buffer;
 };

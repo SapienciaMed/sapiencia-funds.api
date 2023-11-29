@@ -24,7 +24,7 @@ export default class extends BaseSchema {
       .notNullable()
       .comment("lista generica de información");
       table
-      .string("CIN_NOMBRE_ARCHIVO", 20)
+      .string("CIN_NOMBRE_ARCHIVO", 150)
       .notNullable()
       .comment("Nombre del archivo asociado a la información");
       table

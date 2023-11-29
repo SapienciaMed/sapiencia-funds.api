@@ -11,6 +11,7 @@ import { IConsolidationTrayForTechnicianCollection,
 import { IConsolidationTrayTechnicianCollectionRepository } from '../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository';
 import { ICutInterface } from '../Interfaces/CutInterface';
 import { ICallFound } from "App/Interfaces/CallfundInterfaces";
+import { PqrsdfResultSimple } from '../Interfaces/ConsolidationTrayInterface';
 
 export interface ISapienciaService {
   getAllCallPeriod(): Promise<ApiResponse<ICallPeriod[]>>;
@@ -23,6 +24,7 @@ export interface ISapienciaService {
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
   geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
+  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<PqrsdfResultSimple[] | null>>;
 
 }
 
@@ -92,6 +94,16 @@ export default class SapienciaService implements ISapienciaService {
       return new ApiResponse(null, EResponseCodes.FAIL, "No se pudo actualizar el corte");
 
     return new ApiResponse(technicianTransaction, EResponseCodes.OK, "Se actualizó el corte para el beneficiario");
+
+  }
+
+  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<PqrsdfResultSimple[] | null>> {
+
+    const getGetPQRSDF = await this.callConsolidationTrayTechnicianCollectionRepository.getPQRSDFExternal(filters);
+    if( !getGetPQRSDF || getGetPQRSDF == null )
+      return new ApiResponse(null, EResponseCodes.FAIL, "No se encontró información u ocurrió un error");
+
+    return new ApiResponse(getGetPQRSDF, EResponseCodes.OK, "Listado de PQRSDF");
 
   }
 
