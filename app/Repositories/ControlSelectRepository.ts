@@ -157,34 +157,33 @@ export default class ControlSelectRepository implements IControlSelectRepository
     }
 
     async getInfopay(payload: controlSelectFilterPag) {
-        if (payload.idControlSelect == 5) {
-            const { validity } = payload;
-            const query = `call AuroraControlFinancieroPagare('${validity}')`;
-            const result = await Database.connection("mysql_sapiencia").rawQuery(query);
+        const { idConvocatoria } = payload;
+        const query = `call AuroraControlFinancieroPagare('${idConvocatoria}')`;
+        const result = await Database.connection("mysql_sapiencia").rawQuery(query);
 
-            // Suponiendo que result contiene un arreglo de resultados
-            const data = result[0];
+        // Suponiendo que result contiene un arreglo de resultados
+        const data = result[0][0];
 
-            // Extrae el subarreglo necesario sin modificar el original
-            const cleanedData = data.map(entry => entry);
+        // Extrae el subarreglo necesario sin modificar el original
+        const cleanedData = data.map(entry => entry);
 
-            const { page, perPage } = payload;
+        const { page, perPage } = payload;
 
-            // Realiza la paginación manualmente
-            const start = (payload.page! - 1) * payload.perPage!;
-            const end = start + payload.perPage!;
-            const paginatedData = cleanedData.slice(start, end);
+        // Realiza la paginación manualmente
+        const start = (payload.page! - 1) * payload.perPage!;
+        const end = start + payload.perPage!;
+        const paginatedData = cleanedData.slice(start, end);
 
-            console.log(paginatedData)
-            const meta = {
-                total: cleanedData.length,
-                per_page: perPage,
-                current_page: page,
-                last_page: Math.ceil(cleanedData.length / payload.perPage!),
-            };
+        console.log(paginatedData)
+        const meta = {
+            total: cleanedData.length,
+            per_page: perPage,
+            current_page: page,
+            last_page: Math.ceil(cleanedData.length / payload.perPage!),
+        };
 
-            return { array: cleanedData as controlSelectFilterPag[], meta };
-        }
+        return { array: cleanedData as controlSelectFilterPag[], meta };
+
 
     }
 
@@ -192,11 +191,11 @@ export default class ControlSelectRepository implements IControlSelectRepository
     async getInfoEstratos123(payload: controlSelectFilter) {
         if (payload.idControlSelect) {
             const queryControlSelectEstratos123 = ControlSelectConsolidateModel.query().preload("resourcePrioritization")
-            queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub)  => sub.where("projectNumber", payload.noProject!))
+            queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
             let res = await queryControlSelectEstratos123.paginate(1, 999999)
             if (res) {
                 const { data } = res.serialize();
-                if ( data.length <= 0) {
+                if (data.length <= 0) {
                     const queryResourcePrioritization = ResourcePrioritization.query()
                     queryResourcePrioritization.where("projectNumber", payload.noProject!)
                     queryResourcePrioritization.where("programId", 1)

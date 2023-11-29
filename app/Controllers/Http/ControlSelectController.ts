@@ -126,6 +126,8 @@ export default class ControlSelectController {
         } catch (err) {
             return DBException.badRequest(ctx, err);
         }
+
+        console.log(payload)
         try {
             const res = await ControlSelectProvider.getInfopay(payload)
 
