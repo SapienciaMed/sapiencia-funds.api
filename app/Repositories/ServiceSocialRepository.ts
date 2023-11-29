@@ -1,5 +1,6 @@
 
 import { IImportServiceSocial, IInsertServiceSocial, IValidateServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
+import BeneficiariesConsolidate from "App/Models/BeneficiariesConsolidate";
 import AuroraEpmRenovado from "App/Models/Sapiencia/AuroraEpmRenovado";
 import AuroraPpRenovado from "App/Models/Sapiencia/AuroraPpRenovado";
 import ServiceSocialBeneficiary from "App/Models/ServiceSocialBeneficiary";
@@ -9,6 +10,7 @@ export interface IServiceSocialRepository {
     import(): Promise<IImportServiceSocial[]>;       
     insert(data:any): Promise<IInsertServiceSocial[]>;    
     validate(consolidationBeneficiary: string,legalizationPeriod: string): Promise<IValidateServiceSocial | null>;
+    validateConsolidate(consolidationBeneficiary: string): Promise<any | null>;
 }
 
 export default class ServiceSocialRepository implements IServiceSocialRepository {
@@ -30,8 +32,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
         const filteredData = combinedData.filter(item => item.hoursServicePerform != null);
 
         return filteredData
-    }
-  
+    }  
 
     async validate(consolidationBeneficiary: string, legalizationPeriod: string): Promise<IValidateServiceSocial | null> {    
         try {
@@ -46,6 +47,22 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
             } */
     
             // Ejecutar la consulta
+            const data = await query.first();
+
+            // Devolver los datos serializados si existen
+            return data?.serialize() as any;
+        } catch (error) {
+            console.error("Error en la función validate:", error);
+            // Manejar el error como consideres necesario
+            return null;
+        }
+    }
+
+    async validateConsolidate(document: string): Promise<any | null> {
+        try {
+            // Construir la consulta base con las condiciones siempre presentes
+            let query = BeneficiariesConsolidate.query().where('numberDocument', document)
+
             const data = await query.first();
 
             // Devolver los datos serializados si existen

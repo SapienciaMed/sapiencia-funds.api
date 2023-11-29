@@ -14,7 +14,7 @@ export default class AuroraPpRenovado extends BaseModel {
   @column({  columnName: "Pseleccion", serializeAs: "pSelection" })
   public pSelection: string;
   
-  @column({  columnName: "document", serializeAs: "document" })
+  @column({  columnName: "Documento", serializeAs: "document" })
   public number: string;
   
   @column({  columnName: "Nombre", serializeAs: "name" })

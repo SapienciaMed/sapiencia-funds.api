@@ -93,15 +93,22 @@ export default class ServiceSocialService implements IServiceSocialService {
             // Extraer los campos necesarios para la validación
             const consolidationBeneficiary = record.id; 
             const legalizationPeriod = record.periodRenew;
+            const document = record.document;
            // const hoursBorrowed = record.hoursServicePerform;           
          
             if (consolidationBeneficiary != null && legalizationPeriod != null) {
+
+                //verificar si el registro existe en la tabla de BAC_BENEFICIARIOS_A_CONSOLIDAR para evitar errores con llaves foraneas
+                const validateConsolidate = await this.serviceSocialRepository.validateConsolidate(document);
+
                 // Verificar si el registro existe en la base de datos
-                const existingRecord = await this.serviceSocialRepository.validate(consolidationBeneficiary, legalizationPeriod);             
-                
-                // Si el registro no existe, añadirlo a la lista de nuevos registros
-                if (!existingRecord) {
-                    newRecords.push(record as never);
+                if (validateConsolidate && validateConsolidate.id) {
+                    const existingRecord = await this.serviceSocialRepository.validate(validateConsolidate.id, legalizationPeriod);
+        
+                    if (!existingRecord) {
+                        record.id = validateConsolidate.id;
+                        newRecords.push(record as never);
+                    }
                 }
             }    
         }    
