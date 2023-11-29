@@ -3,7 +3,9 @@ export interface IConsolidationTrayForTechnicianCollection {
   searchParam?: string;
   cutParamName?: string;
   cutParamId?: number;
-  identification?: string; //El documento parameter para consultar atención ciudadana
+  identification?: string; //El documento parameter para consultar atención ciudadana y también sirve para lo del reglamento
+  idBeneficiary?: number; //Para traerme requerimientos del reglamento
+  legalPeriod?: string; //Para traerme requerimientos del reglamento
   page: number,
   perPage: number;
 }
@@ -52,7 +54,8 @@ export interface InitialBeneficiaryInformation {
   countSuspendContinues: number;
   countSuspendDiscontinues: number;
   countSuspendSpecials: number;
-  statusProcess: string;
+  idStatusProcessPacc: number;
+  statusProcessPacc: string;
   statusSapiencia: number;
   countSemesterProjected: number;
   countSpinProjected: number;
@@ -71,11 +74,12 @@ export interface InitialBeneficiaryInformation {
   reason: string;
   characterization: string;
   currentManager: string;
-  cuts: Cuts;
-  programs: Programs;
+  cuts: ICuts;
+  programs: IPrograms;
+  statusPacc: IStatusPacc;
 }
 
-export interface Cuts {
+export interface ICuts {
   id: number;
   name: string;
   from: string; //Date, pero colocamos string por errores tipado.
@@ -86,116 +90,120 @@ export interface Cuts {
   createDate: Date;
 }
 
-export interface Programs {
+export interface IPrograms {
   id: number;
   value: string;
 }
 
-
-export interface CitizenAttentionDataExternal {
-  pqrsdf_result: PqrsdfResult[];
+export interface IStatusPacc {
+  id: number;
+  description: string;
 }
 
-export interface PqrsdfResult {
-  id?:                 number;
-  requestTypeId?:      number;
-  personId?:           number;
-  responseMediumId?:   number;
-  requestSubjectId?:   number;
-  clasification?:      string;
-  filingNumber?:       number;
-  answer?:             null;
-  answerDate?:         null;
-  dependency?:         string;
-  description?:        string;
-  fileId?:             number;
-  createdAt?:          Date;
-  updatedAt?:          Date | null;
-  statusId?:           number;
-  responsibleId?:      number;
+export interface ICitizenAttentionDataExternal {
+  pqrsdf_result: IPqrsdfResult[];
+}
+
+export interface IPqrsdfResult {
+  id?: number;
+  requestTypeId?: number;
+  personId?: number;
+  responseMediumId?: number;
+  requestSubjectId?: number;
+  clasification?: string;
+  filingNumber?: number;
+  answer?: null;
+  answerDate?: null;
+  dependency?: string;
+  description?: string;
+  fileId?: number;
+  createdAt?: Date;
+  updatedAt?: Date | null;
+  statusId?: number;
+  responsibleId?: number;
   idCanalesAttencion?: number | null;
-  programId?:          number | null;
-  closedAt?:           null;
-  person?:             Person;
-  status?:             Status;
-  canalesAttencion?:   CanalesAttencion | null;
-  requestSubject?:     RequestSubject;
-  responseMedium?:     ResponseMedium;
-  requestType?:        RequestType;
-  program?:            Program | null;
+  programId?: number | null;
+  closedAt?: null;
+  person?: IPerson;
+  status?: IStatus;
+  canalesAttencion?: ICanalesAttencion | null;
+  requestSubject?: IRequestSubject;
+  responseMedium?: IResponseMedium;
+  requestType?: IRequestType;
+  program?: IProgram | null;
 }
 
-export interface CanalesAttencion {
-  cad_codigo:   number;
-  cad_nombre:   string;
+export interface ICanalesAttencion {
+  cad_codigo: number;
+  cad_nombre: string;
   cad_id_canal: number;
-  cad_activo:   number;
-  cad_orden:    number;
+  cad_activo: number;
+  cad_orden: number;
 }
 
-export interface Person {
-  id:                  number;
-  identification:      string;
-  documentTypeId:      number;
-  entityTypeId:        number;
-  firstName:           string;
-  secondName:          string;
-  firstSurname:        string;
-  secondSurname:       string;
-  birthdate:           Date;
-  firstContactNumber:  string;
+export interface IPerson {
+  id: number;
+  identification: string;
+  documentTypeId: number;
+  entityTypeId: number;
+  firstName: string;
+  secondName: string;
+  firstSurname: string;
+  secondSurname: string;
+  birthdate: Date;
+  firstContactNumber: string;
   secondContactNumber: string;
-  email:               string;
-  address:             string;
-  countryId:           number;
-  departmentId:        number;
-  municipalityId:      number;
-  isBeneficiary:       number;
-  createdAt:           Date;
-  updatedAt:           Date;
+  email: string;
+  address: string;
+  countryId: number;
+  departmentId: number;
+  municipalityId: number;
+  isBeneficiary: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export interface Program {
-  prg_codigo:        number;
-  prg_descripcion:   string;
+export interface IProgram {
+  prg_codigo: number;
+  prg_descripcion: string;
   prg_clasificacion: number;
-  prg_dependencia:   number;
-  prg_activo:        number;
-  prg_orden:         number;
+  prg_dependencia: number;
+  prg_activo: number;
+  prg_orden: number;
 }
 
-export interface RequestSubject {
-  aso_codigo:      number;
-  aso_asunto:      string;
-  aso_activo:      number;
-  aso_orden:       number;
+export interface IRequestSubject {
+  aso_codigo: number;
+  aso_asunto: string;
+  aso_activo: number;
+  aso_orden: number;
   requestObjectId: number;
-  createdAt:       Date;
-  updatedAt:       null;
+  createdAt: Date;
+  updatedAt: null;
 }
 
-export interface RequestType {
-  tso_codigo:      number;
+export interface IRequestType {
+  tso_codigo: number;
   tso_description: string;
-  tso_activo:      number;
-  tso_orden:       number;
+  tso_activo: number;
+  tso_orden: number;
 }
 
-export interface ResponseMedium {
-  mre_codigo:      number;
+export interface IResponseMedium {
+  mre_codigo: number;
   mre_descripcion: string;
-  mre_activo:      number;
-  mre_orden:       number;
+  mre_activo: number;
+  mre_orden: number;
 }
 
-export interface Status {
+export interface IStatus {
   lep_codigo: number;
   lep_estado: string;
   lep_activo: number;
-  lep_orden:  number;
+  lep_orden: number;
 }
 
-export interface PqrsdfResultSimple {
+export interface IPqrsdfResultSimple {
   numberPqrsdf: number;
   dateFiled: Date | string;
   program: string;
@@ -204,5 +212,16 @@ export interface PqrsdfResultSimple {
   state: string;
   answerDate: Date | string;
   answer: string;
+}
+
+export interface IRequerimentsResultSimple {
+  id?: number;
+  idBeneficiary: number;
+  idReglament: number;
+  idRequirement: number;
+  descriptionRequirement: string;
+  activeRequirement: boolean
+  percentRequirement: number | null;
+  accomplished?: boolean;
 }
 
