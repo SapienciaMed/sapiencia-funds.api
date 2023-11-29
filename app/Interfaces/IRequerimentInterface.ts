@@ -1,7 +1,7 @@
 export interface IRequerimentInterface {
   id?: number;
   codReglament?: number;
-  status?: boolean;
+  active?: boolean;
   percent?: number;
   description: string;
 }

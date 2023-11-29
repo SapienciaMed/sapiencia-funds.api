@@ -43,10 +43,7 @@ export default class AuroraEpmRenovado extends BaseModel {
   })
   public performService: string;
 
-  @column({
-    columnName: "Total_horas_servicio_social",
-    serializeAs: "totalHoursServicePerform",
-  })
+  @column({  columnName: "Total_horas_servicio_social", serializeAs: "hoursServicePerform" })
   public hoursServicePerform: string;
 
   @column({ columnName: "Operador", serializeAs: "operator" })

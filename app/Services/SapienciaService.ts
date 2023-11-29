@@ -7,11 +7,12 @@ import { ApiResponse,
          IPagingData } from "App/Utils/ApiResponses";
 import { IConsolidationTrayForTechnicianCollection,
          IConsolidationTrayForTechnicianCollectionParams,
-         IConsolidationTrayForTransactions } from '../Interfaces/ConsolidationTrayInterface';
+         IConsolidationTrayForTransactions,
+         IPqrsdfResultSimple,
+         IRequerimentsResultSimple} from '../Interfaces/ConsolidationTrayInterface';
 import { IConsolidationTrayTechnicianCollectionRepository } from '../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository';
 import { ICutInterface } from '../Interfaces/CutInterface';
 import { ICallFound } from "App/Interfaces/CallfundInterfaces";
-import { PqrsdfResultSimple } from '../Interfaces/ConsolidationTrayInterface';
 
 export interface ISapienciaService {
   getAllCallPeriod(): Promise<ApiResponse<ICallPeriod[]>>;
@@ -24,7 +25,9 @@ export interface ISapienciaService {
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
   geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
-  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<PqrsdfResultSimple>>>;
+  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
+  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>>;
+  getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
 
 }
 
@@ -97,10 +100,25 @@ export default class SapienciaService implements ISapienciaService {
 
   }
 
-  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<PqrsdfResultSimple>>> {
+  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>> {
 
     const getGetPQRSDF = await this.callConsolidationTrayTechnicianCollectionRepository.getPQRSDFExternal(filters);
     return new ApiResponse(getGetPQRSDF, EResponseCodes.OK, "Listado de PQRSDF");
+
+  }
+
+  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>> {
+
+    const getRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiary(filters);
+    if( !getRequirements ) return new ApiResponse(false, EResponseCodes.FAIL, "Ocurrio un error realizando la transacción");
+    return new ApiResponse(true, EResponseCodes.OK, "Transacción realizada con éxito");
+
+  }
+
+  async getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>> {
+
+    const getGetRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiaryList(filters);
+    return new ApiResponse(getGetRequirements, EResponseCodes.OK, "Listado de Requisitos");
 
   }
 

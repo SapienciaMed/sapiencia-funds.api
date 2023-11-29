@@ -273,7 +273,17 @@ Route.group(() => {
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
   ).middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_SOPORTES_PQRSDF");
+   .middleware("auth:VER_SOPORTES_PQRSDF");
+  Route.post(
+  "/get-requirements-by-beneficiary",
+  "ConsolidationTrayController.getRequirementsByBeneficiary"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-requirements-by-beneficiary-list",
+    "ConsolidationTrayController.getRequirementsByBeneficiaryList"
+    ).middleware("auth:TECNICO_PASO_COBRO")
+     .middleware("auth:VER_REQUISITOS_REGLAMENTO");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
