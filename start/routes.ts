@@ -226,6 +226,7 @@ Route.group(() => {
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
 }).prefix("/api/v1/controlSelect");
+//.middleware("auth");
 Route.group(() => {
   Route.post(
     "/getrenewal-paginated/",

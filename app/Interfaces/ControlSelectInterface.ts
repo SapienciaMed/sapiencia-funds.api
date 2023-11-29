@@ -32,6 +32,7 @@ export interface controlSelectFilterPag  {
     idControlSelect?: number
     idConvocatoria?: number
     id_comuna?: number | number[] | string;
+    page: number;
+    perPage:number;
     
-
 }
