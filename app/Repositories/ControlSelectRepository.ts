@@ -2,13 +2,17 @@ import Database from "@ioc:Adonis/Lucid/Database";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
 import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ControlSelectLegalization from "App/Models/ControlSelectLegalization";
+import ControlSelectStratum123Model from "App/Models/ControlSelectStratum123";
 import ResourcePrioritization from "App/Models/ResourcePrioritization";
 
 export interface IControlSelectRepository {
     getInfoConsolidate(payload: controlSelectFilter): Promise<any>
     getInfoLegalization(payload: controlSelectFilter): Promise<any>
+    getInfoEstratos123(payload: controlSelectFilter): Promise<any>
     getInfoBeforeCreate(payload: controlSelectFilter): Promise<any>
+    getInfoBeforeCreateEstratos123(payload: controlSelectFilter): Promise<any>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<any>
+    createInfoEstratos123(payload: controlSelectConsolidado): Promise<any>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<any>
     getInfopay(payload: controlSelectFilter): Promise<any>
 }
@@ -184,4 +188,53 @@ export default class ControlSelectRepository implements IControlSelectRepository
 
     }
 
+
+    async getInfoEstratos123(payload: controlSelectFilter) {
+        if (payload.idControlSelect) {
+            const queryControlSelectEstratos123 = ControlSelectConsolidateModel.query().preload("resourcePrioritization")
+            queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub)  => sub.where("projectNumber", payload.noProject!))
+            let res = await queryControlSelectEstratos123.paginate(1, 999999)
+            if (res) {
+                const { data } = res.serialize();
+                if ( data.length <= 0) {
+                    const queryResourcePrioritization = ResourcePrioritization.query()
+                    queryResourcePrioritization.where("projectNumber", payload.noProject!)
+                    queryResourcePrioritization.where("programId", 1)
+                    queryResourcePrioritization.where("validity", payload.validity!)
+                    const res = await queryResourcePrioritization.paginate(1, 100)
+                    const { data } = res.serialize()
+                    await Promise.all(data.map(async (data) => {
+                        let query = `select COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
+                        from giro_vwbeneficiario_proyec_renova_giro 
+                        where comunagiros IN ( (${data.communeId}*1000) + 123)
+                        and perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1 `
+                        const dataBase = await Database.connection("mysql_sapiencia").rawQuery(query)
+
+                        let dataInsert = {
+                            "idResourcePrioritization": data.id,
+                            "announcement": payload.idConvocatoria,
+                            "validity": payload.validity,
+                            "resourceAvailable": data.resourceForCredit,
+                            "granted": dataBase[0][0].otorgado,
+                            "legalized": dataBase[0][0].legalizado
+                        }
+                        this.createInfoEstratos123([dataInsert])
+                    }))
+                }
+            }
+        }
+    }
+
+    async getInfoBeforeCreateEstratos123(payload: any) {
+        const queryControlSelect = ControlSelectStratum123Model.query()
+            .preload("resourcePrioritization")
+        queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
+        const res = await queryControlSelect.paginate(1, 100)
+        const { data, meta } = res.serialize()
+        return { array: data, meta }
+    }
+
+    async createInfoEstratos123(payload: any) {
+        return await ControlSelectStratum123Model.createMany(payload)
+    }
 }

@@ -225,6 +225,7 @@ Route.group(() => {
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
+    Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
 }).prefix("/api/v1/controlSelect");
 //.middleware("auth");
 Route.group(() => {

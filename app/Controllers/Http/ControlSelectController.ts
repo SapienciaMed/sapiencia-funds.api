@@ -1,7 +1,7 @@
 import { HttpContext } from '@adonisjs/core/build/standalone';
 import ControlSelectProvider from "@ioc:core.ControlSelectProvider"
 import { EResponseCodes } from 'App/Constants/ResponseCodesEnum';
-import { controlSelectFilterPag } from 'App/Interfaces/ControlSelectInterface';
+import { controlSelectFilterPag, controlSelectFilter } from 'App/Interfaces/ControlSelectInterface';
 import { ApiResponse } from 'App/Utils/ApiResponses';
 import { DBException } from 'App/Utils/DbHandlerError';
 import { controlSelectSchema } from 'App/Validators/ControlSelectValidator';
@@ -12,6 +12,26 @@ export default class ControlSelectController {
         const payload = request.body()
         try {
             const res = await ControlSelectProvider.getinfoConsolidate(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+
+    public async getInfoEstratos123(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfoEstratos123(payload)
 
             return response.ok(res)
         } catch (err) {
