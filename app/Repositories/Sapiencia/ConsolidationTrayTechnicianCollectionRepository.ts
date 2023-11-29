@@ -27,7 +27,8 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
   getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IPqrsdfResultSimple>>;
-  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>>;
+  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean>;
+  getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>>;
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
@@ -85,8 +86,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
-    const start: number = (page - 1) * perPage;
-    const end: number = start + perPage;
+    const start: number = (page! - 1) * perPage!;
+    const end: number = start + perPage!;
 
     //* ******************************************** //*
     //* Ordenemos por el corte según la fecha actual //*
@@ -136,7 +137,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       total: infoWithCutAndProgram.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(infoWithCutAndProgram.length / perPage),
+      last_page: Math.ceil(infoWithCutAndProgram.length / perPage!),
     };
 
     return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
@@ -195,8 +196,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
     const { searchParam, cutParamName, cutParamId, page, perPage } = filters;
-    const start: number = (page - 1) * perPage;
-    const end: number = start + perPage;
+    const start: number = (page! - 1) * perPage!;
+    const end: number = start + perPage!;
 
     //* ************************************************************************ //*
     //* **** Ordenemos por el corte que llega de parámetro                       //*
@@ -300,7 +301,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       total_general: filterForSearch.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(totalDataContent / perPage),
+      last_page: Math.ceil(totalDataContent / perPage!),
     };
 
     return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
@@ -472,8 +473,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     let infoPaginated: IPqrsdfResultSimple[] = [];
 
     const { page, perPage } = filters;
-    const start: number = (page - 1) * perPage;
-    const end: number = start + perPage;
+    const start: number = (page! - 1) * perPage!;
+    const end: number = start + perPage!;
 
     infoPaginated = resultFilter.slice(start, end);
 
@@ -482,23 +483,16 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       total_general: resultFilter.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(resultFilter.length / perPage),
+      last_page: Math.ceil(resultFilter.length / perPage!),
     };
 
     return { array: infoPaginated as IPqrsdfResultSimple[], meta };
 
   }
 
-  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>> {
+  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean> {
 
-    const { page, perPage, idBeneficiary } = filters;
-    const meta_error = {
-      total: 0,
-      total_general: 0,
-      per_page: 0,
-      current_page: 0,
-      last_page: 0,
-    };
+    const { idBeneficiary } = filters;
 
     //* **************************************** //*
     //* ** Traigamos el beneficiario asociado ** //*
@@ -508,11 +502,12 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .where("id", Number(idBeneficiary))
       .preload("cuts")
       .preload("programs")
+      .preload("statusPacc")
       .orderBy("id", "asc");
     //Solo "debería" traer uno pero, tratemos como array para una manipulación más simple.
     const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
-    if(!resAurora || resAurora == null) return { array: [null] as any[], meta: meta_error };
+    if(!resAurora || resAurora == null) return false;
     const getLegalPeriod: string[] = convertResAurora[0].legalPeriod.split('-');
     const legalPeriodConvert: number = Number(getLegalPeriod[0]+getLegalPeriod[1]); //Para pasarlo de 2023-1 a un 20231 (Número validable)
 
@@ -523,7 +518,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .query()
       .where("program", convertResAurora[0].idProgram);
 
-    if(!getReglaments || getReglaments == null) return { array: [null] as any[], meta: meta_error };
+    if(!getReglaments || getReglaments == null) return false;
 
     const convertReglaments = getReglaments.map((i) => i.serialize() as IReglamentInterface);
     let objReglament: IReglamentInterface | null = null; //Solo debería traer un reglamento.
@@ -560,7 +555,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     }
 
-    if( !objReglament || objReglament == null ) return { array: [null] as any[], meta: meta_error };
+    if( !objReglament || objReglament == null ) return false;
 
     //* ************************************************************ //*
     //* *** Ahora, debemos buscar los requisitos del reglamento  *** //*
@@ -598,7 +593,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           idReglament: Number(reglamentUse),
           idRequirement: Number(req.id),
           descriptionRequirement: req.description,
-          activeRequirement: Boolean(req.status),
+          activeRequirement: req.active!,
           percentRequirement: Number(req.percent) | null!,
           accomplished: accomplishedStatic,
 
@@ -612,15 +607,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
       }
 
-      const meta = {
-        total: listRequerimentsActual.length,
-        total_general: listRequerimentsActual.length,
-        per_page: perPage,
-        current_page: page,
-        last_page: Math.ceil(listRequerimentsActual.length / perPage),
-      };
-
-      return { array: listRequerimentsActual as IRequerimentsResultSimple[], meta };
+      return true;
 
     }
 
@@ -651,9 +638,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
             historyIdReglament = reqCon.idReglament;
             historyIdRequirement = reqCon.idRequirement;
             historyDescriptionRequirement = req.description;
-            historyActiveRequirement = Boolean(req.status);
+            historyActiveRequirement = req.active!;
             historyPercentRequirement = Number(req.percent) | null!;
-            historyAccomplished = Boolean(reqCon.accomplished);
+            historyAccomplished = reqCon.accomplished!;
 
           }
 
@@ -666,9 +653,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
             idReglament: historyIdReglament,
             idRequirement: historyIdRequirement,
             descriptionRequirement: historyDescriptionRequirement,
-            activeRequirement: historyActiveRequirement,
+            activeRequirement: historyActiveRequirement!,
             percentRequirement: historyPercentRequirement,
-            accomplished: historyAccomplished
+            accomplished: historyAccomplished!
           }
 
           arrayRegisterActual.push(obj);
@@ -680,9 +667,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
             idReglament: reglamentUse,
             idRequirement: Number(req.id),
             descriptionRequirement: req.description,
-            activeRequirement: Boolean(req.status),
+            activeRequirement: req.active!,
             percentRequirement: Number(req.percent) | null!,
-            accomplished: Boolean(false)
+            accomplished: false
           }
 
           arrayRegisterNews.push(obj);
@@ -711,29 +698,37 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
       }
 
-      const meta = {
-        total: arrayConcatedFinally.length,
-        total_general: arrayConcatedFinally.length,
-        per_page: perPage,
-        current_page: page,
-        last_page: Math.ceil(arrayConcatedFinally.length / perPage),
-      };
-
-      return { array: arrayRegisterActual as IRequerimentsResultSimple[], meta };
+      return true;
 
     }
 
-    const arrayTest: any[] = ["ERROR"];
+    return false;
+
+  }
+
+  async getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>> {
+
+    const { idBeneficiary, page, perPage } = filters;
+    let infoPaginated: IRequerimentsResultSimple[] = [];
+
+    const getRequirementsConsolidate = await RequirementsConsolidate
+      .query()
+      .where("idBeneficiary", Number(idBeneficiary))
+
+    const convertResAurora = getRequirementsConsolidate.map((i) => i.serialize() as IRequerimentsResultSimple);
+
+    const start: number = (page! - 1) * perPage!;
+    const end: number = start + perPage!;
+    infoPaginated = convertResAurora.slice(start, end);
 
     const meta = {
-      total: arrayTest.length,
-      total_general: arrayTest.length,
+      total: convertResAurora.length,
       per_page: perPage,
       current_page: page,
-      last_page: Math.ceil(arrayTest.length / perPage),
+      last_page: Math.ceil(convertResAurora.length / perPage!),
     };
 
-    return { array: arrayTest as any[], meta };
+    return { array: infoPaginated as IRequerimentsResultSimple[], meta };
 
   }
 
