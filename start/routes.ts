@@ -318,7 +318,6 @@ Route.group(() => {
   Route.get("/generate-xlsx", "DatingController.generateXLSX");
 })
   .prefix("/api/v1/citas")
-  .middleware("auth");
 
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
