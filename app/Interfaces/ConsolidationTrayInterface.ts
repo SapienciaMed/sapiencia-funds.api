@@ -6,8 +6,8 @@ export interface IConsolidationTrayForTechnicianCollection {
   identification?: string; //El documento parameter para consultar atención ciudadana y también sirve para lo del reglamento
   idBeneficiary?: number; //Para traerme requerimientos del reglamento
   legalPeriod?: string; //Para traerme requerimientos del reglamento
-  page: number,
-  perPage: number;
+  page?: number,
+  perPage?: number;
 }
 
 export interface IConsolidationTrayForTransactions {

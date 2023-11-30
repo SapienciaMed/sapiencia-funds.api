@@ -26,3 +26,13 @@ export interface controlSelectConsolidado {
 export interface consolidado {
     consolidado?: controlSelectConsolidado[]
 }
+export interface controlSelectFilterPag {
+    noProject?: number
+    validity?: string
+    idControlSelect?: number
+    idConvocatoria?: number
+    id_comuna?: number | number[] | string;
+    page?: number;
+    perPage?: number;
+
+}

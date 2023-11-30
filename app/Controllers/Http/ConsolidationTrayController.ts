@@ -125,4 +125,21 @@ export default class ConsolidationTrayController {
 
   }
 
+  public async getRequirementsByBeneficiaryList({ request, response }: HttpContextContract) {
+
+    try {
+
+      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      return response.send(await SapienciaProvider.getRequirementsByBeneficiaryList(data));
+
+    } catch (err) {
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
 }

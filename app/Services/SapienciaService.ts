@@ -8,7 +8,8 @@ import { ApiResponse,
 import { IConsolidationTrayForTechnicianCollection,
          IConsolidationTrayForTechnicianCollectionParams,
          IConsolidationTrayForTransactions,
-         IPqrsdfResultSimple} from '../Interfaces/ConsolidationTrayInterface';
+         IPqrsdfResultSimple,
+         IRequerimentsResultSimple} from '../Interfaces/ConsolidationTrayInterface';
 import { IConsolidationTrayTechnicianCollectionRepository } from '../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository';
 import { ICutInterface } from '../Interfaces/CutInterface';
 import { ICallFound } from "App/Interfaces/CallfundInterfaces";
@@ -25,7 +26,8 @@ export interface ISapienciaService {
   geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
   getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
-  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<any>>>;
+  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>>;
+  getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
 
 }
 
@@ -105,10 +107,18 @@ export default class SapienciaService implements ISapienciaService {
 
   }
 
-  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<any>>> {
+  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>> {
 
     const getRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiary(filters);
-    return new ApiResponse(getRequirements, EResponseCodes.OK, "Listado de Requerimientos");
+    if( !getRequirements ) return new ApiResponse(false, EResponseCodes.FAIL, "Ocurrio un error realizando la transacción");
+    return new ApiResponse(true, EResponseCodes.OK, "Transacción realizada con éxito");
+
+  }
+
+  async getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>> {
+
+    const getGetRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiaryList(filters);
+    return new ApiResponse(getGetRequirements, EResponseCodes.OK, "Listado de Requisitos");
 
   }
 
