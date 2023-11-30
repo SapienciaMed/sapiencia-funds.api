@@ -1,5 +1,7 @@
 
 import { IImportServiceSocial, IInsertServiceSocial, IValidateServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
+import AuroraEfeRenovado from "App/Models/AuroraEfeRenovado";
+import AuroraFaRenovado from "App/Models/AuroraFaRenovado";
 import BeneficiariesConsolidate from "App/Models/BeneficiariesConsolidate";
 import AuroraEpmRenovado from "App/Models/Sapiencia/AuroraEpmRenovado";
 import AuroraPpRenovado from "App/Models/Sapiencia/AuroraPpRenovado";
@@ -25,9 +27,17 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
         // Consulta para el modelo AuroraEpmRenovado
         const dataAuroraEpmRenovado = await AuroraEpmRenovado.query().limit(10);
         const serializedDataAuroraEpmRenovado = dataAuroraEpmRenovado.map((item) => item.serialize());
+
+        // Consulta para el modelo AuroraEfeRenovado
+        const dataAuroraEfeRenovado = await AuroraEfeRenovado.query().limit(10);
+        const serializedDataAuroraEfeRenovado = dataAuroraEfeRenovado.map((item) => item.serialize());
+        
+        // Consulta para el modelo AuroraEfeRenovado
+        const dataAuroraFaRenovado = await AuroraFaRenovado.query().limit(10);
+        const serializedDataAuroraFaRenovado = dataAuroraFaRenovado.map((item) => item.serialize());        
     
         // Combinando ambos conjuntos de datos en una sola lista
-        const combinedData = [...serializedDataAuroraPpRenovado, ...serializedDataAuroraEpmRenovado];
+        const combinedData = [...serializedDataAuroraPpRenovado, ...serializedDataAuroraEpmRenovado, ...serializedDataAuroraEfeRenovado, ...serializedDataAuroraFaRenovado];
     
         const filteredData = combinedData.filter(item => item.hoursServicePerform != null);
 
