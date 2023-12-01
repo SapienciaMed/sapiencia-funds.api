@@ -1,7 +1,7 @@
 
 import { IImportServiceSocial, IInsertServiceSocial, IValidateServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
-import AuroraEfeRenovado from "App/Models/AuroraEfeRenovado";
-import AuroraFaRenovado from "App/Models/AuroraFaRenovado";
+///import AuroraEfeRenovado from "App/Models/AuroraEfeRenovado";
+//import AuroraFaRenovado from "App/Models/AuroraFaRenovado";
 import BeneficiariesConsolidate from "App/Models/BeneficiariesConsolidate";
 import AuroraEpmRenovado from "App/Models/Sapiencia/AuroraEpmRenovado";
 import AuroraPpRenovado from "App/Models/Sapiencia/AuroraPpRenovado";
@@ -22,40 +22,31 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
     async import(): Promise<IImportServiceSocial[]> {
         // Consulta para el modelo AuroraPpRenovado
         const dataAuroraPpRenovado = await AuroraPpRenovado.query().limit(10);
-        const serializedDataAuroraPpRenovado = dataAuroraPpRenovado.map((item) => item.serialize());
+        //const serializedDataAuroraPpRenovado = dataAuroraPpRenovado.map((item) => item.serialize());
+        const serializedDataAuroraPpRenovado = dataAuroraPpRenovado.map((item) => { let serializedItem = item.serialize();serializedItem.origen = "PP"; return serializedItem;
+        });
     
         // Consulta para el modelo AuroraEpmRenovado
         const dataAuroraEpmRenovado = await AuroraEpmRenovado.query().limit(10);
         const serializedDataAuroraEpmRenovado = dataAuroraEpmRenovado.map((item) => item.serialize());
-
-        // Consulta para el modelo AuroraEfeRenovado
-        const dataAuroraEfeRenovado = await AuroraEfeRenovado.query().limit(10);
-        const serializedDataAuroraEfeRenovado = dataAuroraEfeRenovado.map((item) => item.serialize());
-        
-        // Consulta para el modelo AuroraEfeRenovado
-        const dataAuroraFaRenovado = await AuroraFaRenovado.query().limit(10);
-        const serializedDataAuroraFaRenovado = dataAuroraFaRenovado.map((item) => item.serialize());        
     
         // Combinando ambos conjuntos de datos en una sola lista
-        const combinedData = [...serializedDataAuroraPpRenovado, ...serializedDataAuroraEpmRenovado, ...serializedDataAuroraEfeRenovado, ...serializedDataAuroraFaRenovado];
+        const combinedData = [...serializedDataAuroraPpRenovado, ...serializedDataAuroraEpmRenovado];
     
         const filteredData = combinedData.filter(item => item.hoursServicePerform != null);
 
-        return filteredData
+        const filterF = filteredData.filter(item => item.performServiceSocial.toUpperCase() !== 'NO')
+
+        return filterF
     }  
 
-    async validate(consolidationBeneficiary: string, legalizationPeriod: string): Promise<IValidateServiceSocial | null> {    
+    async validate(consolidationBeneficiary: string, legalizationPeriod: string): Promise<IValidateServiceSocial | null> {
         try {
             // Construir la consulta base con las condiciones siempre presentes
             let query = ServiceSocialBeneficiary.query()
-                .where('consolidationBeneficiary', consolidationBeneficiary)            
+                .where('consolidationBeneficiary', consolidationBeneficiary)
                 .where('legalizationPeriod', legalizationPeriod);
-    /* 
-            // Añadir la condición para hoursBorrowed solo si no es null ni undefined
-            if (hoursBorrowed !== null && hoursBorrowed !== undefined) { // Esto cubre null y undefined, pero permite 0
-                query = query.where('hoursBorrowed', Number(hoursBorrowed));
-            } */
-    
+
             // Ejecutar la consulta
             const data = await query.first();
 
@@ -71,7 +62,7 @@ export default class ServiceSocialRepository implements IServiceSocialRepository
     async validateConsolidate(document: string): Promise<any | null> {
         try {
             // Construir la consulta base con las condiciones siempre presentes
-            let query = BeneficiariesConsolidate.query().where('numberDocument', document)
+            let query = BeneficiariesConsolidate.query().where('numberDocument', document) //cambiar por idUsuario
 
             const data = await query.first();
 

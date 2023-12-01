@@ -35,8 +35,8 @@ export default class AuroraPpRenovado extends BaseModel {
   @column({  columnName: "Promedio_Acumulado", serializeAs: "accumulatedAverage" })
   public accumulatedAverage: string;
 
-  @column({  columnName: "Realizo_servicio", serializeAs: "performService" })
-  public performService: string;
+  @column({  columnName: "Realizo_servicio", serializeAs: "performServiceSocial" })
+  public performServiceSocial: string;
 
   @column({  columnName: "Horas_servicio_realizo", serializeAs: "hoursServicePerform" })
   public hoursServicePerform: string;

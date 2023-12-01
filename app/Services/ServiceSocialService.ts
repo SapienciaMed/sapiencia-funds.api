@@ -61,7 +61,7 @@ export default class ServiceSocialService implements IServiceSocialService {
         const dataArray = receivedData.data;
 
         const transformedData = dataArray.map(item => ({
-            legalizationPeriod: item.periodRenew,
+            legalizationPeriod: item.period,
             consolidationBeneficiary: item.id,
             hoursBorrowed: item.hoursServicePerform,
             // Agrega aquí cualquier otro campo que necesites
@@ -92,14 +92,14 @@ export default class ServiceSocialService implements IServiceSocialService {
         for (const record of records) {
             // Extraer los campos necesarios para la validación
             const consolidationBeneficiary = record.id; 
-            const legalizationPeriod = record.periodRenew;
-            const document = record.document;
+            const legalizationPeriod = record.period;
+            const document = record.document; //cambiar por idUsuario
            // const hoursBorrowed = record.hoursServicePerform;           
          
             if (consolidationBeneficiary != null && legalizationPeriod != null) {
 
                 //verificar si el registro existe en la tabla de BAC_BENEFICIARIOS_A_CONSOLIDAR para evitar errores con llaves foraneas
-                const validateConsolidate = await this.serviceSocialRepository.validateConsolidate(document);
+                const validateConsolidate = await this.serviceSocialRepository.validateConsolidate(document); //cambiar por idUsuario
 
                 // Verificar si el registro existe en la base de datos
                 if (validateConsolidate && validateConsolidate.id) {
