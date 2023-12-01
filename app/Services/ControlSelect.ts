@@ -11,6 +11,7 @@ export interface IControlSelectService {
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoControl(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoControlSubtotales(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateInfoLegalization(payload: any): Promise<ApiResponse<any>>
     updateInfoStratum456(payload: any): Promise<ApiResponse<any>>
     getInfoEstratos123(payload: controlSelectFilter): Promise<ApiResponse<any>>
@@ -46,6 +47,12 @@ export default class ControlSelectServices implements IControlSelectService {
     }
     async getInfoControl(payload: controlSelectFilter) {
         const res = await this.controlSelectRepository.getInfoControl(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+
+    async getInfoControlSubtotales(payload: controlSelectFilter) {
+        const res = await this.controlSelectRepository.getInfoControlSubtotales(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 

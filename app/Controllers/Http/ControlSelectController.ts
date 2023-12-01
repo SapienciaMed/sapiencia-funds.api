@@ -83,6 +83,27 @@ export default class ControlSelectController {
         }
     }
 
+    public async getInfoControlSubtotales(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+
+
+        if (!Array.isArray(payload.id_comuna)) {
+            payload.id_comuna = [Number(payload.id_comuna)];
+        }
+        const idComunaList = payload.id_comuna.join(',');
+
+        payload.id_comuna = idComunaList;
+        try {
+            const res = await ControlSelectProvider.getInfoControlSubtotales(payload)
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
     public async getInfoControl(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         const payload = request.body()

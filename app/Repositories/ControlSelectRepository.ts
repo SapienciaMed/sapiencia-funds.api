@@ -155,6 +155,20 @@ export default class ControlSelectRepository implements IControlSelectRepository
 
         return { array: data }
     }
+
+    async getInfoControlSubtotales(payload: controlSelectFilter) {
+        const { id_comuna, idConvocatoria } = payload;
+
+        const idComunaArray = Array.isArray(id_comuna) ? id_comuna : [id_comuna];
+
+        let querySapiencia = `call AuroraControlSelectControlSubTotales('${idConvocatoria}','${idComunaArray.join(",")}')`
+
+        const result = await Database.connection("mysql_sapiencia").rawQuery(querySapiencia);
+
+        const data = result[0][0];
+
+        return { array: data }
+    }
     // Functions Pay
     async getInfopay(payload: controlSelectFilterPag) {
         const { idConvocatoria } = payload;
