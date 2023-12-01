@@ -94,7 +94,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
         query.where('announcement', payload.idConvocatoria!)
 
         let res = await query.paginate(1, 100)
-        const { data, meta } = res.serialize()
+        const { data } = res.serialize()
 
         if (data.length <= 0) {
             let query = `SELECT nombrefondo AS programa,COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
@@ -115,18 +115,17 @@ export default class ControlSelectRepository implements IControlSelectRepository
                 }
                 ControlSelectLegalization.createMany([dataInset])
             }))
-
-            const queryRe = ControlSelectLegalization.query()
-            queryRe.where('announcement', payload.idConvocatoria!)
-
-            let res = await queryRe.paginate(1, 100)
-            const { data, meta } = res.serialize()
-
-            return { array: data, meta }
-
-        } else {
-            return { array: data, meta }
         }
+    }
+
+    async getInfoLegalizationBeforeCreate(payload: any) {
+        const query = ControlSelectLegalization.query()
+        query.where('announcement', payload.idConvocatoria!)
+
+        let res = await query.paginate(1, 100)
+        const { data, meta } = res.serialize()
+
+        return { array: data, meta }
     }
 
     async updateInfoLegalization(payload: any) {

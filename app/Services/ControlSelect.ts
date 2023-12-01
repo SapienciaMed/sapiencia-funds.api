@@ -40,7 +40,8 @@ export default class ControlSelectServices implements IControlSelectService {
     }
 
     async getInfoLegalization(payload: controlSelectFilter) {
-        const res = await this.controlSelectRepository.getInfoLegalization(payload)
+        await this.controlSelectRepository.getInfoLegalization(payload)
+        const res = await this.controlSelectRepository.getInfoLegalizationBeforeCreate(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
     async getInfoControl(payload: controlSelectFilter) {
