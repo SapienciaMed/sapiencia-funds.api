@@ -1,10 +1,10 @@
 import Database from "@ioc:Adonis/Lucid/Database";
 import { controlSelectConsolidado, controlSelectFilter } from "App/Interfaces/ControlSelectInterface";
-import ControlSelectModel from "App/Models/ControlSelect";
+import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ResourcePrioritization from "App/Models/ResourcePrioritization";
 
 export interface IControlSelectRepository {
-    getInfo(payload: controlSelectFilter): Promise<any>
+    getInfoConsolidate(payload: controlSelectFilter): Promise<any>
     getInfoBeforeCreate(payload: controlSelectFilter): Promise<any>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<any>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<any>
@@ -13,9 +13,9 @@ export interface IControlSelectRepository {
 export default class ControlSelectRepository implements IControlSelectRepository {
     constructor() { }
 
-    async getInfo(payload: controlSelectFilter) {
+    async getInfoConsolidate(payload: controlSelectFilter) {
         if (payload.idControlSelect == 1) {
-            const queryControlSelect = ControlSelectModel.query()
+            const queryControlSelect = ControlSelectConsolidateModel.query()
                 .preload("resourcePrioritization")
             queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
             let res = await queryControlSelect.paginate(1, 100)
@@ -42,7 +42,9 @@ export default class ControlSelectRepository implements IControlSelectRepository
                             "consolidatedResourceAvailable": data.resourceForCredit,
                             "consolidatedGranted": dataBase[0][0].otorgado,
                             "consolidatedLegalized": dataBase[0][0].legalizado,
-                            "consolidatedFinancialReturns": data.financialPerformances
+                            "consolidatedFinancialReturns": data.financialPerformances,
+                            "places": data.places,
+                            "validity": payload.validity
                         }
                         this.createInfoConsolidado([dataInsert])
                     }))
@@ -52,7 +54,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
     }
 
     async getInfoBeforeCreate(payload: any) {
-        const queryControlSelect = ControlSelectModel.query()
+        const queryControlSelect = ControlSelectConsolidateModel.query()
             .preload("resourcePrioritization")
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
         const res = await queryControlSelect.paginate(1, 100)
@@ -61,7 +63,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
     }
 
     async createInfoConsolidado(payload: any) {
-        return await ControlSelectModel.createMany(payload)
+        return await ControlSelectConsolidateModel.createMany(payload)
     }
 
     async updateinfoConsolidado(payload: any) {
@@ -85,6 +87,6 @@ export default class ControlSelectRepository implements IControlSelectRepository
             consolidatedLegalized: payload.consolidatedLegalized,
             consolidatedFinancialReturns: payload.consolidatedFinancialReturns,
         }
-        return await ControlSelectModel.updateOrCreate({ id }, data)
+        return await ControlSelectConsolidateModel.updateOrCreate({ id }, data)
     }
 }
