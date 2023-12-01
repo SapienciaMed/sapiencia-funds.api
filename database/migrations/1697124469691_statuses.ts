@@ -15,7 +15,7 @@ export default class extends BaseSchema {
         .comment("llave primaria");
 
       table
-        .string("ETO_NOMBRE", 20)
+        .string("ETO_NOMBRE", 30)
         .notNullable()
         .comment("Nombre del maestro");
     })

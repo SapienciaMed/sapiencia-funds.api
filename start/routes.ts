@@ -323,7 +323,7 @@ Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
 })
   .prefix("/api/v1/service-social")
-  .middleware("auth");
+  //.middleware("auth");
 
 Route.group(() => {
   Route.post(
