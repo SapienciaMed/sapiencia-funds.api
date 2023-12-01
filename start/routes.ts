@@ -223,9 +223,11 @@ Route.group(() => {
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado");
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado");
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
+  Route.put("/updateEstrato456", "ControlSelectController.updateInfoStratum456")
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
   Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
+  Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
 }).prefix("/api/v1/controlSelect");
 //.middleware("auth");
 Route.group(() => {

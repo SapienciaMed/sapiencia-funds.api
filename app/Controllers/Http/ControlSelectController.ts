@@ -139,4 +139,32 @@ export default class ControlSelectController {
         }
     }
 
+
+    public async getInfoStratum456(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoStratum456(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async updateInfoStratum456(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload = request.body()
+
+        try {
+            const res = await ControlSelectProvider.updateInfoStratum456(payload)
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
 }
