@@ -275,18 +275,51 @@ Route.group(() => {
   ).middleware("auth:TECNICO_PASO_COBRO")
    .middleware("auth:VER_SOPORTES_PQRSDF");
   Route.post(
-  "/get-requirements-by-beneficiary",
-  "ConsolidationTrayController.getRequirementsByBeneficiary"
+    "/get-requirements-by-beneficiary",
+    "ConsolidationTrayController.getRequirementsByBeneficiary"
   ).middleware("auth:TECNICO_PASO_COBRO")
    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/get-requirements-by-beneficiary-list",
     "ConsolidationTrayController.getRequirementsByBeneficiaryList"
-    ).middleware("auth:TECNICO_PASO_COBRO")
-     .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  ).middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/compliance-assignment-beneficiary",
+    "ConsolidationTrayController.complianceAssignmentBeneficiary"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/upload-requirement-file/:id",
+    "ConsolidationTrayController.uploadRequirementFile"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.get(
+    "/get-requirement-file/:id",
+    "ConsolidationTrayController.getUploadFiles"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/delete-requirement-file/:id/:beneficiary",
+    "ConsolidationTrayController.deleteUploadFiles"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/dowload-requirement-file/:id/:beneficiary",
+    "ConsolidationTrayController.dowloadUploadFiles"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
+
+
+  //?
+  Route.get(
+    "/files/get-by-project/:id",
+    "UploadInformationController.getuploadFiles"
+  );
+  //?
 
 Route.group(() => {
   Route.get(

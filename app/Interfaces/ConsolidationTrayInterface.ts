@@ -62,7 +62,6 @@ export interface InitialBeneficiaryInformation {
   countSpins: number;
   periodUltimaeSpin: string;
   countRenew: number;
-  nroFiducyContract: string;
   dateDepartmentReturn: Date;
   dateIncome: Date;
   gracePeriod: string;
@@ -223,5 +222,10 @@ export interface IRequerimentsResultSimple {
   activeRequirement: boolean
   percentRequirement: number | null;
   accomplished?: boolean;
+}
+
+export interface IComplianceAssignment {
+  idRequirementConsolidate: number;
+  newStatus: boolean;
 }
 
