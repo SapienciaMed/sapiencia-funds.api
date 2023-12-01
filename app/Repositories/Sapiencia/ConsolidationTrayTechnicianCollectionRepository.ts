@@ -1,12 +1,16 @@
 import axios, { AxiosInstance } from "axios";
 // import Database from "@ioc:Adonis/Lucid/Database";
-import { IConsolidationTrayForTechnicianCollection,
-         IConsolidationTrayForTechnicianCollectionParams,
-         IConsolidationTrayForTransactions,
-         InitialBeneficiaryInformation,
-         ICitizenAttentionDataExternal,
-         IPqrsdfResultSimple,
-         IPqrsdfResult} from '../../Interfaces/ConsolidationTrayInterface';
+import {
+  IConsolidationTrayForTechnicianCollection,
+  IConsolidationTrayForTechnicianCollectionParams,
+  IConsolidationTrayForTransactions,
+  InitialBeneficiaryInformation,
+  ICitizenAttentionDataExternal,
+  IPqrsdfResultSimple,
+  IPqrsdfResult,
+  IRequerimentsResultSimple,
+  IComplianceAssignment
+} from '../../Interfaces/ConsolidationTrayInterface';
 import { IPagingData } from "App/Utils/ApiResponses";
 import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
 import { ICutInterface } from '../../Interfaces/CutInterface';
@@ -15,7 +19,6 @@ import Reglament from '../../Models/Reglament';
 import { IReglamentInterface } from '../../Interfaces/IReglamentInterface';
 import Requeriment from '../../Models/Requeriment';
 import { IRequerimentInterface } from '../../Interfaces/IRequerimentInterface';
-import { IRequerimentsResultSimple } from '../../Interfaces/ConsolidationTrayInterface';
 import RequirementsConsolidate from '../../Models/RequirementsConsolidate';
 
 
@@ -29,6 +32,7 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IPqrsdfResultSimple>>;
   getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean>;
   getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>>;
+  complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<IComplianceAssignment[] | null>;
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
@@ -95,11 +99,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     for (const data of convertResAurora) {
 
       //Solo mostramos SII es Técnico Pacc
-      if(data.statusPacc.id === 4){
+      if (data.statusPacc.id === 4) {
 
         const getNumericDateNow: number = Date.parse(Date());
-        const getNumericDateIncomeCut: number = Date.parse( data.cuts.from );
-        const getNumericDateFinallyCut: number = Date.parse( data.cuts.until );
+        const getNumericDateIncomeCut: number = Date.parse(data.cuts.from);
+        const getNumericDateFinallyCut: number = Date.parse(data.cuts.until);
 
         if (getNumericDateNow >= getNumericDateIncomeCut && getNumericDateNow <= getNumericDateFinallyCut) {
 
@@ -206,7 +210,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     for (const data of convertResAurora) {
 
       //Solo podemos proceder SII si es Técnico Pacc
-      if( data.statusPacc.id === 4 ){
+      if (data.statusPacc.id === 4) {
 
         const objParams: IConsolidationTrayForTechnicianCollectionParams = {
           idBenef: data.id,
@@ -228,17 +232,17 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           currentResponsible: data.currentManager,
         }
 
-        if( !cutParamName || cutParamName == null || cutParamName == "" ){
+        if (!cutParamName || cutParamName == null || cutParamName == "") {
 
-          if (data.cuts.id === cutParamId){
+          if (data.cuts.id === cutParamId) {
 
             infoFiltered.push(objParams);
 
           }
 
-        }else{
+        } else {
 
-          if( cutParamName === "TODOS" ){
+          if (cutParamName === "TODOS") {
 
             infoAllData.push(objParams);
 
@@ -255,9 +259,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************************** //*
     let filterForSearch: IConsolidationTrayForTechnicianCollectionParams[] = [];
 
-    if( cutParamName && cutParamName !== "" && cutParamName === "TODOS" ){
+    if (cutParamName && cutParamName !== "" && cutParamName === "TODOS") {
       filterForSearch = infoAllData;
-    }else{
+    } else {
       filterForSearch = infoFiltered;
     }
 
@@ -265,11 +269,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* Revisamos si vienen elementos para consultar //*
     //* ******************************************** //*
     let totalDataContent: number = 0;
-    if (searchParam && searchParam !== null && searchParam !== ""){
+    if (searchParam && searchParam !== null && searchParam !== "") {
 
       const filter: IConsolidationTrayForTechnicianCollectionParams[] =
 
-      filterForSearch.filter(f =>
+        filterForSearch.filter(f =>
           f.creditId.toString().includes(searchParam.toLowerCase()) ||
           f.nroFiducy.toString().includes(searchParam.toLowerCase()) ||
           f.document.toLowerCase().toString().includes(searchParam.toLowerCase()) ||
@@ -289,7 +293,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       infoPaginated = filter.slice(start, end);
       totalDataContent = infoPaginated.length;
 
-    }else{
+    } else {
 
       infoPaginated = filterForSearch.slice(start, end);
       totalDataContent = infoPaginated.length;
@@ -319,7 +323,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .orderBy("id", "asc");
     const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
-    if(convertResAurora.length === 0) return null;
+    if (convertResAurora.length === 0) return null;
 
     const objResult: IConsolidationTrayForTechnicianCollectionParams = {
       idBenef: convertResAurora[0].id,
@@ -354,10 +358,10 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   async updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null> {
 
-    const { id , cut } = data;
+    const { id, cut } = data;
 
-    if( !id || id == null || id == undefined ||
-        !cut || cut == null || cut == undefined) return null;
+    if (!id || id == null || id == undefined ||
+      !cut || cut == null || cut == undefined) return null;
 
     const toBeneficiary = await BeneficiariesConsolidate.find(id);
 
@@ -385,15 +389,15 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     const dataCitizen = await this.axiosInstance.post<
       ICitizenAttentionDataExternal[]>(urlConsumer, privateFiltersForCitizen, {
-      headers: {
-        Authorization: process.env.CURRENT_AUTHORIZATION,
-      },
-    });
+        headers: {
+          Authorization: process.env.CURRENT_AUTHORIZATION,
+        },
+      });
 
     const dataResult: ICitizenAttentionDataExternal | any = dataCitizen;
     const dataCaptured: IPqrsdfResult[] = dataResult.data.data.array;
 
-    dataCaptured.forEach( (pqrsdf) => {
+    dataCaptured.forEach((pqrsdf) => {
 
       let program: string = "";
       let clasify: string = "";
@@ -404,51 +408,51 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       let answerDate: Date | string;
       let answer: string = "";
 
-      if( !pqrsdf.filingNumber || pqrsdf.filingNumber == null ){
+      if (!pqrsdf.filingNumber || pqrsdf.filingNumber == null) {
         numberPqrsdf = 0;
-      }else{
+      } else {
         numberPqrsdf = pqrsdf.filingNumber;
       }
 
-      if( !pqrsdf.createdAt || pqrsdf.createdAt == null ){
+      if (!pqrsdf.createdAt || pqrsdf.createdAt == null) {
         dateFiled = "";
-      }else{
+      } else {
         dateFiled = pqrsdf.createdAt;
       }
 
-      if( !pqrsdf.program || pqrsdf.program == null ){
+      if (!pqrsdf.program || pqrsdf.program == null) {
         program = "";
-      }else{
+      } else {
         program = pqrsdf.program.prg_descripcion;
       }
 
-      if( !pqrsdf.clasification || pqrsdf.clasification == null ){
+      if (!pqrsdf.clasification || pqrsdf.clasification == null) {
         clasify = "";
-      }else{
+      } else {
         clasify = pqrsdf.clasification;
       }
 
-      if( !pqrsdf.requestSubject || pqrsdf.requestSubject == null ){
+      if (!pqrsdf.requestSubject || pqrsdf.requestSubject == null) {
         reason = "";
-      }else{
+      } else {
         reason = pqrsdf.requestSubject!.aso_asunto;
       }
 
-      if( !pqrsdf.status || pqrsdf.status == null ){
+      if (!pqrsdf.status || pqrsdf.status == null) {
         state = "";
-      }else{
+      } else {
         state = pqrsdf.status!.lep_estado;
       }
 
-      if( !pqrsdf.answerDate || pqrsdf.answerDate == null ){
+      if (!pqrsdf.answerDate || pqrsdf.answerDate == null) {
         answerDate = "";
-      }else{
+      } else {
         answerDate = pqrsdf.answerDate;
       }
 
-      if( !pqrsdf.answer || pqrsdf.answer == null ){
+      if (!pqrsdf.answer || pqrsdf.answer == null) {
         answer = "";
-      }else{
+      } else {
         answer = pqrsdf.answer;
       }
 
@@ -507,9 +511,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //Solo "debería" traer uno pero, tratemos como array para una manipulación más simple.
     const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
-    if(!resAurora || resAurora == null) return false;
+    if (!resAurora || resAurora == null) return false;
     const getLegalPeriod: string[] = convertResAurora[0].legalPeriod.split('-');
-    const legalPeriodConvert: number = Number(getLegalPeriod[0]+getLegalPeriod[1]); //Para pasarlo de 2023-1 a un 20231 (Número validable)
+    const legalPeriodConvert: number = Number(getLegalPeriod[0] + getLegalPeriod[1]); //Para pasarlo de 2023-1 a un 20231 (Número validable)
 
     //* ******************************************** //*
     //* ** Traigamos los reglamentos para validar ** //*
@@ -518,7 +522,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .query()
       .where("program", convertResAurora[0].idProgram);
 
-    if(!getReglaments || getReglaments == null) return false;
+    if (!getReglaments || getReglaments == null) return false;
 
     const convertReglaments = getReglaments.map((i) => i.serialize() as IReglamentInterface);
     let objReglament: IReglamentInterface | null = null; //Solo debería traer un reglamento.
@@ -534,11 +538,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
         const initialPeriod: string[] = regl.initialPeriod.split('-');
         const endPeriod: string[] = regl.endPeriod.split('-');
 
-        initialPeriodNumber = Number(initialPeriod[0]+initialPeriod[1]);
-        endPeriodNumber = Number(endPeriod[0]+endPeriod[1]);
+        initialPeriodNumber = Number(initialPeriod[0] + initialPeriod[1]);
+        endPeriodNumber = Number(endPeriod[0] + endPeriod[1]);
 
-        if( isNaN(initialPeriodNumber) ) initialPeriodNumber = 0;
-        if( isNaN(endPeriodNumber) ) endPeriodNumber = 0;
+        if (isNaN(initialPeriodNumber)) initialPeriodNumber = 0;
+        if (isNaN(endPeriodNumber)) endPeriodNumber = 0;
 
       } catch (error) {
 
@@ -547,15 +551,15 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
       }
 
-      if(initialPeriodNumber !== 0 && endPeriodNumber !== 0){
-        if( legalPeriodConvert >= initialPeriodNumber || legalPeriodConvert <= endPeriodNumber ){
+      if (initialPeriodNumber !== 0 && endPeriodNumber !== 0) {
+        if (legalPeriodConvert >= initialPeriodNumber || legalPeriodConvert <= endPeriodNumber) {
           objReglament = regl;
         }
       }
 
     }
 
-    if( !objReglament || objReglament == null ) return false;
+    if (!objReglament || objReglament == null) return false;
 
     //* ************************************************************ //*
     //* *** Ahora, debemos buscar los requisitos del reglamento  *** //*
@@ -567,10 +571,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     const convertRequirements = requirements.map((i) => i.serialize() as IRequerimentInterface);
     let listRequerimentsActual: IRequerimentsResultSimple[] = [];
 
-    //* ************************************************************ //*
-    //* *** Ahora, nos traemos los requisitos consolidados para  *** //*
-    //* *** el beneficiario, se tienen varios escenarios:        *** //*
-    //* ************************************************************ //*
+    //* *************************************************************************** //*
+    //* *** Ahora, nos traemos los requisitos consolidados para el beneficiario *** //*
+    //* *************************************************************************** //*
     const beneficiaryUse: number = Number(convertResAurora[0].id);
     const reglamentUse: number = Number(objReglament.id);
     const accomplishedStatic: boolean = false;
@@ -582,8 +585,15 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     const convertRequirementConsolidate = getRequirementsConsolidate.map((i) => i.serialize() as IRequerimentsResultSimple);
 
-    //? (Escenario 1). No se tenían requisitos consolidados ingresados
-    if( convertRequirementConsolidate.length === 0 ){
+    //* ************************************************************************************************************************* //*
+    //* *** Dividiremos el tema en 4 escenarios, si ya no se encuentra en los requerimientos del reglamento                   *** //*
+    //* *** procederemos a eliminarlo, si aún se encuentra actualizamos descripciones, porcentajes y estados si es requerido, *** //*
+    //* *** así como el caso si es un requerimiento totalmente nuevo y debemos anexarlo simplemente, finalmente, el ultimo    *** //*
+    //* *** caso sería si nunca se ha guardado requisitos de consolidación, aquí se agrega totalmente normal,:                *** //*
+    //* ************************************************************************************************************************* //*
+
+    //? No se había registrado nunca, escenario más sencillo:
+    if(convertRequirementConsolidate.length === 0){
 
       for (const req of convertRequirements) {
 
@@ -611,98 +621,80 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     }
 
-    //? (Escenario 2). Se tenían requisitos consolidados (También chequear los valores existentes)
-    if( convertRequirementConsolidate.length !== 0 ){
+    //? Validamos si Encontramos requisito en consolidado (Modificación) y si No encontramos requisito en consolidado (Agregado)
+    for (const iterRequirementOfReg1 of convertRequirements) {
 
-      let arrayRegisterActual: IRequerimentsResultSimple[] = [];
-      let arrayRegisterNews: IRequerimentsResultSimple[] = [];
-      let arrayConcatedFinally: IRequerimentsResultSimple[] = [];
+      let controlBand: boolean = false;
 
-      for (const req of convertRequirements) {
+      for (const iterRequirementConsolid1 of convertRequirementConsolidate) {
 
-        let band: boolean = false;
-        let historyIdBeneficiary: number = 0;
-        let historyIdReglament: number = 0;
-        let historyIdRequirement: number = 0;
-        let historyDescriptionRequirement: string = "";
-        let historyActiveRequirement: boolean = false;
-        let historyPercentRequirement: number = 0;
-        let historyAccomplished: boolean = false;
+        //Solamente modifico si es el caso
+        if(iterRequirementOfReg1.id === iterRequirementConsolid1.idRequirement){
 
-        for (const reqCon of convertRequirementConsolidate) {
+          const toUpdate = await RequirementsConsolidate.findBy("id", iterRequirementConsolid1.id);
+          if (!toUpdate) return false;
 
-          if(reqCon.idRequirement === req.id){
-
-            band = true;
-            historyIdBeneficiary = reqCon.idBeneficiary;
-            historyIdReglament = reqCon.idReglament;
-            historyIdRequirement = reqCon.idRequirement;
-            historyDescriptionRequirement = req.description;
-            historyActiveRequirement = req.active!;
-            historyPercentRequirement = Number(req.percent) | null!;
-            historyAccomplished = reqCon.accomplished!;
-
-          }
-
-        }
-
-        if ( band ){
-
-          const obj: IRequerimentsResultSimple = {
-            idBeneficiary: historyIdBeneficiary,
-            idReglament: historyIdReglament,
-            idRequirement: historyIdRequirement,
-            descriptionRequirement: historyDescriptionRequirement,
-            activeRequirement: historyActiveRequirement!,
-            percentRequirement: historyPercentRequirement,
-            accomplished: historyAccomplished!
-          }
-
-          arrayRegisterActual.push(obj);
-
-        }else{
-
-          const obj: IRequerimentsResultSimple = {
-            idBeneficiary: beneficiaryUse,
-            idReglament: reglamentUse,
-            idRequirement: Number(req.id),
-            descriptionRequirement: req.description,
-            activeRequirement: req.active!,
-            percentRequirement: Number(req.percent) | null!,
-            accomplished: false
-          }
-
-          arrayRegisterNews.push(obj);
+          toUpdate.idBeneficiary = iterRequirementConsolid1.idBeneficiary;
+          toUpdate.idReglament = iterRequirementConsolid1.idReglament;
+          toUpdate.idRequirement = iterRequirementConsolid1.idRequirement;
+          toUpdate.descriptionRequirement = iterRequirementOfReg1.description;
+          toUpdate.activeRequirement = iterRequirementOfReg1.active!;
+          toUpdate.percentRequirement = Number(iterRequirementOfReg1.percent);
+          toUpdate.accomplished = iterRequirementConsolid1.accomplished!;
+          await toUpdate.save();
+          controlBand = true;
 
         }
 
       }
 
-      //Juntamos los nuevos resultados
-      arrayConcatedFinally = arrayRegisterActual.concat(arrayRegisterNews);
+      //No hallamos el elemento, entonces debemos agregar
+      if( !controlBand ) {
 
-      //Ahora, eliminemos los que teníamos y registremos nuevamente pero con la nueva data
-      for (const delActual of convertRequirementConsolidate) {
+        const objResult: IRequerimentsResultSimple = {
 
-        const deleteData = await RequirementsConsolidate.findBy("idBeneficiary", delActual.idBeneficiary);
-        if( deleteData && deleteData !== null && deleteData !== undefined ) await deleteData.delete();
+          idBeneficiary: Number(beneficiaryUse),
+          idReglament: Number(reglamentUse),
+          idRequirement: Number(iterRequirementOfReg1.id),
+          descriptionRequirement: iterRequirementOfReg1.description,
+          activeRequirement: iterRequirementOfReg1.active!,
+          percentRequirement: Number(iterRequirementOfReg1.percent) | null!,
+          accomplished: false,
+
+        }
+
+        const toCreate = new RequirementsConsolidate();
+        toCreate.fill({ ...objResult });
+        await toCreate.save();
 
       }
-
-      //Re ingresemos la información con la data que debe de ser:
-      for (const addUpdate of arrayConcatedFinally) {
-
-        const reCreate = new RequirementsConsolidate();
-        reCreate.fill({ ...addUpdate });
-        await reCreate.save();
-
-      }
-
-      return true;
 
     }
 
-    return false;
+    //? Validamos si No encontramos consolidado en requisito (Eliminamos)
+    for (const iterRequirementConsolid1 of convertRequirementConsolidate){
+
+      let controlBand: boolean = false;
+
+      for (const iterRequirementOfReg1 of convertRequirements) {
+
+        //Solo elimino sino encuentro
+        if(iterRequirementConsolid1.idRequirement === iterRequirementOfReg1.id)
+          controlBand = true;
+
+      }
+
+      if( !controlBand ){
+
+        const deleteData = await RequirementsConsolidate.findBy("id", iterRequirementConsolid1.id);
+        if (deleteData && deleteData !== null && deleteData !== undefined)
+          await deleteData.delete();
+
+      }
+
+    }
+
+    return true;
 
   }
 
@@ -732,4 +724,28 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
+  async complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<IComplianceAssignment[] | null> {
+
+    let arrayResult: IComplianceAssignment[] = [];
+    for (const iter of data) {
+
+      const toUpdate = await RequirementsConsolidate.findBy("id", iter.idRequirementConsolidate);
+      if (!toUpdate) return null;
+
+      toUpdate.accomplished = iter.newStatus;
+      await toUpdate.save();
+
+      arrayResult.push(iter)
+
+    }
+
+    if( arrayResult.length <= 0 ){
+      return null;
+    }else{
+      return arrayResult;
+    }
+
+  }
+
 }
+
