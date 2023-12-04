@@ -24,6 +24,19 @@ export default class ControlSelectController {
         }
     }
 
+    public async getInfoConsolidateTotals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoConsolidateTotals(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
 
     public async getInfoEstratos123(ctx: HttpContext) {
         const { request, response, logger } = ctx;
@@ -35,6 +48,25 @@ export default class ControlSelectController {
         }
         try {
             const res = await ControlSelectProvider.getInfoEstratos123(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async getInfoEstratos123Totals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfoEstratos123Totals(payload)
 
             return response.ok(res)
         } catch (err) {
@@ -96,8 +128,6 @@ export default class ControlSelectController {
     public async updateinfoConsolidado(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         let payload = request.body()
-
-        console.log(payload)
         try {
             const res = await ControlSelectProvider.updateinfoConsolidado(payload)
             return response.ok(res)
@@ -113,6 +143,18 @@ export default class ControlSelectController {
         const payload = request.body()
         try {
             const res = await ControlSelectProvider.getInfoLegalization(payload)
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+    public async getInfoLegalizationTotals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoLegalizationTotals(payload)
             return response.ok(res)
         } catch (err) {
             logger.error(err);
@@ -204,6 +246,20 @@ export default class ControlSelectController {
         const payload = request.body()
         try {
             const res = await ControlSelectProvider.getInfoStratum456(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async getInfoStratum456Totals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoStratum456Totals(payload)
 
             return response.ok(res)
         } catch (err) {

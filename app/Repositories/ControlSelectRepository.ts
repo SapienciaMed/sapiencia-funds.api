@@ -34,6 +34,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
         if (res) {
             const { data } = res.serialize()
             if (data.length <= 0) {
+                console.log('Entra')
                 const queryResourcePrioritization = ResourcePrioritization.query()
                 queryResourcePrioritization.where("projectNumber", payload.noProject!)
                 queryResourcePrioritization.where("programId", 1)
