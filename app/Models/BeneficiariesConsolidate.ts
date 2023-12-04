@@ -124,12 +124,6 @@ export default class BeneficiariesConsolidate extends BaseModel {
   public countRenew: number;
 
   @column({
-    columnName: "BAC_NRO_CONTRATO_FIDUCIARIO",
-    serializeAs: "nroFiducyContract",
-  })
-  public nroFiducyContract: number;
-
-  @column({
     columnName: "BAC_FECHA_REGRESO_DEPARTAMENTO",
     serializeAs: "dateDepartmentReturn"
   })
