@@ -1,5 +1,6 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
+import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectRepository from "App/Repositories/ControlSelectRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
@@ -8,6 +9,7 @@ export interface IControlSelectService {
     getinfoConsolidate(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoStratum456(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
+    updateStratum123(id: number, payload: IStratum123UpdateItem): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoControl(payload: controlSelectFilter): Promise<ApiResponse<any>>
@@ -15,6 +17,8 @@ export interface IControlSelectService {
     updateInfoLegalization(payload: any): Promise<ApiResponse<any>>
     updateInfoStratum456(payload: any): Promise<ApiResponse<any>>
     getInfoEstratos123(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoEstratos123Xlsx(payload: controlSelectFilter): Promise<ApiResponse<any>>
+
 }
 export default class ControlSelectServices implements IControlSelectService {
     constructor(private controlSelectRepository: ControlSelectRepository) { }
@@ -28,6 +32,17 @@ export default class ControlSelectServices implements IControlSelectService {
     async getInfoEstratos123(payload: controlSelectFilter) {
         await this.controlSelectRepository.getInfoEstratos123(payload)
         const res = await this.controlSelectRepository.getInfoBeforeCreateEstratos123(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async getInfoEstratos123Xlsx(payload: controlSelectFilter) {
+        await this.controlSelectRepository.getInfoEstratos123Xlsx(payload)
+        const res = await this.controlSelectRepository.getInfoBeforeCreateEstratos123Xlsx(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async updateStratum123(id : number, payload: IStratum123UpdateItem) {
+        const res = await this.controlSelectRepository.updateStratum123(id, payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 

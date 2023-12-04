@@ -5,6 +5,9 @@ import { controlSelectFilterPag, controlSelectFilter } from 'App/Interfaces/Cont
 import { ApiResponse } from 'App/Utils/ApiResponses';
 import { DBException } from 'App/Utils/DbHandlerError';
 import { controlSelectSchema } from 'App/Validators/ControlSelectValidator';
+import Strautm123UpdateValidator from 'App/Validators/UpdateStratum123Validators';
+import { generateExcel } from "App/Utils/generateXLSX"
+
 export default class ControlSelectController {
 
     public async getInfoConsolidate(ctx: HttpContext) {
@@ -38,6 +41,41 @@ export default class ControlSelectController {
             logger.error(err);
             const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
             return response.badRequest(apiResp);
+        }
+    }
+
+    public async getInfoEstratos123Xlsx(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfoEstratos123Xlsx(payload)
+            const responsexlsx = await generateExcel(res.data.array);
+            response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
+
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async updateStratum123({ response, request }: HttpContext) {
+        try {
+            const { id } = request.params();
+            const payload = await request.validate(Strautm123UpdateValidator);
+
+            return response.send(
+                await ControlSelectProvider.updateStratum123(id, payload)
+            );
+        } catch (err) {
+            response.badRequest(
+                new ApiResponse(null, EResponseCodes.FAIL, String(err))
+            );
         }
     }
 
