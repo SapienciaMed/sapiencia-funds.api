@@ -1,15 +1,11 @@
-import { STORAGE_POST_POLICY_BASE_URL } from "@google-cloud/storage/build/src/file";
 import Database from "@ioc:Adonis/Lucid/Database";
-import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
-import { IGenericList } from "App/Interfaces/CoreInterfaces";
 import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ControlSelectLegalization from "App/Models/ControlSelectLegalization";
 import ControlSelectStratum123Model from "App/Models/ControlSelectStratum123";
 import ControlSelectStratum456Model from "App/Models/ControlSelectStratum456";
 import ResourcePrioritization from "App/Models/ResourcePrioritization";
-import { ApiResponse } from "App/Utils/ApiResponses";
 import CoreService from "../Services/External/CoreService"
 
 export interface IControlSelectRepository {
@@ -245,7 +241,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
         }
     }
 
-        async getInfoEstratos123Xlsx(payload: controlSelectFilter) {
+    async getInfoEstratos123Xlsx(payload: controlSelectFilter) {
         if (payload.idControlSelect) {
             const queryControlSelectEstratos123 = ControlSelectConsolidateModel.query().preload("resourcePrioritization")
             queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
@@ -287,16 +283,16 @@ export default class ControlSelectRepository implements IControlSelectRepository
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
         const res = await queryControlSelect.paginate(1, 100)
         const { data, meta } = res.serialize()
-        let arraDataXlsx :any = [];
+        let arraDataXlsx: any = [];
 
         const groupers = ["COMUNA_CORREGIMIENTO"];
-        let arrComunas :any= [{}];
+        let arrComunas: any = [{}];
         const getListByG = new CoreService()
         const resComunas = await getListByG.getListByGroupers(groupers);
-        resComunas.map(async(item) => {
+        resComunas.map(async (item) => {
             const list = {
-            name: item.itemDescription,
-            value: item.itemCode,
+                name: item.itemDescription,
+                value: item.itemCode,
             };
             arrComunas.push(list)
             return list;
@@ -314,7 +310,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                 }
             )
         })
-        
+
         return { array: arraDataXlsx, meta }
     }
 
@@ -322,10 +318,10 @@ export default class ControlSelectRepository implements IControlSelectRepository
         return await ControlSelectStratum123Model.createMany(payload)
     }
 
-    async updateStratum123(id: number, payload: IStratum123UpdateItem) { 
+    async updateStratum123(id: number, payload: IStratum123UpdateItem) {
 
         const toUpdate = await ControlSelectStratum123Model.find(id);
-        
+
         if (toUpdate) {
             toUpdate.legalized = payload.legalized;
             toUpdate.resourceAvailable = payload.availableResource;
@@ -340,9 +336,10 @@ export default class ControlSelectRepository implements IControlSelectRepository
             }
         }
 
-
+    }
 
     // Functions Stratum456
+
     async getInfoStratum456(payload: controlSelectFilter) {
         const query = ControlSelectStratum456Model.query()
             .preload("resourcePrioritization")
@@ -360,9 +357,9 @@ export default class ControlSelectRepository implements IControlSelectRepository
                 const { data } = res.serialize()
                 await Promise.all(data.map(async (data) => {
                     let query = `select COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
-                        from giro_vwbeneficiario_proyec_renova_giro 
-                        where comunagiros IN ((${data.communeId}*1000) + 456)
-                        and id_perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1`
+                    from giro_vwbeneficiario_proyec_renova_giro 
+                    where comunagiros IN ((${data.communeId}*1000) + 456)
+                    and id_perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1`
                     const dataBase = await Database.connection("mysql_sapiencia").rawQuery(query)
 
                     let dataInsert = {
