@@ -114,11 +114,6 @@ export default class extends BaseSchema {
         .comment("Cantidad de renovaciones.");
 
       table
-        .integer("BAC_NRO_CONTRATO_FIDUCIARIO")
-        .notNullable()
-        .comment("Número de contrato fiduciario.");
-
-      table
         .date("BAC_FECHA_REGRESO_DEPARTAMENTO")
         .notNullable()
         .comment("Fecha regreso departamento.");
