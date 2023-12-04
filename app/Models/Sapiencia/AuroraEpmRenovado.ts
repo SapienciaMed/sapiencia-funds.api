@@ -13,7 +13,7 @@ export default class AuroraEpmRenovado extends BaseModel {
   @column({ columnName: "Pseleccion", serializeAs: "pSelection" })
   public pSelection: number;
 
-  @column({ columnName: "Document", serializeAs: "document" })
+  @column({ columnName: "Documento", serializeAs: "document" })
   public document: string;
 
   @column({ columnName: "Nombre", serializeAs: "name" })
@@ -43,10 +43,7 @@ export default class AuroraEpmRenovado extends BaseModel {
   })
   public performService: string;
 
-  @column({
-    columnName: "Total_horas_servicio_social",
-    serializeAs: "totalHoursServicePerform",
-  })
+  @column({  columnName: "Total_horas_servicio_social", serializeAs: "hoursServicePerform" })
   public hoursServicePerform: string;
 
   @column({ columnName: "Operador", serializeAs: "operator" })

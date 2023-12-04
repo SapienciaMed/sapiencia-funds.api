@@ -2,11 +2,16 @@ import { DateTime } from "luxon";
 import { BaseModel, column, hasOne, HasOne } from "@ioc:Adonis/Lucid/Orm";
 import Programs from "./Programs";
 import Cut from "./Cut";
+import MasterStatusPacc from './MasterStatusPacc';
 
 export default class BeneficiariesConsolidate extends BaseModel {
   public static table = "BAC_BENEFICIARIOS_A_CONSOLIDAR";
 
-  @column({ isPrimary: true, columnName: "BAC_CODIGO", serializeAs: "id" })
+  @column({
+    isPrimary: true,
+    columnName: "BAC_CODIGO",
+    serializeAs: "id"
+  })
   public id: number;
 
   @column.dateTime({
@@ -77,10 +82,10 @@ export default class BeneficiariesConsolidate extends BaseModel {
   public countSuspendSpecials: number;
 
   @column({
-    columnName: "BAC_ESTADO_PROCESO",
-    serializeAs: "statusProcess"
+    columnName: "BAC_CODEPP_ESTADO_PROCESO",
+    serializeAs: "idStatusProcessPacc"
   })
-  public statusProcess: string;
+  public idStatusProcessPacc: number;
 
   @column({
     columnName: "BAC_ESTADO_SAPIENCIA",
@@ -212,4 +217,12 @@ export default class BeneficiariesConsolidate extends BaseModel {
     serializeAs: "cuts",
   })
   public cuts: HasOne<typeof Cut>;
+
+  @hasOne(() => MasterStatusPacc, {
+    localKey: "idStatusProcessPacc",
+    foreignKey: "id",
+    serializeAs: "statusPacc",
+  })
+  public statusPacc: HasOne<typeof MasterStatusPacc>;
+
 }

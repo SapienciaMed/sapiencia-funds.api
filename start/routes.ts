@@ -223,11 +223,14 @@ Route.group(() => {
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado");
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado");
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
+  Route.put("/updateEstrato456", "ControlSelectController.updateInfoStratum456")
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
+  Route.post("/getInfoControlSubtotales", "ControlSelectController.getInfoControlSubtotales")
   Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
   Route.put("/updateStratum123/:id", "ControlSelectController.updateStratum123")
   Route.post("/getInfoEstratos123Xlsx", "ControlSelectController.getInfoEstratos123Xlsx")
+  Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
 }).prefix("/api/v1/controlSelect");
 //.middleware("auth");
 Route.group(() => {
@@ -276,6 +279,16 @@ Route.group(() => {
     "ConsolidationTrayController.getPQRSDFExternal"
   ).middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_SOPORTES_PQRSDF");
+  Route.post(
+    "/get-requirements-by-beneficiary",
+    "ConsolidationTrayController.getRequirementsByBeneficiary"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-requirements-by-beneficiary-list",
+    "ConsolidationTrayController.getRequirementsByBeneficiaryList"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
@@ -310,13 +323,12 @@ Route.group(() => {
   Route.get("/generate-xlsx", "DatingController.generateXLSX");
 })
   .prefix("/api/v1/citas")
-  .middleware("auth");
 
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
 })
   .prefix("/api/v1/service-social")
-  .middleware("auth");
+//.middleware("auth");
 
 Route.group(() => {
   Route.post(
