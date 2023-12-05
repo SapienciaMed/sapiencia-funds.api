@@ -6,8 +6,18 @@ export interface IConsolidationTrayForTechnicianCollection {
   identification?: string; //El documento parameter para consultar atención ciudadana y también sirve para lo del reglamento
   idBeneficiary?: number; //Para traerme requerimientos del reglamento
   legalPeriod?: string; //Para traerme requerimientos del reglamento
+  user?: string; //Usuario que me llega desde el Front
   page?: number,
   perPage?: number;
+}
+
+export interface IChageStatusKnowledgeTransfer {
+  id: number;
+  idBeneficiary: number;
+  status: boolean;
+  observations: string;
+  user: string;
+  workedHours: number;
 }
 
 export interface IConsolidationTrayForTransactions {
@@ -222,6 +232,7 @@ export interface IRequerimentsResultSimple {
   activeRequirement: boolean
   percentRequirement: number | null;
   accomplished?: boolean;
+  mandatoryFor?: string;
 }
 
 export interface IComplianceAssignment {
@@ -229,3 +240,17 @@ export interface IComplianceAssignment {
   newStatus: boolean;
 }
 
+export interface IApplyKnowledgeTransfer {
+  id?: number;
+  idBeneficiary: number;
+  idReglament: number;
+  committedHours: number;
+  workedHours: number;
+  pendingHours: number;
+  percentTransfer: number;
+  status: boolean;
+  idStatusProcessPacc: number;
+  observations: string;
+  userCreate: string;
+  dateCreate: Date;
+}

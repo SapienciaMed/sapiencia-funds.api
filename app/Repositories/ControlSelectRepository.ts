@@ -1,20 +1,25 @@
 import Database from "@ioc:Adonis/Lucid/Database";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
+import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ControlSelectLegalization from "App/Models/ControlSelectLegalization";
 import ControlSelectStratum123Model from "App/Models/ControlSelectStratum123";
 import ControlSelectStratum456Model from "App/Models/ControlSelectStratum456";
 import ResourcePrioritization from "App/Models/ResourcePrioritization";
+import CoreService from "../Services/External/CoreService"
 
 export interface IControlSelectRepository {
     getInfoConsolidate(payload: controlSelectFilter): Promise<any>
     getInfoLegalization(payload: controlSelectFilter): Promise<any>
     getInfoEstratos123(payload: controlSelectFilter): Promise<any>
+    getInfoEstratos123Xlsx(payload: controlSelectFilter): Promise<any>
     getInfoBeforeCreate(payload: controlSelectFilter): Promise<any>
     getInfoBeforeCreateEstratos123(payload: controlSelectFilter): Promise<any>
+    getInfoBeforeCreateEstratos123Xlsx(payload: controlSelectFilter): Promise<any>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<any>
     createInfoEstratos123(payload: controlSelectConsolidado): Promise<any>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<any>
+    updateStratum123(id: number, payload: controlSelectConsolidado): Promise<any>
     getInfopay(payload: controlSelectFilter): Promise<any>
 }
 
@@ -22,7 +27,6 @@ export default class ControlSelectRepository implements IControlSelectRepository
     constructor() { }
     // Functions Consolidate
     async getInfoConsolidate(payload: controlSelectFilter) {
-
         const queryControlSelect = ControlSelectConsolidateModel.query()
             .preload("resourcePrioritization")
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
@@ -30,6 +34,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
         if (res) {
             const { data } = res.serialize()
             if (data.length <= 0) {
+                console.log('Entra')
                 const queryResourcePrioritization = ResourcePrioritization.query()
                 queryResourcePrioritization.where("projectNumber", payload.noProject!)
                 queryResourcePrioritization.where("programId", 1)
@@ -237,6 +242,33 @@ export default class ControlSelectRepository implements IControlSelectRepository
         }
     }
 
+    async getInfoEstratos123Xlsx(payload: controlSelectFilter) {
+        if (payload.idControlSelect) {
+            const queryControlSelectEstratos123 = ControlSelectConsolidateModel.query().preload("resourcePrioritization")
+            queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
+            let res = await queryControlSelectEstratos123.paginate(1, 999999)
+            if (res) {
+                const { data } = res.serialize();
+                if (data.length <= 0) {
+                    const queryResourcePrioritization = ResourcePrioritization.query()
+                    queryResourcePrioritization.where("projectNumber", payload.noProject!)
+                    queryResourcePrioritization.where("programId", 1)
+                    queryResourcePrioritization.where("validity", payload.validity!)
+                    const res = await queryResourcePrioritization.paginate(1, 100)
+                    const { data } = res.serialize()
+                    await Promise.all(data.map(async (data) => {
+                        let query = `select COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
+                        from giro_vwbeneficiario_proyec_renova_giro 
+                        where comunagiros IN ( (${data.communeId}*1000) + 123)
+                        and perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1 `
+                        await Database.connection("mysql_sapiencia").rawQuery(query)
+
+                    }))
+                }
+            }
+        }
+    }
+
     async getInfoBeforeCreateEstratos123(payload: any) {
         const queryControlSelect = ControlSelectStratum123Model.query()
             .preload("resourcePrioritization")
@@ -246,10 +278,69 @@ export default class ControlSelectRepository implements IControlSelectRepository
         return { array: data, meta }
     }
 
+    async getInfoBeforeCreateEstratos123Xlsx(payload: any) {
+        const queryControlSelect = ControlSelectStratum123Model.query()
+            .preload("resourcePrioritization")
+        queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
+        const res = await queryControlSelect.paginate(1, 100)
+        const { data, meta } = res.serialize()
+        let arraDataXlsx: any = [];
+
+        const groupers = ["COMUNA_CORREGIMIENTO"];
+        let arrComunas: any = [{}];
+        const getListByG = new CoreService()
+        const resComunas = await getListByG.getListByGroupers(groupers);
+        resComunas.map(async (item) => {
+            const list = {
+                name: item.itemDescription,
+                value: item.itemCode,
+            };
+            arrComunas.push(list)
+            return list;
+        })
+
+        data.map((e) => {
+            arraDataXlsx.push(
+                {
+                    "Comuna o corregimiento": arrComunas.find(obj => obj.value == e.resourcePrioritization.communeId)?.name,
+                    "Recurso disponible": e.resourceAvailable,
+                    "Otorgado": e.granted,
+                    "Disponible": (Number(e.resourceAvailable) - Number(e.granted)),
+                    "%Participación": ((Number(e.granted) / Number(e.resourceAvailable)) * 100),
+                    "No. Legalizados": e.legalized
+                }
+            )
+        })
+
+        return { array: arraDataXlsx, meta }
+    }
+
     async createInfoEstratos123(payload: any) {
         return await ControlSelectStratum123Model.createMany(payload)
     }
+
+    async updateStratum123(id: number, payload: IStratum123UpdateItem) {
+
+        const toUpdate = await ControlSelectStratum123Model.find(id);
+
+        if (toUpdate) {
+            toUpdate.legalized = payload.legalized;
+            toUpdate.resourceAvailable = payload.availableResource;
+            toUpdate.granted = payload.granted;
+
+            await toUpdate.save();
+
+            return toUpdate.serialize() as IStratum123UpdateItem;
+        } else {
+            return {
+                error: 'Ocurrió un error al actualizar la informacaión'
+            }
+        }
+
+    }
+
     // Functions Stratum456
+
     async getInfoStratum456(payload: controlSelectFilter) {
         const query = ControlSelectStratum456Model.query()
             .preload("resourcePrioritization")
@@ -267,9 +358,9 @@ export default class ControlSelectRepository implements IControlSelectRepository
                 const { data } = res.serialize()
                 await Promise.all(data.map(async (data) => {
                     let query = `select COUNT(DISTINCT documento_beneficiario) legalizado, SUM(total_proyectado) otorgado
-                        from giro_vwbeneficiario_proyec_renova_giro 
-                        where comunagiros IN ((${data.communeId}*1000) + 456)
-                        and id_perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1`
+                    from giro_vwbeneficiario_proyec_renova_giro 
+                    where comunagiros IN ((${data.communeId}*1000) + 456)
+                    and id_perido_legalizacion  = '${payload.idConvocatoria}' AND id_fondo = 1`
                     const dataBase = await Database.connection("mysql_sapiencia").rawQuery(query)
 
                     let dataInsert = {

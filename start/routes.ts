@@ -165,6 +165,7 @@ Route.group(() => {
   Route.put("/updateActa", "ActaController.updateActa").middleware(
     "auth:EDITAR_ACTAS"
   );
+  Route.delete("/deleteCitation", "ActaController.deleteCitation")
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
@@ -220,15 +221,21 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/getInfoConsolidatepay", "ControlSelectController.getInfopay")
   Route.post("/getInfoConsolidate", "ControlSelectController.getInfoConsolidate");
+  Route.post("/getInfoConsolidateTotals", "ControlSelectController.getInfoConsolidateTotals");
   Route.post("/createInfoConsolidado", "ControlSelectController.createInfoConsolidado");
   Route.put("/updateInfoConsolidado", "ControlSelectController.updateinfoConsolidado");
   Route.put("/updateInfoLegalization", "ControlSelectController.updateInfoLegalization")
   Route.put("/updateEstrato456", "ControlSelectController.updateInfoStratum456")
   Route.post("/getInfoLegalization", "ControlSelectController.getInfoLegalization")
+  Route.post("/getInfoLegalizationTotals", "ControlSelectController.getInfoLegalization")
   Route.post("/getInfoControl", "ControlSelectController.getInfoControl")
   Route.post("/getInfoControlSubtotales", "ControlSelectController.getInfoControlSubtotales")
   Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
+  Route.post("/getInfoEstratos123Totals", "ControlSelectController.getInfoEstratos123Totals")
+  Route.put("/updateStratum123/:id", "ControlSelectController.updateStratum123")
+  Route.post("/getInfoEstratos123Xlsx", "ControlSelectController.getInfoEstratos123Xlsx")
   Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
+  Route.post("/getInfoEstratos456Totals", "ControlSelectController.getInfoStratum456Totals")
 }).prefix("/api/v1/controlSelect");
 //.middleware("auth");
 Route.group(() => {
@@ -278,30 +285,30 @@ Route.group(() => {
   ).middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_SOPORTES_PQRSDF");
   Route.post(
-      "/get-requirements-by-beneficiary",
-      "ConsolidationTrayController.getRequirementsByBeneficiary"
+    "/get-requirements-by-beneficiary",
+    "ConsolidationTrayController.getRequirementsByBeneficiary"
   ).middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/get-requirements-by-beneficiary-list",
     "ConsolidationTrayController.getRequirementsByBeneficiaryList"
   ).middleware("auth:TECNICO_PASO_COBRO")
-   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/compliance-assignment-beneficiary",
     "ConsolidationTrayController.complianceAssignmentBeneficiary"
   ).middleware("auth:TECNICO_PASO_COBRO")
-   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/upload-requirement-file/:id",
     "ConsolidationTrayController.uploadRequirementFile"
   ).middleware("auth:TECNICO_PASO_COBRO")
-   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.get(
     "/get-requirement-file/:id",
     "ConsolidationTrayController.getUploadFiles"
   ).middleware("auth:TECNICO_PASO_COBRO")
-   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/delete-requirement-file/:id/:beneficiary",
     "ConsolidationTrayController.deleteUploadFiles"
@@ -312,17 +319,29 @@ Route.group(() => {
     "ConsolidationTrayController.dowloadUploadFiles"
   ).middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-knowledge-transfer-by-beneficiary",
+    "ConsolidationTrayController.getKnowledgeTransferByBeneficiary"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/change-approve-or-reject-knowledge-transfer",
+    "ConsolidationTrayController.changeApproveOrRejectKnowledgeTransfer"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/upload-knowledge-transfer-file/:id/:idBeneficiary",
+    "ConsolidationTrayController.uploadKnowledgeTransferFile"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.get(
+    "/get-knowledge-transfer-file/:idBeneficiary",
+    "ConsolidationTrayController.getUploadKnowledgeTransferFiles"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
-
-
-  //?
-  Route.get(
-    "/files/get-by-project/:id",
-    "UploadInformationController.getuploadFiles"
-  );
-  //?
 
 Route.group(() => {
   Route.get(

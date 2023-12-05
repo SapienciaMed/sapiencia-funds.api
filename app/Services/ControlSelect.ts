@@ -1,20 +1,28 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
+import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectRepository from "App/Repositories/ControlSelectRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
 export interface IControlSelectService {
     getInfopay(payload: controlSelectFilterPag): Promise<ApiResponse<any>>
     getinfoConsolidate(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoConsolidateTotals(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoStratum456(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoStratum456Totals(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
+    updateStratum123(id: number, payload: IStratum123UpdateItem): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoLegalizationTotals(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoControl(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoControlSubtotales(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateInfoLegalization(payload: any): Promise<ApiResponse<any>>
     updateInfoStratum456(payload: any): Promise<ApiResponse<any>>
     getInfoEstratos123(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoEstratos123Totals(payload: controlSelectFilter): Promise<ApiResponse<any>>
+    getInfoEstratos123Xlsx(payload: controlSelectFilter): Promise<ApiResponse<any>>
+
 }
 export default class ControlSelectServices implements IControlSelectService {
     constructor(private controlSelectRepository: ControlSelectRepository) { }
@@ -24,10 +32,29 @@ export default class ControlSelectServices implements IControlSelectService {
         const res = await this.controlSelectRepository.getInfoBeforeCreate(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
+    async getInfoConsolidateTotals(payload: controlSelectFilter) {
+        const res = await this.controlSelectRepository.getInfoBeforeCreate(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
 
     async getInfoEstratos123(payload: controlSelectFilter) {
         await this.controlSelectRepository.getInfoEstratos123(payload)
         const res = await this.controlSelectRepository.getInfoBeforeCreateEstratos123(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+    async getInfoEstratos123Totals(payload: controlSelectFilter) {
+        const res = await this.controlSelectRepository.getInfoBeforeCreateEstratos123(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async getInfoEstratos123Xlsx(payload: controlSelectFilter) {
+        await this.controlSelectRepository.getInfoEstratos123Xlsx(payload)
+        const res = await this.controlSelectRepository.getInfoBeforeCreateEstratos123Xlsx(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+
+    async updateStratum123(id: number, payload: IStratum123UpdateItem) {
+        const res = await this.controlSelectRepository.updateStratum123(id, payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
@@ -42,6 +69,10 @@ export default class ControlSelectServices implements IControlSelectService {
 
     async getInfoLegalization(payload: controlSelectFilter) {
         await this.controlSelectRepository.getInfoLegalization(payload)
+        const res = await this.controlSelectRepository.getInfoLegalizationBeforeCreate(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+    async getInfoLegalizationTotals(payload: controlSelectFilter) {
         const res = await this.controlSelectRepository.getInfoLegalizationBeforeCreate(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
@@ -72,6 +103,10 @@ export default class ControlSelectServices implements IControlSelectService {
 
     async getInfoStratum456(payload: controlSelectFilter) {
         await this.controlSelectRepository.getInfoStratum456(payload)
+        const res = await this.controlSelectRepository.getInfoBeforeCreateStratum456(payload)
+        return new ApiResponse(res, EResponseCodes.OK)
+    }
+    async getInfoStratum456Totals(payload: controlSelectFilter) {
         const res = await this.controlSelectRepository.getInfoBeforeCreateStratum456(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }

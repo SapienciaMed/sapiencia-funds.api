@@ -2,12 +2,17 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import SapienciaProvider from "@ioc:core.SapienciaProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import { IComplianceAssignment } from '../../Interfaces/ConsolidationTrayInterface';
+import { IComplianceAssignment, IChageStatusKnowledgeTransfer } from '../../Interfaces/ConsolidationTrayInterface';
 import { IConsolidationTrayForTechnicianCollection,
          IConsolidationTrayForTransactions } from '../../Interfaces/ConsolidationTrayInterface';
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 
 export default class ConsolidationTrayController {
+
+  //? *************************************************************************** ?//
+  //? ***** HU DE BANDEJA DE CONSOLIDACIÓN - TÉCNICO PASO AL COBRO (PAC012) ***** ?//
+  //? *****   esta es la bandeja principal de donde parten suboperaciones   ***** ?//
+  //? *************************************************************************** ?//
 
   public async geConsolidationTrayTechnicianCollection({ request, response }: HttpContextContract) {
 
@@ -93,6 +98,11 @@ export default class ConsolidationTrayController {
 
   }
 
+  //? *************************************************************************************** ?//
+  //? *********** HU DE BANDEJA DE CONSOLIDACIÓN - TÉCNICO PASO AL COBRO (PAC011) *********** ?//
+  //? *****   esta es la bandeja en su TAB de PQRS (Conexión con antención ciudadana)   ***** ?//
+  //? *************************************************************************************** ?//
+
   public async getPQRSDFExternal({ request, response }: HttpContextContract) {
 
     try {
@@ -109,6 +119,13 @@ export default class ConsolidationTrayController {
     }
 
   }
+
+  //TODO: Pendiente descargar archivo de atención ciudadana (En el módulo de atención ciudadana no está funcionando)!
+
+  //? *************************************************************************************** ?//
+  //? *********** HU DE BANDEJA DE CONSOLIDACIÓN - TÉCNICO PASO AL COBRO (PAC016) *********** ?//
+  //? *******************   esta es la bandeja en su TAB de Requisitos   ******************** ?//
+  //? *************************************************************************************** ?//
 
   public async getRequirementsByBeneficiary({ request, response }: HttpContextContract) {
 
@@ -261,5 +278,111 @@ export default class ConsolidationTrayController {
     }
 
   }
+
+  //? *************************************************************************************** ?//
+  //? *********** HU DE BANDEJA DE CONSOLIDACIÓN - TÉCNICO PASO AL COBRO (PAC017) *********** ?//
+  //? **********   esta es la bandeja en su TAB de Transferencia de conocimiento   ********** ?//
+  //? *************************************************************************************** ?//
+
+  public async getKnowledgeTransferByBeneficiary({ request, response }: HttpContextContract) {
+
+    try {
+
+      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      return response.send(await SapienciaProvider.getKnowledgeTransferByBeneficiary(data));
+
+    } catch (err) {
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
+  public async changeApproveOrRejectKnowledgeTransfer({ request, response }: HttpContextContract) {
+
+    try {
+
+      const data = request.body() as IChageStatusKnowledgeTransfer;
+      return response.send(await SapienciaProvider.changeApproveOrRejectKnowledgeTransfer(data));
+
+    } catch (err) {
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
+  public async uploadKnowledgeTransferFile({ request, response }: HttpContextContract) {
+
+    const files = request.files('files');
+    const { id, idBeneficiary } = request.params();
+
+    if( files ){
+
+      const results = await Promise.all(
+        files.map(async (file) => {
+          if(file.tmpPath) {
+            const fileUrl = await SapienciaProvider.uploadKnowledgeTransferFile(file, `cargar-transferencia-conocimiento/${idBeneficiary}/`, id, idBeneficiary);
+            return fileUrl;
+          } else {
+            return false;
+          }
+        })
+      );
+
+      const filesFailed: MultipartFileContract[] = [];
+
+      results.forEach((result, index) => {
+        if(!result) filesFailed.push(files[index]);
+      });
+
+      if(filesFailed.length > 0) {
+
+        const filesFailedStr = filesFailed.map(item => item.clientName);
+        return response.badRequest(
+          new ApiResponse(true, EResponseCodes.WARN, `No se pudieron guardar el siguiente archivo: ${filesFailedStr.join(",")}`)
+        );
+
+      } else {
+
+        return response.send(
+          new ApiResponse(true, EResponseCodes.OK, "¡Archivo guardado exitosamente!")
+        );
+
+      }
+
+    }else{
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String("No se proporciono el archivo para subir"))
+      );
+
+    }
+
+  }
+
+  public async getUploadKnowledgeTransferFiles({ request, response }: HttpContextContract) {
+
+    const { idBeneficiary } = request.params();
+    try {
+
+      return response.send(await SapienciaProvider.getUploadFiles(`cargar-transferencia-conocimiento/${idBeneficiary}/`));
+
+    } catch (err) {
+
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String("El beneficiario, en correlación a la transferencia de conocimiento seleccionado, no tiene adjuntos asociados"))
+      );
+
+    }
+
+  }
+
 
 }

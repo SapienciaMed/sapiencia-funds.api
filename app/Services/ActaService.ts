@@ -1,5 +1,6 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IActa } from "App/Interfaces/ActaInterface";
+import { ICitation } from "App/Interfaces/CitationInterface";
 import { IActaRepository } from "App/Repositories/ActaRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
@@ -10,6 +11,7 @@ export interface IActaService {
     approveCitation(id: number)
     lastInsertId()
     updateActa(acta)
+    deleteCitation(citation: ICitation)
 }
 
 export default class ActaService implements IActaService {
@@ -47,6 +49,18 @@ export default class ActaService implements IActaService {
 
     async updateActa(acta: IActa): Promise<ApiResponse<IActa>> {
         const res = await this.actaRepository.updateActa(acta)
+        if (!res) {
+            return new ApiResponse(
+                {} as IActa,
+                EResponseCodes.FAIL,
+                "*Ocurrió un error en su Transacción "
+            );
+        }
+        return new ApiResponse(res, EResponseCodes.OK);
+    }
+
+    async deleteCitation(citation: ICitation): Promise<ApiResponse<ICitation>> {
+        const res = await this.actaRepository.deleteCitation(citation)
         if (!res) {
             return new ApiResponse(
                 {} as IActa,

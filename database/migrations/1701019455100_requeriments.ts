@@ -10,6 +10,7 @@ export default class extends BaseSchema {
       table.boolean("RRE_ACTIVO").notNullable();
       table.integer("RRE_PORCENTAJE").nullable();
       table.string("RRE_DESCRIPCION", 500).notNullable();
+      table.string("RRE_OBLIGATORIO_PARA", 150).nullable();
     });
   }
 

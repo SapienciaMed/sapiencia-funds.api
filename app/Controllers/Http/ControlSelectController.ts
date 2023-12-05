@@ -5,6 +5,9 @@ import { controlSelectFilterPag, controlSelectFilter } from 'App/Interfaces/Cont
 import { ApiResponse } from 'App/Utils/ApiResponses';
 import { DBException } from 'App/Utils/DbHandlerError';
 import { controlSelectSchema } from 'App/Validators/ControlSelectValidator';
+import Strautm123UpdateValidator from 'App/Validators/UpdateStratum123Validators';
+import { generateExcel } from "App/Utils/generateXLSX"
+
 export default class ControlSelectController {
 
     public async getInfoConsolidate(ctx: HttpContext) {
@@ -21,6 +24,19 @@ export default class ControlSelectController {
         }
     }
 
+    public async getInfoConsolidateTotals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoConsolidateTotals(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
 
     public async getInfoEstratos123(ctx: HttpContext) {
         const { request, response, logger } = ctx;
@@ -41,6 +57,60 @@ export default class ControlSelectController {
         }
     }
 
+    public async getInfoEstratos123Totals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfoEstratos123Totals(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async getInfoEstratos123Xlsx(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        let payload: controlSelectFilter
+        try {
+            payload = await request.validate({ schema: controlSelectSchema })
+        } catch (err) {
+            return DBException.badRequest(ctx, err);
+        }
+        try {
+            const res = await ControlSelectProvider.getInfoEstratos123Xlsx(payload)
+            const responsexlsx = await generateExcel(res.data.array);
+            response.send(new ApiResponse(responsexlsx, EResponseCodes.OK));
+
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async updateStratum123({ response, request }: HttpContext) {
+        try {
+            const { id } = request.params();
+            const payload = await request.validate(Strautm123UpdateValidator);
+
+            return response.send(
+                await ControlSelectProvider.updateStratum123(id, payload)
+            );
+        } catch (err) {
+            response.badRequest(
+                new ApiResponse(null, EResponseCodes.FAIL, String(err))
+            );
+        }
+    }
+
     public async createInfoConsolidado(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         let payload = request.body()
@@ -58,8 +128,6 @@ export default class ControlSelectController {
     public async updateinfoConsolidado(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         let payload = request.body()
-
-        console.log(payload)
         try {
             const res = await ControlSelectProvider.updateinfoConsolidado(payload)
             return response.ok(res)
@@ -75,6 +143,18 @@ export default class ControlSelectController {
         const payload = request.body()
         try {
             const res = await ControlSelectProvider.getInfoLegalization(payload)
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+    public async getInfoLegalizationTotals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoLegalizationTotals(payload)
             return response.ok(res)
         } catch (err) {
             logger.error(err);
@@ -166,6 +246,20 @@ export default class ControlSelectController {
         const payload = request.body()
         try {
             const res = await ControlSelectProvider.getInfoStratum456(payload)
+
+            return response.ok(res)
+        } catch (err) {
+            logger.error(err);
+            const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+            return response.badRequest(apiResp);
+        }
+    }
+
+    public async getInfoStratum456Totals(ctx: HttpContext) {
+        const { request, response, logger } = ctx;
+        const payload = request.body()
+        try {
+            const res = await ControlSelectProvider.getInfoStratum456Totals(payload)
 
             return response.ok(res)
         } catch (err) {

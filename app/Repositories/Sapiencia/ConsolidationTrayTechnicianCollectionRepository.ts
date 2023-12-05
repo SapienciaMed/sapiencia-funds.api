@@ -9,30 +9,55 @@ import {
   IPqrsdfResultSimple,
   IPqrsdfResult,
   IRequerimentsResultSimple,
-  IComplianceAssignment
+  IComplianceAssignment,
+  IApplyKnowledgeTransfer,
+  IChageStatusKnowledgeTransfer
 } from '../../Interfaces/ConsolidationTrayInterface';
-import { IPagingData } from "App/Utils/ApiResponses";
-import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
+import { IRequerimentInterface } from '../../Interfaces/IRequerimentInterface';
+import { IReglamentInterface } from '../../Interfaces/IReglamentInterface';
 import { ICutInterface } from '../../Interfaces/CutInterface';
+
+import { IPagingData } from "App/Utils/ApiResponses";
+
+import BeneficiariesConsolidate from '../../Models/BeneficiariesConsolidate';
 import Cut from '../../Models/Cut';
 import Reglament from '../../Models/Reglament';
-import { IReglamentInterface } from '../../Interfaces/IReglamentInterface';
 import Requeriment from '../../Models/Requeriment';
-import { IRequerimentInterface } from '../../Interfaces/IRequerimentInterface';
 import RequirementsConsolidate from '../../Models/RequirementsConsolidate';
+import KnowledgeTransfer from '../../Models/KnowledgeTransfer';
 
 
 export interface IConsolidationTrayTechnicianCollectionRepository {
+
   getHellow(filters: IConsolidationTrayForTechnicianCollection): Promise<any>;
+
+  //* ************************************************************* *//
+  //* ********** TEMAS DEL BANDEJA TÉCNICO PASO AL COBRO ********** *//
+  //* ************************************************************* *//
   geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
   getCutGeneric(): Promise<ICutInterface[] | null>;
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
   geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
+
+  //* ********************************************* *//
+  //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
+  //* ********************************************* *//
   getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IPqrsdfResultSimple>>;
+
+  //* ************************************************* *//
+  //* ********** TEMAS DEL TAB DE REQUISITOS ********** *//
+  //* ************************************************* *//
   getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean>;
   getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>>;
   complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<IComplianceAssignment[] | null>;
+
+  //* ******************************************************************* *//
+  //* ********** TEMAS DE TAB DE TRANSFERENCIA DE CONOCIMIENTO ********** *//
+  //* ******************************************************************* *//
+  getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean>;
+  changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<IApplyKnowledgeTransfer | boolean>;
+
 }
 
 export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
@@ -606,6 +631,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           activeRequirement: req.active!,
           percentRequirement: Number(req.percent) | null!,
           accomplished: accomplishedStatic,
+          mandatoryFor: req.mandatoryFor
 
         }
 
@@ -634,6 +660,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           const toUpdate = await RequirementsConsolidate.findBy("id", iterRequirementConsolid1.id);
           if (!toUpdate) return false;
 
+          console.log(iterRequirementOfReg1.mandatoryFor);
+
           toUpdate.idBeneficiary = iterRequirementConsolid1.idBeneficiary;
           toUpdate.idReglament = iterRequirementConsolid1.idReglament;
           toUpdate.idRequirement = iterRequirementConsolid1.idRequirement;
@@ -641,6 +669,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           toUpdate.activeRequirement = iterRequirementOfReg1.active!;
           toUpdate.percentRequirement = Number(iterRequirementOfReg1.percent);
           toUpdate.accomplished = iterRequirementConsolid1.accomplished!;
+          toUpdate.mandatoryFor = iterRequirementOfReg1.mandatoryFor!;
           await toUpdate.save();
           controlBand = true;
 
@@ -660,6 +689,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           activeRequirement: iterRequirementOfReg1.active!,
           percentRequirement: Number(iterRequirementOfReg1.percent) | null!,
           accomplished: false,
+          mandatoryFor: iterRequirementOfReg1.mandatoryFor
 
         }
 
@@ -744,6 +774,196 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     }else{
       return arrayResult;
     }
+
+  }
+
+  async getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean> {
+
+    const { idBeneficiary } = filters;
+
+    //* **************************************** //*
+    //* ** Traigamos el beneficiario asociado ** //*
+    //* **************************************** //*
+    const resAurora = await BeneficiariesConsolidate
+      .query()
+      .where("id", Number(idBeneficiary))
+      .preload("cuts")
+      .preload("programs")
+      .preload("statusPacc")
+      .orderBy("id", "asc");
+
+    //Solo "debería" traer uno pero, tratemos como array para una manipulación más simple.
+    const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
+
+    if (!resAurora || resAurora == null) return false;
+    const getLegalPeriod: string[] = convertResAurora[0].legalPeriod.split('-');
+    const legalPeriodConvert: number = Number(getLegalPeriod[0] + getLegalPeriod[1]); //Para pasarlo de 2023-1 a un 20231 (Número validable)
+
+    //* ******************************************** //*
+    //* ** Traigamos los reglamentos para validar ** //*
+    //* ******************************************** //*
+    const getReglaments = await Reglament
+      .query()
+      .where("program", convertResAurora[0].idProgram);
+
+    if (!getReglaments || getReglaments == null) return false;
+
+    const convertReglaments = getReglaments.map((i) => i.serialize() as IReglamentInterface);
+    let objReglament: IReglamentInterface | null = null; //Solo debería traer un reglamento.
+
+    for (const regl of convertReglaments) {
+
+      let initialPeriodNumber: number = 0;
+      let endPeriodNumber: number = 0;
+
+      //Como hay inconsistencias en la BD (02/12/2023) para capturar el error
+      try {
+
+        const initialPeriod: string[] = regl.initialPeriod.split('-');
+        const endPeriod: string[] = regl.endPeriod.split('-');
+
+        initialPeriodNumber = Number(initialPeriod[0] + initialPeriod[1]);
+        endPeriodNumber = Number(endPeriod[0] + endPeriod[1]);
+
+        if (isNaN(initialPeriodNumber)) initialPeriodNumber = 0;
+        if (isNaN(endPeriodNumber)) endPeriodNumber = 0;
+
+      } catch (error) {
+
+        initialPeriodNumber = 0;
+        endPeriodNumber = 0;
+
+      }
+
+      if (initialPeriodNumber !== 0 && endPeriodNumber !== 0) {
+        if (legalPeriodConvert >= initialPeriodNumber || legalPeriodConvert <= endPeriodNumber) {
+          objReglament = regl;
+        }
+      }
+
+    }
+
+    if (!objReglament || objReglament == null) return false;
+
+    //* ***************************************************************** //*
+    //* ** Verifiquemos si aplica transferencia de conocimiento        ** //*
+    //* ** Si aplica, verificamos en las tablas y ubicamos el registro ** //*
+    //* ** Si aún no hay registro, lo creamos entonces para gestionar  ** //*
+    //* ***************************************************************** //*
+    const { user, page, perPage } = filters;
+    const idBeneficiaryForApplyKnowledge: number = convertResAurora[0].id;
+    const beneficiaryStatusForApplyKnowledge: number = Number(convertResAurora[0].statusPacc.id);
+    const applyKnowledgeTransferPercent: number = objReglament.knowledgeTransferPercentage;
+    const applyKnowledgeTransferHours: number = objReglament.knowledgeTransferHours;
+    let infoPaginated: IApplyKnowledgeTransfer[] = [];
+
+    const getKnowledgeTransferByBeneficiary = await KnowledgeTransfer
+      .query()
+      .where('idBeneficiary', idBeneficiaryForApplyKnowledge);
+
+    const convertResAuroraKnowledgeTransferByBeneficiary = getKnowledgeTransferByBeneficiary.map((i) => i.serialize() as IApplyKnowledgeTransfer);
+
+    //Si no tiene data, agregamos la transferencia de conocimiento por defecto.
+    if( !convertResAuroraKnowledgeTransferByBeneficiary || convertResAuroraKnowledgeTransferByBeneficiary.length === 0 ){
+
+      const objBody: IApplyKnowledgeTransfer = {
+        idBeneficiary: idBeneficiaryForApplyKnowledge,
+        idReglament: objReglament.id,
+        committedHours: applyKnowledgeTransferHours,
+        workedHours: 0,
+        pendingHours: applyKnowledgeTransferHours,
+        percentTransfer: applyKnowledgeTransferPercent,
+        status: false,
+        idStatusProcessPacc: beneficiaryStatusForApplyKnowledge,
+        observations: "Ninguna",
+        userCreate: user!,
+        dateCreate: new Date()
+      }
+
+      const toCreate = new KnowledgeTransfer();
+      toCreate.fill({ ...objBody });
+      await toCreate.save();
+
+      const getKnowledgeTransger = await KnowledgeTransfer.query().where("id", Number(toCreate.id));
+      if( !getKnowledgeTransger || getKnowledgeTransger == null ) return false;
+      const resultCreate = getKnowledgeTransger.map((i) => i.serialize() as IApplyKnowledgeTransfer);
+
+      const start: number = (page! - 1) * perPage!;
+      const end: number = start + perPage!;
+      infoPaginated = resultCreate.slice(start, end);
+
+      const meta = {
+        total: convertResAurora.length,
+        per_page: perPage,
+        current_page: page,
+        last_page: Math.ceil(convertResAurora.length / perPage!),
+      };
+
+      return { array: infoPaginated as IApplyKnowledgeTransfer[], meta };
+
+    }else{
+
+      infoPaginated = Array(convertResAuroraKnowledgeTransferByBeneficiary[convertResAuroraKnowledgeTransferByBeneficiary.length - 1]);
+
+      const meta = {
+        total: 1,
+        per_page: perPage,
+        current_page: page,
+        last_page: 1,
+      };
+
+      return { array: infoPaginated as IApplyKnowledgeTransfer[], meta };
+
+    }
+
+  }
+
+  async changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<IApplyKnowledgeTransfer | boolean> {
+
+    const { id, idBeneficiary, status, observations, user, workedHours } = data;
+
+    //* **************************************************************************** *//
+    //* ************ Primero ubiquemos la transferencia de conocimiento ************ *//
+    //* ***** Posteriormente ubiquemos la beneficiario para obtener info extra ***** *//
+    //* **************************************************************************** *//
+    const getKnowledgeTransfer = await KnowledgeTransfer
+      .query()
+      .where("id", id)
+      .andWhere("idBeneficiary", idBeneficiary);
+
+    const getBeneficiary = await BeneficiariesConsolidate
+      .query()
+      .where("id", Number(idBeneficiary))
+      .preload("cuts")
+      .preload("programs")
+      .preload("statusPacc")
+      .orderBy("id", "asc");
+
+    if( !getKnowledgeTransfer || getKnowledgeTransfer == null ) return false;
+    const convertGetKnowledgeTransfer = getKnowledgeTransfer.map((i) => i.serialize() as IApplyKnowledgeTransfer);
+
+    if( !getBeneficiary || getBeneficiary == null ) return false;
+    const convertGetBeneficiary = getBeneficiary.map((i) => i.serialize() as InitialBeneficiaryInformation);
+
+    const objCreate: IApplyKnowledgeTransfer = {
+      idBeneficiary: idBeneficiary,
+      idReglament: convertGetKnowledgeTransfer[0].idReglament,
+      committedHours: convertGetKnowledgeTransfer[0].committedHours,
+      workedHours: Number(workedHours),
+      pendingHours: Number(convertGetKnowledgeTransfer[0].pendingHours) - Number(workedHours),
+      percentTransfer: convertGetKnowledgeTransfer[0].percentTransfer,
+      status: status,
+      idStatusProcessPacc: convertGetBeneficiary[0].statusPacc.id,
+      observations: observations,
+      userCreate: user,
+      dateCreate: new Date()
+    }
+
+    const toCreate = new KnowledgeTransfer();
+    toCreate.fill({ ...objCreate });
+    await toCreate.save();
+
+    return true;
 
   }
 
