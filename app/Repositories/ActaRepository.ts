@@ -191,7 +191,7 @@ export default class ActaRepository implements IActaRepository {
     let savedCitations;
     const saveCitationPromises = acta.citation!.map(citation => {
       const savecitation = new Citation();
-      if (!citation.id) {
+      if (!citation.idCitation) {
         savecitation.fill({ ...citation, idActa: acta.id });
         return savecitation.save();
       }
