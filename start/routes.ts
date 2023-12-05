@@ -165,6 +165,7 @@ Route.group(() => {
   Route.put("/updateActa", "ActaController.updateActa").middleware(
     "auth:EDITAR_ACTAS"
   );
+  Route.delete("/deleteCitation", "ActaController.deleteCitation")
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
