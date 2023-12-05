@@ -12,4 +12,6 @@ export default class Requeriment extends BaseModel {
   public percent: number;
   @column({ columnName: "RRE_DESCRIPCION", serializeAs: "description" })
   public description: string;
+  @column({ columnName: "RRE_OBLIGATORIO_PARA", serializeAs: "mandatoryFor" })
+  public mandatoryFor: string;
 }
