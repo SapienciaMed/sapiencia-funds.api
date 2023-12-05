@@ -26,9 +26,9 @@ export default class extends BaseSchema {
       table
         .integer("REC_REGLAMENTO")
         .notNullable()
-        .unsigned()
-        .references("RCO_CODIGO")
-        .inTable("RCO_REGLAMENTOS_CONDONACION")
+        // .unsigned()
+        // .references("RCO_CODIGO")
+        // .inTable("RCO_REGLAMENTOS_CONDONACION")
         .comment("Codigo del Reglamento (FK REC)");
 
       table
@@ -55,6 +55,11 @@ export default class extends BaseSchema {
         .boolean("REC_CUMPLE")
         .notNullable()
         .comment("Cumple con el requisito.");
+
+      table
+        .string("REC_REF_OBLIGATORIO_PARA", 150)
+        .nullable()
+        .comment("Referencia a requisito obligatorio para.");
 
     })
 

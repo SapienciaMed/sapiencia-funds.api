@@ -15,7 +15,9 @@ import {
   IConsolidationTrayForTransactions,
   IPqrsdfResultSimple,
   IRequerimentsResultSimple,
-  IComplianceAssignment
+  IComplianceAssignment,
+  IApplyKnowledgeTransfer,
+  IChageStatusKnowledgeTransfer
 } from '../Interfaces/ConsolidationTrayInterface';
 import { IConsolidationTrayTechnicianCollectionRepository } from '../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository';
 import { ICutInterface } from '../Interfaces/CutInterface';
@@ -27,30 +29,51 @@ import { ICallFound } from "App/Interfaces/CallfundInterfaces";
 import { IFiles } from '../Interfaces/StorageInterfaces';
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 import { Storage } from "@google-cloud/storage";
+
 import RequirementsConsolidate from '../Models/RequirementsConsolidate';
+
 //const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
 const bucketName = process.env.GCLOUD_BUCKET ?? ""; //-->Pdxn
 
 export interface ISapienciaService {
+
   getAllCallPeriod(): Promise<ApiResponse<ICallPeriod[]>>;
   getAllCallBudget(): Promise<ApiResponse<ICallBudget[]>>;
   getAllCallfond(): Promise<ApiResponse<ICallFound[]>>;
   geCallBudgetPaginate(filters: ICallBudgetFilters): Promise<ApiResponse<IPagingData<ICallBudget>>>;
 
+  //* ************************************************************* *//
+  //* ********** TEMAS DEL BANDEJA TÉCNICO PASO AL COBRO ********** *//
+  //* ************************************************************* *//
   geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
   getCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[] | null>>;
   geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
   geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
   updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
+
+  //* ********************************************* *//
+  //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
+  //* ********************************************* *//
   getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
+
+  //* ************************************************* *//
+  //* ********** TEMAS DEL TAB DE REQUISITOS ********** *//
+  //* ************************************************* *//
   getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>>;
   getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
   complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<ApiResponse<IComplianceAssignment[] | null>>;
-
   uploadRequirementFile(file: MultipartFileContract, path?: string, requirement?: number): Promise<boolean>;
   getUploadFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
   deleteUploadFiles(path?: string, beneficiary?: number): Promise<boolean>;
   dowloadUploadFiles(path: string, beneficiary?: number): Promise<Buffer>;
+
+  //* **************************************************************************************************** *//
+  //* ********** TEMAS DE TAB DE TRANSFERENCIA DE CONOCIMIENTO (TAMBIÉN PARA MANEJAR HISTÓRICO) ********** *//
+  //* **************************************************************************************************** *//
+  getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>>;
+  changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>>;
+  uploadKnowledgeTransferFile(file: MultipartFileContract, path?: string, knowledgeTransfer?: number, beneficiary?: number): Promise<boolean>;
+  getUploadKnowledgeTransferFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
 
 }
 
@@ -63,7 +86,7 @@ export default class SapienciaService implements ISapienciaService {
     private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayTechnicianCollectionRepository,
   ) {
 
-    //this.storage = new Storage({ keyFilename }); //-->Local
+    // this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage(); //-->Pdxn
 
   }
@@ -199,8 +222,6 @@ export default class SapienciaService implements ISapienciaService {
 
     const response = files.map(file => {
 
-      console.log(file);
-
       const fileName = file.metadata.name?.split("/");
 
       return {
@@ -232,6 +253,81 @@ export default class SapienciaService implements ISapienciaService {
     const [archivo] = await this.storage.bucket(bucketName).file(urlComplement).download();
     console.log(archivo);
     return archivo;
+
+  }
+
+  async getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>> {
+
+    const getKnowledgeTransfers = await this.callConsolidationTrayTechnicianCollectionRepository.getKnowledgeTransferByBeneficiary(filters);
+    if (!getKnowledgeTransfers)
+      return new ApiResponse(
+        false,
+        EResponseCodes.FAIL,
+        "Ocurrio un error realizando la transacción, es posible que no se encontrara al beneficiario o al reglamento que aplique a la fecha de legalicación del beneficiario en cuestión.");
+    return new ApiResponse(getKnowledgeTransfers, EResponseCodes.OK, "Transacción realizada con éxito, obteniendo transferencia de conocimiento");
+
+  }
+
+  async changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>> {
+
+    const applyChangeKnowledgeTransfer = await this.callConsolidationTrayTechnicianCollectionRepository.changeApproveOrRejectKnowledgeTransfer(data);
+    if (!applyChangeKnowledgeTransfer)
+      return new ApiResponse(
+        false,
+        EResponseCodes.FAIL,
+        "Ocurrio un error realizando la transacción, no pudo cambiarse el estado de la transferencia de conocimiento.");
+    return new ApiResponse(applyChangeKnowledgeTransfer, EResponseCodes.OK, "Transacción realizada con éxito, obteniendo transferencia de conocimiento");
+
+  }
+
+  async uploadKnowledgeTransferFile(file: MultipartFileContract, path?: string, knowledgeTransfer?: number, beneficiary?: number): Promise<boolean> {
+
+    try {
+
+      const bucket = this.storage.bucket(bucketName);
+
+      if (!file.tmpPath) return false;
+
+      //* ****** Como puede haber varios archivos por grupo          ****** *//
+      //* ****** entonces debemos nombrar diferente PERO mantener el ****** *//
+      //* ****** usuario alineado con su grupo específico            ****** *//
+      const getNameDate: number = Date.parse(Date());
+      const descriptionName: string = `${getNameDate}-TC${knowledgeTransfer}-BENEF${beneficiary}`;
+
+      const nameFile: string = `${descriptionName}.pdf`;
+
+      const [fileCloud] = await bucket.upload(file.tmpPath, {
+        destination: `${path}${nameFile}`,
+      });
+
+      return !!fileCloud;
+
+    } catch (error) {
+
+      return false;
+
+    }
+
+  }
+
+  async getUploadKnowledgeTransferFiles(path?: string): Promise<ApiResponse<IFiles[]>> {
+
+    const [files] = await this.storage.bucket(bucketName).getFiles({prefix: path});
+
+    const response = files.map(file => {
+
+      const fileName = file.metadata.name?.split("/");
+
+      return {
+          name: fileName ? fileName[fileName.length - 1] : "",
+          path: file.metadata.name ?? "",
+          size: Number(file.metadata.size ?? 0),
+          date: file.metadata.timeCreated ?? ""
+      }
+
+    });
+
+    return new ApiResponse(response.filter(file => file.name), EResponseCodes.OK);
 
   }
 
