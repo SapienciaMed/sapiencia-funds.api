@@ -55,6 +55,12 @@ export default class RequirementsConsolidate extends BaseModel {
   })
   public accomplished: boolean;
 
+  @column({
+    columnName: "REC_REF_OBLIGATORIO_PARA",
+    serializeAs: "mandatoryFor"
+  })
+  public mandatoryFor: string;
+
 
   @hasOne(() => BeneficiariesConsolidate, {
     localKey: "idBeneficiary",

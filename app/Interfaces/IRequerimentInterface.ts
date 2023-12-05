@@ -4,6 +4,7 @@ export interface IRequerimentInterface {
   active?: boolean;
   percent?: number;
   description: string;
+  mandatoryFor?: string;
 }
 
 export interface IRequerimentFiltersInterface {

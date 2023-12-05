@@ -312,17 +312,29 @@ Route.group(() => {
     "ConsolidationTrayController.dowloadUploadFiles"
   ).middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-knowledge-transfer-by-beneficiary",
+    "ConsolidationTrayController.getKnowledgeTransferByBeneficiary"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/change-approve-or-reject-knowledge-transfer",
+    "ConsolidationTrayController.changeApproveOrRejectKnowledgeTransfer"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/upload-knowledge-transfer-file/:id/:idBeneficiary",
+    "ConsolidationTrayController.uploadKnowledgeTransferFile"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.get(
+    "/get-knowledge-transfer-file/:idBeneficiary",
+    "ConsolidationTrayController.getUploadKnowledgeTransferFiles"
+  ).middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
 })
   .prefix("/api/v1/consolidation-tray")
   .middleware("auth");
-
-
-  //?
-  Route.get(
-    "/files/get-by-project/:id",
-    "UploadInformationController.getuploadFiles"
-  );
-  //?
 
 Route.group(() => {
   Route.get(
