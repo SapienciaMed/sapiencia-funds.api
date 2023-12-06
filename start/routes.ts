@@ -165,7 +165,7 @@ Route.group(() => {
   Route.put("/updateActa", "ActaController.updateActa").middleware(
     "auth:EDITAR_ACTAS"
   );
-  Route.delete("/deleteCitation", "ActaController.deleteCitation")
+  Route.delete("/deleteCitation/:id", "ActaController.deleteCitation")
 }).prefix("/api/v1/actas");
 //.middleware("auth");
 
@@ -232,12 +232,11 @@ Route.group(() => {
   Route.post("/getInfoControlSubtotales", "ControlSelectController.getInfoControlSubtotales")
   Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
   Route.post("/getInfoEstratos123Totals", "ControlSelectController.getInfoEstratos123Totals")
-  Route.put("/updateStratum123/:id", "ControlSelectController.updateStratum123")
+  Route.put("/updateStratum123", "ControlSelectController.updateStratum123")
   Route.post("/getInfoEstratos123Xlsx", "ControlSelectController.getInfoEstratos123Xlsx")
   Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
   Route.post("/getInfoEstratos456Totals", "ControlSelectController.getInfoStratum456Totals")
-}).prefix("/api/v1/controlSelect");
-//.middleware("auth");
+}).prefix("/api/v1/controlSelect").middleware("auth:INFORME_CONTROL");
 Route.group(() => {
   Route.post(
     "/getrenewal-paginated/",

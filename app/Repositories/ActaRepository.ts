@@ -17,7 +17,7 @@ export interface IActaRepository {
   approveCitation(id: number)
   lastInsertId()
   updateActa(acta: IActa)
-  deleteCitation(citation: ICitation)
+  deleteCitation(id: number)
 }
 
 
@@ -208,11 +208,9 @@ export default class ActaRepository implements IActaRepository {
     }
   }
 
-  async deleteCitation(citation: ICitation) {
+  async deleteCitation(id: number) {
 
-    console.log(citation)
-
-    return await Citation.query().where("id", citation.id!).delete()
+    return await Citation.query().where("id", id).delete()
   }
 
 }

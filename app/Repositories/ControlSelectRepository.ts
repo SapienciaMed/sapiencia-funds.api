@@ -1,6 +1,5 @@
 import Database from "@ioc:Adonis/Lucid/Database";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
-import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectConsolidateModel from "App/Models/ControlSelectConsolidate";
 import ControlSelectLegalization from "App/Models/ControlSelectLegalization";
 import ControlSelectStratum123Model from "App/Models/ControlSelectStratum123";
@@ -19,7 +18,7 @@ export interface IControlSelectRepository {
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<any>
     createInfoEstratos123(payload: controlSelectConsolidado): Promise<any>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<any>
-    updateStratum123(id: number, payload: controlSelectConsolidado): Promise<any>
+    updateStratum123(payload: any): Promise<any>
     getInfopay(payload: controlSelectFilter): Promise<any>
 }
 
@@ -34,7 +33,6 @@ export default class ControlSelectRepository implements IControlSelectRepository
         if (res) {
             const { data } = res.serialize()
             if (data.length <= 0) {
-                console.log('Entra')
                 const queryResourcePrioritization = ResourcePrioritization.query()
                 queryResourcePrioritization.where("projectNumber", payload.noProject!)
                 queryResourcePrioritization.where("programId", 1)
@@ -157,8 +155,19 @@ export default class ControlSelectRepository implements IControlSelectRepository
         const result = await Database.connection("mysql_sapiencia").rawQuery(querySapiencia);
 
         const data = result[0][0];
+        const meta = {
+            "total": data.length,
+            "per_page": 100,
+            "current_page": 1,
+            "last_page": 1,
+            "first_page": 1,
+            "first_page_url": "/?page=1",
+            "last_page_url": "/?page=1",
+            "next_page_url": null,
+            "previous_page_url": null
+        }
 
-        return { array: data }
+        return { array: data, meta }
     }
 
     async getInfoControlSubtotales(payload: controlSelectFilter) {
@@ -208,7 +217,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
     // Functions Stratum123
     async getInfoEstratos123(payload: controlSelectFilter) {
         if (payload.idControlSelect) {
-            const queryControlSelectEstratos123 = ControlSelectConsolidateModel.query().preload("resourcePrioritization")
+            const queryControlSelectEstratos123 = ControlSelectStratum123Model.query().preload("resourcePrioritization")
             queryControlSelectEstratos123.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject!))
             let res = await queryControlSelectEstratos123.paginate(1, 999999)
             if (res) {
@@ -231,7 +240,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                             "idResourcePrioritization": data.id,
                             "announcement": payload.idConvocatoria,
                             "validity": payload.validity,
-                            "resourceAvailable": data.resourceForCredit,
+                            "resourceAvailable": data.total123,
                             "granted": dataBase[0][0].otorgado,
                             "legalized": dataBase[0][0].legalizado
                         }
@@ -273,6 +282,8 @@ export default class ControlSelectRepository implements IControlSelectRepository
         const queryControlSelect = ControlSelectStratum123Model.query()
             .preload("resourcePrioritization")
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
+        queryControlSelect.where("validity", payload.validity!)
+        queryControlSelect.where("announcement", payload.idConvocatoria!)
         const res = await queryControlSelect.paginate(1, 100)
         const { data, meta } = res.serialize()
         return { array: data, meta }
@@ -319,24 +330,16 @@ export default class ControlSelectRepository implements IControlSelectRepository
         return await ControlSelectStratum123Model.createMany(payload)
     }
 
-    async updateStratum123(id: number, payload: IStratum123UpdateItem) {
+    async updateStratum123(payload: any) {
+        console.log("entra", payload)
+        const id = payload.id!
 
-        const toUpdate = await ControlSelectStratum123Model.find(id);
-
-        if (toUpdate) {
-            toUpdate.legalized = payload.legalized;
-            toUpdate.resourceAvailable = payload.availableResource;
-            toUpdate.granted = payload.granted;
-
-            await toUpdate.save();
-
-            return toUpdate.serialize() as IStratum123UpdateItem;
-        } else {
-            return {
-                error: 'Ocurrió un error al actualizar la informacaión'
-            }
+        let data = {
+            resourceAvailable: payload.resourceAvailable,
+            granted: payload.granted,
+            legalized: payload.legalized
         }
-
+        return await ControlSelectStratum123Model.updateOrCreate({ id }, data)
     }
 
     // Functions Stratum456
@@ -366,7 +369,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                     let dataInsert = {
                         "idResourcePrioritization": data.id,
                         "announcement": payload.idConvocatoria,
-                        "resourceAvailable": data.total123,
+                        "resourceAvailable": data.total456,
                         "granted": dataBase[0][0].otorgado,
                         "legalized": dataBase[0][0].legalizado,
                         "validity": payload.validity
@@ -393,14 +396,14 @@ export default class ControlSelectRepository implements IControlSelectRepository
     }
 
     async updateInfoStratum456(payload: any) {
-        const id = payload.id!
+
+        const id = payload.id
 
         let data = {
             resourceAvailable: payload.resourceAvailable,
             granted: payload.granted,
             legalized: payload.legalized
         }
-
         return await ControlSelectStratum456Model.updateOrCreate({ id }, data)
     }
 }

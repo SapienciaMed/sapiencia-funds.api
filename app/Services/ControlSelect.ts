@@ -1,6 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { controlSelectConsolidado, controlSelectFilter, controlSelectFilterPag } from "App/Interfaces/ControlSelectInterface";
-import { IStratum123UpdateItem } from "App/Interfaces/Stratum123Intrefaces";
 import ControlSelectRepository from "App/Repositories/ControlSelectRepository";
 import { ApiResponse } from "App/Utils/ApiResponses";
 
@@ -11,7 +10,7 @@ export interface IControlSelectService {
     getInfoStratum456(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoStratum456Totals(payload: controlSelectFilter): Promise<ApiResponse<any>>
     updateinfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
-    updateStratum123(id: number, payload: IStratum123UpdateItem): Promise<ApiResponse<any>>
+    updateStratum123(payload: any): Promise<ApiResponse<any>>
     createInfoConsolidado(payload: controlSelectConsolidado): Promise<ApiResponse<any>>
     getInfoLegalization(payload: controlSelectFilter): Promise<ApiResponse<any>>
     getInfoLegalizationTotals(payload: controlSelectFilter): Promise<ApiResponse<any>>
@@ -53,8 +52,8 @@ export default class ControlSelectServices implements IControlSelectService {
         return new ApiResponse(res, EResponseCodes.OK)
     }
 
-    async updateStratum123(id: number, payload: IStratum123UpdateItem) {
-        const res = await this.controlSelectRepository.updateStratum123(id, payload)
+    async updateStratum123(payload: any) {
+        const res = await this.controlSelectRepository.updateStratum123(payload)
         return new ApiResponse(res, EResponseCodes.OK)
     }
 

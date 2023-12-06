@@ -11,7 +11,7 @@ export interface IActaService {
     approveCitation(id: number)
     lastInsertId()
     updateActa(acta)
-    deleteCitation(citation: ICitation)
+    deleteCitation(id: number)
 }
 
 export default class ActaService implements IActaService {
@@ -59,8 +59,8 @@ export default class ActaService implements IActaService {
         return new ApiResponse(res, EResponseCodes.OK);
     }
 
-    async deleteCitation(citation: ICitation): Promise<ApiResponse<ICitation>> {
-        const res = await this.actaRepository.deleteCitation(citation)
+    async deleteCitation(id: number): Promise<ApiResponse<ICitation>> {
+        const res = await this.actaRepository.deleteCitation(id)
         if (!res) {
             return new ApiResponse(
                 {} as IActa,
