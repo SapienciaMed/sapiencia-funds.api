@@ -157,8 +157,19 @@ export default class ControlSelectRepository implements IControlSelectRepository
         const result = await Database.connection("mysql_sapiencia").rawQuery(querySapiencia);
 
         const data = result[0][0];
+        const meta = {
+            "total": data.length,
+            "per_page": 100,
+            "current_page": 1,
+            "last_page": 1,
+            "first_page": 1,
+            "first_page_url": "/?page=1",
+            "last_page_url": "/?page=1",
+            "next_page_url": null,
+            "previous_page_url": null
+        }
 
-        return { array: data }
+        return { array: data, meta }
     }
 
     async getInfoControlSubtotales(payload: controlSelectFilter) {
@@ -231,7 +242,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                             "idResourcePrioritization": data.id,
                             "announcement": payload.idConvocatoria,
                             "validity": payload.validity,
-                            "resourceAvailable": data.resourceForCredit,
+                            "resourceAvailable": data.total123,
                             "granted": dataBase[0][0].otorgado,
                             "legalized": dataBase[0][0].legalizado
                         }

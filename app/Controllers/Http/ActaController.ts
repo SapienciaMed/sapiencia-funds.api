@@ -73,11 +73,11 @@ export default class ActaController {
     }
   }
 
-  async deleteCitation(ctx: HttpContextContract) {
-    const { request, response, logger } = ctx;
+  async deleteCitation({ logger, request, response }: HttpContextContract) {
+    const { id } = request.params();
     try {
       return response.send(
-        await ActaProvider.deleteCitation(request.body())
+        await ActaProvider.deleteCitation(Number(id))
       );
     } catch (err) {
       logger.error(err)
