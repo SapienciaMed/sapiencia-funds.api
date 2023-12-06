@@ -384,5 +384,22 @@ export default class ConsolidationTrayController {
 
   }
 
+  public async getRequirementsKnowledgeTransfer({ request, response }: HttpContextContract) {
+
+    try {
+
+      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      return response.send(await SapienciaProvider.getRequirementsKnowledgeTransfer(data));
+
+    } catch (err) {
+
+      response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
 
 }

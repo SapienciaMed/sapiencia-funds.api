@@ -57,6 +57,7 @@ export interface IConsolidationTrayTechnicianCollectionRepository {
   //* ******************************************************************* *//
   getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean>;
   changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<IApplyKnowledgeTransfer | boolean>;
+  getRequirementsKnowledgeTransfer(beneficiary: number): Promise<IRequerimentsResultSimple[] | null>;
 
 }
 
@@ -903,7 +904,42 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     }else{
 
-      infoPaginated = Array(convertResAuroraKnowledgeTransferByBeneficiary[convertResAuroraKnowledgeTransferByBeneficiary.length - 1]);
+      //* ****************************************************** *//
+      //* ***** Vamos a calcular según los que ya tengamos ***** *//
+      //* ****************************************************** *//
+      let countWorkedHourts: number = 0;
+      let countCommittedHours: number = 0;
+      let countPendingHours: number = 0;
+
+      for (const knowledgeT of convertResAuroraKnowledgeTransferByBeneficiary) {
+
+        countWorkedHourts += knowledgeT.workedHours;
+        countCommittedHours = knowledgeT.committedHours;
+        countPendingHours = knowledgeT.pendingHours;
+
+      }
+
+      const endElementRegister: IApplyKnowledgeTransfer =
+        convertResAuroraKnowledgeTransferByBeneficiary[convertResAuroraKnowledgeTransferByBeneficiary.length - 1];
+
+      const objResult: IApplyKnowledgeTransfer = {
+
+        id: endElementRegister.id,
+        idBeneficiary: endElementRegister.idBeneficiary,
+        idReglament: endElementRegister.idReglament,
+        committedHours: countCommittedHours,
+        workedHours: countWorkedHourts,
+        pendingHours: countPendingHours,
+        percentTransfer: endElementRegister.percentTransfer,
+        status: endElementRegister.status,
+        idStatusProcessPacc: endElementRegister.idStatusProcessPacc,
+        observations: endElementRegister.observations,
+        userCreate: endElementRegister.userCreate,
+        dateCreate: endElementRegister.dateCreate,
+
+      }
+
+      infoPaginated = Array(objResult);
 
       const meta = {
         total: 1,
@@ -964,6 +1000,19 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     await toCreate.save();
 
     return true;
+
+  }
+
+  async getRequirementsKnowledgeTransfer(beneficiary: number): Promise<IRequerimentsResultSimple[] | null> {
+
+    const getRequirementsConsolidate = await RequirementsConsolidate
+      .query()
+      .where("idBeneficiary", beneficiary)
+      .andWhere("mandatoryFor", "Transferencia de conocimiento")
+
+    const convertResult = getRequirementsConsolidate.map((i) => i.serialize() as IRequerimentsResultSimple);
+
+    return convertResult;
 
   }
 
