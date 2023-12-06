@@ -74,6 +74,7 @@ export interface ISapienciaService {
   changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>>;
   uploadKnowledgeTransferFile(file: MultipartFileContract, path?: string, knowledgeTransfer?: number, beneficiary?: number): Promise<boolean>;
   getUploadKnowledgeTransferFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
+  getRequirementsKnowledgeTransfer(data: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IRequerimentsResultSimple[] | null>>;
 
 }
 
@@ -86,7 +87,7 @@ export default class SapienciaService implements ISapienciaService {
     private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayTechnicianCollectionRepository,
   ) {
 
-    // this.storage = new Storage({ keyFilename }); //-->Local
+    //this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage(); //-->Pdxn
 
   }
@@ -292,7 +293,9 @@ export default class SapienciaService implements ISapienciaService {
       //* ****** entonces debemos nombrar diferente PERO mantener el ****** *//
       //* ****** usuario alineado con su grupo específico            ****** *//
       const getNameDate: number = Date.parse(Date());
-      const descriptionName: string = `${getNameDate}-TC${knowledgeTransfer}-BENEF${beneficiary}`;
+      const clientName: string = file.clientName.split(".")[0];
+      // const descriptionName: string = `${getNameDate}-TC${knowledgeTransfer}-BENEF${beneficiary}`;
+      const descriptionName: string = `${clientName}-${getNameDate}-T${knowledgeTransfer}-B${beneficiary}`;
 
       const nameFile: string = `${descriptionName}.pdf`;
 
@@ -328,6 +331,15 @@ export default class SapienciaService implements ISapienciaService {
     });
 
     return new ApiResponse(response.filter(file => file.name), EResponseCodes.OK);
+
+  }
+
+  async getRequirementsKnowledgeTransfer(data: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IRequerimentsResultSimple[] | null>> {
+
+    const { idBeneficiary } = data;
+    const getRequirementsMandatory =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsKnowledgeTransfer(Number(idBeneficiary));
+    return new ApiResponse(getRequirementsMandatory, EResponseCodes.OK, "Listado de Requisitos Obligatorios");
 
   }
 
