@@ -232,7 +232,7 @@ Route.group(() => {
   Route.post("/getInfoControlSubtotales", "ControlSelectController.getInfoControlSubtotales")
   Route.post("/getInfoEstratos123", "ControlSelectController.getInfoEstratos123")
   Route.post("/getInfoEstratos123Totals", "ControlSelectController.getInfoEstratos123Totals")
-  Route.put("/updateStratum123/:id", "ControlSelectController.updateStratum123")
+  Route.put("/updateStratum123", "ControlSelectController.updateStratum123")
   Route.post("/getInfoEstratos123Xlsx", "ControlSelectController.getInfoEstratos123Xlsx")
   Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
   Route.post("/getInfoEstratos456Totals", "ControlSelectController.getInfoStratum456Totals")

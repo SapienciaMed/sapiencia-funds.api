@@ -5,7 +5,6 @@ import { controlSelectFilterPag, controlSelectFilter } from 'App/Interfaces/Cont
 import { ApiResponse } from 'App/Utils/ApiResponses';
 import { DBException } from 'App/Utils/DbHandlerError';
 import { controlSelectSchema } from 'App/Validators/ControlSelectValidator';
-import Strautm123UpdateValidator from 'App/Validators/UpdateStratum123Validators';
 import { generateExcel } from "App/Utils/generateXLSX"
 
 export default class ControlSelectController {
@@ -98,11 +97,10 @@ export default class ControlSelectController {
 
     public async updateStratum123({ response, request }: HttpContext) {
         try {
-            const { id } = request.params();
-            const payload = await request.validate(Strautm123UpdateValidator);
+            const payload = request.body()
 
             return response.send(
-                await ControlSelectProvider.updateStratum123(id, payload)
+                await ControlSelectProvider.updateStratum123(payload)
             );
         } catch (err) {
             response.badRequest(
@@ -272,6 +270,7 @@ export default class ControlSelectController {
     public async updateInfoStratum456(ctx: HttpContext) {
         const { request, response, logger } = ctx;
         let payload = request.body()
+
 
         try {
             const res = await ControlSelectProvider.updateInfoStratum456(payload)
