@@ -236,8 +236,7 @@ Route.group(() => {
   Route.post("/getInfoEstratos123Xlsx", "ControlSelectController.getInfoEstratos123Xlsx")
   Route.post("/getInfoEstratos456", "ControlSelectController.getInfoStratum456")
   Route.post("/getInfoEstratos456Totals", "ControlSelectController.getInfoStratum456Totals")
-}).prefix("/api/v1/controlSelect");
-//.middleware("auth");
+}).prefix("/api/v1/controlSelect").middleware("auth:INFORME_CONTROL");
 Route.group(() => {
   Route.post(
     "/getrenewal-paginated/",
