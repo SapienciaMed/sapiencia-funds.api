@@ -282,6 +282,8 @@ export default class ControlSelectRepository implements IControlSelectRepository
         const queryControlSelect = ControlSelectStratum123Model.query()
             .preload("resourcePrioritization")
         queryControlSelect.whereHas("resourcePrioritization", (sub) => sub.where("projectNumber", payload.noProject))
+        queryControlSelect.where("validity", payload.validity!)
+        queryControlSelect.where("announcement", payload.idConvocatoria!)
         const res = await queryControlSelect.paginate(1, 100)
         const { data, meta } = res.serialize()
         return { array: data, meta }
@@ -367,7 +369,7 @@ export default class ControlSelectRepository implements IControlSelectRepository
                     let dataInsert = {
                         "idResourcePrioritization": data.id,
                         "announcement": payload.idConvocatoria,
-                        "resourceAvailable": data.total123,
+                        "resourceAvailable": data.total456,
                         "granted": dataBase[0][0].otorgado,
                         "legalized": dataBase[0][0].legalizado,
                         "validity": payload.validity
