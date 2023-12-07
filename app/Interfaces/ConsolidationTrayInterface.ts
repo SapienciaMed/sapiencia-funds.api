@@ -7,6 +7,7 @@ export interface IConsolidationTrayForTechnicianCollection {
   idBeneficiary?: number; //Para traerme requerimientos del reglamento
   legalPeriod?: string; //Para traerme requerimientos del reglamento
   user?: string; //Usuario que me llega desde el Front
+  statusPaccSearch?: number; //Para filtar entre las tabs de Pacc -> //*¡¡¡ RE UTILIZACIÓN !!!*//
   page?: number,
   perPage?: number;
 }

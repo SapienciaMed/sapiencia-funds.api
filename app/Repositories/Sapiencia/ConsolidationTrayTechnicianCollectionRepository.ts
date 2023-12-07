@@ -109,7 +109,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     // --------------------------------------------------- //
     // --------------- INFORMACIÓN QUEMADA --------------- //
     // --------------------------------------------------- //
-    const { page, perPage } = filters;
+    const { page, perPage, statusPaccSearch } = filters;
     let infoPaginated: IConsolidationTrayForTechnicianCollectionParams[] = [];
     const infoWithCutAndProgram: IConsolidationTrayForTechnicianCollectionParams[] = [];
 
@@ -125,7 +125,10 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     for (const data of convertResAurora) {
 
       //Solo mostramos SII es Técnico Pacc
-      if (data.statusPacc.id === 4) {
+      // console.log({statusPaccSearch});
+      // console.log({"data.statusPacc.id" : data.statusPacc.id})
+      // console.log("*************************************************")
+      if (data.statusPacc.id === statusPaccSearch) {
 
         const getNumericDateNow: number = Date.parse(Date());
         const getNumericDateIncomeCut: number = Date.parse(data.cuts.from);
@@ -160,6 +163,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       }
 
     }
+
+    console.log({infoWithCutAndProgram});
 
     infoPaginated = infoWithCutAndProgram.slice(start, end);
 
@@ -225,7 +230,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
-    const { searchParam, cutParamName, cutParamId, page, perPage } = filters;
+    const { searchParam, cutParamName, cutParamId, page, perPage, statusPaccSearch } = filters;
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
 
@@ -236,7 +241,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     for (const data of convertResAurora) {
 
       //Solo podemos proceder SII si es Técnico Pacc
-      if (data.statusPacc.id === 4) {
+      if (data.statusPacc.id === statusPaccSearch) {
 
         const objParams: IConsolidationTrayForTechnicianCollectionParams = {
           idBenef: data.id,
