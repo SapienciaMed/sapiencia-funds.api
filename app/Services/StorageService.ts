@@ -5,11 +5,13 @@ import { IFiles } from "App/Interfaces/StorageInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
 //const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
 const bucketName = process.env.GCLOUD_BUCKET ?? "";
+const bucketNameCitizen = process.env.GCLOUD_BUCKET_CITIZEN ?? "";
 
 export interface IStorageService {
     uploadInformation(filePath: MultipartFileContract, path?: string): Promise<boolean>;
     getFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
     downloadFile(fileName: string): Promise<Buffer>;
+    downloadFileCitizen(fileName: string): Promise<Buffer>;
     deleteFile(fileName: string): Promise<boolean>;
 }
 
@@ -51,7 +53,12 @@ export default class StorageService implements IStorageService {
         const [archivo] = await this.storage.bucket(bucketName).file(fileName).download();
         return archivo;
     }
-    
+
+    async downloadFileCitizen(fileName: string): Promise<Buffer> {
+      const [archivo] = await this.storage.bucket(bucketNameCitizen).file(fileName).download();
+      return archivo;
+  }
+
     async deleteFile(fileName: string): Promise<boolean> {
         await this.storage.bucket(bucketName).file(fileName).delete();
         return true;

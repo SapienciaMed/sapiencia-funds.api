@@ -121,7 +121,10 @@ Route.group(() => {
     "/files/get-by-project/:id",
     "UploadInformationController.getuploadFiles"
   );
+
   Route.post("/files/get-file", "UploadInformationController.getuploadFile");
+  Route.post("/files/get-file-v2", "UploadInformationController.getuploadFileCitizen");
+
   Route.post("/upload/:id", "UploadInformationController.uploadInformation");
   Route.get("/", "UploadInformationController.getUploadInformation");
   Route.post(
@@ -306,23 +309,28 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  ).middleware("auth:TECNICO_PASO_COBRO");
+  )
+    .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray-technician-collection",
     "ConsolidationTrayController.geConsolidationTrayTechnicianCollection"
-  ).middleware("auth:TECNICO_PASO_COBRO");
+  )
+    .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray-technician-collection-by-cut",
     "ConsolidationTrayController.geConsolidationTrayTechnicianCollectionByCut"
-  ).middleware("auth:TECNICO_PASO_COBRO");
+  )
+    .middleware("auth:TECNICO_PASO_COBRO");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  ).middleware("auth:TECNICO_PASO_COBRO");
+  )
+    .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  ).middleware("auth:TECNICO_PASO_COBRO");
+  )
+    .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -396,8 +404,8 @@ Route.group(() => {
     .middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-    "/get-requirements-knowledge-transfer",
-    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+      "/get-requirements-knowledge-transfer",
+      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
