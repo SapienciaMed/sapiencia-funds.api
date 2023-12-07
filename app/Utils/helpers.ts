@@ -37,4 +37,10 @@ export const getAuthHeaders = () => ({
   authorization: Env.get("CURRENT_AUTHORIZATION"),
 });
 
+export const ENV = {
+  CURRENT_USER_DOCUMENT: Env.get("CURRENT_USER_DOCUMENT"),
+};
 
+export const DATABASE_NAMES = {
+  SAPIENCIA: "mysql_sapiencia",
+};
