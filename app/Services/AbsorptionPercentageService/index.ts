@@ -2,7 +2,6 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import {
   IAbsorptionPercentaje,
   IAbsortionPercentageCreateSchema,
-  ICommuneResource,
 } from "App/Interfaces/AbsorptionPercentage";
 import { ISelectData } from "App/Interfaces/Common";
 import { IAbsorptionPercentageRepository } from "App/Repositories/AbsorptionPercentageRepository";
