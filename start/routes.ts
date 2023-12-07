@@ -461,6 +461,18 @@ Route.group(() => {
     "/create",
     "AbsorptionPercentageController.createAbsorptionPercentage"
   );
+  Route.post(
+    "/get-all-paginated",
+    "AbsorptionPercentageController.getAllAbsorptionPercentagePaginated"
+  );
+  Route.put(
+    "/:id/update-by-id",
+    "AbsorptionPercentageController.updateAbsorptionPercentageById"
+  ).where("id", Route.matchers.number());
+  Route.delete(
+    "/:id/delete-by-id",
+    "AbsorptionPercentageController.deleteAbsorptionPercentageById"
+  ).where("id", Route.matchers.number());
 })
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
