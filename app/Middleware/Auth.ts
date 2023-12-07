@@ -1,9 +1,9 @@
-import jwt from "jsonwebtoken";
-import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import Encryption from "@ioc:Adonis/Core/Encryption";
 import Env from "@ioc:Adonis/Core/Env";
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import Encryption from "@ioc:Adonis/Core/Encryption";
+import jwt from "jsonwebtoken";
 
 export default class Auth {
   public async handle(
@@ -11,7 +11,17 @@ export default class Auth {
     next: () => Promise<void>,
     guards: string[]
   ) {
-    const { authorization, permissions } = ctx.request.headers();
+    const {
+      authorization: authorizationHeader,
+      permissions: permissionsHeader,
+    } = ctx.request.headers();
+    const {
+      authorization: authorizationQueryString,
+      permissions: permissionsQueryString,
+    } = ctx.request.qs();
+    const authorization = authorizationHeader || authorizationQueryString;
+    const permissions = permissionsHeader || permissionsQueryString;
+
     const key = Env.get("APP_KEY");
 
     try {
