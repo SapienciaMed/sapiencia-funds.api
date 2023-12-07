@@ -111,4 +111,31 @@ export default class AbsorptionPercentageController {
       return response.badRequest(apiResp);
     }
   }
+  // GENERATE ABSORPTION PERCENTAGE XLSX
+  public async generateAbsorptionPercentageXLSX(ctx: HttpContextContract) {
+    const { request, response, logger } = ctx;
+    let filters: IAbsortionPercentagePaginatedFilters;
+    try {
+      filters = await request.validate({
+        schema: filterAbsorptionPercentageSchema,
+      });
+    } catch (err) {
+      return DBException.badRequest(ctx, err);
+    }
+    try {
+      const resp =
+        await AbsorptionPercentageProvider.generateAbsorptionPercentageXLSX(
+          filters
+        );
+      response.header(
+        "Content-Disposition",
+        "attachment; filename=porcentaje_absorcion.xlsx"
+      );
+      return response.download(resp.data);
+    } catch (err) {
+      logger.error(err);
+      const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+      return response.badRequest(apiResp);
+    }
+  }
 }

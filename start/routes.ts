@@ -481,6 +481,10 @@ Route.group(() => {
     "/:id/delete-by-id",
     "AbsorptionPercentageController.deleteAbsorptionPercentageById"
   ).where("id", Route.matchers.number());
+  Route.get(
+    "/generate-xlsx",
+    "AbsorptionPercentageController.generateAbsorptionPercentageXLSX"
+  );
 })
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);

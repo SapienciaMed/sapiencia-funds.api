@@ -12,6 +12,12 @@ import { ICallBudgetRepository } from "App/Repositories/Sapiencia/CallBudgetRepo
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import Env from "@ioc:Adonis/Core/Env";
 import { ENV_NAMES } from "App/Utils/helpers";
+import { generateXLSX } from "App/Utils/generateXLSX";
+import {
+  absorptionPercentageXLSXColumns,
+  absorptionPercentageXLSXFilePath,
+  absorptionPercentageXLSXRows,
+} from "./XLSX";
 
 export interface IAbsorptionPercentageService {
   createAbsortionPercentage(
@@ -26,6 +32,9 @@ export interface IAbsorptionPercentageService {
     payload: IAbsortionPercentageUpdateSchema
   ): Promise<ApiResponse<IAbsorptionPercentaje>>;
   deleteAbsorptionPercentageById(id: number): Promise<ApiResponse<null>>;
+  generateAbsorptionPercentageXLSX(
+    filters: IAbsortionPercentagePaginatedFilters
+  ): Promise<ApiResponse<string>>;
 }
 
 export default class AbsorptionPercentageService
@@ -141,5 +150,21 @@ export default class AbsorptionPercentageService
       id
     );
     return new ApiResponse(null, EResponseCodes.OK);
+  }
+  // GENERATE ABSORPTION PERCENTAGE XLSX
+  public async generateAbsorptionPercentageXLSX(
+    filters: IAbsortionPercentagePaginatedFilters
+  ) {
+    const absorptionPercentageFound =
+      await this.absorptionPercentageRepository.getAllAbsorptionPercentagePaginated(
+        filters
+      );
+    await generateXLSX({
+      columns: absorptionPercentageXLSXColumns,
+      data: absorptionPercentageXLSXRows(absorptionPercentageFound),
+      filePath: absorptionPercentageXLSXFilePath,
+      worksheetName: "PORCENTAJE DE ABSORCIÓN",
+    });
+    return new ApiResponse(absorptionPercentageXLSXFilePath, EResponseCodes.OK);
   }
 }
