@@ -32,7 +32,7 @@ import { Storage } from "@google-cloud/storage";
 
 import RequirementsConsolidate from '../Models/RequirementsConsolidate';
 
-//const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
+// const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
 const bucketName = process.env.GCLOUD_BUCKET ?? ""; //-->Pdxn
 
 export interface ISapienciaService {
@@ -87,7 +87,7 @@ export default class SapienciaService implements ISapienciaService {
     private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayTechnicianCollectionRepository,
   ) {
 
-    //this.storage = new Storage({ keyFilename }); //-->Local
+    // this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage(); //-->Pdxn
 
   }
