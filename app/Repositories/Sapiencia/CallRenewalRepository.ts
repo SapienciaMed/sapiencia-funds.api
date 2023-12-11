@@ -22,19 +22,37 @@ export default class RenewalRepository implements IRenewalRepository {
   async createRenewal(
     renewal: ICallRenewal
   ): Promise<ICallRenewal> {
-    const toCreate = new Renewal();
+   // Assuming 'period' and 'fund' uniquely identify a renewal record
+   const existingRenewal = await Renewal.query()
+   .where('period', renewal.period)
+   .where('fund', renewal.fund)
+   .first();
 
-    toCreate.fill({ ...renewal });
-    await toCreate.save();
-    return toCreate.serialize() as ICallRenewal;
+if (existingRenewal) {
+   // Update the existing record
+   existingRenewal.merge(renewal);
+   await existingRenewal.save();
+   return existingRenewal.serialize() as ICallRenewal;
+} else {
+   // Create a new record
+   const newRenewal = new Renewal();
+   newRenewal.fill(renewal);
+   await newRenewal.save();
+   return newRenewal.serialize() as ICallRenewal;
+}
   }
 
-  public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
+
+  
+
+
+  /* public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
     const { period } = filters;
   
     const query = `call AuroraInformeRenovados('${period}')`;
   
-    const result = await Database.connection("mysql_sapiencia").rawQuery(query);
+    //const result = await Database.connection("mysql_sapiencia").rawQuery(query);
+    const result = await Renewal.query().where('period',1);
   
     // Suponiendo que result contiene un arreglo de resultados
     const data = result[0];
@@ -57,7 +75,34 @@ export default class RenewalRepository implements IRenewalRepository {
     };
   
     return { array: paginatedData as ICallRenewal[], meta };
-  }
+  } 
+   */
+  
+  async geCallRenewalPaginate(
+    filters: ICallRenewalFilters
+  ): Promise<IPagingData<any>> {
+    const res = Renewal.query();
+
+    console.log('filtro 2',filters.period)
+
+    if (filters.period) {
+      res.where("period", `${filters.period}`);
+    }
+
+    const workerMasterActivityPaginated = await res.paginate(
+      filters.page,
+      filters.perPage
+    );
+
+    const { data, meta } = workerMasterActivityPaginated.serialize();
+    const dataArray = data ?? [];
+
+    return {
+      array: dataArray as any[],
+      meta,
+    };
+  } 
+  
   
   
 }
