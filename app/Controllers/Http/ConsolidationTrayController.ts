@@ -3,7 +3,7 @@ import SapienciaProvider from "@ioc:core.SapienciaProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import { IComplianceAssignment, IChageStatusKnowledgeTransfer } from '../../Interfaces/ConsolidationTrayInterface';
-import { IConsolidationTrayForTechnicianCollection,
+import { IConsolidationTray,
          IConsolidationTrayForTransactions } from '../../Interfaces/ConsolidationTrayInterface';
 import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
 
@@ -14,12 +14,12 @@ export default class ConsolidationTrayController {
   //? *****   esta es la bandeja principal de donde parten suboperaciones   ***** ?//
   //? *************************************************************************** ?//
 
-  public async geConsolidationTrayTechnicianCollection({ request, response }: HttpContextContract) {
+  public async geConsolidationTray({ request, response }: HttpContextContract) {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
-      return response.send(await SapienciaProvider.geConsolidationTrayTechnicianCollection(data));
+      const data = request.body() as IConsolidationTray;
+      return response.send(await SapienciaProvider.geConsolidationTray(data));
 
     } catch (err) {
 
@@ -47,12 +47,12 @@ export default class ConsolidationTrayController {
 
   }
 
-  public async geConsolidationTrayTechnicianCollectionByCut({ request, response }: HttpContextContract) {
+  public async geConsolidationTrayByCut({ request, response }: HttpContextContract) {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
-      return response.send(await SapienciaProvider.geConsolidationTrayTechnicianCollectionByCut(data));
+      const data = request.body() as IConsolidationTray;
+      return response.send(await SapienciaProvider.geConsolidationTrayByCut(data));
 
     } catch (err) {
 
@@ -107,7 +107,7 @@ export default class ConsolidationTrayController {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      const data = request.body() as IConsolidationTray;
       return response.send(await SapienciaProvider.getPQRSDFExternal(data));
 
     } catch (err) {
@@ -131,7 +131,7 @@ export default class ConsolidationTrayController {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      const data = request.body() as IConsolidationTray;
       return response.send(await SapienciaProvider.getRequirementsByBeneficiary(data));
 
     } catch (err) {
@@ -148,7 +148,7 @@ export default class ConsolidationTrayController {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      const data = request.body() as IConsolidationTray;
       return response.send(await SapienciaProvider.getRequirementsByBeneficiaryList(data));
 
     } catch (err) {
@@ -288,7 +288,7 @@ export default class ConsolidationTrayController {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      const data = request.body() as IConsolidationTray;
       return response.send(await SapienciaProvider.getKnowledgeTransferByBeneficiary(data));
 
     } catch (err) {
@@ -388,7 +388,7 @@ export default class ConsolidationTrayController {
 
     try {
 
-      const data = request.body() as IConsolidationTrayForTechnicianCollection;
+      const data = request.body() as IConsolidationTray;
       return response.send(await SapienciaProvider.getRequirementsKnowledgeTransfer(data));
 
     } catch (err) {

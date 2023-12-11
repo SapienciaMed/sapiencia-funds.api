@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 // import Database from "@ioc:Adonis/Lucid/Database";
 import {
-  IConsolidationTrayForTechnicianCollection,
-  IConsolidationTrayForTechnicianCollectionParams,
+  IConsolidationTray,
+  IConsolidationTrayParams,
   IConsolidationTrayForTransactions,
   InitialBeneficiaryInformation,
   ICitizenAttentionDataExternal,
@@ -27,41 +27,41 @@ import RequirementsConsolidate from '../../Models/RequirementsConsolidate';
 import KnowledgeTransfer from '../../Models/KnowledgeTransfer';
 
 
-export interface IConsolidationTrayTechnicianCollectionRepository {
+export interface IConsolidationTrayRepository {
 
-  getHellow(filters: IConsolidationTrayForTechnicianCollection): Promise<any>;
+  getHellow(filters: IConsolidationTray): Promise<any>;
 
   //* ************************************************************* *//
   //* ********** TEMAS DEL BANDEJA TÉCNICO PASO AL COBRO ********** *//
   //* ************************************************************* *//
-  geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
+  geConsolidationTray(filters: IConsolidationTray): Promise<IPagingData<IConsolidationTrayParams>>;
   getCutGeneric(): Promise<ICutInterface[] | null>;
-  geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>;
-  geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
-  updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null>;
+  geConsolidationTrayByCut(filters: IConsolidationTray): Promise<IPagingData<IConsolidationTrayParams>>;
+  geBeneficiaryById(id: number): Promise<IConsolidationTrayParams | null>;
+  updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayParams | null>;
 
   //* ********************************************* *//
   //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
   //* ********************************************* *//
-  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IPqrsdfResultSimple>>;
+  getPQRSDFExternal(filters: IConsolidationTray): Promise<IPagingData<IPqrsdfResultSimple>>;
 
   //* ************************************************* *//
   //* ********** TEMAS DEL TAB DE REQUISITOS ********** *//
   //* ************************************************* *//
-  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean>;
-  getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>>;
+  getRequirementsByBeneficiary(filters: IConsolidationTray): Promise<boolean>;
+  getRequirementsByBeneficiaryList(filters: IConsolidationTray): Promise<IPagingData<IRequerimentsResultSimple>>;
   complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<IComplianceAssignment[] | null>;
 
   //* ******************************************************************* *//
   //* ********** TEMAS DE TAB DE TRANSFERENCIA DE CONOCIMIENTO ********** *//
   //* ******************************************************************* *//
-  getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean>;
+  getKnowledgeTransferByBeneficiary(filters: IConsolidationTray): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean>;
   changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<IApplyKnowledgeTransfer | boolean>;
   getRequirementsKnowledgeTransfer(beneficiary: number): Promise<IRequerimentsResultSimple[] | null>;
 
 }
 
-export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayTechnicianCollectionRepository {
+export default class ConsolidationTrayTechnicianCollectionRepository implements IConsolidationTrayRepository {
 
   private axiosInstance: AxiosInstance;
 
@@ -73,14 +73,14 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async getHellow(filters: IConsolidationTrayForTechnicianCollection): Promise<any> {
+  async getHellow(filters: IConsolidationTray): Promise<any> {
 
     console.log({ filters })
     return "Hola a todos";
 
   }
 
-  async geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams | any>> {
+  async geConsolidationTray(filters: IConsolidationTray): Promise<IPagingData<IConsolidationTrayParams | any>> {
 
     //* ********************************************** *//
     //* *** Llamado tabla Aurora (SI ES REQUERIDO) *** *//
@@ -110,8 +110,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     // --------------- INFORMACIÓN QUEMADA --------------- //
     // --------------------------------------------------- //
     const { page, perPage, statusPaccSearch } = filters;
-    let infoPaginated: IConsolidationTrayForTechnicianCollectionParams[] = [];
-    const infoWithCutAndProgram: IConsolidationTrayForTechnicianCollectionParams[] = [];
+    let infoPaginated: IConsolidationTrayParams[] = [];
+    const infoWithCutAndProgram: IConsolidationTrayParams[] = [];
 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
@@ -124,10 +124,6 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     for (const data of convertResAurora) {
 
-      //Solo mostramos SII es Técnico Pacc
-      // console.log({statusPaccSearch});
-      // console.log({"data.statusPacc.id" : data.statusPacc.id})
-      // console.log("*************************************************")
       if (data.statusPacc.id === statusPaccSearch) {
 
         const getNumericDateNow: number = Date.parse(Date());
@@ -136,7 +132,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
         if (getNumericDateNow >= getNumericDateIncomeCut && getNumericDateNow <= getNumericDateFinallyCut) {
 
-          const objParams: IConsolidationTrayForTechnicianCollectionParams = {
+          const objParams: IConsolidationTrayParams = {
             idBenef: data.id,
             idCut: data.idCut,
             idProgram: data.idProgram,
@@ -164,8 +160,6 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     }
 
-    console.log({infoWithCutAndProgram});
-
     infoPaginated = infoWithCutAndProgram.slice(start, end);
 
     const meta = {
@@ -175,7 +169,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       last_page: Math.ceil(infoWithCutAndProgram.length / perPage!),
     };
 
-    return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
+    return { array: infoPaginated as IConsolidationTrayParams[], meta };
 
   }
 
@@ -210,7 +204,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IConsolidationTrayForTechnicianCollectionParams>> {
+  async geConsolidationTrayByCut(filters: IConsolidationTray): Promise<IPagingData<IConsolidationTrayParams>> {
 
     //* ********************************************** *//
     //* *** Llamado tabla Aurora (SI ES REQUERIDO) *** *//
@@ -223,9 +217,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       .orderBy("id", "asc");
     const convertResAurora = resAurora.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
-    let infoFiltered: IConsolidationTrayForTechnicianCollectionParams[] = [];
-    let infoAllData: IConsolidationTrayForTechnicianCollectionParams[] = [];
-    let infoPaginated: IConsolidationTrayForTechnicianCollectionParams[] = [];
+    let infoFiltered: IConsolidationTrayParams[] = [];
+    let infoAllData: IConsolidationTrayParams[] = [];
+    let infoPaginated: IConsolidationTrayParams[] = [];
 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
@@ -243,7 +237,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       //Solo podemos proceder SII si es Técnico Pacc
       if (data.statusPacc.id === statusPaccSearch) {
 
-        const objParams: IConsolidationTrayForTechnicianCollectionParams = {
+        const objParams: IConsolidationTrayParams = {
           idBenef: data.id,
           idCut: data.idCut,
           idProgram: data.idProgram,
@@ -288,7 +282,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************************** //*
     //* Defino que tipo de filtro usaré del condicional anterior //*
     //* ******************************************************** //*
-    let filterForSearch: IConsolidationTrayForTechnicianCollectionParams[] = [];
+    let filterForSearch: IConsolidationTrayParams[] = [];
 
     if (cutParamName && cutParamName !== "" && cutParamName === "TODOS") {
       filterForSearch = infoAllData;
@@ -302,7 +296,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     let totalDataContent: number = 0;
     if (searchParam && searchParam !== null && searchParam !== "") {
 
-      const filter: IConsolidationTrayForTechnicianCollectionParams[] =
+      const filter: IConsolidationTrayParams[] =
 
         filterForSearch.filter(f =>
           f.creditId.toString().includes(searchParam.toLowerCase()) ||
@@ -339,11 +333,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       last_page: Math.ceil(totalDataContent / perPage!),
     };
 
-    return { array: infoPaginated as IConsolidationTrayForTechnicianCollectionParams[], meta };
+    return { array: infoPaginated as IConsolidationTrayParams[], meta };
 
   }
 
-  async geBeneficiaryById(id: number): Promise<IConsolidationTrayForTechnicianCollectionParams | null> {
+  async geBeneficiaryById(id: number): Promise<IConsolidationTrayParams | null> {
 
     const resAurora = await BeneficiariesConsolidate
       .query()
@@ -356,7 +350,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     if (convertResAurora.length === 0) return null;
 
-    const objResult: IConsolidationTrayForTechnicianCollectionParams = {
+    const objResult: IConsolidationTrayParams = {
       idBenef: convertResAurora[0].id,
       idCut: convertResAurora[0].idCut,
       idProgram: convertResAurora[0].idProgram,
@@ -387,7 +381,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayForTechnicianCollectionParams | null> {
+  async updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<IConsolidationTrayParams | null> {
 
     const { id, cut } = data;
 
@@ -403,16 +397,16 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     toBeneficiary.idCut = Number(cut);
     await toBeneficiary.save();
 
-    return toBeneficiary.serialize() as IConsolidationTrayForTechnicianCollectionParams;
+    return toBeneficiary.serialize() as IConsolidationTrayParams;
 
   }
 
-  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IPqrsdfResultSimple>> {
+  async getPQRSDFExternal(filters: IConsolidationTray): Promise<IPagingData<IPqrsdfResultSimple>> {
 
     const urlConsumer = `/api/v1/pqrsdf/get-paginated/`;
     const resultFilter: IPqrsdfResultSimple[] = [];
 
-    const privateFiltersForCitizen: IConsolidationTrayForTechnicianCollection = {
+    const privateFiltersForCitizen: IConsolidationTray = {
       identification: filters.identification,
       page: 1,
       perPage: 100000
@@ -525,7 +519,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<boolean> {
+  async getRequirementsByBeneficiary(filters: IConsolidationTray): Promise<boolean> {
 
     const { idBeneficiary } = filters;
 
@@ -734,7 +728,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IRequerimentsResultSimple>> {
+  async getRequirementsByBeneficiaryList(filters: IConsolidationTray): Promise<IPagingData<IRequerimentsResultSimple>> {
 
     const { idBeneficiary, page, perPage } = filters;
     let infoPaginated: IRequerimentsResultSimple[] = [];
@@ -783,7 +777,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   }
 
-  async getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean> {
+  async getKnowledgeTransferByBeneficiary(filters: IConsolidationTray): Promise<IPagingData<IApplyKnowledgeTransfer> | boolean> {
 
     const { idBeneficiary } = filters;
 

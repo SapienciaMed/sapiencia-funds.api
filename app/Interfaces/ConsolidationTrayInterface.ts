@@ -1,5 +1,5 @@
 
-export interface IConsolidationTrayForTechnicianCollection {
+export interface IConsolidationTray {
   searchParam?: string;
   cutParamName?: string;
   cutParamId?: number;
@@ -26,7 +26,7 @@ export interface IConsolidationTrayForTransactions {
   cut?: number;
 }
 
-export interface IConsolidationTrayForTechnicianCollectionParams {
+export interface IConsolidationTrayParams {
   idBenef?: number;
   idCut?: number;
   idProgram?: number;

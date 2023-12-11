@@ -7,8 +7,8 @@ import {
 import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import {
-  IConsolidationTrayForTechnicianCollection,
-  IConsolidationTrayForTechnicianCollectionParams,
+  IConsolidationTray,
+  IConsolidationTrayParams,
   IConsolidationTrayForTransactions,
   IPqrsdfResultSimple,
   IRequerimentsResultSimple,
@@ -16,7 +16,7 @@ import {
   IApplyKnowledgeTransfer,
   IChageStatusKnowledgeTransfer,
 } from "../Interfaces/ConsolidationTrayInterface";
-import { IConsolidationTrayTechnicianCollectionRepository } from "../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository";
+import { IConsolidationTrayRepository } from "../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository";
 import { ICutInterface } from "../Interfaces/CutInterface";
 import { ICallFound } from "App/Interfaces/CallfundInterfaces";
 
@@ -43,43 +43,43 @@ export interface ISapienciaService {
   //* ************************************************************* *//
   //* ********** TEMAS DEL BANDEJA TÉCNICO PASO AL COBRO ********** *//
   //* ************************************************************* *//
-  geConsolidationTrayTechnicianCollection(
-    filters: IConsolidationTrayForTechnicianCollection
+  geConsolidationTray(
+    filters: IConsolidationTray
   ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
   >;
   getCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[] | null>>;
-  geConsolidationTrayTechnicianCollectionByCut(
-    filters: IConsolidationTrayForTechnicianCollection
+  geConsolidationTrayByCut(
+    filters: IConsolidationTray
   ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
   >;
   geBeneficiaryById(
     id: number
   ): Promise<
-    ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>
+    ApiResponse<IConsolidationTrayParams | null>
   >;
   updateCutBeneficiary(
     data: IConsolidationTrayForTransactions
   ): Promise<
-    ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>
+    ApiResponse<IConsolidationTrayParams | null>
   >;
 
   //* ********************************************* *//
   //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
   //* ********************************************* *//
   getPQRSDFExternal(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
 
   //* ************************************************* *//
   //* ********** TEMAS DEL TAB DE REQUISITOS ********** *//
   //* ************************************************* *//
   getRequirementsByBeneficiary(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<boolean>>;
   getRequirementsByBeneficiaryList(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
   complianceAssignmentBeneficiary(
     data: IComplianceAssignment[]
@@ -97,7 +97,7 @@ export interface ISapienciaService {
   //* ********** TEMAS DE TAB DE TRANSFERENCIA DE CONOCIMIENTO (TAMBIÉN PARA MANEJAR HISTÓRICO) ********** *//
   //* **************************************************************************************************** *//
   getKnowledgeTransferByBeneficiary(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>>;
   changeApproveOrRejectKnowledgeTransfer(
     data: IChageStatusKnowledgeTransfer
@@ -112,7 +112,7 @@ export interface ISapienciaService {
     path?: string
   ): Promise<ApiResponse<IFiles[]>>;
   getRequirementsKnowledgeTransfer(
-    data: IConsolidationTrayForTechnicianCollection
+    data: IConsolidationTray
   ): Promise<ApiResponse<IRequerimentsResultSimple[] | null>>;
 }
 
@@ -121,7 +121,7 @@ export default class SapienciaService implements ISapienciaService {
 
   constructor(
     private callPeriodRepository: ICallPeriodRepository,
-    private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayTechnicianCollectionRepository
+    private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayRepository
   ) {
     //this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage(); //-->Pdxn
@@ -151,13 +151,13 @@ export default class SapienciaService implements ISapienciaService {
     return new ApiResponse(Activity, EResponseCodes.OK);
   }
 
-  async geConsolidationTrayTechnicianCollection(
-    filters: IConsolidationTrayForTechnicianCollection
+  async geConsolidationTray(
+    filters: IConsolidationTray
   ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
   > {
     const technicianCollection =
-      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayTechnicianCollection(
+      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTray(
         filters
       );
     return new ApiResponse(technicianCollection, EResponseCodes.OK);
@@ -171,13 +171,13 @@ export default class SapienciaService implements ISapienciaService {
     return new ApiResponse(res, EResponseCodes.OK);
   }
 
-  async geConsolidationTrayTechnicianCollectionByCut(
-    filters: IConsolidationTrayForTechnicianCollection
+  async geConsolidationTrayByCut(
+    filters: IConsolidationTray
   ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
   > {
     const technicianCollection =
-      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayTechnicianCollectionByCut(
+      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayByCut(
         filters
       );
     return new ApiResponse(technicianCollection, EResponseCodes.OK);
@@ -186,7 +186,7 @@ export default class SapienciaService implements ISapienciaService {
   async geBeneficiaryById(
     id: number
   ): Promise<
-    ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>
+    ApiResponse<IConsolidationTrayParams | null>
   > {
     const getBeneficiary =
       await this.callConsolidationTrayTechnicianCollectionRepository.geBeneficiaryById(
@@ -208,7 +208,7 @@ export default class SapienciaService implements ISapienciaService {
   async updateCutBeneficiary(
     data: IConsolidationTrayForTransactions
   ): Promise<
-    ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>
+    ApiResponse<IConsolidationTrayParams | null>
   > {
     const technicianTransaction =
       await this.callConsolidationTrayTechnicianCollectionRepository.updateCutBeneficiary(
@@ -230,7 +230,7 @@ export default class SapienciaService implements ISapienciaService {
   }
 
   async getPQRSDFExternal(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>> {
     const getGetPQRSDF =
       await this.callConsolidationTrayTechnicianCollectionRepository.getPQRSDFExternal(
@@ -244,7 +244,7 @@ export default class SapienciaService implements ISapienciaService {
   }
 
   async getRequirementsByBeneficiary(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<boolean>> {
     const getRequirements =
       await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiary(
@@ -264,7 +264,7 @@ export default class SapienciaService implements ISapienciaService {
   }
 
   async getRequirementsByBeneficiaryList(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>> {
     const getGetRequirements =
       await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiaryList(
@@ -376,7 +376,7 @@ export default class SapienciaService implements ISapienciaService {
   }
 
   async getKnowledgeTransferByBeneficiary(
-    filters: IConsolidationTrayForTechnicianCollection
+    filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>> {
     const getKnowledgeTransfers =
       await this.callConsolidationTrayTechnicianCollectionRepository.getKnowledgeTransferByBeneficiary(
@@ -471,7 +471,7 @@ export default class SapienciaService implements ISapienciaService {
   }
 
   async getRequirementsKnowledgeTransfer(
-    data: IConsolidationTrayForTechnicianCollection
+    data: IConsolidationTray
   ): Promise<ApiResponse<IRequerimentsResultSimple[] | null>> {
     const { idBeneficiary } = data;
     const getRequirementsMandatory =
