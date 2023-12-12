@@ -1,5 +1,5 @@
 import { IPagingData } from "App/Utils/ApiResponses";
-import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 // import CallBudget from "App/Models/Sapiencia/Callbudget";
 //import Database from "@ioc:Adonis/Lucid/Database";
 import Renewal from "App/Models/Renewal";
@@ -14,6 +14,7 @@ export interface IRenewalRepository {
     filters: ICallRenewalFilters
   ): Promise<IPagingData<ICallRenewal>>;
   calculate(period:any): Promise<any>;
+  getBeca(period:number): Promise<any>;
 }
 
 export default class RenewalRepository implements IRenewalRepository {
@@ -78,28 +79,41 @@ if (existingRenewal) {
   } 
    */
   
-  async geCallRenewalPaginate(
-    filters: ICallRenewalFilters
-  ): Promise<IPagingData<any>> {
+  async geCallRenewalPaginate(filters: ICallRenewalFilters): Promise<IPagingData<any>> {
     const res = Renewal.query();
-
+  
     if (filters.period) {
       res.where("period", `${filters.period}`);
     }
-
+  
     const workerMasterActivityPaginated = await res.paginate(
       filters.page,
       filters.perPage
     );
-
+  
     const { data, meta } = workerMasterActivityPaginated.serialize();
-    const dataArray = data ?? [];
-
+    let dataArray = data ?? [];
+  
+    // Filtrar registros donde 'found' es 'Beca Mejores Bachilleres Legaliza'
+    dataArray = dataArray.filter(item => item.fund !== 'Beca Mejores Bachilleres Legaliza');
+  
     return {
       array: dataArray as ICallRenewal[],
       meta,
     };
-  } 
+  }
+
+  async getBeca(period:number): Promise<any> {
+   
+    const query = Renewal.query();
+  
+    const res = query.where("period", period).where('fund','Beca Mejores Bachilleres Legaliza')
+
+    return res
+  
+    
+  }
+  
 
   async calculate(period): Promise<{ sumEnabled: number, sumRenewed: number }> {
     // Obtener todos los registros para el periodo dado

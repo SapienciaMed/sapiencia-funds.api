@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { EResponseCodes } from 'App/Constants/ResponseCodesEnum';
 import { ApiResponse } from 'App/Utils/ApiResponses';
-import { ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 import RenewalProvider from '@ioc:core.RenewalProvider';
 import { DBException } from 'App/Utils/DbHandlerError';
 import RenewalValidatorFilter from 'App/Validators/RenewalValidator';
@@ -68,6 +68,17 @@ export default class RenewalController {
     try {
       const { period } = request.params();      
       return response.send(await RenewalProvider.calculate(period));
+    } catch (err) {
+      return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
+    }
+  } 
+
+  public async getBeca({ response, request }: HttpContextContract) {
+    try {
+      const { period } = request.params();
+
+      console.log(period)     
+      return response.send(await RenewalProvider.getBeca(period));
     } catch (err) {
       return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
     }
