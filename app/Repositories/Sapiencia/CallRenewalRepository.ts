@@ -1,5 +1,5 @@
 import { IPagingData } from "App/Utils/ApiResponses";
-import { ICallRenewal, ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 // import CallBudget from "App/Models/Sapiencia/Callbudget";
 //import Database from "@ioc:Adonis/Lucid/Database";
 import Renewal from "App/Models/Renewal";

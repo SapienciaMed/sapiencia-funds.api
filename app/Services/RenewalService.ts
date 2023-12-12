@@ -1,5 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { ICallRenewal, ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 import { IRenewalRepository } from "App/Repositories/Sapiencia/CallRenewalRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { generateXLSX } from "App/Utils/generateXLSX";
