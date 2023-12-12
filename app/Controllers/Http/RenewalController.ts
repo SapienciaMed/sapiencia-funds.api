@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { EResponseCodes } from 'App/Constants/ResponseCodesEnum';
 import { ApiResponse } from 'App/Utils/ApiResponses';
-import { ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 import RenewalProvider from '@ioc:core.RenewalProvider';
 import { DBException } from 'App/Utils/DbHandlerError';
 import RenewalValidatorFilter from 'App/Validators/RenewalValidator';
