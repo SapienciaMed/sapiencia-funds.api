@@ -83,8 +83,6 @@ if (existingRenewal) {
   ): Promise<IPagingData<any>> {
     const res = Renewal.query();
 
-    console.log('filtro 2',filters.period)
-
     if (filters.period) {
       res.where("period", `${filters.period}`);
     }

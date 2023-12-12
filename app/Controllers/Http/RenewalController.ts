@@ -22,7 +22,6 @@ export default class RenewalController {
     }
 
     try {
-      console.log("************vengo con filters", filters)
       const resp = await RenewalProvider.generateXLSXRenewal(filters)
       response.header(
         "Content-Disposition",
@@ -59,22 +58,11 @@ export default class RenewalController {
   public async geCallRenewalPaginate({ response, request }: HttpContextContract) {
     try {
       const filters = request.body() as ICallRenewalFilters;
-      //console.log(filters)
       return response.send(await RenewalProvider.geCallRenewalPaginate(filters));
     } catch (err) {
       return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
     }
-  }
-  /* public async getMasterPaginate({response,request }: HttpContextContract) {
-     try {
-       const data = request.body() as IMasterFilters;
-       return response.send(await MasterProvider.getMasterPaginate(data));
-     } catch (err) {
-       return response.badRequest(
-         new ApiResponse(null, EResponseCodes.FAIL, String(err))
-       );
-     }
-   }  */
+  } 
 
 
 }

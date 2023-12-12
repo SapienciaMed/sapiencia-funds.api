@@ -53,7 +53,6 @@ export default class RenewalService implements IRenewalService {
 
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
-    console.log('filtro',filters)
     const accountStatementsFound =
       await this.renewalRepository.geCallRenewalPaginate(
         filters
