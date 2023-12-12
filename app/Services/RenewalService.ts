@@ -20,6 +20,9 @@ export interface IRenewalService {
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
+  calculate(
+    period: any
+  ): Promise<ApiResponse<any>>;
 }
 
 export default class RenewalService implements IRenewalService {
@@ -60,5 +63,11 @@ export default class RenewalService implements IRenewalService {
     return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
 
   }
+
+  public async calculate(period: any): Promise<ApiResponse<any>> {
+    const accountStatementsFound = await this.renewalRepository.calculate(period);
+    return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
+  }
+
 }
 

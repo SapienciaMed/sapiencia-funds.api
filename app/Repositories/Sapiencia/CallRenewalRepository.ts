@@ -13,7 +13,7 @@ export interface IRenewalRepository {
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<IPagingData<ICallRenewal>>;
-
+  calculate(period:any): Promise<any>;
 }
 
 export default class RenewalRepository implements IRenewalRepository {
@@ -96,10 +96,35 @@ if (existingRenewal) {
     const dataArray = data ?? [];
 
     return {
-      array: dataArray as any[],
+      array: dataArray as ICallRenewal[],
       meta,
     };
   } 
+
+  async calculate(period): Promise<{ sumEnabled: number, sumRenewed: number }> {
+    // Obtener todos los registros para el periodo dado
+    const records = await Renewal.query().where('RRP_PERIODO', period);
+  
+    if (records && records.length > 0) {
+      // Inicializa las sumas
+      let sumEnabled = 0;
+      let sumRenewed = 0;
+  
+      // Itera sobre los registros y suma los valores de 'enabled' y 'renewed'
+      for (const record of records) {
+        sumEnabled += record.enabled;
+        sumRenewed += record.renewed;
+      }
+  
+      // Retorna las sumas totales de 'enabled' y 'renewed'
+      return { sumEnabled, sumRenewed };
+    } else {
+      // Retorna 0 para ambas sumas si no hay registros
+      return { sumEnabled: 0, sumRenewed: 0 };
+    }
+  }
+  
+  
   
   
   
