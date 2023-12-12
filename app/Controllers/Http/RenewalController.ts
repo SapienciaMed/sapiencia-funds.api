@@ -1,7 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { EResponseCodes } from 'App/Constants/ResponseCodesEnum';
 import { ApiResponse } from 'App/Utils/ApiResponses';
-import {ICallRenewalFilters} from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 import RenewalProvider from '@ioc:core.RenewalProvider';
 import { DBException } from 'App/Utils/DbHandlerError';
 import RenewalValidatorFilter from 'App/Validators/RenewalValidator';
@@ -9,20 +9,19 @@ import RenewalValidator from 'App/Validators/CreteRenewalValidator';
 
 
 export default class RenewalController {
-  
+
   //GENERATE XLSX
   public async generateXLSX(ctx: HttpContextContract) {
     const { request, response, logger } = ctx;
     let filters: ICallRenewalFilters;
-    
+
     try {
       filters = await request.validate(RenewalValidatorFilter);
     } catch (err) {
       return DBException.badRequest(ctx, err);
     }
 
-    try {  
-      console.log("************vengo con filters", filters)
+    try {
       const resp = await RenewalProvider.generateXLSXRenewal(filters)
       response.header(
         "Content-Disposition",
@@ -36,8 +35,8 @@ export default class RenewalController {
     }
   }
 
-  public async createCallRenewal({ 
-    request, 
+  public async createCallRenewal({
+    request,
     response
   }: HttpContextContract) {
     try {
@@ -51,21 +50,19 @@ export default class RenewalController {
     } catch (err) {
       response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
-   
+
       );
     }
   }
 
-public async geCallRenewalPaginate({ response, request }: HttpContextContract) {
-  try {
-    const filters = request.body() as ICallRenewalFilters;
+  public async geCallRenewalPaginate({ response, request }: HttpContextContract) {
+    try {
+      const filters = request.body() as ICallRenewalFilters;
+      return response.send(await RenewalProvider.geCallRenewalPaginate(filters));
+    } catch (err) {
+      return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
+    }
+  } 
 
-    const resp = await RenewalProvider.geCallRenewalPaginate(filters);
-
-    return response.ok(resp);
-  } catch (err) {
-    return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
-  }
-}
 
 }
