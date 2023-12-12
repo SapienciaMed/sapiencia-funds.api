@@ -64,5 +64,13 @@ export default class RenewalController {
     }
   } 
 
+  public async calculate({ response, request }: HttpContextContract) {
+    try {
+      const { period } = request.params();      
+      return response.send(await RenewalProvider.calculate(period));
+    } catch (err) {
+      return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
+    }
+  } 
 
 }
