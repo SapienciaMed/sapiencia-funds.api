@@ -1,5 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalBecas, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
 import { IRenewalRepository } from "App/Repositories/Sapiencia/CallRenewalRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { generateXLSX } from "App/Utils/generateXLSX";
@@ -20,15 +20,15 @@ export interface IRenewalService {
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
-  calculate(
-    period: any
-  ): Promise<ApiResponse<any>>;
+  calculate(period: any): Promise<ApiResponse<any>>;
+  getBeca(period:number, ): Promise<ApiResponse<any>>;
 }
 
 export default class RenewalService implements IRenewalService {
   constructor(
     private renewalRepository: IRenewalRepository
   ) { }
+  
 
   //crear Renewal
   async createRenewal(renewal: ICallRenewal): Promise<ApiResponse<ICallRenewal>> {
@@ -68,6 +68,11 @@ export default class RenewalService implements IRenewalService {
     const accountStatementsFound = await this.renewalRepository.calculate(period);
     return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
   }
+
+  async getBeca(period) {
+    const res = await this.renewalRepository.getBeca(period,)
+    return new ApiResponse(res, EResponseCodes.OK)
+}
 
 }
 
