@@ -1,8 +1,9 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, hasOne, HasOne } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, column, HasMany, hasMany, hasOne, HasOne } from "@ioc:Adonis/Lucid/Orm";
 import Programs from "./Programs";
 import Cut from "./Cut";
 import MasterStatusPacc from './MasterStatusPacc';
+import RequirementsConsolidate from "./RequirementsConsolidate";
 
 export default class BeneficiariesConsolidate extends BaseModel {
   public static table = "BAC_BENEFICIARIOS_A_CONSOLIDAR";
@@ -218,5 +219,11 @@ export default class BeneficiariesConsolidate extends BaseModel {
     serializeAs: "statusPacc",
   })
   public statusPacc: HasOne<typeof MasterStatusPacc>;
+
+  @hasMany(() => RequirementsConsolidate, {
+    localKey: "id",
+    foreignKey: "idBeneficiary",
+  })
+  public requerimentsConsolidate: HasMany<typeof RequirementsConsolidate>;
 
 }

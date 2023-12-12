@@ -1,6 +1,9 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IImportServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
-import { ISocialServiceFiltersInterface } from "App/Interfaces/SocialServiceInterface";
+import {
+  ISocialServiceBeneficiary,
+  ISocialServiceFiltersInterface,
+} from "App/Interfaces/SocialServiceInterface";
 import { IServiceSocialRepository } from "App/Repositories/ServiceSocialRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
@@ -9,7 +12,7 @@ export interface IServiceSocialService {
   insert(data: any[]): Promise<ApiResponse<any[]>>;
   getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
-  ): Promise<ApiResponse<IPagingData<ISocialServiceFiltersInterface>>>;
+  ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>>;
 }
 
 export default class ServiceSocialService implements IServiceSocialService {
@@ -118,7 +121,7 @@ export default class ServiceSocialService implements IServiceSocialService {
 
   async getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
-  ): Promise<ApiResponse<IPagingData<ISocialServiceFiltersInterface>>> {
+  ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>> {
     const requeriment =
       await this.serviceSocialRepository.getServiceSocialPaginate(filters);
     return new ApiResponse(requeriment, EResponseCodes.OK);

@@ -1,3 +1,5 @@
+import { IRequerimentsConsolidate } from "./requerimentsConsolidateInterface";
+
 export interface IBeneficiariesConsolidateInterface {
   id?: number | any;
   name: string;
@@ -7,6 +9,7 @@ export interface IBeneficiariesConsolidateInterface {
   modifyDate?: string;
   createUser: string;
   createDate: string;
+  requerimentsConsolidate?: IRequerimentsConsolidate[];
 }
 
 export interface IBeneficiariesConsolidateFiltersInterface {

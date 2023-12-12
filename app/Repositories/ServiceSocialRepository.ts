@@ -3,7 +3,10 @@ import {
   IInsertServiceSocial,
   IValidateServiceSocial,
 } from "App/Interfaces/ImportServiceSocialInterface";
-import { ISocialServiceFiltersInterface } from "App/Interfaces/SocialServiceInterface";
+import {
+  ISocialServiceBeneficiary,
+  ISocialServiceFiltersInterface,
+} from "App/Interfaces/SocialServiceInterface";
 ///import AuroraEfeRenovado from "App/Models/AuroraEfeRenovado";
 //import AuroraFaRenovado from "App/Models/AuroraFaRenovado";
 import BeneficiariesConsolidate from "App/Models/BeneficiariesConsolidate";
@@ -23,7 +26,7 @@ export interface IServiceSocialRepository {
   validateConsolidate(consolidationBeneficiary: string): Promise<any | null>;
   getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
-  ): Promise<IPagingData<ISocialServiceFiltersInterface>>;
+  ): Promise<IPagingData<ISocialServiceBeneficiary>>;
 }
 
 export default class ServiceSocialRepository
@@ -122,12 +125,22 @@ export default class ServiceSocialRepository
 
   async getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
-  ): Promise<IPagingData<ISocialServiceFiltersInterface>> {
+  ): Promise<IPagingData<ISocialServiceBeneficiary>> {
     const res = BeneficiarySocialService.query();
     res.whereHas("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
       beneficiarieConsolidateQuery.where("id", filters.id);
     });
     res.preload("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
+      beneficiarieConsolidateQuery.preload(
+        "requerimentsConsolidate",
+        (requerimentsConsolidateQuery) => {
+          requerimentsConsolidateQuery.where(
+            "mandatoryFor",
+            "=",
+            "Servicio social"
+          );
+        }
+      );
       beneficiarieConsolidateQuery.where("id", filters.id);
     });
 
@@ -140,7 +153,7 @@ export default class ServiceSocialRepository
     const dataArray = data ?? [];
 
     return {
-      array: dataArray as ISocialServiceFiltersInterface[],
+      array: dataArray as ISocialServiceBeneficiary[],
       meta,
     };
   }
