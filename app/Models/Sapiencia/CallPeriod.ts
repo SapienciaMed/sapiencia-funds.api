@@ -2,6 +2,7 @@ import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 
 export default class CallPeriod extends BaseModel {
+
   public static table = "periodo_convocatoria";
   public static connection = "mysql_sapiencia";
 
@@ -13,5 +14,8 @@ export default class CallPeriod extends BaseModel {
 
   @column({  columnName: "smmlv", serializeAs: "minimumSalary" })
   public minimumSalary: number;
+
+  @column({  columnName: "estado", serializeAs: "status" })
+  public status: string;
 
 }

@@ -419,7 +419,7 @@ Route.group(() => {
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
 })
   .prefix("/api/v1/consolidation-tray-collection-technician")
-  .middleware("auth");
+   .middleware("auth");
 
 //? ********** TÉCNICO PROFESIONAL ********** ?//
 Route.group(() => {
@@ -860,6 +860,22 @@ Route.group(() => {
 //* ********************************************************************************
 //* ********************************************************************************
 //* ********************************************************************************
+//? ******** ESTRUCTURACIÓN DE REGLAMENTO (VERSIÓN 2.0) Y AJUSTES GENERALES ********
+
+Route.group(() => {
+  Route.post("/get-periods-sapi", "ReglamentConsolidationController.getPeriodsSapi");
+  Route.post("/create-reglament", "ReglamentConsolidationController.createReglament");
+  // Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
+  // Route.get("/get-last-id", "ReglamentController.getLastId");
+  // Route.post("/create", "ReglamentController.createReglament");
+  // Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
+  // Route.put("/edit/:id", "ReglamentController.updateReglament");
+  // Route.delete("/delete/:id", "ReglamentController.deleteReglament");
+  // Route.get("/programs", "ReglamentController.getPrograms");
+})
+  .prefix("/api/v1/reglament-v2")
+  //.middleware("auth");
+
 
 Route.group(() => {
   Route.get(
