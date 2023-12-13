@@ -23,6 +23,14 @@ export default class BeneficiarySocialService extends BaseModel {
   })
   public idConsolidationBeneficiary: number;
 
+  
+
+  @column({
+    columnName: "SSB_HORAS_COMPROMETIDAS",
+    serializeAs: "committedHours"
+  })
+  public committedHours: number;
+
   @column({
     columnName: "SSB_HORAS_PRESTADAS",
     serializeAs: "hoursDone",
@@ -30,10 +38,30 @@ export default class BeneficiarySocialService extends BaseModel {
   public hoursDone: number;
 
   @column({
+    columnName: "SSB_HORAS_PENDIENTES",
+    serializeAs: "pendingHours"
+  })
+  public pendingHours: number;
+
+  @column({
+    columnName: "SSB_ESTADO",
+    serializeAs: "state",
+    prepare: (val) => (String(val) === "true" ? 1 : 0),
+    serialize: (val) => Boolean(val),
+  })
+  public state: boolean;
+
+  @column({
     columnName: "SSB_RUTA_DOCUMENTO_SOPORTE",
     serializeAs: "documentPath",
   })
   public documentPath: string;
+
+  @column({
+    columnName: "SSB_OBSERVACION",
+    serializeAs: "observation",
+  })
+  public observation: string;
 
   @hasOne(() => BeneficiariesConsolidate, {
     localKey: "idConsolidationBeneficiary",

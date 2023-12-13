@@ -6,11 +6,15 @@ export interface ISocialServiceFiltersInterface {
   perPage: number;
 }
 
-export interface ISocialServiceBeneficiary{
-  id:number;
+export interface ISocialServiceBeneficiary {
+  id?: number;
   legalizationPeriod: string;
   consolidationBeneficiary: number;
   hoursBorrowed: number;
+  committedHours: number;
+  pendingHours: number;
   supportDocumentRoute: string;
-  beneficiarieConsolidate: IBeneficiariesConsolidateInterface;
+  observation: string;
+  state: boolean;
+  beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }
