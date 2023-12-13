@@ -321,7 +321,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     } else {
 
       infoPaginated = filterForSearch.slice(start, end);
-      totalDataContent = infoPaginated.length;
+      totalDataContent = infoAllData.length;
 
     }
 
@@ -395,6 +395,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     }
 
     toBeneficiary.idCut = Number(cut);
+    toBeneficiary.countRenew
     await toBeneficiary.save();
 
     return toBeneficiary.serialize() as IConsolidationTrayParams;
