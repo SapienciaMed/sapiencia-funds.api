@@ -11,6 +11,10 @@ export interface ICallRenewal {
     page: number;
     perPage: number;
   }
+  export interface ICallRenewalFiltersp {
+    period: number;
+   
+  }
 
   export interface ICallRenewalBecas {
     fund: string;  
