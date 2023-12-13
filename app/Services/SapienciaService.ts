@@ -406,7 +406,7 @@ export default class SapienciaService implements ISapienciaService {
       return new ApiResponse(
         false,
         EResponseCodes.FAIL,
-        "Ocurrio un error realizando la transacción, no pudo cambiarse el estado de la transferencia de conocimiento."
+        "Ocurrio un error realizando la transacción, no pudo cambiarse el estado de la transferencia de conocimiento. Pudo haberse encontrado un error al solicitar el reglamento o hay inconsistencias con las horas ingresadas, por favor verifique."
       );
     return new ApiResponse(
       applyChangeKnowledgeTransfer,

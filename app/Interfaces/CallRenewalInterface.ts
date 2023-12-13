@@ -11,3 +11,8 @@ export interface ICallRenewal {
     page: number;
     perPage: number;
   }
+
+  export interface ICallRenewalBecas {
+    fund: string;  
+    period: number 
+  }

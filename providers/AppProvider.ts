@@ -69,6 +69,10 @@ export default class AppProvider {
     const AbsorptionPercentageService = await import(
       "App/Services/AbsorptionPercentageService"
     );
+
+    const ReglamentConsolidationService = await import(
+      "App/Services/ReglamentConsolidationService"
+    );
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -156,6 +160,9 @@ export default class AppProvider {
       "App/Repositories/Sapiencia/CallBudgetRepository"
     );
 
+    const ReglamentConsolidationRepository = await import(
+      "App/Repositories/ReglamentConsolidationRepository"
+    );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -289,6 +296,14 @@ export default class AppProvider {
         new AbsorptionPercentageService.default(
           new AbsorptionPercentageRepository.default(),
           new CallBudgetRepository.default()
+        )
+    );
+
+    this.app.container.singleton(
+      "core.ReglamentConsolidationProvider",
+      () =>
+        new ReglamentConsolidationService.default(
+            new ReglamentConsolidationRepository.default()
         )
     );
   }

@@ -433,6 +433,10 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       let answerDate: Date | string;
       let answer: string = "";
 
+      let completePath: string = "";
+      let nameFile: string = "";
+      let nameRoute: string = "";
+
       if (!pqrsdf.filingNumber || pqrsdf.filingNumber == null) {
         numberPqrsdf = 0;
       } else {
@@ -481,6 +485,22 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
         answer = pqrsdf.answer;
       }
 
+      if (!pqrsdf.file || pqrsdf.file == null) {
+        completePath = "";
+        nameFile = "";
+        nameRoute = "";
+      } else {
+        if( pqrsdf.file.name == "" || pqrsdf.file.name.split("/")[2] == ""){
+          completePath = "";
+          nameFile = "";
+          nameRoute = "";
+        }else{
+          completePath = pqrsdf.file.name;
+          nameFile = pqrsdf.file.name.split("/")[2];
+          nameRoute = `${pqrsdf.file.name.split("/")[0]}/${pqrsdf.file.name.split("/")[1]}`;
+        }
+      }
+
       const objResult: IPqrsdfResultSimple = {
         numberPqrsdf,
         dateFiled,
@@ -490,6 +510,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
         state,
         answerDate,
         answer,
+        completePath,
+        nameFile,
+        nameRoute
       }
 
       resultFilter.push(objResult);
@@ -906,18 +929,6 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       //* ****************************************************** *//
       //* ***** Vamos a calcular según los que ya tengamos ***** *//
       //* ****************************************************** *//
-      let countWorkedHourts: number = 0;
-      let countCommittedHours: number = 0;
-      let countPendingHours: number = 0;
-
-      for (const knowledgeT of convertResAuroraKnowledgeTransferByBeneficiary) {
-
-        countWorkedHourts += knowledgeT.workedHours;
-        countCommittedHours = knowledgeT.committedHours;
-        countPendingHours = knowledgeT.pendingHours;
-
-      }
-
       const endElementRegister: IApplyKnowledgeTransfer =
         convertResAuroraKnowledgeTransferByBeneficiary[convertResAuroraKnowledgeTransferByBeneficiary.length - 1];
 
@@ -926,9 +937,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
         id: endElementRegister.id,
         idBeneficiary: endElementRegister.idBeneficiary,
         idReglament: endElementRegister.idReglament,
-        committedHours: countCommittedHours,
-        workedHours: countWorkedHourts,
-        pendingHours: countPendingHours,
+        committedHours: endElementRegister.committedHours,
+        workedHours: endElementRegister.workedHours,
+        pendingHours: endElementRegister.pendingHours,
         percentTransfer: endElementRegister.percentTransfer,
         status: endElementRegister.status,
         idStatusProcessPacc: endElementRegister.idStatusProcessPacc,
@@ -955,7 +966,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
   async changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<IApplyKnowledgeTransfer | boolean> {
 
-    const { id, idBeneficiary, status, observations, user, workedHours } = data;
+    const { id, idBeneficiary, status, observations, user } = data;
 
     //* **************************************************************************** *//
     //* ************ Primero ubiquemos la transferencia de conocimiento ************ *//
@@ -964,7 +975,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     const getKnowledgeTransfer = await KnowledgeTransfer
       .query()
       .where("id", id)
-      .andWhere("idBeneficiary", idBeneficiary);
+      .andWhere("idBeneficiary", idBeneficiary); //Solo de a uno.
 
     const getBeneficiary = await BeneficiariesConsolidate
       .query()
@@ -980,12 +991,21 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     if( !getBeneficiary || getBeneficiary == null ) return false;
     const convertGetBeneficiary = getBeneficiary.map((i) => i.serialize() as InitialBeneficiaryInformation);
 
-    const objCreate: IApplyKnowledgeTransfer = {
+    //* Separamos los valores para que sean más manipulables
+    const plusCommittedHours: number = convertGetKnowledgeTransfer[0].committedHours;
+    const plusValuesWorked: number = data.workedHours;
+    const plusValuesPending: number = plusCommittedHours - data.workedHours;
+
+    if( plusValuesWorked > plusCommittedHours || plusValuesWorked < 0) return false;
+    if( plusValuesPending > plusCommittedHours || plusValuesPending < 0) return false;
+
+
+    const objUpdate: IApplyKnowledgeTransfer = {
       idBeneficiary: idBeneficiary,
       idReglament: convertGetKnowledgeTransfer[0].idReglament,
-      committedHours: convertGetKnowledgeTransfer[0].committedHours,
-      workedHours: Number(workedHours),
-      pendingHours: Number(convertGetKnowledgeTransfer[0].pendingHours) - Number(workedHours),
+      committedHours: plusCommittedHours,
+      workedHours: plusValuesWorked,
+      pendingHours: plusValuesPending,
       percentTransfer: convertGetKnowledgeTransfer[0].percentTransfer,
       status: status,
       idStatusProcessPacc: convertGetBeneficiary[0].statusPacc.id,
@@ -994,9 +1014,10 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       dateCreate: new Date()
     }
 
-    const toCreate = new KnowledgeTransfer();
-    toCreate.fill({ ...objCreate });
-    await toCreate.save();
+    const toUpdate = await KnowledgeTransfer.find(id);
+    if( !toUpdate || toUpdate == null || toUpdate == undefined ) return false;
+    toUpdate.fill({ id , ...objUpdate });
+    await toUpdate.save();
 
     return true;
 

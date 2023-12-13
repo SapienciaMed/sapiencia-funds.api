@@ -20,12 +20,15 @@ export interface IRenewalService {
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
+  calculate(period: any): Promise<ApiResponse<any>>;
+  getBeca(period:number, ): Promise<ApiResponse<any>>;
 }
 
 export default class RenewalService implements IRenewalService {
   constructor(
     private renewalRepository: IRenewalRepository
   ) { }
+  
 
   //crear Renewal
   async createRenewal(renewal: ICallRenewal): Promise<ApiResponse<ICallRenewal>> {
@@ -60,5 +63,16 @@ export default class RenewalService implements IRenewalService {
     return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
 
   }
+
+  public async calculate(period: any): Promise<ApiResponse<any>> {
+    const accountStatementsFound = await this.renewalRepository.calculate(period);
+    return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
+  }
+
+  async getBeca(period) {
+    const res = await this.renewalRepository.getBeca(period,)
+    return new ApiResponse(res, EResponseCodes.OK)
+}
+
 }
 
