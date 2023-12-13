@@ -5,6 +5,10 @@ export interface ICallRenewal {
   renewed: number;
   percentage: string;
   }
+
+  export interface IUpdateRenewal{
+    enabled: number;
+  }
   
   export interface ICallRenewalFilters {
     period: number;
