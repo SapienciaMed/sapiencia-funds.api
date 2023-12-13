@@ -15,7 +15,7 @@ export interface IRenewalRepository {
   ): Promise<IPagingData<ICallRenewal>>;
   calculate(period: any): Promise<any>;
   getBeca(period: number): Promise<any>;
-  update(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null>;
+  createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null>;
 }
 
 export default class RenewalRepository implements IRenewalRepository {
@@ -143,7 +143,7 @@ export default class RenewalRepository implements IRenewalRepository {
     }
   }
 
-  async update(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null> {
+  async createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null> {
     const toUpdate = await Renewal.query().where('period',period).where('fund', 'Beca Mejores Bachilleres Legaliza').first();
     if (!toUpdate) {
       return null;

@@ -85,11 +85,11 @@ export default class RenewalController {
     }
   } 
 
-  public async update({ request, response }: HttpContextContract) {
+  public async createReportRenewal({ request, response }: HttpContextContract) {
     try {      
       const { period } = request.params();
       const data = await request.validate(RenewaUpdatelValidator);     
-      return response.send(await RenewalProvider.update(data, period));
+      return response.send(await RenewalProvider.createReportRenewal(data, period));
     } catch (err) {
       return response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))

@@ -22,7 +22,7 @@ export interface IRenewalService {
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
   calculate(period: any): Promise<ApiResponse<any>>;
   getBeca(period:number, ): Promise<ApiResponse<any>>;
-  update(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>>;
+  createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>>;
 }
 
 export default class RenewalService implements IRenewalService {
@@ -75,8 +75,8 @@ export default class RenewalService implements IRenewalService {
     return new ApiResponse(res, EResponseCodes.OK)
 }
 
-async update(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>> {
-  const res = await this.renewalRepository.update(renewal, period);
+async createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>> {
+  const res = await this.renewalRepository.createReportRenewal(renewal, period);
 
   if (!res) {
     return new ApiResponse(

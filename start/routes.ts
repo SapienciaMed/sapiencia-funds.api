@@ -294,7 +294,7 @@ Route.group(() => {
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
   Route.get("/calculate/:period", "RenewalController.calculate");
   Route.get("/get-beca/:period/", "RenewalController.getBeca");
-  Route.post("/update/:period/", "RenewalController.update");
+  Route.post("/createReportRenewal/:period/", "RenewalController.createReportRenewal");
 }).prefix("/api/v1/renovacion");
 //.middleware("auth");
 
