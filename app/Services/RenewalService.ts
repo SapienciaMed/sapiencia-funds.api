@@ -1,5 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalFilters, IUpdateRenewal } from "App/Interfaces/CallRenewalInterface";
 import { IRenewalRepository } from "App/Repositories/Sapiencia/CallRenewalRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { generateXLSX } from "App/Utils/generateXLSX";
@@ -22,6 +22,7 @@ export interface IRenewalService {
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
   calculate(period: any): Promise<ApiResponse<any>>;
   getBeca(period:number, ): Promise<ApiResponse<any>>;
+  update(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>>;
 }
 
 export default class RenewalService implements IRenewalService {
@@ -72,6 +73,20 @@ export default class RenewalService implements IRenewalService {
   async getBeca(period) {
     const res = await this.renewalRepository.getBeca(period,)
     return new ApiResponse(res, EResponseCodes.OK)
+}
+
+async update(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>> {
+  const res = await this.renewalRepository.update(renewal, period);
+
+  if (!res) {
+    return new ApiResponse(
+      {} as IUpdateRenewal,
+      EResponseCodes.FAIL,
+      "El registro indicado no existe"
+    );
+  }
+
+  return new ApiResponse(res, EResponseCodes.OK);
 }
 
 }

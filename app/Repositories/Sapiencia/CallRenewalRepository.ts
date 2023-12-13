@@ -1,5 +1,5 @@
 import { IPagingData } from "App/Utils/ApiResponses";
-import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalFilters, IUpdateRenewal } from "App/Interfaces/CallRenewalInterface";
 // import CallBudget from "App/Models/Sapiencia/Callbudget";
 //import Database from "@ioc:Adonis/Lucid/Database";
 import Renewal from "App/Models/Renewal";
@@ -15,6 +15,7 @@ export interface IRenewalRepository {
   ): Promise<IPagingData<ICallRenewal>>;
   calculate(period: any): Promise<any>;
   getBeca(period: number): Promise<any>;
+  update(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null>;
 }
 
 export default class RenewalRepository implements IRenewalRepository {
@@ -142,7 +143,19 @@ export default class RenewalRepository implements IRenewalRepository {
     }
   }
 
+  async update(renewal: IUpdateRenewal, period: number): Promise<IUpdateRenewal | null> {
+    const toUpdate = await Renewal.query().where('period',period).where('fund', 'Beca Mejores Bachilleres Legaliza').first();
+    if (!toUpdate) {
+      return null;
+    }
 
+   toUpdate.enabled = renewal.enabled;
+    
+
+    await toUpdate.save();
+    return toUpdate.serialize() as IUpdateRenewal; 
+  
+  }
 
 
 
