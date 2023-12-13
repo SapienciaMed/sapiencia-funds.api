@@ -47,7 +47,6 @@ export default class BeneficiarySocialService extends BaseModel {
     columnName: "SSB_ESTADO",
     serializeAs: "state",
     prepare: (val) => (String(val) === "true" ? 1 : 0),
-    serialize: (val) => Boolean(val),
   })
   public state: boolean;
 
