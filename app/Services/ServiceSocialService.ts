@@ -124,6 +124,29 @@ export default class ServiceSocialService implements IServiceSocialService {
   ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>> {
     const requeriment =
       await this.serviceSocialRepository.getServiceSocialPaginate(filters);
+    let totalPendingHours = 0;
+
+    requeriment.array.forEach((item) => {
+      const period = item.beneficiarieConsolidate?.programs?.reglaments?.find(
+        (period) =>
+          Number(period.initialPeriod.split("-")[0] ?? 0) <=
+            Number(item.legalizationPeriod.split("-")[0] ?? 0) &&
+          Number(item.legalizationPeriod.split("-")[0] ?? 0) <=
+            Number(period.endPeriod.split("-")[0] ?? 0) &&
+          Number(period.program) ==
+            (item.beneficiarieConsolidate?.idProgram ?? 0)
+      );
+
+      const socialServiceHours = period?.socialServiceHours ?? 0;
+
+      item.committedHours = socialServiceHours;
+      item.pendingHours =
+        Number(socialServiceHours) - Number(item.hoursDone);
+
+      // Calcular el total de horas pendientes acumuladas
+      item.totalPendingHours = totalPendingHours + item.pendingHours;
+      totalPendingHours = item.totalPendingHours;
+    });
     return new ApiResponse(requeriment, EResponseCodes.OK);
   }
 }

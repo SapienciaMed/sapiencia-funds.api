@@ -10,9 +10,10 @@ export interface ISocialServiceBeneficiary {
   id?: number;
   legalizationPeriod: string;
   consolidationBeneficiary: number;
-  hoursBorrowed: number;
+  hoursDone: number;
   committedHours: number;
   pendingHours: number;
+  totalPendingHours?: number;
   supportDocumentRoute: string;
   observation: string;
   state: boolean;

@@ -27,6 +27,10 @@ export interface IServiceSocialRepository {
   getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
   ): Promise<IPagingData<ISocialServiceBeneficiary>>;
+  updateState(
+    data: ISocialServiceBeneficiary,
+    id: number
+  ): Promise<ISocialServiceBeneficiary | null>;
 }
 
 export default class ServiceSocialRepository
@@ -123,6 +127,23 @@ export default class ServiceSocialRepository
     return insertedItems;
   }
 
+  async updateState(
+    data: ISocialServiceBeneficiary,
+    id: number
+  ): Promise<ISocialServiceBeneficiary | null> {
+    const toUpdate = await BeneficiarySocialService.find(id);
+
+    if (!toUpdate) {
+      return null;
+    }
+
+    toUpdate.fill({ ...toUpdate, ...data });
+
+    await toUpdate.save();
+
+    return toUpdate.serialize() as ISocialServiceBeneficiary;
+  }
+
   async getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
   ): Promise<IPagingData<ISocialServiceBeneficiary>> {
@@ -141,6 +162,9 @@ export default class ServiceSocialRepository
           );
         }
       );
+      beneficiarieConsolidateQuery.preload("programs", (programsQuery) => {
+        programsQuery.preload("reglaments");
+      });
       beneficiarieConsolidateQuery.where("id", filters.id);
     });
 

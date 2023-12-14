@@ -1,3 +1,4 @@
+import { IProgramInterface } from "./ProgramInterface";
 import { IRequerimentsConsolidate } from "./requerimentsConsolidateInterface";
 
 export interface IBeneficiariesConsolidateInterface {
@@ -5,11 +6,13 @@ export interface IBeneficiariesConsolidateInterface {
   name: string;
   from: string;
   until: string;
+  idProgram?: number;
   modifyUser?: string;
   modifyDate?: string;
   createUser: string;
   createDate: string;
   requerimentsConsolidate?: IRequerimentsConsolidate[];
+  programs?: IProgramInterface;
 }
 
 export interface IBeneficiariesConsolidateFiltersInterface {

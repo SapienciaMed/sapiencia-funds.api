@@ -1,4 +1,5 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import Reglament from "./Reglament";
 
 export default class Programs extends BaseModel {
   public static table = "PMA_PROGRAMA";
@@ -6,4 +7,10 @@ export default class Programs extends BaseModel {
   public id: number;
   @column({ columnName: "PMA_NOMBRE", serializeAs: "value" })
   public value: string;
+
+  @hasMany(() => Reglament, {
+    localKey: "id",
+    foreignKey: "program",
+  })
+  public reglaments: HasMany<typeof Reglament>;
 }
