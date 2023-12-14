@@ -29,7 +29,7 @@ export default class extends BaseSchema {
         .notNullable()
         .comment("Número de renovados del reporte de renovación");
       table
-        .integer("RRP_PORCENTAJE")
+        .string("RRP_PORCENTAJE",20)
         .notNullable()
         .comment("Porcentaje reporte de renovación");
 
