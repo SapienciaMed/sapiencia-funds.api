@@ -93,7 +93,7 @@ export default class RenewalRepository implements IRenewalRepository {
     // Calcular el porcentaje de 'enabled * 100 / renewed' para cada registro
     dataArray = dataArray.map(item => {
       if (item.renewed > 0) {
-        const percentage = parseFloat(((item.enabled * 100) / item.renewed).toFixed(2));
+        const percentage = parseFloat(((item.renewed * 100) / item.enabled).toFixed(2));
         return { ...item, percentage };
       } else {
         // Si 'renewed' es 0, evita la división por cero asignando un porcentaje de 0
