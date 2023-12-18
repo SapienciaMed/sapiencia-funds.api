@@ -163,6 +163,10 @@ export default class AppProvider {
     const ReglamentConsolidationRepository = await import(
       "App/Repositories/ReglamentConsolidationRepository"
     );
+
+    const StorageRepository = await import(
+      "App/Repositories/StorageRepository"
+    );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -283,7 +287,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ServiceSocialProvider",
       () =>
-        new ServiceSocialService.default(new ServiceSocialRepository.default())
+        new ServiceSocialService.default(
+          new ServiceSocialRepository.default(),
+          new StorageRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.ConsolidationProvider",
@@ -303,7 +310,7 @@ export default class AppProvider {
       "core.ReglamentConsolidationProvider",
       () =>
         new ReglamentConsolidationService.default(
-            new ReglamentConsolidationRepository.default()
+          new ReglamentConsolidationRepository.default()
         )
     );
   }

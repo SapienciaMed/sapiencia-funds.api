@@ -1,5 +1,5 @@
 import { IBeneficiariesConsolidateInterface } from "./BeneficiariesConsolidateInterface";
-
+import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 export interface ISocialServiceFiltersInterface {
   id: number;
   page: number;
@@ -17,5 +17,6 @@ export interface ISocialServiceBeneficiary {
   supportDocumentRoute: string;
   observation: string;
   state: boolean;
+  files?: MultipartFileContract[];
   beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }

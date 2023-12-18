@@ -1,10 +1,15 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
+import {
+  IConsolidationTray,
+  IConsolidationTrayParams,
+} from "App/Interfaces/ConsolidationTrayInterface";
 import { IImportServiceSocial } from "App/Interfaces/ImportServiceSocialInterface";
 import {
   ISocialServiceBeneficiary,
   ISocialServiceFiltersInterface,
 } from "App/Interfaces/SocialServiceInterface";
 import { IServiceSocialRepository } from "App/Repositories/ServiceSocialRepository";
+import { IStorageRepository } from "App/Repositories/StorageRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 export interface IServiceSocialService {
@@ -13,10 +18,20 @@ export interface IServiceSocialService {
   getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
   ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>>;
+  updateSocialService(
+    socialService: ISocialServiceBeneficiary,
+    id: number
+  ): Promise<ApiResponse<ISocialServiceBeneficiary | null>>;
+  geConsolidationSocialService(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>>;
 }
 
 export default class ServiceSocialService implements IServiceSocialService {
-  constructor(private serviceSocialRepository: IServiceSocialRepository) {}
+  constructor(
+    private serviceSocialRepository: IServiceSocialRepository,
+    private storageRepository: IStorageRepository
+  ) {}
 
   async import(): Promise<ApiResponse<IImportServiceSocial[]>> {
     try {
@@ -140,13 +155,56 @@ export default class ServiceSocialService implements IServiceSocialService {
       const socialServiceHours = period?.socialServiceHours ?? 0;
 
       item.committedHours = socialServiceHours;
-      item.pendingHours =
-        Number(socialServiceHours) - Number(item.hoursDone);
+      item.pendingHours = Number(socialServiceHours) - Number(item.hoursDone);
 
       // Calcular el total de horas pendientes acumuladas
       item.totalPendingHours = totalPendingHours + item.pendingHours;
       totalPendingHours = item.totalPendingHours;
     });
     return new ApiResponse(requeriment, EResponseCodes.OK);
+  }
+
+  async downloadFilesServiceSocial(path: string): Promise<ApiResponse<Buffer>> {
+    const res = await this.storageRepository.downloadFile(path);
+    if (!res) {
+      return new ApiResponse(
+        {} as Buffer,
+        EResponseCodes.FAIL,
+        "Ocurrió un error en su Transacción "
+      );
+    }
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+  async updateSocialService(
+    socialService: ISocialServiceBeneficiary,
+    id: number
+  ): Promise<ApiResponse<ISocialServiceBeneficiary | null>> {
+    const res = await this.serviceSocialRepository.updateState(
+      socialService,
+      id
+    );
+    let uploadFiles;
+    if (socialService?.files) {
+      uploadFiles = await this.storageRepository.uploadInformation(
+        socialService?.files[0],
+        socialService.supportDocumentRoute
+      );
+    }
+    if (!res || !uploadFiles) {
+      return new ApiResponse(
+        {} as ISocialServiceBeneficiary,
+        EResponseCodes.FAIL,
+        "Ocurrió un error en su Transacción "
+      );
+    }
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+  async geConsolidationSocialService(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>> {
+    const technicianCollection =
+      await this.serviceSocialRepository.geConsolidationSocialService(filters);
+    return new ApiResponse(technicianCollection, EResponseCodes.OK);
   }
 }
