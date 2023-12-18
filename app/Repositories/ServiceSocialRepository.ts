@@ -205,14 +205,14 @@ export default class ServiceSocialRepository
       (i) => i.serialize() as InitialBeneficiaryInformation
     );
 
-    let infoFiltered: IConsolidationTrayParams[] = [];
+
     let infoAllData: IConsolidationTrayParams[] = [];
     let infoPaginated: IConsolidationTrayParams[] = [];
 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
-    const { searchParam, cutParamName, cutParamId, page, perPage } = filters;
+    const { searchParam, page, perPage } = filters;
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
 
