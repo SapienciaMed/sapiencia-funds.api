@@ -22,3 +22,7 @@ export interface IRemnant {
     dateCreate?:    Date;
     idProgram:     number;
 }
+export interface IRemnantUpdate {    
+    remaining:     number;
+    averageCost:   number;   
+}

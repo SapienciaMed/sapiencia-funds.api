@@ -1,14 +1,17 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { IRemnant, IRemnantFilters } from "App/Interfaces/IRemnantInterface";
+import { IRemnant, IRemnantFilters, IRemnantUpdate } from "App/Interfaces/IRemnantInterface";
 import { IMaster } from "App/Interfaces/MasterInterface";
 import { IRemnantRepository } from "App/Repositories/RemnantRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 
 
 export interface IRemnantService {
-    createMaster(master: IMaster): Promise<ApiResponse<IMaster>>;
     getallRemnantsPaginated(filters: IRemnantFilters): Promise<ApiResponse<IPagingData<IRemnant>>>;
+    getRemnantById(id:number): Promise<ApiResponse<IRemnant>>;
+    updateRemnan(id: number,remnant: IRemnantUpdate): Promise<ApiResponse<IRemnant>>;
+
     getMasterList(): Promise<ApiResponse<IMaster[]>>;
+    createMaster(master: IMaster): Promise<ApiResponse<IMaster>>;
     /* getMasterActivityPaginate(filters: IMasterActivityFilters): Promise<ApiResponse<IPagingData<IMasterActivity>>>; */
 }
 
@@ -27,8 +30,36 @@ export default class RemnantService implements IRemnantService {
         } 
         
         return new ApiResponse(remnants, EResponseCodes.OK);
-
+        
     }
+    
+    async getRemnantById(id: number): Promise<ApiResponse<IRemnant>> {
+        const res = await this.remnantRepository.getRemnantById(id);
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IRemnant,
+        EResponseCodes.FAIL,
+        "Registro no encontrado"
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
+    }
+
+    async updateRemnan(id: number,remnant: IRemnantUpdate): Promise<ApiResponse<IRemnant>> {
+        const res = await this.remnantRepository.updateRemnan(id,remnant);
+        if (!res) {
+          return new ApiResponse(
+            {} as IRemnant,
+            EResponseCodes.FAIL,
+            "El registro indicado no existe"
+          );
+        }
+    
+        return new ApiResponse(res, EResponseCodes.OK);
+      }
+
 
 
 

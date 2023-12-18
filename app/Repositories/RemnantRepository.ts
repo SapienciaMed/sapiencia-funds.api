@@ -1,5 +1,5 @@
 import Database from "@ioc:Adonis/Lucid/Database";
-import { IRemnant, IRemnantFilters } from "App/Interfaces/IRemnantInterface";
+import { IRemnant, IRemnantFilters, IRemnantUpdate } from "App/Interfaces/IRemnantInterface";
 import { IMaster, IMasterFilters } from "App/Interfaces/MasterInterface";
 import Master from "App/Models/Master";
 import Remanente from "App/Models/Remanente";
@@ -7,8 +7,12 @@ import { IPagingData } from "App/Utils/ApiResponses";
 
 
 export interface IRemnantRepository {
-  createMaster(master: IMaster): Promise<IMaster>;
   getallRemnantsPaginated(filters: IRemnantFilters): Promise<IPagingData<IRemnant>>;
+  getRemnantById(id:number): Promise<IRemnant | null>;
+  updateRemnan(id: number,remnant: IRemnantUpdate): Promise<IRemnant | null>;
+
+
+  createMaster(master: IMaster): Promise<IMaster>;
   getMasterList(): Promise<IMaster[]>;
   importRemnants(filters: IMasterFilters): Promise<any>;
 }
@@ -84,9 +88,30 @@ export default class RemnantRepository implements IRemnantRepository {
     await Promise.all(insertPromises);
 
     return results;
+  }
 
 
+  async getRemnantById(id: number): Promise<IRemnant | null> {
+    const res = await Remanente.find(id);
+    if (res) {     
+      return res.serialize() as IRemnant;
+    }
+    return null;
+  }
 
+  async updateRemnan(id: number,remnant: IRemnantUpdate): Promise<IRemnant | null> {
+    const toUpdate = await Remanente.find(id);
+
+    if (!toUpdate) {
+      return null;
+    }
+
+    toUpdate.remaining = Number(remnant.remaining);
+    toUpdate.averageCost = Number(remnant.averageCost);
+  
+
+    await toUpdate.save();
+    return toUpdate.serialize() as IRemnant;
   }
 
 

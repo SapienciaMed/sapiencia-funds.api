@@ -945,5 +945,7 @@ Route.group(() => {
 
 Route.group(() => {
   Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
+  Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
+  Route.put("/update/:id", "RemnantController.updateRemnan")
 }).prefix("/api/v1/remnants")
   
