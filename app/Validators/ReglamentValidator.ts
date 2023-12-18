@@ -6,7 +6,7 @@ export class ReglamentValidator {
 
   public schema = schema.create({
     id: schema.number.optional(),
-    program: schema.string([rules.maxLength(60)]),
+    program: schema.number(),
     initialPeriod: schema.string([rules.maxLength(60)]),
     isOpenPeriod: schema.boolean(),
     endPeriod: schema.string.optional([rules.maxLength(60)]),

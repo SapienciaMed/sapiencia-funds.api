@@ -1,6 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import ServiceSocialProvider from "@ioc:core.ServiceSocialProvider";
-import StorageProvider from "@ioc:core.StorageProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IConsolidationTray } from "App/Interfaces/ConsolidationTrayInterface";
 import {

@@ -1,3 +1,4 @@
+import { EStatesBeneficiary } from "App/Constants/StatesBeneficiaryEnum";
 import {
   IConsolidationTray,
   IConsolidationTrayParams,
@@ -211,14 +212,7 @@ export default class ServiceSocialRepository
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
-    const {
-      searchParam,
-      cutParamName,
-      cutParamId,
-      page,
-      perPage,
-      statusPaccSearch,
-    } = filters;
+    const { searchParam, cutParamName, cutParamId, page, perPage } = filters;
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
 
@@ -228,7 +222,7 @@ export default class ServiceSocialRepository
     //* ************************************************************************ //*
     for (const data of convertResAurora) {
       //Solo podemos proceder SII si es Técnico Pacc
-      if (data.statusPacc.id === statusPaccSearch) {
+      if (data.statusPacc.id === EStatesBeneficiary.SocialServices) {
         const objParams: IConsolidationTrayParams = {
           idBenef: data.id,
           idCut: data.idCut,
@@ -249,15 +243,7 @@ export default class ServiceSocialRepository
           currentResponsible: data.currentManager,
         };
 
-        if (!cutParamName || cutParamName == null || cutParamName == "") {
-          if (data.cuts.id === cutParamId) {
-            infoFiltered.push(objParams);
-          }
-        } else {
-          if (cutParamName === "TODOS") {
-            infoAllData.push(objParams);
-          }
-        }
+        infoAllData.push(objParams);
       }
     }
 
@@ -266,11 +252,7 @@ export default class ServiceSocialRepository
     //* ******************************************************** //*
     let filterForSearch: IConsolidationTrayParams[] = [];
 
-    if (cutParamName && cutParamName !== "" && cutParamName === "TODOS") {
-      filterForSearch = infoAllData;
-    } else {
-      filterForSearch = infoFiltered;
-    }
+    filterForSearch = infoAllData;
 
     //* ******************************************** //*
     //* Revisamos si vienen elementos para consultar //*
