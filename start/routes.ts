@@ -297,7 +297,10 @@ Route.group(() => {
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
   Route.get("/calculate/:period", "RenewalController.calculate");
   Route.get("/get-beca/:period/", "RenewalController.getBeca");
-  Route.post("/createReportRenewal/:period/", "RenewalController.createReportRenewal");
+  Route.post(
+    "/createReportRenewal/:period/",
+    "RenewalController.createReportRenewal"
+  );
 }).prefix("/api/v1/renovacion");
 //.middleware("auth");
 
@@ -416,6 +419,12 @@ Route.group(() => {
   )
     .middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/get-service-social-by-beneficiary",
+    "ServiceSocialController.getServiceSocialPaginate"
+  )
+    .middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_SERVICIO_SOCIAL");
 })
   .prefix("/api/v1/consolidation-tray-collection-technician")
   .middleware("auth");
@@ -834,6 +843,29 @@ Route.group(() => {
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
 })
   .prefix("/api/v1/consolidation-tray-project-leader")
+  .middleware("auth");
+
+//? ********** SERVICIO SOCIAL ********** ?//
+Route.group(() => {
+  Route.get("/import", "ServiceSocialController.import");
+  Route.get(
+    "/get-beneficiary-by-id/:id",
+    "ConsolidationTrayController.geBeneficiaryById"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-paginated/consolidate",
+    "ServiceSocialController.getConsolidationSocialService"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-service-social-file/",
+    "ServiceSocialController.dowloadUploadFiles"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.put(
+    "/update-service-social/",
+    "ServiceSocialController.updateServiceSocial"
+  ).middleware("auth:SERVICIO_SOCIAL");
+})
+  .prefix("/api/v1/consolidation-tray-social-service")
   .middleware("auth");
 
 //* ********************************************************************************

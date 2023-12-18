@@ -25,6 +25,7 @@ export interface IServiceSocialService {
   geConsolidationSocialService(
     filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>>;
+  downloadFilesServiceSocial(path: string): Promise<ApiResponse<Buffer>>;
 }
 
 export default class ServiceSocialService implements IServiceSocialService {

@@ -64,4 +64,22 @@ export default class ServiceSocialController {
       );
     }
   }
+
+  public async dowloadUploadFiles({ request, response }: HttpContextContract) {
+    const { path } = request.body();
+
+    try {
+      return response.send(
+        await ServiceSocialProvider.downloadFilesServiceSocial(`${path}`)
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(
+          null,
+          EResponseCodes.FAIL,
+          String("El requisito seleccionado no tiene adjuntos asociados")
+        )
+      );
+    }
+  }
 }
