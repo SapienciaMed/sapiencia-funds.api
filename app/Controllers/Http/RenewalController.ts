@@ -6,6 +6,7 @@ import RenewalProvider from '@ioc:core.RenewalProvider';
 import { DBException } from 'App/Utils/DbHandlerError';
 import RenewalValidatorFilter from 'App/Validators/RenewalValidator';
 import RenewalValidator from 'App/Validators/CreteRenewalValidator';
+import RenewaUpdatelValidator from 'App/Validators/RenewalUpdateValidator';
 
 
 export default class RenewalController {
@@ -83,5 +84,17 @@ export default class RenewalController {
       return response.badRequest(new ApiResponse(null, EResponseCodes.FAIL, String(err)));
     }
   } 
+
+  public async createReportRenewal({ request, response }: HttpContextContract) {
+    try {      
+      const { period } = request.params();
+      const data = await request.validate(RenewaUpdatelValidator);     
+      return response.send(await RenewalProvider.createReportRenewal(data, period));
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
 
 }

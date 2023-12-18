@@ -227,6 +227,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     const { searchParam, cutParamName, cutParamId, page, perPage, statusPaccSearch } = filters;
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
+    let auxCount1: number = 0; //Control Paginación Manual
+    let auxCount2: number = 0; //Control Paginación Manual
+    let auxCount3: number = 0; //Control Paginación Manual
 
     //* ************************************************************************ //*
     //* **** Ordenemos por el corte que llega de parámetro                       //*
@@ -262,6 +265,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           if (data.cuts.id === cutParamId) {
 
             infoFiltered.push(objParams);
+            auxCount1 += 1;
 
           }
 
@@ -270,6 +274,10 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           if (cutParamName === "TODOS") {
 
             infoAllData.push(objParams);
+
+          }else{
+
+            //TODO. Revisar paginación Adonis.
 
           }
 
@@ -315,15 +323,22 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           f.currentResponsible.toLowerCase().toString().includes(searchParam.toLowerCase())
         );
 
+      auxCount2 = filter.length;
       infoPaginated = filter.slice(start, end);
       totalDataContent = infoPaginated.length;
 
     } else {
 
+      auxCount3 = filterForSearch.length;
       infoPaginated = filterForSearch.slice(start, end);
-      totalDataContent = infoPaginated.length;
+      totalDataContent = infoAllData.length;
 
     }
+
+    //Defino estructura paginada para aplicar totales.
+    if( cutParamId && cutParamId > 0 ) totalDataContent = auxCount1;
+    if( searchParam && searchParam !== "" && searchParam !== null ) totalDataContent = auxCount2;
+    if( !searchParam && searchParam == "" && searchParam == null ) totalDataContent = auxCount3;
 
     const meta = {
       total: totalDataContent,
@@ -395,6 +410,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     }
 
     toBeneficiary.idCut = Number(cut);
+    toBeneficiary.countRenew
     await toBeneficiary.save();
 
     return toBeneficiary.serialize() as IConsolidationTrayParams;
