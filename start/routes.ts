@@ -942,4 +942,8 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
 }).prefix("/api/v1/fiducia")
+
+Route.group(() => {
+  Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
+}).prefix("/api/v1/remnants")
   

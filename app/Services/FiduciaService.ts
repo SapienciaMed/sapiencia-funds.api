@@ -1,4 +1,3 @@
-import { ITypeMasterList } from "App/Interfaces/TypeMasterListinterface";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IFiduciaRepository } from "App/Repositories/FiduciaRepository";

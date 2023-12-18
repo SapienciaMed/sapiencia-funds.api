@@ -1,11 +1,14 @@
 import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
 
 export default class Remanente extends BaseModel {
+
+  public static table = "RMT_REMANETES";
+
   @column({ isPrimary: true, columnName: "RMT_CODIGO", serializeAs: "id" })
   public id: number;
 
   @column({ columnName: "RMT_CONVOCATORIA", serializeAs: "announcement" })
-  public announcement: string;
+  public announcement: number;
 
   @column({ columnName: "RMT_FIDUCIA", serializeAs: "trust" })
   public trust: number;

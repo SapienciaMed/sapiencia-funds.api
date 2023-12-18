@@ -72,6 +72,10 @@ export default class AppProvider {
     const FiduciaService = await import(
       "App/Services/FiduciaService"
     );
+    
+    const RemnantService = await import(
+      "App/Services/RemnantService"
+    );
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -160,6 +164,9 @@ export default class AppProvider {
     );
     const FiduciaRepository = await import(
       "App/Repositories/FiduciaRepository"
+    );
+    const RemnantRepository = await import(
+      "App/Repositories/RemnantRepository"
     );
 
     /**************************************************************************/
@@ -301,6 +308,11 @@ export default class AppProvider {
       "core.FiduciaProvider",
       () =>
         new FiduciaService.default(new FiduciaRepository.default())
+    );
+    this.app.container.singleton(
+      "core.RemnantProvider",
+      () =>
+        new RemnantService.default(new RemnantRepository.default())
     );
   }
 
