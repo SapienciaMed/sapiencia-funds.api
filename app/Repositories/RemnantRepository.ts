@@ -23,13 +23,13 @@ export default class RemnantRepository implements IRemnantRepository {
     const res = Remanente.query();
 
     if (filters.announcement) {
-      res.whereILike("announcement", `%${filters.announcement}%`);
+      res.where("announcement", `${filters.announcement}`);
     }
     if (filters.fund) {
-      res.whereILike("communityFund", `%${filters.fund}%`);
+      res.where("communityFund", `${filters.fund}`);
     }
     if (filters.trust) {
-      res.whereILike("trust", `%${filters.trust}%`);
+      res.where("trust", `${filters.trust}`);
     }
 
     const workerMasterActivityPaginated = await res.paginate(
