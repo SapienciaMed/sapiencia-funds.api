@@ -2,67 +2,93 @@ import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ICallPeriod } from "App/Interfaces/CallPeriodInterfaces";
 import {
   ICallBudget,
-  ICallBudgetFilters
+  ICallBudgetFilters,
 } from "App/Interfaces/CallBudgetInterfaces";
 import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
+import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import {
-  ApiResponse,
-  IPagingData
-} from "App/Utils/ApiResponses";
-import {
-  IConsolidationTrayForTechnicianCollection,
-  IConsolidationTrayForTechnicianCollectionParams,
+  IConsolidationTray,
+  IConsolidationTrayParams,
   IConsolidationTrayForTransactions,
   IPqrsdfResultSimple,
   IRequerimentsResultSimple,
   IComplianceAssignment,
   IApplyKnowledgeTransfer,
-  IChageStatusKnowledgeTransfer
-} from '../Interfaces/ConsolidationTrayInterface';
-import { IConsolidationTrayTechnicianCollectionRepository } from '../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository';
-import { ICutInterface } from '../Interfaces/CutInterface';
+  IChageStatusKnowledgeTransfer,
+} from "../Interfaces/ConsolidationTrayInterface";
+import { IConsolidationTrayRepository } from "../Repositories/Sapiencia/ConsolidationTrayTechnicianCollectionRepository";
+import { ICutInterface } from "../Interfaces/CutInterface";
 import { ICallFound } from "App/Interfaces/CallfundInterfaces";
 
 //* ************************************************************* *//
 //* ***** Para la subida de archivos al BUCKET DE SAPIENCIA ***** *//
 //* ************************************************************* *//
-import { IFiles } from '../Interfaces/StorageInterfaces';
-import { MultipartFileContract } from '@ioc:Adonis/Core/BodyParser';
+import { IFiles } from "../Interfaces/StorageInterfaces";
+import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 import { Storage } from "@google-cloud/storage";
 
-import RequirementsConsolidate from '../Models/RequirementsConsolidate';
+import RequirementsConsolidate from "../Models/RequirementsConsolidate";
 
-//const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
+// const keyFilename = process.env.GCLOUD_KEYFILE;  //-->Local
 const bucketName = process.env.GCLOUD_BUCKET ?? ""; //-->Pdxn
 
 export interface ISapienciaService {
-
   getAllCallPeriod(): Promise<ApiResponse<ICallPeriod[]>>;
   getAllCallBudget(): Promise<ApiResponse<ICallBudget[]>>;
   getAllCallfond(): Promise<ApiResponse<ICallFound[]>>;
-  geCallBudgetPaginate(filters: ICallBudgetFilters): Promise<ApiResponse<IPagingData<ICallBudget>>>;
+  geCallBudgetPaginate(
+    filters: ICallBudgetFilters
+  ): Promise<ApiResponse<IPagingData<ICallBudget>>>;
 
   //* ************************************************************* *//
   //* ********** TEMAS DEL BANDEJA TÉCNICO PASO AL COBRO ********** *//
   //* ************************************************************* *//
-  geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
+  geConsolidationTray(
+    filters: IConsolidationTray
+  ): Promise<
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
+  >;
   getCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[] | null>>;
-  geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>>;
-  geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
-  updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>>;
+  geConsolidationTrayByCut(
+    filters: IConsolidationTray
+  ): Promise<
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
+  >;
+  geBeneficiaryById(
+    id: number
+  ): Promise<
+    ApiResponse<IConsolidationTrayParams | null>
+  >;
+  updateCutBeneficiary(
+    data: IConsolidationTrayForTransactions
+  ): Promise<
+    ApiResponse<IConsolidationTrayParams | null>
+  >;
 
   //* ********************************************* *//
   //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
   //* ********************************************* *//
-  getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
+  getPQRSDFExternal(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>>;
 
   //* ************************************************* *//
   //* ********** TEMAS DEL TAB DE REQUISITOS ********** *//
   //* ************************************************* *//
-  getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>>;
-  getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
-  complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<ApiResponse<IComplianceAssignment[] | null>>;
-  uploadRequirementFile(file: MultipartFileContract, path?: string, requirement?: number): Promise<boolean>;
+  getRequirementsByBeneficiary(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<boolean>>;
+  getRequirementsByBeneficiaryList(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>>;
+  complianceAssignmentBeneficiary(
+    data: IComplianceAssignment[]
+  ): Promise<ApiResponse<IComplianceAssignment[] | null>>;
+  uploadRequirementFile(
+    file: MultipartFileContract,
+    path?: string,
+    requirement?: number
+  ): Promise<boolean>;
   getUploadFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
   deleteUploadFiles(path?: string, beneficiary?: number): Promise<boolean>;
   dowloadUploadFiles(path: string, beneficiary?: number): Promise<Buffer>;
@@ -70,25 +96,35 @@ export interface ISapienciaService {
   //* **************************************************************************************************** *//
   //* ********** TEMAS DE TAB DE TRANSFERENCIA DE CONOCIMIENTO (TAMBIÉN PARA MANEJAR HISTÓRICO) ********** *//
   //* **************************************************************************************************** *//
-  getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>>;
-  changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>>;
-  uploadKnowledgeTransferFile(file: MultipartFileContract, path?: string, knowledgeTransfer?: number, beneficiary?: number): Promise<boolean>;
-  getUploadKnowledgeTransferFiles(path?: string): Promise<ApiResponse<IFiles[]>>;
-
+  getKnowledgeTransferByBeneficiary(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>>;
+  changeApproveOrRejectKnowledgeTransfer(
+    data: IChageStatusKnowledgeTransfer
+  ): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>>;
+  uploadKnowledgeTransferFile(
+    file: MultipartFileContract,
+    path?: string,
+    knowledgeTransfer?: number,
+    beneficiary?: number
+  ): Promise<boolean>;
+  getUploadKnowledgeTransferFiles(
+    path?: string
+  ): Promise<ApiResponse<IFiles[]>>;
+  getRequirementsKnowledgeTransfer(
+    data: IConsolidationTray
+  ): Promise<ApiResponse<IRequerimentsResultSimple[] | null>>;
 }
 
 export default class SapienciaService implements ISapienciaService {
-
   storage: Storage;
 
   constructor(
     private callPeriodRepository: ICallPeriodRepository,
-    private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayTechnicianCollectionRepository,
+    private callConsolidationTrayTechnicianCollectionRepository: IConsolidationTrayRepository
   ) {
-
-    // this.storage = new Storage({ keyFilename }); //-->Local
+    //this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage(); //-->Pdxn
-
   }
 
   async getAllCallPeriod(): Promise<ApiResponse<ICallPeriod[]>> {
@@ -109,87 +145,165 @@ export default class SapienciaService implements ISapienciaService {
   async geCallBudgetPaginate(
     filters: ICallBudgetFilters
   ): Promise<ApiResponse<IPagingData<ICallBudget>>> {
-    const Activity =
-      await this.callPeriodRepository.geCallBudgetPaginate(filters);
+    const Activity = await this.callPeriodRepository.geCallBudgetPaginate(
+      filters
+    );
     return new ApiResponse(Activity, EResponseCodes.OK);
   }
 
-  async geConsolidationTrayTechnicianCollection(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>> {
-
-    const technicianCollection = await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayTechnicianCollection(filters);
+  async geConsolidationTray(
+    filters: IConsolidationTray
+  ): Promise<
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
+  > {
+    const technicianCollection =
+      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTray(
+        filters
+      );
     return new ApiResponse(technicianCollection, EResponseCodes.OK);
-
   }
 
-  async getCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[] | null>> {
-
-    const res = await this.callConsolidationTrayTechnicianCollectionRepository.getCutGeneric();
+  async getCutsForConsolidationTray(): Promise<
+    ApiResponse<ICutInterface[] | null>
+  > {
+    const res =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getCutGeneric();
     return new ApiResponse(res, EResponseCodes.OK);
-
   }
 
-  async geConsolidationTrayTechnicianCollectionByCut(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IConsolidationTrayForTechnicianCollectionParams>>> {
-
-    const technicianCollection = await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayTechnicianCollectionByCut(filters);
+  async geConsolidationTrayByCut(
+    filters: IConsolidationTray
+  ): Promise<
+    ApiResponse<IPagingData<IConsolidationTrayParams>>
+  > {
+    const technicianCollection =
+      await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayByCut(
+        filters
+      );
     return new ApiResponse(technicianCollection, EResponseCodes.OK);
-
   }
 
-  async geBeneficiaryById(id: number): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>> {
-
-    const getBeneficiary = await this.callConsolidationTrayTechnicianCollectionRepository.geBeneficiaryById(id);
-    if (!getBeneficiary || getBeneficiary == null) return new ApiResponse(null, EResponseCodes.FAIL, "No se encontró información");
-    return new ApiResponse(getBeneficiary, EResponseCodes.OK, "Información encontrada");
-
+  async geBeneficiaryById(
+    id: number
+  ): Promise<
+    ApiResponse<IConsolidationTrayParams | null>
+  > {
+    const getBeneficiary =
+      await this.callConsolidationTrayTechnicianCollectionRepository.geBeneficiaryById(
+        id
+      );
+    if (!getBeneficiary || getBeneficiary == null)
+      return new ApiResponse(
+        null,
+        EResponseCodes.FAIL,
+        "No se encontró información"
+      );
+    return new ApiResponse(
+      getBeneficiary,
+      EResponseCodes.OK,
+      "Información encontrada"
+    );
   }
 
-  async updateCutBeneficiary(data: IConsolidationTrayForTransactions): Promise<ApiResponse<IConsolidationTrayForTechnicianCollectionParams | null>> {
-
-    const technicianTransaction = await this.callConsolidationTrayTechnicianCollectionRepository.updateCutBeneficiary(data);
+  async updateCutBeneficiary(
+    data: IConsolidationTrayForTransactions
+  ): Promise<
+    ApiResponse<IConsolidationTrayParams | null>
+  > {
+    const technicianTransaction =
+      await this.callConsolidationTrayTechnicianCollectionRepository.updateCutBeneficiary(
+        data
+      );
 
     if (!technicianTransaction || technicianTransaction == null)
-      return new ApiResponse(null, EResponseCodes.FAIL, "No se pudo actualizar el corte");
+      return new ApiResponse(
+        null,
+        EResponseCodes.FAIL,
+        "No se pudo actualizar el corte"
+      );
 
-    return new ApiResponse(technicianTransaction, EResponseCodes.OK, "Se actualizó el corte para el beneficiario");
-
+    return new ApiResponse(
+      technicianTransaction,
+      EResponseCodes.OK,
+      "Se actualizó el corte para el beneficiario"
+    );
   }
 
-  async getPQRSDFExternal(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>> {
-
-    const getGetPQRSDF = await this.callConsolidationTrayTechnicianCollectionRepository.getPQRSDFExternal(filters);
-    return new ApiResponse(getGetPQRSDF, EResponseCodes.OK, "Listado de PQRSDF");
-
+  async getPQRSDFExternal(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IPqrsdfResultSimple>>> {
+    const getGetPQRSDF =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getPQRSDFExternal(
+        filters
+      );
+    return new ApiResponse(
+      getGetPQRSDF,
+      EResponseCodes.OK,
+      "Listado de PQRSDF"
+    );
   }
 
-  async getRequirementsByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<boolean>> {
-
-    const getRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiary(filters);
-    if (!getRequirements) return new ApiResponse(false, EResponseCodes.FAIL, "Ocurrio un error realizando la transacción");
-    return new ApiResponse(true, EResponseCodes.OK, "Transacción realizada con éxito");
-
+  async getRequirementsByBeneficiary(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<boolean>> {
+    const getRequirements =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiary(
+        filters
+      );
+    if (!getRequirements)
+      return new ApiResponse(
+        false,
+        EResponseCodes.FAIL,
+        "Ocurrio un error realizando la transacción"
+      );
+    return new ApiResponse(
+      true,
+      EResponseCodes.OK,
+      "Transacción realizada con éxito"
+    );
   }
 
-  async getRequirementsByBeneficiaryList(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>> {
-
-    const getGetRequirements = await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiaryList(filters);
-    return new ApiResponse(getGetRequirements, EResponseCodes.OK, "Listado de Requisitos");
-
+  async getRequirementsByBeneficiaryList(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IRequerimentsResultSimple>>> {
+    const getGetRequirements =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsByBeneficiaryList(
+        filters
+      );
+    return new ApiResponse(
+      getGetRequirements,
+      EResponseCodes.OK,
+      "Listado de Requisitos"
+    );
   }
 
-  async complianceAssignmentBeneficiary(data: IComplianceAssignment[]): Promise<ApiResponse<IComplianceAssignment[] | null>> {
-
-    const changeCompliance = await this.callConsolidationTrayTechnicianCollectionRepository.complianceAssignmentBeneficiary(data);
+  async complianceAssignmentBeneficiary(
+    data: IComplianceAssignment[]
+  ): Promise<ApiResponse<IComplianceAssignment[] | null>> {
+    const changeCompliance =
+      await this.callConsolidationTrayTechnicianCollectionRepository.complianceAssignmentBeneficiary(
+        data
+      );
     if (!changeCompliance || changeCompliance == null)
-      return new ApiResponse(null, EResponseCodes.FAIL, "Ocurrió un error al intentar cambiar los estados de cumplimiento");
+      return new ApiResponse(
+        null,
+        EResponseCodes.FAIL,
+        "Ocurrió un error al intentar cambiar los estados de cumplimiento"
+      );
 
-    return new ApiResponse(changeCompliance, EResponseCodes.OK, "Estados de cumplimiento cambiados");
-
+    return new ApiResponse(
+      changeCompliance,
+      EResponseCodes.OK,
+      "Estados de cumplimiento cambiados"
+    );
   }
 
-  async uploadRequirementFile(file: MultipartFileContract, path?: string, requirement?: number): Promise<boolean> {
-
+  async uploadRequirementFile(
+    file: MultipartFileContract,
+    path?: string,
+    requirement?: number
+  ): Promise<boolean> {
     try {
-
       const bucket = this.storage.bucket(bucketName);
 
       if (!file.tmpPath) return false;
@@ -197,7 +311,7 @@ export default class SapienciaService implements ISapienciaService {
       const id: number = Number(requirement);
       const getRequirement = await RequirementsConsolidate.find(id);
 
-      if( !getRequirement ) return false;
+      if (!getRequirement) return false;
 
       const beneficiary: number = getRequirement?.idBeneficiary;
       const nameFile: string = `beneficiary_${beneficiary}_aurora.pdf`;
@@ -207,83 +321,107 @@ export default class SapienciaService implements ISapienciaService {
       });
 
       return !!fileCloud;
-
     } catch (error) {
-
       return false;
-
     }
-
   }
 
   async getUploadFiles(path?: string): Promise<ApiResponse<IFiles[]>> {
+    const [files] = await this.storage
+      .bucket(bucketName)
+      .getFiles({ prefix: path });
 
-    const [files] = await this.storage.bucket(bucketName).getFiles({prefix: path});
-
-    const response = files.map(file => {
-
+    const response = files.map((file) => {
       const fileName = file.metadata.name?.split("/");
 
       return {
-          name: fileName ? fileName[fileName.length - 1] : "",
-          path: file.metadata.name ?? "",
-          size: Number(file.metadata.size ?? 0),
-          date: file.metadata.timeCreated ?? ""
-      }
-
+        name: fileName ? fileName[fileName.length - 1] : "",
+        path: file.metadata.name ?? "",
+        size: Number(file.metadata.size ?? 0),
+        date: file.metadata.timeCreated ?? "",
+      };
     });
 
-    return new ApiResponse(response.filter(file => file.name), EResponseCodes.OK);
-
+    return new ApiResponse(
+      response.filter((file) => file.name),
+      EResponseCodes.OK
+    );
   }
 
-  async deleteUploadFiles(path?: string, beneficiary?: number): Promise<boolean> {
-
+  async deleteUploadFiles(
+    path?: string,
+    beneficiary?: number
+  ): Promise<boolean> {
     const urlComplement: string = `${path}beneficiary_${beneficiary}_aurora.pdf`;
-    const result = await this.storage.bucket(bucketName).file(urlComplement).delete();
+    const result = await this.storage
+      .bucket(bucketName)
+      .file(urlComplement)
+      .delete();
     console.log(result);
 
     return true;
-
   }
 
-  async dowloadUploadFiles(path: string, beneficiary?: number): Promise<Buffer> {
-
+  async dowloadUploadFiles(
+    path: string,
+    beneficiary?: number
+  ): Promise<Buffer> {
     const urlComplement: string = `${path}beneficiary_${beneficiary}_aurora.pdf`;
-    const [archivo] = await this.storage.bucket(bucketName).file(urlComplement).download();
+    const [archivo] = await this.storage
+      .bucket(bucketName)
+      .file(urlComplement)
+      .download();
     console.log(archivo);
     return archivo;
-
   }
 
-  async getKnowledgeTransferByBeneficiary(filters: IConsolidationTrayForTechnicianCollection): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>> {
-
-    const getKnowledgeTransfers = await this.callConsolidationTrayTechnicianCollectionRepository.getKnowledgeTransferByBeneficiary(filters);
+  async getKnowledgeTransferByBeneficiary(
+    filters: IConsolidationTray
+  ): Promise<ApiResponse<IPagingData<IApplyKnowledgeTransfer> | boolean>> {
+    const getKnowledgeTransfers =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getKnowledgeTransferByBeneficiary(
+        filters
+      );
     if (!getKnowledgeTransfers)
       return new ApiResponse(
         false,
         EResponseCodes.FAIL,
-        "Ocurrio un error realizando la transacción, es posible que no se encontrara al beneficiario o al reglamento que aplique a la fecha de legalicación del beneficiario en cuestión.");
-    return new ApiResponse(getKnowledgeTransfers, EResponseCodes.OK, "Transacción realizada con éxito, obteniendo transferencia de conocimiento");
-
+        "Ocurrio un error realizando la transacción, es posible que no se encontrara al beneficiario o al reglamento que aplique a la fecha de legalicación del beneficiario en cuestión."
+      );
+    return new ApiResponse(
+      getKnowledgeTransfers,
+      EResponseCodes.OK,
+      "Transacción realizada con éxito, obteniendo transferencia de conocimiento"
+    );
   }
 
-  async changeApproveOrRejectKnowledgeTransfer(data: IChageStatusKnowledgeTransfer): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>> {
-
-    const applyChangeKnowledgeTransfer = await this.callConsolidationTrayTechnicianCollectionRepository.changeApproveOrRejectKnowledgeTransfer(data);
+  async changeApproveOrRejectKnowledgeTransfer(
+    data: IChageStatusKnowledgeTransfer
+  ): Promise<ApiResponse<IApplyKnowledgeTransfer | boolean>> {
+    const applyChangeKnowledgeTransfer =
+      await this.callConsolidationTrayTechnicianCollectionRepository.changeApproveOrRejectKnowledgeTransfer(
+        data
+      );
     if (!applyChangeKnowledgeTransfer)
       return new ApiResponse(
         false,
         EResponseCodes.FAIL,
-        "Ocurrio un error realizando la transacción, no pudo cambiarse el estado de la transferencia de conocimiento.");
-    return new ApiResponse(applyChangeKnowledgeTransfer, EResponseCodes.OK, "Transacción realizada con éxito, obteniendo transferencia de conocimiento");
-
+        "Ocurrio un error realizando la transacción, no pudo cambiarse el estado de la transferencia de conocimiento. Pudo haberse encontrado un error al solicitar el reglamento o hay inconsistencias con las horas ingresadas, por favor verifique."
+      );
+    return new ApiResponse(
+      applyChangeKnowledgeTransfer,
+      EResponseCodes.OK,
+      "Transacción realizada con éxito, obteniendo transferencia de conocimiento"
+    );
   }
 
-  async uploadKnowledgeTransferFile(file: MultipartFileContract, path?: string, knowledgeTransfer?: number, beneficiary?: number): Promise<boolean> {
-
+  async uploadKnowledgeTransferFile(
+    file: MultipartFileContract,
+    path?: string,
+    knowledgeTransfer?: number,
+    beneficiary?: number
+  ): Promise<boolean> {
     try {
-
       const bucket = this.storage.bucket(bucketName);
 
       if (!file.tmpPath) return false;
@@ -292,7 +430,9 @@ export default class SapienciaService implements ISapienciaService {
       //* ****** entonces debemos nombrar diferente PERO mantener el ****** *//
       //* ****** usuario alineado con su grupo específico            ****** *//
       const getNameDate: number = Date.parse(Date());
-      const descriptionName: string = `${getNameDate}-TC${knowledgeTransfer}-BENEF${beneficiary}`;
+      const clientName: string = file.clientName.split(".")[0];
+      // const descriptionName: string = `${getNameDate}-TC${knowledgeTransfer}-BENEF${beneficiary}`;
+      const descriptionName: string = `${clientName}-${getNameDate}-T${knowledgeTransfer}-B${beneficiary}`;
 
       const nameFile: string = `${descriptionName}.pdf`;
 
@@ -301,34 +441,47 @@ export default class SapienciaService implements ISapienciaService {
       });
 
       return !!fileCloud;
-
     } catch (error) {
-
       return false;
-
     }
-
   }
 
-  async getUploadKnowledgeTransferFiles(path?: string): Promise<ApiResponse<IFiles[]>> {
+  async getUploadKnowledgeTransferFiles(
+    path?: string
+  ): Promise<ApiResponse<IFiles[]>> {
+    const [files] = await this.storage
+      .bucket(bucketName)
+      .getFiles({ prefix: path });
 
-    const [files] = await this.storage.bucket(bucketName).getFiles({prefix: path});
-
-    const response = files.map(file => {
-
+    const response = files.map((file) => {
       const fileName = file.metadata.name?.split("/");
 
       return {
-          name: fileName ? fileName[fileName.length - 1] : "",
-          path: file.metadata.name ?? "",
-          size: Number(file.metadata.size ?? 0),
-          date: file.metadata.timeCreated ?? ""
-      }
-
+        name: fileName ? fileName[fileName.length - 1] : "",
+        path: file.metadata.name ?? "",
+        size: Number(file.metadata.size ?? 0),
+        date: file.metadata.timeCreated ?? "",
+      };
     });
 
-    return new ApiResponse(response.filter(file => file.name), EResponseCodes.OK);
-
+    return new ApiResponse(
+      response.filter((file) => file.name),
+      EResponseCodes.OK
+    );
   }
 
+  async getRequirementsKnowledgeTransfer(
+    data: IConsolidationTray
+  ): Promise<ApiResponse<IRequerimentsResultSimple[] | null>> {
+    const { idBeneficiary } = data;
+    const getRequirementsMandatory =
+      await this.callConsolidationTrayTechnicianCollectionRepository.getRequirementsKnowledgeTransfer(
+        Number(idBeneficiary)
+      );
+    return new ApiResponse(
+      getRequirementsMandatory,
+      EResponseCodes.OK,
+      "Listado de Requisitos Obligatorios"
+    );
+  }
 }

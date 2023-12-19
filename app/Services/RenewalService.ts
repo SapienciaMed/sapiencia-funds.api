@@ -1,5 +1,5 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { ICallRenewal, ICallRenewalFilters } from "App/Interfaces/CallRenewalInterface";
+import { ICallRenewal, ICallRenewalFilters, IUpdateRenewal } from "App/Interfaces/CallRenewalInterface";
 import { IRenewalRepository } from "App/Repositories/Sapiencia/CallRenewalRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { generateXLSX } from "App/Utils/generateXLSX";
@@ -20,12 +20,16 @@ export interface IRenewalService {
   geCallRenewalPaginate(
     filters: ICallRenewalFilters
   ): Promise<ApiResponse<IPagingData<ICallRenewal>>>;
+  calculate(period: any): Promise<ApiResponse<any>>;
+  getBeca(period: number,): Promise<ApiResponse<any>>;
+  createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>>;
 }
 
 export default class RenewalService implements IRenewalService {
   constructor(
     private renewalRepository: IRenewalRepository
   ) { }
+
 
   //crear Renewal
   async createRenewal(renewal: ICallRenewal): Promise<ApiResponse<ICallRenewal>> {
@@ -53,12 +57,58 @@ export default class RenewalService implements IRenewalService {
 
 
   public async geCallRenewalPaginate(filters: ICallRenewalFilters) {
+
+    const imports = await this.renewalRepository.import(filters);
+
+    imports[0].map(i => {
+      this.renewalRepository.validate(filters.period, i)
+    });
+
     const accountStatementsFound =
       await this.renewalRepository.geCallRenewalPaginate(
         filters
       );
+
     return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
 
+
   }
+
+  public async calculate(period: any): Promise<ApiResponse<any>> {
+    const accountStatementsFound = await this.renewalRepository.calculate(period);
+    return new ApiResponse(accountStatementsFound, EResponseCodes.OK);
+  }
+
+  async getBeca(period) {
+    const res = await this.renewalRepository.getBeca(period,)
+    return new ApiResponse(res, EResponseCodes.OK)
+  }
+
+  async createReportRenewal(renewal: IUpdateRenewal, period: number): Promise<ApiResponse<IUpdateRenewal>> {
+    const res = await this.renewalRepository.createReportRenewal(renewal, period);
+
+    if (!res) {
+      return new ApiResponse(
+        {} as IUpdateRenewal,
+        EResponseCodes.FAIL,
+        "El registro indicado no existe"
+      );
+    }
+
+    return new ApiResponse(res, EResponseCodes.OK);
+  }
+
+
+  public async import(filters: ICallRenewalFilters) {
+
+    const imports = await this.renewalRepository.import(filters);
+
+    return new ApiResponse(imports, EResponseCodes.OK);
+
+  }
+
+
 }
+
+
 

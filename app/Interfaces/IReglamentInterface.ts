@@ -1,6 +1,6 @@
 export interface IReglamentInterface {
   id?: number | any;
-  program: string;
+  program: number;
   initialPeriod: string;
   isOpenPeriod: boolean;
   endPeriod?: string | any;

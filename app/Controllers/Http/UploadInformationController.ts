@@ -9,8 +9,8 @@ import EmailProvider from "@ioc:core.EmailProvider"
 import UploadInformationValidatorValidator from "App/Validators/UploadInformationValidator";
 
 export default class UploadInformationController {
-  public async createUploadInformation({ 
-    request, 
+  public async createUploadInformation({
+    request,
     response
   }: HttpContextContract) {
     try {
@@ -21,16 +21,16 @@ export default class UploadInformationController {
       return response.send(
         await UploadInformationProvider.createUploadInformation(uploadInformation)
       );
-      
+
     } catch (err) {
       response.badRequest(
         new ApiResponse(null, EResponseCodes.FAIL, String(err))
-   
+
       );
     }
   }
-  
-  
+
+
 
 public async getUploadInformation({ response }: HttpContextContract) {
     try {
@@ -45,8 +45,8 @@ public async getUploadInformation({ response }: HttpContextContract) {
   }
 
   public async getUploadInformationById({
-    request, 
-    response 
+    request,
+    response
   }: HttpContextContract) {
     try {
       const { id } = request.params();
@@ -148,14 +148,28 @@ public async getUploadInformation({ response }: HttpContextContract) {
     }
   }
 
+  public async getuploadFileCitizen({ request, response }: HttpContextContract) {
+    try {
+      const params = request.body();
+      if(!params.fileName) throw(new Error("Falta una ruta"));
+      response.header('Content-Type', 'application/octet-stream');
+      response.header('Content-Disposition', `attachment; filename="${params.fileName}"`);
+      return response.send(await StorageProvider.downloadFileCitizen(params.fileName));
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
 
   public async emailNotification({ request, response }: HttpContextContract) {
     try {
       const data = request.only(['commune', 'validity', 'information', 'User', 'emails' , 'fileName']);
-      
-      const emailList: string[] = data.emails;    
+
+      const emailList: string[] = data.emails;
       const emailResponse = await EmailProvider.emailNotification(data, emailList);
-    
+
       return response.send(emailResponse);
     } catch (err) {
       return response.badRequest(
@@ -163,5 +177,5 @@ public async getUploadInformation({ response }: HttpContextContract) {
       );
     }
   }
-  
+
 }

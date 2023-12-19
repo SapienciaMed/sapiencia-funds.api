@@ -66,6 +66,20 @@ export default class AppProvider {
     const ConsolidationService = await import(
       "App/Services/ConsolidationService"
     );
+    const AbsorptionPercentageService = await import(
+      "App/Services/AbsorptionPercentageService"
+    );
+
+    const ReglamentConsolidationService = await import(
+      "App/Services/ReglamentConsolidationService"
+    );
+    const FiduciaService = await import(
+      "App/Services/FiduciaService"
+    );
+    
+    const RemnantService = await import(
+      "App/Services/RemnantService"
+    );
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -146,7 +160,26 @@ export default class AppProvider {
     const ConsolidationRepository = await import(
       "App/Repositories/ConsolidationRepository"
     );
+    const AbsorptionPercentageRepository = await import(
+      "App/Repositories/AbsorptionPercentageRepository"
+    );
+    const CallBudgetRepository = await import(
+      "App/Repositories/Sapiencia/CallBudgetRepository"
+    );
+    const FiduciaRepository = await import(
+      "App/Repositories/FiduciaRepository"
+    );
+    const RemnantRepository = await import(
+      "App/Repositories/RemnantRepository"
+    );
 
+    const ReglamentConsolidationRepository = await import(
+      "App/Repositories/ReglamentConsolidationRepository"
+    );
+
+    const StorageRepository = await import(
+      "App/Repositories/StorageRepository"
+    );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -267,12 +300,41 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ServiceSocialProvider",
       () =>
-        new ServiceSocialService.default(new ServiceSocialRepository.default())
+        new ServiceSocialService.default(
+          new ServiceSocialRepository.default(),
+          new StorageRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.ConsolidationProvider",
       () =>
         new ConsolidationService.default(new ConsolidationRepository.default())
+    );    
+    this.app.container.singleton(
+      "core.AbsorptionPercentageProvider",
+      () =>
+        new AbsorptionPercentageService.default(
+          new AbsorptionPercentageRepository.default(),
+          new CallBudgetRepository.default()
+        )
+    );
+
+    this.app.container.singleton(
+      "core.ReglamentConsolidationProvider",
+      () =>
+        new ReglamentConsolidationService.default(
+          new ReglamentConsolidationRepository.default()
+        )
+    );
+    this.app.container.singleton(
+      "core.FiduciaProvider",
+      () =>
+        new FiduciaService.default(new FiduciaRepository.default())
+    );
+    this.app.container.singleton(
+      "core.RemnantProvider",
+      () =>
+        new RemnantService.default(new RemnantRepository.default())
     );
   }
 

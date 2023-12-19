@@ -1,5 +1,5 @@
 
-export interface IConsolidationTrayForTechnicianCollection {
+export interface IConsolidationTray {
   searchParam?: string;
   cutParamName?: string;
   cutParamId?: number;
@@ -7,6 +7,7 @@ export interface IConsolidationTrayForTechnicianCollection {
   idBeneficiary?: number; //Para traerme requerimientos del reglamento
   legalPeriod?: string; //Para traerme requerimientos del reglamento
   user?: string; //Usuario que me llega desde el Front
+  statusPaccSearch?: number; //Para filtar entre las tabs de Pacc -> //*¡¡¡ RE UTILIZACIÓN !!!*//
   page?: number,
   perPage?: number;
 }
@@ -25,7 +26,7 @@ export interface IConsolidationTrayForTransactions {
   cut?: number;
 }
 
-export interface IConsolidationTrayForTechnicianCollectionParams {
+export interface IConsolidationTrayParams {
   idBenef?: number;
   idCut?: number;
   idProgram?: number;
@@ -140,6 +141,7 @@ export interface IPqrsdfResult {
   responseMedium?: IResponseMedium;
   requestType?: IRequestType;
   program?: IProgram | null;
+  file?: IFile | null;
 }
 
 export interface ICanalesAttencion {
@@ -221,6 +223,9 @@ export interface IPqrsdfResultSimple {
   state: string;
   answerDate: Date | string;
   answer: string;
+  completePath: string;
+  nameFile: string;
+  nameRoute: string;
 }
 
 export interface IRequerimentsResultSimple {
@@ -253,4 +258,10 @@ export interface IApplyKnowledgeTransfer {
   observations: string;
   userCreate: string;
   dateCreate: Date;
+}
+
+export interface IFile {
+  id?: number;
+  name: string;
+  isActive: boolean;
 }

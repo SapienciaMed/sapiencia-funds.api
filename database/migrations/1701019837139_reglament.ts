@@ -6,7 +6,13 @@ export default class CrearTablaRcoReglamentosCondonacion extends BaseSchema {
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments("RCO_CODIGO").primary();
-      table.string("RCO_CODPMA_PROGRAMA", 60).notNullable();
+      table
+        .integer("RCO_CODPMA_PROGRAMA")
+        .notNullable()
+        .unsigned()
+        .references("PMA_CODIGO")
+        .inTable("PMA_PROGRAMA")
+        .comment("Codigo del programa (FK PMA_PROGRAMA)");
       table.string("RCO_PERIODO_INICIAL", 60).notNullable();
       table.boolean("RCO_PERIODO_ABIERTO").notNullable();
       table.string("RCO_PERIODO_FINAL", 60).nullable();

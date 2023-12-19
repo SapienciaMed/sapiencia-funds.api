@@ -100,11 +100,12 @@ export default class VotingResultsRepository implements IVotingResultsRepository
             userModified: i.asuserModifiedd,
             dateModified: i.dateModifiedd,
             dateCreate: i.dateCreatee,
+            program: i.programa45,
             typesProgram: {
                 id: i.codProgram,
                 name: i.programa45
             }
-          }
+          },
         });
       });
 
