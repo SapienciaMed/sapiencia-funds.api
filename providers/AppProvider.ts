@@ -69,6 +69,10 @@ export default class AppProvider {
     const AbsorptionPercentageService = await import(
       "App/Services/AbsorptionPercentageService"
     );
+
+    const ReglamentConsolidationService = await import(
+      "App/Services/ReglamentConsolidationService"
+    );
     const FiduciaService = await import(
       "App/Services/FiduciaService"
     );
@@ -169,6 +173,13 @@ export default class AppProvider {
       "App/Repositories/RemnantRepository"
     );
 
+    const ReglamentConsolidationRepository = await import(
+      "App/Repositories/ReglamentConsolidationRepository"
+    );
+
+    const StorageRepository = await import(
+      "App/Repositories/StorageRepository"
+    );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
     /**************************************************************************/
@@ -289,7 +300,10 @@ export default class AppProvider {
     this.app.container.singleton(
       "core.ServiceSocialProvider",
       () =>
-        new ServiceSocialService.default(new ServiceSocialRepository.default())
+        new ServiceSocialService.default(
+          new ServiceSocialRepository.default(),
+          new StorageRepository.default()
+        )
     );
     this.app.container.singleton(
       "core.ConsolidationProvider",
@@ -302,6 +316,14 @@ export default class AppProvider {
         new AbsorptionPercentageService.default(
           new AbsorptionPercentageRepository.default(),
           new CallBudgetRepository.default()
+        )
+    );
+
+    this.app.container.singleton(
+      "core.ReglamentConsolidationProvider",
+      () =>
+        new ReglamentConsolidationService.default(
+          new ReglamentConsolidationRepository.default()
         )
     );
     this.app.container.singleton(

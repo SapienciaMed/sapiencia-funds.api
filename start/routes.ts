@@ -123,7 +123,10 @@ Route.group(() => {
   );
 
   Route.post("/files/get-file", "UploadInformationController.getuploadFile");
-  Route.post("/files/get-file-v2", "UploadInformationController.getuploadFileCitizen");
+  Route.post(
+    "/files/get-file-v2",
+    "UploadInformationController.getuploadFileCitizen"
+  );
 
   Route.post("/upload/:id", "UploadInformationController.uploadInformation");
   Route.get("/", "UploadInformationController.getUploadInformation");
@@ -294,7 +297,10 @@ Route.group(() => {
   Route.get("/generate-xlsx", "RenewalController.generateXLSX");
   Route.get("/calculate/:period", "RenewalController.calculate");
   Route.get("/get-beca/:period/", "RenewalController.getBeca");
-  Route.post("/createReportRenewal/:period/", "RenewalController.createReportRenewal");
+  Route.post(
+    "/createReportRenewal/:period/",
+    "RenewalController.createReportRenewal"
+  );
 }).prefix("/api/v1/renovacion");
 //.middleware("auth");
 
@@ -308,7 +314,6 @@ Route.group(() => {
   .prefix("/api/v1/cuts")
   .middleware("auth");
 
-
 //* ********************************************************************************
 //* ********************************************************************************
 //* Se usa la misma estructura y se cambia parámetros del body para condicionar ****
@@ -319,28 +324,23 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  )
-    .middleware("auth:TECNICO_PASO_COBRO");
+  ).middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  )
-    .middleware("auth:TECNICO_PASO_COBRO");
+  ).middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
-  )
-    .middleware("auth:TECNICO_PASO_COBRO");
+  ).middleware("auth:TECNICO_PASO_COBRO");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  )
-    .middleware("auth:TECNICO_PASO_COBRO");
+  ).middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  )
-    .middleware("auth:TECNICO_PASO_COBRO");
+  ).middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -414,11 +414,17 @@ Route.group(() => {
     .middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-      "/get-requirements-knowledge-transfer",
-      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:TECNICO_PASO_COBRO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/get-service-social-by-beneficiary",
+    "ServiceSocialController.getServiceSocialPaginate"
+  )
+    .middleware("auth:TECNICO_PASO_COBRO")
+    .middleware("auth:VER_SERVICIO_SOCIAL");
 })
   .prefix("/api/v1/consolidation-tray-collection-technician")
   .middleware("auth");
@@ -428,28 +434,23 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  )
-    .middleware("auth:TECNICO_PROFESIONAL");
+  ).middleware("auth:TECNICO_PROFESIONAL");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  )
-    .middleware("auth:TECNICO_PROFESIONAL");
+  ).middleware("auth:TECNICO_PROFESIONAL");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
-  )
-    .middleware("auth:TECNICO_PROFESIONAL");
+  ).middleware("auth:TECNICO_PROFESIONAL");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  )
-    .middleware("auth:TECNICO_PROFESIONAL");
+  ).middleware("auth:TECNICO_PROFESIONAL");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  )
-    .middleware("auth:TECNICO_PROFESIONAL");
+  ).middleware("auth:TECNICO_PROFESIONAL");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -523,8 +524,8 @@ Route.group(() => {
     .middleware("auth:TECNICO_PROFESIONAL")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-      "/get-requirements-knowledge-transfer",
-      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:TECNICO_PROFESIONAL")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
@@ -537,28 +538,23 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  )
-    .middleware("auth:COORDINADOR");
+  ).middleware("auth:COORDINADOR");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  )
-    .middleware("auth:COORDINADOR");
+  ).middleware("auth:COORDINADOR");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
-  )
-    .middleware("auth:COORDINADOR");
+  ).middleware("auth:COORDINADOR");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  )
-    .middleware("auth:COORDINADOR");
+  ).middleware("auth:COORDINADOR");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  )
-    .middleware("auth:COORDINADOR");
+  ).middleware("auth:COORDINADOR");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -632,8 +628,8 @@ Route.group(() => {
     .middleware("auth:COORDINADOR")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-      "/get-requirements-knowledge-transfer",
-      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:COORDINADOR")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
@@ -646,28 +642,23 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  )
-    .middleware("auth:JURIDICA");
+  ).middleware("auth:JURIDICA");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  )
-    .middleware("auth:JURIDICA");
+  ).middleware("auth:JURIDICA");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
-  )
-    .middleware("auth:JURIDICA");
+  ).middleware("auth:JURIDICA");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  )
-    .middleware("auth:JURIDICA");
+  ).middleware("auth:JURIDICA");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  )
-    .middleware("auth:JURIDICA");
+  ).middleware("auth:JURIDICA");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -741,8 +732,8 @@ Route.group(() => {
     .middleware("auth:JURIDICA")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-      "/get-requirements-knowledge-transfer",
-      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:JURIDICA")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
@@ -755,28 +746,23 @@ Route.group(() => {
   Route.get(
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
-  )
-    .middleware("auth:LIDER_PROYECTO");
+  ).middleware("auth:LIDER_PROYECTO");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  )
-    .middleware("auth:LIDER_PROYECTO");
+  ).middleware("auth:LIDER_PROYECTO");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
-  )
-    .middleware("auth:LIDER_PROYECTO");
+  ).middleware("auth:LIDER_PROYECTO");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
-  )
-    .middleware("auth:LIDER_PROYECTO");
+  ).middleware("auth:LIDER_PROYECTO");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
-  )
-    .middleware("auth:LIDER_PROYECTO");
+  ).middleware("auth:LIDER_PROYECTO");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
@@ -850,8 +836,8 @@ Route.group(() => {
     .middleware("auth:LIDER_PROYECTO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
-      "/get-requirements-knowledge-transfer",
-      "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
     .middleware("auth:LIDER_PROYECTO")
     .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
@@ -859,9 +845,56 @@ Route.group(() => {
   .prefix("/api/v1/consolidation-tray-project-leader")
   .middleware("auth");
 
+//? ********** SERVICIO SOCIAL ********** ?//
+Route.group(() => {
+  Route.get("/import", "ServiceSocialController.import");
+  Route.get(
+    "/get-beneficiary-by-id/:id",
+    "ConsolidationTrayController.geBeneficiaryById"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-paginated/consolidate",
+    "ServiceSocialController.getConsolidationSocialService"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-service-social-file/",
+    "ServiceSocialController.dowloadUploadFiles"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-service-social-by-beneficiary",
+    "ServiceSocialController.getServiceSocialPaginate"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.put(
+    "/update-service-social/",
+    "ServiceSocialController.updateServiceSocial"
+  ).middleware("auth:SERVICIO_SOCIAL");
+})
+  .prefix("/api/v1/consolidation-tray-social-service")
+  .middleware("auth");
+
 //* ********************************************************************************
 //* ********************************************************************************
 //* ********************************************************************************
+//? ******** ESTRUCTURACIÓN DE REGLAMENTO (VERSIÓN 2.0) Y AJUSTES GENERALES ********
+
+Route.group(() => {
+  Route.post(
+    "/get-periods-sapi",
+    "ReglamentConsolidationController.getPeriodsSapi"
+  );
+  Route.post(
+    "/create-reglament",
+    "ReglamentConsolidationController.createReglament"
+  );
+  // Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
+  // Route.get("/get-last-id", "ReglamentController.getLastId");
+  // Route.post("/create", "ReglamentController.createReglament");
+  // Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
+  // Route.put("/edit/:id", "ReglamentController.updateReglament");
+  // Route.delete("/delete/:id", "ReglamentController.deleteReglament");
+  // Route.get("/programs", "ReglamentController.getPrograms");
+}).prefix("/api/v1/reglament-v2");
+//.middleware("auth");
 
 Route.group(() => {
   Route.get(
@@ -895,6 +928,14 @@ Route.group(() => {
 
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
+  Route.post(
+    "/get-paginated",
+    "ServiceSocialController.getServiceSocialPaginate"
+  );
+  Route.post(
+    "/get-paginated/consolidate",
+    "ServiceSocialController.getConsolidationSocialService"
+  );
 }).prefix("/api/v1/service-social");
 //.middleware("auth");
 
@@ -909,6 +950,10 @@ Route.group(() => {
   );
 }).prefix("/api/v1/consolidation");
 // .middleware("auth");
+
+Route.group(() => {
+  Route.get("/test", "StoragesController.getFiles");
+}).prefix("/api/v1/files");
 
 Route.group(() => {
   Route.get(

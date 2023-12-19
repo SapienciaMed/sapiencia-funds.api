@@ -1,11 +1,12 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasOne, column, hasOne } from "@ioc:Adonis/Lucid/Orm";
+import Programs from "./Programs";
 
 export default class Reglament extends BaseModel {
   public static table = "RCO_REGLAMENTOS_CONDONACION";
   @column({ isPrimary: true, columnName: "RCO_CODIGO", serializeAs: "id" })
   public id: number;
   @column({ columnName: "RCO_CODPMA_PROGRAMA", serializeAs: "program" })
-  public program: string;
+  public program: number;
   @column({ columnName: "RCO_PERIODO_INICIAL", serializeAs: "initialPeriod" })
   public initialPeriod: string;
   @column({ columnName: "RCO_PERIODO_ABIERTO", serializeAs: "isOpenPeriod" })
@@ -142,4 +143,10 @@ export default class Reglament extends BaseModel {
     serializeAs: "createDate",
   })
   public createDate: string;
+
+  @hasOne(() => Programs, {
+    localKey: "program",
+    foreignKey: "id",
+  })
+  public programs: HasOne<typeof Programs>;
 }
