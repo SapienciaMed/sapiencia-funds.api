@@ -860,6 +860,10 @@ Route.group(() => {
     "/get-service-social-file/",
     "ServiceSocialController.dowloadUploadFiles"
   ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/get-service-social-by-beneficiary",
+    "ServiceSocialController.getServiceSocialPaginate"
+  ).middleware("auth:SERVICIO_SOCIAL");
   Route.put(
     "/update-service-social/",
     "ServiceSocialController.updateServiceSocial"
