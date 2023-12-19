@@ -40,4 +40,15 @@ export default class RemnantController {
       );
     }
   }
+
+  public async deleteRemnan({ request, response }: HttpContextContract) {
+    try {
+      const { id } = request.params();
+      return response.send(await RemnantProvider.deleteRemnan(id));
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
 }

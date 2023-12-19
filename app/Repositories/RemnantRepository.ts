@@ -1,7 +1,5 @@
 import Database from "@ioc:Adonis/Lucid/Database";
 import { IRemnant, IRemnantFilters, IRemnantUpdate } from "App/Interfaces/IRemnantInterface";
-import { IMaster, IMasterFilters } from "App/Interfaces/MasterInterface";
-import Master from "App/Models/Master";
 import Remanente from "App/Models/Remanente";
 import { IPagingData } from "App/Utils/ApiResponses";
 
@@ -10,11 +8,8 @@ export interface IRemnantRepository {
   getallRemnantsPaginated(filters: IRemnantFilters): Promise<IPagingData<IRemnant>>;
   getRemnantById(id:number): Promise<IRemnant | null>;
   updateRemnan(id: number,remnant: IRemnantUpdate): Promise<IRemnant | null>;
-
-
-  createMaster(master: IMaster): Promise<IMaster>;
-  getMasterList(): Promise<IMaster[]>;
-  importRemnants(filters: IMasterFilters): Promise<any>;
+  deleteRemnan(id: number): Promise<boolean>; 
+  importRemnants(filters: IRemnantFilters): Promise<any>;
 }
 
 
@@ -90,7 +85,6 @@ export default class RemnantRepository implements IRemnantRepository {
     return results;
   }
 
-
   async getRemnantById(id: number): Promise<IRemnant | null> {
     const res = await Remanente.find(id);
     if (res) {     
@@ -114,32 +108,15 @@ export default class RemnantRepository implements IRemnantRepository {
     return toUpdate.serialize() as IRemnant;
   }
 
+  async deleteRemnan(id: number): Promise<boolean> {
+    const toDelete = await Remanente.find(id);
 
-
-
-
-  async createMaster(master: IMaster): Promise<IMaster> {
-
-    const existingMaster = await Master.query()
-      .where('codtlmo', master.codtlmo)
-      .andWhere('name', master.name)
-      .first();
-
-    if (existingMaster) {
-      throw new Error('El dato ya existe');
+    if (!toDelete) {
+      return false;
     }
 
-    const toCreate = new Master();
-
-    toCreate.fill({ ...master });
-    await toCreate.save();
-    return toCreate.serialize() as IMaster;
-  }
-
-
-  async getMasterList(): Promise<IMaster[]> {
-    const res = await Master.query().preload('typeMasterList');
-    return res.map((i) => i.serialize() as IMaster);
+    await toDelete.delete();
+    return true;
   }
 
 }

@@ -1,6 +1,4 @@
-import { ITypeMasterList } from "App/Interfaces/TypeMasterListinterface";
 import Fiducia from "App/Models/Sapiencia/Fiducia";
-import TypeMasterList from "App/Models/TypeMasterList";
 
 
 export interface IFiduciaRepository {
