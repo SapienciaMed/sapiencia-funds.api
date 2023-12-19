@@ -18,17 +18,24 @@ export default class RemnantService implements IRemnantService {
         private remnantRepository: IRemnantRepository
     ) { }
 
-    async getallRemnantsPaginated(filters: IRemnantFilters): Promise<ApiResponse<IPagingData<any>>> {
+    async getallRemnantsPaginated(
+        filters: IRemnantFilters,
+        retryCount = 0 // Parámetro adicional para controlar el número de reintentos
+    ): Promise<ApiResponse<IPagingData<any>>> {
         let remnants = await this.remnantRepository.getallRemnantsPaginated(filters);
-
+    
         if (Array.isArray(remnants.array) && remnants.array.length === 0) {
-            remnants = await this.remnantRepository.importRemnants(filters)
-            return this.getallRemnantsPaginated(filters);
+            if (retryCount < 1) { // Limita el número de reintentos
+                remnants = await this.remnantRepository.importRemnants(filters);
+                return this.getallRemnantsPaginated(filters, retryCount + 1);
+            } else {               
+                return new ApiResponse(remnants, EResponseCodes.OK);
+            }
         }
-
+    
         return new ApiResponse(remnants, EResponseCodes.OK);
-
     }
+    
 
     async getRemnantById(id: number): Promise<ApiResponse<IRemnant>> {
         const res = await this.remnantRepository.getRemnantById(id);
