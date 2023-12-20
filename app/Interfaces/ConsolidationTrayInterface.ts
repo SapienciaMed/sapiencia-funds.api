@@ -141,6 +141,7 @@ export interface IPqrsdfResult {
   responseMedium?: IResponseMedium;
   requestType?: IRequestType;
   program?: IProgram | null;
+  file?: IFile | null;
 }
 
 export interface ICanalesAttencion {
@@ -222,6 +223,9 @@ export interface IPqrsdfResultSimple {
   state: string;
   answerDate: Date | string;
   answer: string;
+  completePath: string;
+  nameFile: string;
+  nameRoute: string;
 }
 
 export interface IRequerimentsResultSimple {
@@ -254,4 +258,10 @@ export interface IApplyKnowledgeTransfer {
   observations: string;
   userCreate: string;
   dateCreate: Date;
+}
+
+export interface IFile {
+  id?: number;
+  name: string;
+  isActive: boolean;
 }

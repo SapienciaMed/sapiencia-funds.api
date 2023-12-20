@@ -7,7 +7,7 @@ import { ApiResponse } from "App/Utils/ApiResponses";
 const bucketName = process.env.GCLOUD_BUCKET ?? "";
 const bucketNameCitizen = process.env.GCLOUD_BUCKET_CITIZEN ?? "";
 
-export interface IStorageService {
+export interface IStorageRepository {
   uploadInformation(
     filePath: MultipartFileContract,
     path?: string
@@ -18,10 +18,10 @@ export interface IStorageService {
   deleteFile(fileName: string): Promise<boolean>;
 }
 
-export default class StorageService implements IStorageService {
+export default class StorageRepository implements IStorageRepository {
   storage: Storage;
   constructor() {
- //   this.storage = new Storage({ keyFilename }); //-->Local
+    // this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage();
   }
 
