@@ -40,10 +40,28 @@ export default class RemnantRepository implements IRemnantRepository {
     const { data, meta } = workerMasterActivityPaginated.serialize();
     const dataArray = data ?? [];
 
-    return {
-      array: dataArray as any[],
+    // Modificación aquí
+    const modifiedArray = dataArray.map((item) => {
+      const remaining = item.remaining ?? 0;
+      const averageCost = item.averageCost ?? 1; 
+      const quotas = remaining / averageCost;
+      const quotaResource = quotas*averageCost;
+      const residual = remaining - quotaResource;
+
+      return {
+          ...item,
+          quotas,
+          quotaResource,
+          residual
+      };
+  });
+
+  return {
+      array: modifiedArray as any[], 
       meta,
-    };
+  };
+
+   
   }
 
   async importRemnants(filters: IRemnantFilters): Promise<any> {
