@@ -11,7 +11,7 @@ import {
 import { IServiceSocialRepository } from "App/Repositories/ServiceSocialRepository";
 import { IStorageRepository } from "App/Repositories/StorageRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
-
+import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 export interface IServiceSocialService {
   import(): Promise<ApiResponse<IImportServiceSocial[]>>;
   insert(data: any[]): Promise<ApiResponse<any[]>>;
@@ -20,7 +20,8 @@ export interface IServiceSocialService {
   ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>>;
   updateSocialService(
     socialService: ISocialServiceBeneficiary,
-    id: number
+    id: number,
+    files: MultipartFileContract[]
   ): Promise<ApiResponse<ISocialServiceBeneficiary | null>>;
   geConsolidationSocialService(
     filters: IConsolidationTray
@@ -178,17 +179,18 @@ export default class ServiceSocialService implements IServiceSocialService {
   }
   async updateSocialService(
     socialService: ISocialServiceBeneficiary,
-    id: number
+    id: number,
+    files: MultipartFileContract[]
   ): Promise<ApiResponse<ISocialServiceBeneficiary | null>> {
     const res = await this.serviceSocialRepository.updateState(
       socialService,
       id
     );
     let uploadFiles;
-    if (socialService?.files) {
+    if (files) {
       uploadFiles = await this.storageRepository.uploadInformation(
-        socialService?.files[0],
-        socialService.supportDocumentRoute
+        files[0],
+        socialService.documentPath
       );
     }
     if (!res || !uploadFiles) {

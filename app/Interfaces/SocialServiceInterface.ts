@@ -9,12 +9,12 @@ export interface ISocialServiceFiltersInterface {
 export interface ISocialServiceBeneficiary {
   id?: number;
   legalizationPeriod: string;
-  consolidationBeneficiary: number;
+  idConsolidationBeneficiary: number;
   hoursDone: number;
   committedHours: number;
   pendingHours: number;
   totalPendingHours?: number;
-  supportDocumentRoute: string;
+  documentPath: string;
   observation: string;
   state: boolean;
   files?: MultipartFileContract[];

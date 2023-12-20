@@ -39,8 +39,9 @@ export default class ServiceSocialController {
     try {
       const data = request.body() as ISocialServiceBeneficiary;
       const { id } = request.body();
+      const files = request.files("files");
       return response.send(
-        await ServiceSocialProvider.updateSocialService(data, id)
+        await ServiceSocialProvider.updateSocialService(data, id,files)
       );
     } catch (err) {
       return response.badRequest(
