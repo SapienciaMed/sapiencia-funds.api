@@ -73,6 +73,13 @@ export default class AppProvider {
     const ReglamentConsolidationService = await import(
       "App/Services/ReglamentConsolidationService"
     );
+    const FiduciaService = await import(
+      "App/Services/FiduciaService"
+    );
+    
+    const RemnantService = await import(
+      "App/Services/RemnantService"
+    );
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -158,6 +165,12 @@ export default class AppProvider {
     );
     const CallBudgetRepository = await import(
       "App/Repositories/Sapiencia/CallBudgetRepository"
+    );
+    const FiduciaRepository = await import(
+      "App/Repositories/FiduciaRepository"
+    );
+    const RemnantRepository = await import(
+      "App/Repositories/RemnantRepository"
     );
 
     const ReglamentConsolidationRepository = await import(
@@ -296,7 +309,7 @@ export default class AppProvider {
       "core.ConsolidationProvider",
       () =>
         new ConsolidationService.default(new ConsolidationRepository.default())
-    );
+    );    
     this.app.container.singleton(
       "core.AbsorptionPercentageProvider",
       () =>
@@ -312,6 +325,16 @@ export default class AppProvider {
         new ReglamentConsolidationService.default(
           new ReglamentConsolidationRepository.default()
         )
+    );
+    this.app.container.singleton(
+      "core.FiduciaProvider",
+      () =>
+        new FiduciaService.default(new FiduciaRepository.default())
+    );
+    this.app.container.singleton(
+      "core.RemnantProvider",
+      () =>
+        new RemnantService.default(new RemnantRepository.default())
     );
   }
 
