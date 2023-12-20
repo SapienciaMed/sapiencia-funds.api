@@ -589,7 +589,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     const getReglaments = await Reglament
       .query()
-      .where("program", convertResAurora[0].idProgram);
+      .where("idProgram", convertResAurora[0].idProgram);
 
     if (!getReglaments || getReglaments == null) return false;
 
@@ -848,7 +848,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ******************************************** //*
     const getReglaments = await Reglament
       .query()
-      .where("program", convertResAurora[0].idProgram);
+      .where("idProgram", convertResAurora[0].idProgram);
 
     if (!getReglaments || getReglaments == null) return false;
 
