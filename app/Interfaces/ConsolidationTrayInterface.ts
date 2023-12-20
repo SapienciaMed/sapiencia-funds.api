@@ -19,6 +19,7 @@ export interface IChageStatusKnowledgeTransfer {
   observations: string;
   user: string;
   workedHours: number;
+  statusPaccSearch?: number;
 }
 
 export interface IConsolidationTrayForTransactions {
@@ -226,6 +227,7 @@ export interface IPqrsdfResultSimple {
   completePath: string;
   nameFile: string;
   nameRoute: string;
+  fullPath64: string;
 }
 
 export interface IRequerimentsResultSimple {
@@ -264,4 +266,5 @@ export interface IFile {
   id?: number;
   name: string;
   isActive: boolean;
+  filePath?: string;
 }

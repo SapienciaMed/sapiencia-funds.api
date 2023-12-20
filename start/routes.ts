@@ -214,7 +214,7 @@ Route.group(() => {
   Route.get("/programs", "ReglamentController.getPrograms");
 })
   .prefix("/api/v1/reglament")
-  .middleware("auth");
+  //.middleware("auth");
 
 Route.group(() => {
   Route.post("/getbudget-paginated/", "BudgetController.geCallBudgetPaginate");
@@ -320,108 +320,108 @@ Route.group(() => {
     "/get-cuts-generic",
     "ConsolidationTrayController.getCutsForConsolidationTray"
   )
-    .middleware("auth:TECNICO_PASO_COBRO");
+   .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
   )
-    .middleware("auth:TECNICO_PASO_COBRO");
+   .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-consolidation-tray-by-cut",
     "ConsolidationTrayController.geConsolidationTrayByCut"
   )
-    .middleware("auth:TECNICO_PASO_COBRO");
+   .middleware("auth:TECNICO_PASO_COBRO");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
   )
-    .middleware("auth:TECNICO_PASO_COBRO");
+   .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
   )
-    .middleware("auth:TECNICO_PASO_COBRO");
+   .middleware("auth:TECNICO_PASO_COBRO");
   Route.post(
     "/get-pqrsdf-external",
     "ConsolidationTrayController.getPQRSDFExternal"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_SOPORTES_PQRSDF");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_SOPORTES_PQRSDF");
   Route.post(
     "/get-requirements-by-beneficiary",
     "ConsolidationTrayController.getRequirementsByBeneficiary"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/get-requirements-by-beneficiary-list",
     "ConsolidationTrayController.getRequirementsByBeneficiaryList"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/compliance-assignment-beneficiary",
     "ConsolidationTrayController.complianceAssignmentBeneficiary"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/upload-requirement-file/:id",
     "ConsolidationTrayController.uploadRequirementFile"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.get(
     "/get-requirement-file/:id",
     "ConsolidationTrayController.getUploadFiles"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/delete-requirement-file/:id/:beneficiary",
     "ConsolidationTrayController.deleteUploadFiles"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/dowload-requirement-file/:id/:beneficiary",
     "ConsolidationTrayController.dowloadUploadFiles"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_REQUISITOS_REGLAMENTO");
   Route.post(
     "/get-knowledge-transfer-by-beneficiary",
     "ConsolidationTrayController.getKnowledgeTransferByBeneficiary"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
     "/change-approve-or-reject-knowledge-transfer",
     "ConsolidationTrayController.changeApproveOrRejectKnowledgeTransfer"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
     "/upload-knowledge-transfer-file/:id/:idBeneficiary",
     "ConsolidationTrayController.uploadKnowledgeTransferFile"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.get(
     "/get-knowledge-transfer-file/:idBeneficiary",
     "ConsolidationTrayController.getUploadKnowledgeTransferFiles"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
   Route.post(
       "/get-requirements-knowledge-transfer",
       "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
   )
-    .middleware("auth:TECNICO_PASO_COBRO")
-    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+   .middleware("auth:TECNICO_PASO_COBRO")
+   .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
 })
   .prefix("/api/v1/consolidation-tray-collection-technician")
-   .middleware("auth");
+  .middleware("auth");
 
 //? ********** TÉCNICO PROFESIONAL ********** ?//
 Route.group(() => {
@@ -867,16 +867,16 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/get-periods-sapi", "ReglamentConsolidationController.getPeriodsSapi");
   Route.post("/create-reglament", "ReglamentConsolidationController.createReglament");
+  Route.post("/get-paginated", "ReglamentConsolidationController.getReglamentPaginate");
   // Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
   // Route.get("/get-last-id", "ReglamentController.getLastId");
   // Route.post("/create", "ReglamentController.createReglament");
-  // Route.post("get-paginated", "ReglamentController.getReglamentPaginate");
   // Route.put("/edit/:id", "ReglamentController.updateReglament");
   // Route.delete("/delete/:id", "ReglamentController.deleteReglament");
   // Route.get("/programs", "ReglamentController.getPrograms");
 })
   .prefix("/api/v1/reglament-v2")
-  //.middleware("auth");
+  .middleware("auth");
 
 
 Route.group(() => {
