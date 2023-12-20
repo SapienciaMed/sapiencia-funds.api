@@ -7,7 +7,10 @@ export default class RemnantValidator {
   public schema = schema.create({  
     remaining: schema.number(),
     averageCost: schema.number(),
-   
+    communityFund: schema.number(),
+    quotas: schema.number(),
+    quotaResource: schema.number(),
+    residual: schema.number()   
   });
 
   public messages: CustomMessages = {};

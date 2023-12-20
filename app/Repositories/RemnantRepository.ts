@@ -41,15 +41,14 @@ export default class RemnantRepository implements IRemnantRepository {
     const modifiedArray = dataArray.map((item) => {
       const remaining = item.remaining ?? 0;
       const averageCost = item.averageCost ?? 1;
-      const quotas = remaining / averageCost;
+      const quotas = item.remaining / averageCost;
       const quotaResource = quotas * averageCost;
       const residual = remaining - quotaResource;
 
       return {
-        ...item,
-        quotas,
-        quotaResource,
-        residual
+        ...item      
+        
+        
       };
     });
 
@@ -117,6 +116,11 @@ export default class RemnantRepository implements IRemnantRepository {
 
     toUpdate.remaining = Number(remnant.remaining);
     toUpdate.averageCost = Number(remnant.averageCost);
+    
+    toUpdate.communityFund = remnant.communityFund;    
+    toUpdate.quotas = remnant.quotas;
+    toUpdate.quotaResource = remnant.quotaResource;
+    toUpdate.residual = remnant.residual;
 
 
     await toUpdate.save();

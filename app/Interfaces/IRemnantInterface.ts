@@ -24,5 +24,11 @@ export interface IRemnant {
 }
 export interface IRemnantUpdate {    
     remaining:     number;
-    averageCost:   number;   
+    averageCost:   number; 
+    
+    communityFund:number;
+    quotas:number
+    quotaResource:number;
+    residual:number;
+
 }
