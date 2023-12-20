@@ -2,7 +2,8 @@ import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import ReglamentConsolidationProvider from '@ioc:core.ReglamentConsolidationProvider';
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { ApiResponse } from "App/Utils/ApiResponses";
-import { IReglamentConsolidation } from '../../Interfaces/SapienciaGenericInterface';
+import { IReglamentConsolidation,
+         IFiltersForReglament } from '../../Interfaces/SapienciaGenericInterface';
 
 
 export default class ReglamentConsolidationController {
@@ -12,6 +13,23 @@ export default class ReglamentConsolidationController {
     try {
 
       return response.send(await ReglamentConsolidationProvider.getPeriodsSapi());
+
+    } catch (err) {
+
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
+  public async getReglamentPaginate({ request, response }: HttpContextContract) {
+
+    try {
+
+      const filters = request.body() as IFiltersForReglament;
+      return response.send(await ReglamentConsolidationProvider.getReglamentPaginate(filters));
 
     } catch (err) {
 
