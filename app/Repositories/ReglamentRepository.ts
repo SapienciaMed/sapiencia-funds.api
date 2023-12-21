@@ -58,20 +58,25 @@ export default class ReglamentRepository implements IReglamentRepository {
   async createReglament(
     reglament: IReglamentInterface
   ): Promise<IReglamentInterface | null> {
-    const existReglament = Reglament.query()
-      .where("program", reglament.program)
-      .andWhere("initialPeriod", reglament.initialPeriod)
-      .andWhere("isOpenPeriod", reglament.isOpenPeriod)
-      .orWhere("endPeriod", reglament.endPeriod ? reglament.endPeriod : "");
 
-    const execute = await existReglament;
+    console.log({reglament});
 
-    if (execute.length > 0) return null;
+    // const existReglament = Reglament.query()
+    //   .where("program", reglament.program)
+    //   .andWhere("initialPeriod", reglament.initialPeriod)
+    //   .andWhere("isOpenPeriod", reglament.isOpenPeriod)
+    //   .orWhere("endPeriod", reglament.endPeriod ? reglament.endPeriod : "");
 
-    const toCreate = new Reglament();
-    toCreate.fill({ ...reglament });
-    await toCreate.save();
-    return toCreate.serialize() as IReglamentInterface;
+    // const execute = await existReglament;
+
+    // if (execute.length > 0) return null;
+
+    // const toCreate = new Reglament();
+    // toCreate.fill({ ...reglament });
+    // await toCreate.save();
+    // return toCreate.serialize() as IReglamentInterface;
+
+    return null
   }
 
   async getReglamentPaginate(
@@ -109,78 +114,81 @@ export default class ReglamentRepository implements IReglamentRepository {
     requeriment: IReglamentInterface,
     id: number
   ): Promise<IReglamentInterface | null> {
-    const toUpdate = await Reglament.find(id);
+    //const toUpdate = await Reglament.find(id);
+    console.log({requeriment});
+    console.log({id});
 
-    const buildUpdate = {
-      ...requeriment,
-      isOpenPeriod: requeriment?.isOpenPeriod ? true : false,
-      endPeriod: requeriment?.isOpenPeriod ? null : requeriment?.endPeriod,
-      applySocialService: requeriment?.applySocialService ? true : false,
-      socialServicePercentage: requeriment?.applySocialService
-        ? requeriment?.socialServicePercentage
-        : null,
-      socialServiceHours: requeriment?.applySocialService
-        ? requeriment?.socialServiceHours
-        : null,
-      knowledgeTransferApply: requeriment?.knowledgeTransferApply
-        ? true
-        : false,
-      knowledgeTransferPercentage: requeriment?.knowledgeTransferApply
-        ? requeriment?.knowledgeTransferPercentage
-        : null,
-      knowledgeTransferHours: requeriment?.knowledgeTransferApply
-        ? requeriment?.knowledgeTransferHours
-        : null,
-      gracePeriodApply: requeriment?.gracePeriodApply ? true : false,
-      gracePeriodMonths: requeriment?.gracePeriodApply
-        ? requeriment?.gracePeriodMonths
-        : null,
-      gracePeriodApplication: requeriment?.gracePeriodApply
-        ? requeriment?.gracePeriodApplication
-        : null,
-      continuousSuspensionApplies: requeriment?.continuousSuspensionApplies
-        ? true
-        : false,
-      continuosSuspencionQuantity: requeriment?.continuousSuspensionApplies
-        ? requeriment?.continuosSuspencionQuantity
-        : null,
-      applyDiscontinuousSuspension: requeriment?.applyDiscontinuousSuspension
-        ? true
-        : false,
-      discontinuousSuspensionQuantity: requeriment?.applyDiscontinuousSuspension
-        ? requeriment?.discontinuousSuspensionQuantity
-        : null,
-      applySpecialSuspensions: requeriment?.applySpecialSuspensions
-        ? true
-        : false,
-      applySpecialSuspensionsQuantity: requeriment?.applySpecialSuspensions
-        ? requeriment?.applySpecialSuspensionsQuantity
-        : null,
-      extensionApply: requeriment?.extensionApply ? true : false,
-      extensionApplyQuantity: requeriment?.extensionApply
-        ? requeriment?.extensionApplyQuantity
-        : null,
-      applyCondonationPerformancePeriod:
-        requeriment?.applyCondonationPerformancePeriod ? true : false,
-      performancePeriod: requeriment?.applyCondonationPerformancePeriod
-        ? requeriment?.performancePeriod
-        : null,
-      accomulatedIncomeCondonationApplies:
-        requeriment?.accomulatedIncomeCondonationApplies ? true : false,
-      accumulatedPerformance: requeriment?.accomulatedIncomeCondonationApplies
-        ? requeriment?.accumulatedPerformance
-        : null,
-    };
+    // const buildUpdate = {
+    //   ...requeriment,
+    //   isOpenPeriod: requeriment?.isOpenPeriod ? true : false,
+    //   endPeriod: requeriment?.isOpenPeriod ? null : requeriment?.endPeriod,
+    //   applySocialService: requeriment?.applySocialService ? true : false,
+    //   socialServicePercentage: requeriment?.applySocialService
+    //     ? requeriment?.socialServicePercentage
+    //     : null,
+    //   socialServiceHours: requeriment?.applySocialService
+    //     ? requeriment?.socialServiceHours
+    //     : null,
+    //   knowledgeTransferApply: requeriment?.knowledgeTransferApply
+    //     ? true
+    //     : false,
+    //   knowledgeTransferPercentage: requeriment?.knowledgeTransferApply
+    //     ? requeriment?.knowledgeTransferPercentage
+    //     : null,
+    //   knowledgeTransferHours: requeriment?.knowledgeTransferApply
+    //     ? requeriment?.knowledgeTransferHours
+    //     : null,
+    //   gracePeriodApply: requeriment?.gracePeriodApply ? true : false,
+    //   gracePeriodMonths: requeriment?.gracePeriodApply
+    //     ? requeriment?.gracePeriodMonths
+    //     : null,
+    //   gracePeriodApplication: requeriment?.gracePeriodApply
+    //     ? requeriment?.gracePeriodApplication
+    //     : null,
+    //   continuousSuspensionApplies: requeriment?.continuousSuspensionApplies
+    //     ? true
+    //     : false,
+    //   continuosSuspencionQuantity: requeriment?.continuousSuspensionApplies
+    //     ? requeriment?.continuosSuspencionQuantity
+    //     : null,
+    //   applyDiscontinuousSuspension: requeriment?.applyDiscontinuousSuspension
+    //     ? true
+    //     : false,
+    //   discontinuousSuspensionQuantity: requeriment?.applyDiscontinuousSuspension
+    //     ? requeriment?.discontinuousSuspensionQuantity
+    //     : null,
+    //   applySpecialSuspensions: requeriment?.applySpecialSuspensions
+    //     ? true
+    //     : false,
+    //   applySpecialSuspensionsQuantity: requeriment?.applySpecialSuspensions
+    //     ? requeriment?.applySpecialSuspensionsQuantity
+    //     : null,
+    //   extensionApply: requeriment?.extensionApply ? true : false,
+    //   extensionApplyQuantity: requeriment?.extensionApply
+    //     ? requeriment?.extensionApplyQuantity
+    //     : null,
+    //   applyCondonationPerformancePeriod:
+    //     requeriment?.applyCondonationPerformancePeriod ? true : false,
+    //   performancePeriod: requeriment?.applyCondonationPerformancePeriod
+    //     ? requeriment?.performancePeriod
+    //     : null,
+    //   accomulatedIncomeCondonationApplies:
+    //     requeriment?.accomulatedIncomeCondonationApplies ? true : false,
+    //   accumulatedPerformance: requeriment?.accomulatedIncomeCondonationApplies
+    //     ? requeriment?.accumulatedPerformance
+    //     : null,
+    // };
 
-    if (!toUpdate) {
-      return null;
-    }
+    // if (!toUpdate) {
+    //   return null;
+    // }
 
-    toUpdate.fill({ ...toUpdate, ...buildUpdate });
+    // toUpdate.fill({ ...toUpdate, ...buildUpdate });
+    // await toUpdate.save();
+    // return toUpdate.serialize() as IReglamentInterface;
 
-    await toUpdate.save();
+    return null;
 
-    return toUpdate.serialize() as IReglamentInterface;
   }
 
   async deleteReglament(id: number): Promise<IReglamentInterface | null> {
