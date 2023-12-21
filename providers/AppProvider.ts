@@ -73,13 +73,11 @@ export default class AppProvider {
     const ReglamentConsolidationService = await import(
       "App/Services/ReglamentConsolidationService"
     );
-    const FiduciaService = await import(
-      "App/Services/FiduciaService"
-    );
-    
-    const RemnantService = await import(
-      "App/Services/RemnantService"
-    );
+    const FiduciaService = await import("App/Services/FiduciaService");
+
+    const RemnantService = await import("App/Services/RemnantService");
+
+    const LegalizedService = await import("App/Services/LegalizedService");
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -179,6 +177,10 @@ export default class AppProvider {
 
     const StorageRepository = await import(
       "App/Repositories/StorageRepository"
+    );
+
+    const LegalizedRepository = await import(
+      "App/Repositories/LegalizedRepository"
     );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -309,7 +311,7 @@ export default class AppProvider {
       "core.ConsolidationProvider",
       () =>
         new ConsolidationService.default(new ConsolidationRepository.default())
-    );    
+    );
     this.app.container.singleton(
       "core.AbsorptionPercentageProvider",
       () =>
@@ -328,13 +330,19 @@ export default class AppProvider {
     );
     this.app.container.singleton(
       "core.FiduciaProvider",
-      () =>
-        new FiduciaService.default(new FiduciaRepository.default())
+      () => new FiduciaService.default(new FiduciaRepository.default())
     );
     this.app.container.singleton(
       "core.RemnantProvider",
+      () => new RemnantService.default(new RemnantRepository.default())
+    );
+    this.app.container.singleton(
+      "core.LegalizedProvider",
       () =>
-        new RemnantService.default(new RemnantRepository.default())
+        new LegalizedService.default(
+          new LegalizedRepository.default(),
+          new CallBudgetRepository.default()
+        )
     );
   }
 
