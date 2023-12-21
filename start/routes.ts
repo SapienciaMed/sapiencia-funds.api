@@ -997,8 +997,8 @@ Route.group(() => {
 }).prefix("/api/v1/fiducia");
 
 Route.group(() => {
-  Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
+  Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated").middleware("auth:FONDOS_REMANENTE_CONSULTAR");;
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
-  Route.put("/update/:id", "RemnantController.updateRemnan");
+  Route.put("/update/:id", "RemnantController.updateRemnan").middleware("auth:FONDOS_REMANENTE_EDITAR");
   Route.delete("/delete/:id", "RemnantController.deleteRemnan");
-}).prefix("/api/v1/remnants");
+}).prefix("/api/v1/remnants").middleware("auth");;
