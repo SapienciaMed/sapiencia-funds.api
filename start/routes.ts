@@ -984,6 +984,10 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/get-all", "LegalizedController.getAllLegalized");
   Route.get("/generate-xlsx", "LegalizedController.generateLegalizedXLSX");
+  Route.put(
+    "/update-commune-budget",
+    "LegalizedController.updateLegalizedComunneBudget"
+  );
 })
   .prefix("/api/v1/legalized")
   .middleware(`auth:${PERMISSIONS.LEGALIZED}`);
