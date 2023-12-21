@@ -5,7 +5,7 @@ export default class extends BaseSchema {
   protected tableName = ABSORPTION_PERCENTAGE_TABLE.TABLE_NAME;
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.comment("Table que contiene los porcentajes de absorción");
+      table.comment("Tabla que contiene los porcentajes de absorción");
       table
         .increments(ABSORPTION_PERCENTAGE_TABLE.ID)
         .primary()
@@ -23,7 +23,7 @@ export default class extends BaseSchema {
       table
         .decimal(ABSORPTION_PERCENTAGE_TABLE.RESOURCE, 15, 2)
         .notNullable()
-        .comment("Cantidad de preseleccionados legalizado");
+        .comment("Valor del recurso");
       table
         .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_1, 5, 2)
         .notNullable()

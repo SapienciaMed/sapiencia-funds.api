@@ -983,15 +983,20 @@ Route.group(() => {
 })
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
-  
+
+Route.group(() => {
+  Route.get("/get-all", "LegalizedController.getAllLegalized");
+})
+  .prefix("/api/v1/legalized")
+  .middleware(`auth:${PERMISSIONS.LEGALIZED}`);
+
 Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
-}).prefix("/api/v1/fiducia")
+}).prefix("/api/v1/fiducia");
 
 Route.group(() => {
   Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
-  Route.put("/update/:id", "RemnantController.updateRemnan")
-  Route.delete("/delete/:id", "RemnantController.deleteRemnan")
-}).prefix("/api/v1/remnants")
-  
+  Route.put("/update/:id", "RemnantController.updateRemnan");
+  Route.delete("/delete/:id", "RemnantController.deleteRemnan");
+}).prefix("/api/v1/remnants");
