@@ -32,10 +32,6 @@ export default class extends BaseSchema {
         .comment("Código fiducia");
       table.integer(LEGALIZED_TABLE.ORDER).notNullable().comment("Orden");
       table
-        .dateTime(LEGALIZED_TABLE.UPDATED_DATE)
-        .nullable()
-        .comment("Fecha y hora de la última modificación");
-      table
         .string(LEGALIZED_TABLE.USER_MODIFIED, 15)
         .nullable()
         .comment(
@@ -45,14 +41,6 @@ export default class extends BaseSchema {
         .dateTime(LEGALIZED_TABLE.UPDATED_AT)
         .nullable()
         .comment("Fecha y hora de la última modificación");
-      table
-        .string(LEGALIZED_TABLE.USER_CREATED, 15)
-        .notNullable()
-        .comment("Número del documento del usuario que creó el registro");
-      table
-        .dateTime(LEGALIZED_TABLE.CREATED_AT)
-        .notNullable()
-        .comment("Fecha y hora de creación del registro");
     });
   }
 

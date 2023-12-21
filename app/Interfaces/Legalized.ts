@@ -6,11 +6,8 @@ export type ILegalized = {
   resource: number;
   fiduciaryId: number;
   order: number;
-  updatedDate: DateTime;
   userModified: string;
   updatedAt: DateTime;
-  userCreated: string;
-  createdAt: DateTime;
 };
 export type ILegalizedPaginatedFilters = {
   announcementId: number;

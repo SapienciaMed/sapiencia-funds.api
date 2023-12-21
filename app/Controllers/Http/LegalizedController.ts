@@ -27,4 +27,28 @@ export default class AbsorptionPercentageController {
       return response.badRequest(apiResp);
     }
   }
+  // GENERATE LEGALIZED XLSX
+  public async generateLegalizedXLSX(ctx: HttpContextContract) {
+    const { request, response, logger } = ctx;
+    let filters: ILegalizedPaginatedFilters;
+    try {
+      filters = await request.validate({
+        schema: filterLegalizedSchema,
+      });
+    } catch (err) {
+      return DBException.badRequest(ctx, err);
+    }
+    try {
+      const resp = await LegalizedProvider.generateLegalizedXLSX(filters);
+      response.header(
+        "Content-Disposition",
+        "attachment; filename=legalizados.xlsx"
+      );
+      return response.download(resp.data);
+    } catch (err) {
+      logger.error(err);
+      const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+      return response.badRequest(apiResp);
+    }
+  }
 }

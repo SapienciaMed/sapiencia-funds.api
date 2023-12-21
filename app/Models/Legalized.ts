@@ -42,13 +42,6 @@ export default class Legalized extends BaseModel {
   })
   public order: number;
 
-  @column.dateTime({
-    autoUpdate: true,
-    columnName: LEGALIZED_TABLE.UPDATED_DATE,
-    serializeAs: "updatedDate",
-  })
-  public updatedDate: DateTime;
-
   @column({
     columnName: LEGALIZED_TABLE.USER_MODIFIED,
     serializeAs: "userModified",
@@ -61,17 +54,4 @@ export default class Legalized extends BaseModel {
     serializeAs: "updatedAt",
   })
   public updatedAt: DateTime;
-
-  @column({
-    columnName: LEGALIZED_TABLE.USER_CREATED,
-    serializeAs: "userCreated",
-  })
-  public userCreated: string;
-
-  @column.dateTime({
-    autoCreate: true,
-    columnName: LEGALIZED_TABLE.CREATED_AT,
-    serializeAs: "createdAt",
-  })
-  public createdAt: DateTime;
 }
