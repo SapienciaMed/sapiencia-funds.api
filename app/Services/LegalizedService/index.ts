@@ -1,7 +1,9 @@
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import {
+  ILegalized,
   ILegalizedItem,
   ILegalizedPaginatedFilters,
+  ILegalizedPayload,
 } from "App/Interfaces/Legalized";
 import { ILegalizedRepository } from "App/Repositories/LegalizedRepository";
 import { ICallBudgetRepository } from "App/Repositories/Sapiencia/CallBudgetRepository";
@@ -14,6 +16,9 @@ import {
 } from "./XLSX";
 
 export interface ILegalizedService {
+  updateLegalizedComunneBudget(
+    payload: ILegalizedPayload
+  ): Promise<ApiResponse<ILegalized>>;
   getAllLegalized(
     filters: ILegalizedPaginatedFilters
   ): Promise<ApiResponse<ILegalizedItem[]>>;
@@ -27,9 +32,20 @@ export default class LegalizedService implements ILegalizedService {
     private legalizedRepository: ILegalizedRepository,
     private callBudgetRepository: ICallBudgetRepository
   ) {}
-  // GET ALL LEGALIZED PAGINATED
+  // CREATE LEGALIZED
+  public async updateLegalizedComunneBudget(payload: ILegalizedPayload) {
+    const wasUpdated = await this.callBudgetRepository.updateCommuneBudget(
+      payload
+    );
+    let legalizedCreated = {} as ILegalized;
+    if (wasUpdated) {
+      legalizedCreated = await this.legalizedRepository.createLegalized(
+        payload
+      );
+    }
+    return new ApiResponse(legalizedCreated, EResponseCodes.OK);
+  }
   public async getAllLegalized(filters: ILegalizedPaginatedFilters) {
-    console.log(this.legalizedRepository.toString());
     const legalizedFound =
       await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
     return new ApiResponse(legalizedFound, EResponseCodes.OK);

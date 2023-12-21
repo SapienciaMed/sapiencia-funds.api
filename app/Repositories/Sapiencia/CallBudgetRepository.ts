@@ -4,6 +4,7 @@ import { ICallBudget } from "App/Interfaces/CallBudgetInterfaces";
 import {
   ILegalizedItem,
   ILegalizedPaginatedFilters,
+  ILegalizedPayload,
 } from "App/Interfaces/Legalized";
 import CallBudget from "App/Models/Sapiencia/Callbudget";
 import { DATABASE_NAMES } from "App/Utils/helpers";
@@ -15,6 +16,7 @@ export interface ICallBudgetRepository {
   getCommuneBudgetByPeriod(
     filters: ILegalizedPaginatedFilters
   ): Promise<ILegalizedItem[]>;
+  updateCommuneBudget(payload: ILegalizedPayload): Promise<boolean>;
 }
 
 export default class CallBudgetRepository implements ICallBudgetRepository {
@@ -40,6 +42,7 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
     }
     return resourceFound?.[0];
   }
+  // GET COMMUNE BUDGET BY PERIOD
   public async getCommuneBudgetByPeriod(filters: ILegalizedPaginatedFilters) {
     const { announcementId } = filters;
     /*
@@ -51,6 +54,7 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
           callg_control_presupuesto_comuna_fidu.presupuesto_comuna as resource,
           callg_control_presupuesto_comuna_fidu.idfiducia as fiduciaryId,
           callg_control_presupuesto_comuna_fidu.orden as `order`,
+          callg_control_presupuesto_comuna_fidu.periodo as announcementId,
           fidu_fiducia.numcontrato as `fiduciaryName`
         FROM callg_control_presupuesto_comuna_fidu
         INNER JOIN fidu_fiducia 
@@ -63,5 +67,34 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
       query
     );
     return resp?.[0]?.[0];
+  }
+  // UPDATE COMMUNE BUDGET
+  public async updateCommuneBudget(payload: ILegalizedPayload) {
+    try {
+      const { announcementId, communeFundId, fiduciaryId, order, resource } =
+        payload;
+      // const query = `
+      //   UPDATE callg_presupuesto_comuna_legalizacion
+      //   SET recurso_comuna = ?, orden = ?
+      //   WHERE periodo = ? AND comuna = ? AND idfiducia = ?
+      //   AND NOT EXISTS
+      //     (SELECT 1 FROM
+      //       (SELECT 1 FROM callg_presupuesto_comuna_legalizacion) AS t
+      //       WHERE periodo = ? AND comuna = ? AND idfiducia = ? AND orden = ?)
+      // `;
+      const query = `
+        UPDATE callg_presupuesto_comuna_legalizacion
+        SET recurso_comuna = ?, orden = ?
+        WHERE periodo = ? AND comuna = ? AND idfiducia = ?
+      `;
+      const resp = await Database.connection(DATABASE_NAMES.SAPIENCIA).rawQuery(
+        query,
+        [resource, order, announcementId, communeFundId, fiduciaryId]
+      );
+      return resp?.[0]?.changedRows > 0;
+    } catch (err) {
+      console.log(err);
+      throw new Error("Error al actualizar presupuesto comuna");
+    }
   }
 }
