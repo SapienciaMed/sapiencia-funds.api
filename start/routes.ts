@@ -982,6 +982,12 @@ Route.group(() => {
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
 
 Route.group(() => {
+  Route.get("/get-all", "LegalizedController.getAllLegalized");
+})
+  .prefix("/api/v1/legalized")
+  .middleware(`auth:${PERMISSIONS.LEGALIZED}`);
+
+Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
 }).prefix("/api/v1/fiducia");
 
