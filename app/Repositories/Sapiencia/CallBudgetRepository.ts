@@ -17,6 +17,12 @@ export interface ICallBudgetRepository {
     filters: ILegalizedPaginatedFilters
   ): Promise<ILegalizedItem[]>;
   updateCommuneBudget(payload: ILegalizedPayload): Promise<boolean>;
+  existsOrderCommuneBudget(
+    filters: Pick<
+      ILegalizedPayload,
+      "announcementId" | "communeFundId" | "order"
+    >
+  ): Promise<boolean>;
 }
 
 export default class CallBudgetRepository implements ICallBudgetRepository {
@@ -68,25 +74,45 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
     );
     return resp?.[0]?.[0];
   }
+  // SEARCH EXISTENT ORDER COMMUNE BUDGET
+  public async existsOrderCommuneBudget(
+    filters: Pick<
+      ILegalizedPayload,
+      "announcementId" | "communeFundId" | "order"
+    >
+  ) {
+    try {
+      const { announcementId, communeFundId, order } = filters;
+      const query = `
+        SELECT orden FROM callg_presupuesto_comuna_legalizacion
+        WHERE periodo = ? AND comuna = ? AND orden = ?
+      `;
+      const resp = await Database.connection(DATABASE_NAMES.SAPIENCIA).rawQuery(
+        query,
+        [announcementId, communeFundId, order]
+      );
+      return resp?.[0].length > 0;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
+  }
   // UPDATE COMMUNE BUDGET
   public async updateCommuneBudget(payload: ILegalizedPayload) {
     try {
       const { announcementId, communeFundId, fiduciaryId, order, resource } =
         payload;
-      // const query = `
-      //   UPDATE callg_presupuesto_comuna_legalizacion
-      //   SET recurso_comuna = ?, orden = ?
-      //   WHERE periodo = ? AND comuna = ? AND idfiducia = ?
-      //   AND NOT EXISTS
-      //     (SELECT 1 FROM
-      //       (SELECT 1 FROM callg_presupuesto_comuna_legalizacion) AS t
-      //       WHERE periodo = ? AND comuna = ? AND idfiducia = ? AND orden = ?)
-      // `;
       const query = `
         UPDATE callg_presupuesto_comuna_legalizacion
         SET recurso_comuna = ?, orden = ?
         WHERE periodo = ? AND comuna = ? AND idfiducia = ?
       `;
+      const existsOrderCommuneBudget = await this.existsOrderCommuneBudget(
+        payload
+      );
+      if (existsOrderCommuneBudget) {
+        throw new Error(`El orden ${order} ya existe`);
+      }
       const resp = await Database.connection(DATABASE_NAMES.SAPIENCIA).rawQuery(
         query,
         [resource, order, announcementId, communeFundId, fiduciaryId]
@@ -94,7 +120,7 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
       return resp?.[0]?.changedRows > 0;
     } catch (err) {
       console.log(err);
-      throw new Error("Error al actualizar presupuesto comuna");
+      throw new Error(err);
     }
   }
 }
