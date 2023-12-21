@@ -42,7 +42,7 @@ export default class RemnantRepository implements IRemnantRepository {
     
       const quotas = Number(item.remaining) / Number(item.averageCost);
       const quotaResource =  ( Number(item.remaining) / Number(item.averageCost)) * Number(item.averageCost);
-      const residual = parseFloat(item.remaining) - parseFloat(item.quotaResource);      
+      const residual = Number(item.remaining) - quotaResource;      
 
       return {
         ...item,
