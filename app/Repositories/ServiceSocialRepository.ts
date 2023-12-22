@@ -40,6 +40,9 @@ export interface IServiceSocialRepository {
   geConsolidationSocialService(
     filters: IConsolidationTray
   ): Promise<IPagingData<IConsolidationTrayParams>>;
+  getLastIdByIdServiceSocial(
+    id: number
+  ): Promise<ISocialServiceBeneficiary | null>;
 }
 
 export default class ServiceSocialRepository
@@ -205,7 +208,6 @@ export default class ServiceSocialRepository
       (i) => i.serialize() as InitialBeneficiaryInformation
     );
 
-
     let infoAllData: IConsolidationTrayParams[] = [];
     let infoPaginated: IConsolidationTrayParams[] = [];
 
@@ -319,5 +321,20 @@ export default class ServiceSocialRepository
     };
 
     return { array: infoPaginated as IConsolidationTrayParams[], meta };
+  }
+
+  async getLastIdByIdServiceSocial(
+    id: number
+  ): Promise<ISocialServiceBeneficiary | null> {
+    const res = await BeneficiarySocialService.query()
+      .where("idConsolidationBeneficiary", id)
+      .orderBy("id", "desc")
+      .first();
+
+    if (!res) {
+      return null;
+    }
+
+    return res.serialize() as ISocialServiceBeneficiary;
   }
 }

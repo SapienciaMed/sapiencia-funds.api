@@ -863,7 +863,8 @@ Route.group(() => {
   Route.post(
     "/get-service-social-file/",
     "ServiceSocialController.dowloadUploadFiles"
-  ).middleware("auth:SERVICIO_SOCIAL");
+  );
+  // .middleware("auth:SERVICIO_SOCIAL");
   Route.post(
     "/get-service-social-by-beneficiary",
     "ServiceSocialController.getServiceSocialPaginate"
@@ -872,9 +873,8 @@ Route.group(() => {
     "/update-service-social/",
     "ServiceSocialController.updateServiceSocial"
   ).middleware("auth:SERVICIO_SOCIAL");
-})
-  .prefix("/api/v1/consolidation-tray-social-service")
-  .middleware("auth");
+}).prefix("/api/v1/consolidation-tray-social-service");
+// .middleware("auth");
 
 //* ********************************************************************************
 //* ********************************************************************************
