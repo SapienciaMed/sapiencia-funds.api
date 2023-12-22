@@ -37,11 +37,13 @@ export default class ServiceSocialController {
 
   public async updateServiceSocial({ response, request }: HttpContextContract) {
     try {
-      const data = request.body() as ISocialServiceBeneficiary;
       const { id } = request.body();
+      const data = request.body() as ISocialServiceBeneficiary;
+
       const files = request.files("files");
+
       return response.send(
-        await ServiceSocialProvider.updateSocialService(data, id,files)
+        await ServiceSocialProvider.updateSocialService(data, id, files)
       );
     } catch (err) {
       return response.badRequest(
@@ -67,11 +69,15 @@ export default class ServiceSocialController {
   }
 
   public async dowloadUploadFiles({ request, response }: HttpContextContract) {
-    const { path } = request.body();
+    const { fileName } = request.body();
 
     try {
+      if (!fileName) throw new Error("Falta una ruta");
+
+      response.header("Content-Type", "application/octet-stream");
+
       return response.send(
-        await ServiceSocialProvider.downloadFilesServiceSocial(`${path}`)
+        await ServiceSocialProvider.downloadFilesServiceSocial(`${fileName}`)
       );
     } catch (err) {
       return response.badRequest(

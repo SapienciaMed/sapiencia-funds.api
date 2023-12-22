@@ -3,7 +3,7 @@ import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import { IFiles } from "App/Interfaces/StorageInterfaces";
 import { ApiResponse } from "App/Utils/ApiResponses";
-//const keyFilename = process.env.GCLOUD_KEYFILE; //-->Local
+const keyFilename = process.env.GCLOUD_KEYFILE; //-->Local
 const bucketName = process.env.GCLOUD_BUCKET ?? "";
 const bucketNameCitizen = process.env.GCLOUD_BUCKET_CITIZEN ?? "";
 
@@ -21,8 +21,8 @@ export interface IStorageRepository {
 export default class StorageRepository implements IStorageRepository {
   storage: Storage;
   constructor() {
-    // this.storage = new Storage({ keyFilename }); //-->Local
-    this.storage = new Storage();
+    this.storage = new Storage({ keyFilename }); //-->Local
+    //this.storage = new Storage();
   }
 
   async uploadInformation(
@@ -31,10 +31,13 @@ export default class StorageRepository implements IStorageRepository {
   ): Promise<boolean> {
     try {
       const bucket = this.storage.bucket(bucketName);
+
       if (!file.tmpPath) return false;
+
       const [fileCloud] = await bucket.upload(file.tmpPath, {
         destination: `${path}${file.clientName}`,
       });
+
       return !!fileCloud;
     } catch (error) {
       return false;
@@ -56,7 +59,8 @@ export default class StorageRepository implements IStorageRepository {
     });
     return new ApiResponse(
       response.filter((file) => file.name),
-      EResponseCodes.OK
+      EResponseCodes.OK,
+      "Archivos google cloud"
     );
   }
 

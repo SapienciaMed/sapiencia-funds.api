@@ -859,7 +859,8 @@ Route.group(() => {
   Route.post(
     "/get-service-social-file/",
     "ServiceSocialController.dowloadUploadFiles"
-  ).middleware("auth:SERVICIO_SOCIAL");
+  );
+  // .middleware("auth:SERVICIO_SOCIAL");
   Route.post(
     "/get-service-social-by-beneficiary",
     "ServiceSocialController.getServiceSocialPaginate"
@@ -868,9 +869,8 @@ Route.group(() => {
     "/update-service-social/",
     "ServiceSocialController.updateServiceSocial"
   ).middleware("auth:SERVICIO_SOCIAL");
-})
-  .prefix("/api/v1/consolidation-tray-social-service")
-  .middleware("auth");
+}).prefix("/api/v1/consolidation-tray-social-service");
+// .middleware("auth");
 
 //* ********************************************************************************
 //* ********************************************************************************
@@ -983,15 +983,14 @@ Route.group(() => {
 })
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
-  
+
 Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
-}).prefix("/api/v1/fiducia")
+}).prefix("/api/v1/fiducia");
 
 Route.group(() => {
   Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
-  Route.put("/update/:id", "RemnantController.updateRemnan")
-  Route.delete("/delete/:id", "RemnantController.deleteRemnan")
-}).prefix("/api/v1/remnants")
-  
+  Route.put("/update/:id", "RemnantController.updateRemnan");
+  Route.delete("/delete/:id", "RemnantController.deleteRemnan");
+}).prefix("/api/v1/remnants");
