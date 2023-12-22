@@ -982,6 +982,10 @@ Route.group(() => {
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
 
 Route.group(() => {
+  Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
+}).prefix("/api/v1/fiducia");
+
+Route.group(() => {
   Route.get("/get-all", "LegalizedController.getAllLegalized");
   Route.get("/generate-xlsx", "LegalizedController.generateLegalizedXLSX");
   Route.put(
@@ -997,8 +1001,15 @@ Route.group(() => {
 }).prefix("/api/v1/fiducia");
 
 Route.group(() => {
-  Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated").middleware("auth:FONDOS_REMANENTE_CONSULTAR");;
+  Route.post(
+    "/get-all-paginated",
+    "RemnantController.getallRemnantsPaginated"
+  ).middleware("auth:FONDOS_REMANENTE_CONSULTAR");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
-  Route.put("/update/:id", "RemnantController.updateRemnan").middleware("auth:FONDOS_REMANENTE_EDITAR");
+  Route.put("/update/:id", "RemnantController.updateRemnan").middleware(
+    "auth:FONDOS_REMANENTE_EDITAR"
+  );
   Route.delete("/delete/:id", "RemnantController.deleteRemnan");
-}).prefix("/api/v1/remnants").middleware("auth");;
+})
+  .prefix("/api/v1/remnants")
+  .middleware("auth");

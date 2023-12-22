@@ -1,3 +1,4 @@
+import Env from "@ioc:Adonis/Core/Env";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
 import {
   IConsolidationTray,
@@ -11,7 +12,8 @@ import {
 import { IServiceSocialRepository } from "App/Repositories/ServiceSocialRepository";
 import { IStorageRepository } from "App/Repositories/StorageRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
-
+import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
+import { IFiles } from "App/Interfaces/StorageInterfaces";
 export interface IServiceSocialService {
   import(): Promise<ApiResponse<IImportServiceSocial[]>>;
   insert(data: any[]): Promise<ApiResponse<any[]>>;
@@ -20,12 +22,13 @@ export interface IServiceSocialService {
   ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>>;
   updateSocialService(
     socialService: ISocialServiceBeneficiary,
-    id: number
+    id: number,
+    files: MultipartFileContract[]
   ): Promise<ApiResponse<ISocialServiceBeneficiary | null>>;
   geConsolidationSocialService(
     filters: IConsolidationTray
   ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>>;
-  downloadFilesServiceSocial(path: string): Promise<ApiResponse<Buffer>>;
+  downloadFilesServiceSocial(path: string): Promise<Buffer | null>;
 }
 
 export default class ServiceSocialService implements IServiceSocialService {
@@ -140,7 +143,15 @@ export default class ServiceSocialService implements IServiceSocialService {
   ): Promise<ApiResponse<IPagingData<ISocialServiceBeneficiary>>> {
     const requeriment =
       await this.serviceSocialRepository.getServiceSocialPaginate(filters);
+
     let totalPendingHours = 0;
+
+    const rutasFiles = await this.storageRepository.getFiles(
+      `${Env.get("GCLOUD_PATH_SOCIAL_SERVICES")}`
+    );
+
+    const lastIdPeriod =
+      await this.serviceSocialRepository.getLastIdByIdServiceSocial(filters.id);
 
     requeriment.array.forEach((item) => {
       const period = item.beneficiarieConsolidate?.programs?.reglaments?.find(
@@ -155,6 +166,18 @@ export default class ServiceSocialService implements IServiceSocialService {
 
       const socialServiceHours = period?.socialServiceHours ?? 0;
 
+      item.infoFiles = rutasFiles.data.filter((infoRouteFile) => {
+        const id = infoRouteFile.path.split(`/`)[1];
+
+        if (Number(id) === item.id) return infoRouteFile;
+      });
+
+      if (lastIdPeriod?.id === item.id) {
+        item.editable = true;
+      } else {
+        item.editable = false;
+      }
+
       item.committedHours = socialServiceHours;
       item.pendingHours = Number(socialServiceHours) - Number(item.hoursDone);
 
@@ -162,42 +185,47 @@ export default class ServiceSocialService implements IServiceSocialService {
       item.totalPendingHours = totalPendingHours + item.pendingHours;
       totalPendingHours = item.totalPendingHours;
     });
+
     return new ApiResponse(requeriment, EResponseCodes.OK);
   }
 
-  async downloadFilesServiceSocial(path: string): Promise<ApiResponse<Buffer>> {
+  async downloadFilesServiceSocial(path: string): Promise<Buffer | null> {
     const res = await this.storageRepository.downloadFile(path);
+
     if (!res) {
-      return new ApiResponse(
-        {} as Buffer,
-        EResponseCodes.FAIL,
-        "Ocurrió un error en su Transacción "
-      );
+      return null;
     }
-    return new ApiResponse(res, EResponseCodes.OK);
+
+    return res;
   }
   async updateSocialService(
     socialService: ISocialServiceBeneficiary,
-    id: number
+    id: number,
+    files: MultipartFileContract[]
   ): Promise<ApiResponse<ISocialServiceBeneficiary | null>> {
-    const res = await this.serviceSocialRepository.updateState(
-      socialService,
-      id
-    );
-    let uploadFiles;
-    if (socialService?.files) {
-      uploadFiles = await this.storageRepository.uploadInformation(
-        socialService?.files[0],
-        socialService.supportDocumentRoute
+    const lastId =
+      await this.serviceSocialRepository.getLastIdByIdServiceSocial(
+        socialService.idConsolidationBeneficiary
+      );
+
+    let res = {} as ISocialServiceBeneficiary | null;
+
+    if (lastId?.id === Number(socialService.id)) {
+      res = await this.serviceSocialRepository.updateState(
+        {
+          ...socialService,
+        },
+        id
       );
     }
-    if (!res || !uploadFiles) {
-      return new ApiResponse(
-        {} as ISocialServiceBeneficiary,
-        EResponseCodes.FAIL,
-        "Ocurrió un error en su Transacción "
+
+    if (files.length > 0) {
+      await this.storageRepository.uploadInformation(
+        files[0],
+        `${Env.get("GCLOUD_PATH_SOCIAL_SERVICES")}/${id}/`
       );
     }
+
     return new ApiResponse(res, EResponseCodes.OK);
   }
 
