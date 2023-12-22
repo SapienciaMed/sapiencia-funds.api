@@ -44,7 +44,7 @@ export default class RemnantRepository implements IRemnantRepository {
       const quotaResource =  ( Number(item.remaining) / Number(item.averageCost)) * Number(item.averageCost);
       const residual = Number(item.remaining) - quotaResource;  
 
-      if (item.userModified == null) {
+      //if (item.userModified == null) {
         return {
           ...item,
           remaining: Number(item.remaining),
@@ -56,11 +56,11 @@ export default class RemnantRepository implements IRemnantRepository {
           
         };
         
-      }else{
+     /*  }else{
         return {
           ...item
         };
-      }
+      } */
 
 
     });
