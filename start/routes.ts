@@ -849,6 +849,10 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
   Route.get(
+    "/get-cuts-generic",
+    "ConsolidationTrayController.getCutsForConsolidationTray"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
   ).middleware("auth:SERVICIO_SOCIAL");
@@ -983,15 +987,14 @@ Route.group(() => {
 })
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
-  
+
 Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
-}).prefix("/api/v1/fiducia")
+}).prefix("/api/v1/fiducia");
 
 Route.group(() => {
   Route.post("/get-all-paginated", "RemnantController.getallRemnantsPaginated");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
-  Route.put("/update/:id", "RemnantController.updateRemnan")
-  Route.delete("/delete/:id", "RemnantController.deleteRemnan")
-}).prefix("/api/v1/remnants")
-  
+  Route.put("/update/:id", "RemnantController.updateRemnan");
+  Route.delete("/delete/:id", "RemnantController.deleteRemnan");
+}).prefix("/api/v1/remnants");
