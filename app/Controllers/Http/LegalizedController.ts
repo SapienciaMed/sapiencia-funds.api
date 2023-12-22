@@ -48,7 +48,7 @@ export default class AbsorptionPercentageController {
       const resp = await LegalizedProvider.generateLegalizedXLSX(filters);
       response.header(
         "Content-Disposition",
-        "attachment; filename=legalizados.xlsx"
+        "attachment; filename=Legalizado[dato de convocatoria].xlsx"
       );
       return response.download(resp.data);
     } catch (err) {
