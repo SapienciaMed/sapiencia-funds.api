@@ -42,18 +42,27 @@ export default class RemnantRepository implements IRemnantRepository {
     
       const quotas = Number(item.remaining) / Number(item.averageCost);
       const quotaResource =  ( Number(item.remaining) / Number(item.averageCost)) * Number(item.averageCost);
-      const residual = Number(item.remaining) - quotaResource;      
+      const residual = Number(item.remaining) - quotaResource;  
 
-      return {
-        ...item,
-        remaining: Number(item.remaining),
-        averageCost: Number(item.averageCost),
-        quotas,  
-        quotaResource,      
-        residual,
+      if (item.userModified == null) {
+        return {
+          ...item,
+          remaining: Number(item.remaining),
+          averageCost: Number(item.averageCost),
+          quotas,  
+          quotaResource,      
+          residual,
+          
+          
+        };
         
-        
-      };
+      }else{
+        return {
+          ...item
+        };
+      }
+
+
     });
 
     return {
@@ -125,6 +134,7 @@ export default class RemnantRepository implements IRemnantRepository {
     toUpdate.quotas = remnant.quotas;
     toUpdate.quotaResource = remnant.quotaResource;
     toUpdate.residual = remnant.residual;
+    toUpdate.userModified = String(process.env.CURRENT_USER_DOCUMENT);
 
 
     await toUpdate.save();
