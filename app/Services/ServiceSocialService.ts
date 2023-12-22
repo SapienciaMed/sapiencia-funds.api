@@ -13,7 +13,7 @@ import { IServiceSocialRepository } from "App/Repositories/ServiceSocialReposito
 import { IStorageRepository } from "App/Repositories/StorageRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
-import { IFiles } from "App/Interfaces/StorageInterfaces";
+
 export interface IServiceSocialService {
   import(): Promise<ApiResponse<IImportServiceSocial[]>>;
   insert(data: any[]): Promise<ApiResponse<any[]>>;
