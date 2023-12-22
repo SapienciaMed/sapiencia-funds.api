@@ -981,9 +981,9 @@ Route.group(() => {
   .prefix("/api/v1/absorption-percentage")
   .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
 
-Route.group(() => {
-  Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
-}).prefix("/api/v1/fiducia");
+// Route.group(() => {
+//   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
+// }).prefix("/api/v1/fiducia");
 
 Route.group(() => {
   Route.get("/get-all", "LegalizedController.getAllLegalized");
