@@ -27,6 +27,11 @@ export default class CrearTablaRcoReglamentosCondonacion extends BaseSchema {
         .comment("Periodo inicial (DB Convocatorias)");
 
       table
+        .integer("RCO_PERIODO_INICIAL_NUMERICO") //Apoyo validaciones
+        .nullable()
+        .comment("Periodo inicial (Estructurado Aurora)");
+
+      table
         .boolean("RCO_PERIODO_ABIERTO")
         .notNullable()
         .comment("Indicador de que si para este reglamento esta abierto o no los periodos");
@@ -35,6 +40,11 @@ export default class CrearTablaRcoReglamentosCondonacion extends BaseSchema {
         .string("RCO_PERIODO_FINAL", 60)
         .nullable()
         .comment("Periodo Final  (DB Convocatorias)");
+
+      table
+        .integer("RCO_PERIODO_FINAL_NUMERICO") //Apoyo validaciones
+        .nullable()
+        .comment("Periodo final (Estructurado Aurora)");
 
       table
         .boolean("RCO_APLICA_PORCENTAJE_TEORICO")
@@ -197,7 +207,7 @@ export default class CrearTablaRcoReglamentosCondonacion extends BaseSchema {
         .comment("Numero del documento del ultimo usuario que hizo una modificacion");
 
       table
-        .date("RCO_FECHA_MODIFICO")
+        .dateTime("RCO_FECHA_MODIFICO")
         .nullable()
         .comment("Fecha y hora de la ultima modificacion");
 
@@ -207,7 +217,7 @@ export default class CrearTablaRcoReglamentosCondonacion extends BaseSchema {
         .comment("Numero del documento del usuario que creo el registro");
 
       table
-        .date("RCO_FECHA_CREO")
+        .dateTime("RCO_FECHA_CREO")
         .nullable()
         .comment("Fecha y hora de creacion del registro");
 

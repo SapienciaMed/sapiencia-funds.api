@@ -41,6 +41,23 @@ export default class ReglamentConsolidationController {
 
   }
 
+  public async getReglamentById({ request, response }: HttpContextContract) {
+
+    try {
+
+      const { id } = request.params();
+      return response.send(await ReglamentConsolidationProvider.getReglamentById(id));
+
+    } catch (err) {
+
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+
+    }
+
+  }
+
   public async createReglament({ request, response }: HttpContextContract) {
 
     try {
