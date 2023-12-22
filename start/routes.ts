@@ -842,6 +842,10 @@ Route.group(() => {
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
   Route.get(
+    "/get-cuts-generic",
+    "ConsolidationTrayController.getCutsForConsolidationTray"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
   ).middleware("auth:SERVICIO_SOCIAL");
