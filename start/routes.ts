@@ -875,19 +875,10 @@ Route.group(() => {
 //? ******** ESTRUCTURACIÓN DE REGLAMENTO (VERSIÓN 2.0) Y AJUSTES GENERALES ********
 
 Route.group(() => {
-  Route.post(
-    "/get-periods-sapi",
-    "ReglamentConsolidationController.getPeriodsSapi"
-  );
-  Route.post(
-    "/create-reglament",
-    "ReglamentConsolidationController.createReglament"
-  );
-  Route.post(
-    "/get-paginated",
-    "ReglamentConsolidationController.getReglamentPaginate"
-  );
-  // Route.get("/get-by-id/:id", "ReglamentController.getReglamentById");
+  Route.post("/get-periods-sapi", "ReglamentConsolidationController.getPeriodsSapi");
+  Route.post("/create-reglament", "ReglamentConsolidationController.createReglament");
+  Route.post("/get-paginated", "ReglamentConsolidationController.getReglamentPaginate");
+  Route.get("/get-by-id/:id", "ReglamentConsolidationController.getReglamentById");
   // Route.get("/get-last-id", "ReglamentController.getLastId");
   // Route.post("/create", "ReglamentController.createReglament");
   // Route.put("/edit/:id", "ReglamentController.updateReglament");

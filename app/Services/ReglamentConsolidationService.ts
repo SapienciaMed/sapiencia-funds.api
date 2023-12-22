@@ -8,6 +8,7 @@ export interface IReglamenConsolidationtService {
 
   getPeriodsSapi(): Promise<ApiResponse<ICallPeriodSapi[]>>;
   getReglamentPaginate(filters: IFiltersForReglament): Promise<ApiResponse<IPagingData<IReglamentConsolidation>>>;
+  getReglamentById(id: number): Promise<ApiResponse<IReglamentConsolidation[] | null>>;
   createReglament(data: IReglamentConsolidation): Promise<ApiResponse<IReglamentConsolidation | string>>;
 
 }
@@ -29,6 +30,22 @@ export default class ReglamentConsolidationService implements IReglamenConsolida
 
     const getReglament = await this.reglamentConsolidationRepository.getReglamentPaginate(filters);
     return new ApiResponse(getReglament, EResponseCodes.OK);
+
+  }
+
+  async getReglamentById(id: number): Promise<ApiResponse<IReglamentConsolidation[] | null>> {
+
+    const res = await this.reglamentConsolidationRepository.getReglamentById(id);
+
+    if (!res) {
+
+      return new ApiResponse({} as IReglamentConsolidation[], EResponseCodes.FAIL, "Reglamento no encontrado");
+
+    } else {
+
+      return new ApiResponse(res, EResponseCodes.OK);
+
+    }
 
   }
 
