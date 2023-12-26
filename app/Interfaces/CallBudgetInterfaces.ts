@@ -14,3 +14,17 @@ export interface ICallBudgetFilters {
   page: number;
   perPage: number;
 }
+
+export type ICallCommuneBudget = {
+  comuna: number;
+  communebudget: number;
+  accumulatedLegaliComuna: number;
+  remainingCommuneBudget: number;
+  numberUsersCommune: number;
+  period: number;
+  cutScore: number;
+  closing: number;
+  idfiducia: number;
+  orden: number;
+  modalidade: number;
+};

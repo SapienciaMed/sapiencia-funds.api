@@ -45,25 +45,17 @@ export interface ISapienciaService {
   //* ************************************************************* *//
   geConsolidationTray(
     filters: IConsolidationTray
-  ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayParams>>
-  >;
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>>;
   getCutsForConsolidationTray(): Promise<ApiResponse<ICutInterface[] | null>>;
   geConsolidationTrayByCut(
     filters: IConsolidationTray
-  ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayParams>>
-  >;
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>>;
   geBeneficiaryById(
     id: number
-  ): Promise<
-    ApiResponse<IConsolidationTrayParams | null>
-  >;
+  ): Promise<ApiResponse<IConsolidationTrayParams | null>>;
   updateCutBeneficiary(
     data: IConsolidationTrayForTransactions
-  ): Promise<
-    ApiResponse<IConsolidationTrayParams | null>
-  >;
+  ): Promise<ApiResponse<IConsolidationTrayParams | null>>;
 
   //* ********************************************* *//
   //* ********** TEMAS DEL TAB DE PQRSDF ********** *//
@@ -153,9 +145,7 @@ export default class SapienciaService implements ISapienciaService {
 
   async geConsolidationTray(
     filters: IConsolidationTray
-  ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayParams>>
-  > {
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>> {
     const technicianCollection =
       await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTray(
         filters
@@ -173,9 +163,7 @@ export default class SapienciaService implements ISapienciaService {
 
   async geConsolidationTrayByCut(
     filters: IConsolidationTray
-  ): Promise<
-    ApiResponse<IPagingData<IConsolidationTrayParams>>
-  > {
+  ): Promise<ApiResponse<IPagingData<IConsolidationTrayParams>>> {
     const technicianCollection =
       await this.callConsolidationTrayTechnicianCollectionRepository.geConsolidationTrayByCut(
         filters
@@ -185,9 +173,7 @@ export default class SapienciaService implements ISapienciaService {
 
   async geBeneficiaryById(
     id: number
-  ): Promise<
-    ApiResponse<IConsolidationTrayParams | null>
-  > {
+  ): Promise<ApiResponse<IConsolidationTrayParams | null>> {
     const getBeneficiary =
       await this.callConsolidationTrayTechnicianCollectionRepository.geBeneficiaryById(
         id
@@ -207,9 +193,7 @@ export default class SapienciaService implements ISapienciaService {
 
   async updateCutBeneficiary(
     data: IConsolidationTrayForTransactions
-  ): Promise<
-    ApiResponse<IConsolidationTrayParams | null>
-  > {
+  ): Promise<ApiResponse<IConsolidationTrayParams | null>> {
     const technicianTransaction =
       await this.callConsolidationTrayTechnicianCollectionRepository.updateCutBeneficiary(
         data

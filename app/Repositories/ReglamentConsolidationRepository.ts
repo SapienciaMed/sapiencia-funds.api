@@ -19,6 +19,7 @@ export interface IReglamentConsolidationRepository {
 
   getPeriodsSapi(): Promise<ICallPeriodSapi[]>;
   getReglamentPaginate(filters: IFiltersForReglament): Promise<IPagingData<IReglamentConsolidation>>;
+  getReglamentById(id: number): Promise<IReglamentConsolidation[] | null>;
   createReglament(data: IReglamentConsolidation): Promise<IReglamentConsolidation | string>;
 
 }
@@ -71,22 +72,179 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
     }
 
     if (filters.initialPeriod) {
-      res.andWhere("initialPeriod", filters.initialPeriod);
+      const arraySearch: string[] = filters.initialPeriod.split("-");
+      const paramSearch: number = Number(`${arraySearch[0]}${arraySearch[1]}`);
+      res.andWhere("initialPeriodNumber", ">=" , paramSearch);
     }
 
     if (filters.endPeriod) {
-      res.andWhere("endPeriod", filters.endPeriod);
+      const arraySearch: string[] = filters.endPeriod.split("-");
+      const paramSearch: number = Number(`${arraySearch[0]}${arraySearch[1]}`);
+      res.andWhere("endPeriodNumber", "<=", paramSearch);
     }
 
     const workerReglamentPaginated = await res.paginate( page, perPage );
 
     const { data, meta } = workerReglamentPaginated.serialize();
     const dataArray = data ?? [];
+    const resultArray: IReglamentConsolidation[] = [];
+
+    //Para convertir los resultados JSON
+    for (const iter of dataArray) {
+
+      let arrayConvertSocialServiceCondonationPercent: ICondonationPercent[] | string;
+      let arrayConvertKnowledgeTransferCondonationPercent: ICondonationPercent[] | string;
+
+      let arrayConvertPerformancePeriodStructure: IPerformanceStructure | string;
+      let arrayConvertAccumulatedPerformanceDataTable: IPerformanceStructure | string;
+
+      arrayConvertSocialServiceCondonationPercent = (iter.socialServiceCondonationType == "Parcial") ? JSON.parse(iter.socialServiceCondonationPercent) : "";
+      arrayConvertKnowledgeTransferCondonationPercent = (iter.knowledgeTransferCondonationType == "Parcial") ? JSON.parse(iter.knowledgeTransferCondonationPercent) : "";
+      arrayConvertPerformancePeriodStructure = (iter.applyCondonationPerformancePeriod) ? JSON.parse(iter.performancePeriodStructure) : "";
+      arrayConvertAccumulatedPerformanceDataTable = (iter.applyAccomulatedIncomeCondonation) ? JSON.parse(iter.accumulatedPerformanceDataTable) : "";
+
+      const objConvertJson: IReglamentConsolidation = {
+        id: iter.id,
+        idProgram: iter.idProgram,
+        programName: iter.programs.value,
+        initialPeriod: iter.initialPeriod,
+        isOpenPeriod: iter.isOpenPeriod,
+        endPeriod: iter.endPeriod,
+
+        applyTheoreticalSemiannualPercent: iter.applyTheoreticalSemiannualPercent,
+        theoreticalSemiannualPercent: iter.theoreticalSemiannualPercent,
+
+        applyAcademicPerformancePercent: iter.applyAcademicPerformancePercent,
+        academicPerformancePercent: iter.academicPerformancePercent,
+
+        applyRequirementsPercent: iter.applyRequirementsPercent,
+        requirementsPercent: iter.requirementsPercent,
+
+        applySocialService: iter.applySocialService,
+        socialServicePercent: iter.socialServicePercent,
+        socialServiceHours: iter.socialServiceHours,
+        socialServiceCondonationType: iter.socialServiceCondonationType,
+        socialServiceCondonationPercent: arrayConvertSocialServiceCondonationPercent,
+
+        applyKnowledgeTransfer: iter.applyKnowledgeTransfer,
+        knowledgeTransferPercent: iter.knowledgeTransferPercent,
+        knowledgeTransferHours: iter.knowledgeTransferHours,
+        knowledgeTransferCondonationType: iter.knowledgeTransferCondonationType,
+        knowledgeTransferCondonationPercent: arrayConvertKnowledgeTransferCondonationPercent,
+
+        gracePeriodMonths: iter.gracePeriodMonths,
+        graceDateApplication: iter.graceDateApplication,
+        applyContinuousSuspension: iter.applyContinuousSuspension,
+        continuosSuspencionQuantity: iter.continuosSuspencionQuantity,
+        applyDiscontinuousSuspension: iter.applyDiscontinuousSuspension,
+        discontinuousSuspensionQuantity: iter.discontinuousSuspensionQuantity,
+        applySpecialSuspensions: iter.applySpecialSuspensions,
+        specialSuspensionsQuantity: iter.specialSuspensionsQuantity,
+        applyExtension: iter.applyExtension,
+        extensionQuantity: iter.extensionQuantity,
+
+        applyCondonationPerformancePeriod: iter.applyCondonationPerformancePeriod,
+        performancePeriodStructure: arrayConvertPerformancePeriodStructure,
+
+        applyAccomulatedIncomeCondonation: iter.applyAccomulatedIncomeCondonation,
+        accumulatedPerformanceDataTable: arrayConvertAccumulatedPerformanceDataTable,
+
+        requirementsForReglament: iter.requirements,
+
+      }
+
+      resultArray.push(objConvertJson);
+
+    }
 
     return {
-      array: dataArray as IReglamentConsolidation[],
+      array: resultArray as IReglamentConsolidation[],
       meta,
     };
+
+  }
+
+  async getReglamentById(id: number): Promise<IReglamentConsolidation[] | null> {
+
+    const queryReglament = Reglament.query().where("id", id);
+    queryReglament.preload("programs");
+    queryReglament.preload("requirements");
+
+    const workerReglamentPaginated = await queryReglament.paginate( 1, 9999999 );
+
+    const { data } = workerReglamentPaginated.serialize();
+    const dataArray = data ?? [];
+    const resultArray: IReglamentConsolidation[] = [];
+
+    //Para convertir los resultados JSON
+    for (const iter of dataArray) {
+
+      let arrayConvertSocialServiceCondonationPercent: ICondonationPercent[] | string;
+      let arrayConvertKnowledgeTransferCondonationPercent: ICondonationPercent[] | string;
+
+      let arrayConvertPerformancePeriodStructure: IPerformanceStructure | string;
+      let arrayConvertAccumulatedPerformanceDataTable: IPerformanceStructure | string;
+
+      arrayConvertSocialServiceCondonationPercent = (iter.socialServiceCondonationType == "Parcial") ? JSON.parse(iter.socialServiceCondonationPercent) : "";
+      arrayConvertKnowledgeTransferCondonationPercent = (iter.knowledgeTransferCondonationType == "Parcial") ? JSON.parse(iter.knowledgeTransferCondonationPercent) : "";
+      arrayConvertPerformancePeriodStructure = (iter.applyCondonationPerformancePeriod) ? JSON.parse(iter.performancePeriodStructure) : "";
+      arrayConvertAccumulatedPerformanceDataTable = (iter.applyAccomulatedIncomeCondonation) ? JSON.parse(iter.accumulatedPerformanceDataTable) : "";
+
+      const objConvertJson: IReglamentConsolidation = {
+        id: iter.id,
+        idProgram: iter.idProgram,
+        programName: iter.programs.value,
+        initialPeriod: iter.initialPeriod,
+        isOpenPeriod: iter.isOpenPeriod,
+        endPeriod: iter.endPeriod,
+
+        applyTheoreticalSemiannualPercent: iter.applyTheoreticalSemiannualPercent,
+        theoreticalSemiannualPercent: iter.theoreticalSemiannualPercent,
+
+        applyAcademicPerformancePercent: iter.applyAcademicPerformancePercent,
+        academicPerformancePercent: iter.academicPerformancePercent,
+
+        applyRequirementsPercent: iter.applyRequirementsPercent,
+        requirementsPercent: iter.requirementsPercent,
+
+        applySocialService: iter.applySocialService,
+        socialServicePercent: iter.socialServicePercent,
+        socialServiceHours: iter.socialServiceHours,
+        socialServiceCondonationType: iter.socialServiceCondonationType,
+        socialServiceCondonationPercent: arrayConvertSocialServiceCondonationPercent,
+
+        applyKnowledgeTransfer: iter.applyKnowledgeTransfer,
+        knowledgeTransferPercent: iter.knowledgeTransferPercent,
+        knowledgeTransferHours: iter.knowledgeTransferHours,
+        knowledgeTransferCondonationType: iter.knowledgeTransferCondonationType,
+        knowledgeTransferCondonationPercent: arrayConvertKnowledgeTransferCondonationPercent,
+
+        gracePeriodMonths: iter.gracePeriodMonths,
+        graceDateApplication: iter.graceDateApplication,
+        applyContinuousSuspension: iter.applyContinuousSuspension,
+        continuosSuspencionQuantity: iter.continuosSuspencionQuantity,
+        applyDiscontinuousSuspension: iter.applyDiscontinuousSuspension,
+        discontinuousSuspensionQuantity: iter.discontinuousSuspensionQuantity,
+        applySpecialSuspensions: iter.applySpecialSuspensions,
+        specialSuspensionsQuantity: iter.specialSuspensionsQuantity,
+        applyExtension: iter.applyExtension,
+        extensionQuantity: iter.extensionQuantity,
+
+        applyCondonationPerformancePeriod: iter.applyCondonationPerformancePeriod,
+        performancePeriodStructure: arrayConvertPerformancePeriodStructure,
+
+        applyAccomulatedIncomeCondonation: iter.applyAccomulatedIncomeCondonation,
+        accumulatedPerformanceDataTable: arrayConvertAccumulatedPerformanceDataTable,
+
+        requirementsForReglament: iter.requirements,
+
+      }
+
+      resultArray.push(objConvertJson);
+
+    }
+
+    return resultArray[0] as IReglamentConsolidation[];
 
   }
 
@@ -434,7 +592,12 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
     }
 
     //* *************************************************************************** *//
-    //* *************************************************************************** *//
+    //* *************** AJUSTES PARA PERIODOS -> GUARDADO NUMÉRICO **************** *//
+    let arrayInitialPeriodNumber: string[] = data.initialPeriod?.split("-")!;
+    let arrayIndPeriodNumber: string[] | number = (!data.isOpenPeriod) ? data.endPeriod?.split("-")! : 0;
+
+    const assigInitialPeriodNumber: number = Number(`${arrayInitialPeriodNumber[0]}${arrayInitialPeriodNumber[1]}`);
+    const assigIndPeriodNumber: number = (arrayIndPeriodNumber !== 0) ? Number(`${arrayIndPeriodNumber[0]}${arrayIndPeriodNumber[1]}`) : 0;
 
     //* ********************************* *//
     //* ORGANIZAMOS EL OBJETO DE GUARDADO *//
@@ -492,6 +655,10 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
       performancePeriodStructure: controlPerformancePeriodStructure!,
       applyAccomulatedIncomeCondonation: controlApplyAccomulatedIncomeCondonation,
       accumulatedPerformanceDataTable: controlAccumulatedPerformanceDataTable!,
+
+      //Datos numéricos de campos de fecha
+      initialPeriodNumber: assigInitialPeriodNumber,
+      endPeriodNumber: assigIndPeriodNumber,
 
       //Campos de información de usuario de transacción
       createUser: data.createUser,

@@ -10,6 +10,9 @@ export default class AuroraEpmRenovado extends BaseModel {
   @column({ columnName: "periodo", serializeAs: "period" })
   public period: number;
 
+  @column({ columnName: "periodo_detalle", serializeAs: "periodDetail" })
+  public periodDetail: string;
+
   @column({ columnName: "Pseleccion", serializeAs: "pSelection" })
   public pSelection: number;
 

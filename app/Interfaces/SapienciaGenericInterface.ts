@@ -40,14 +40,14 @@ export interface IReglamentConsolidation {
   socialServicePercent?: number;
   socialServiceHours?: number;
   socialServiceCondonationType?: string; //?Nuevo (Servicio social condonación)
-  socialServiceCondonationPercent?: ICondonationPercent[]; //?Nuevo (Servicio social condonación)
+  socialServiceCondonationPercent?: ICondonationPercent[] | string; //?Nuevo (Servicio social condonación)
 
   //Aplica Transferencia de Conocimiento
   applyKnowledgeTransfer?: boolean;
   knowledgeTransferPercent?: number;
   knowledgeTransferHours?: number;
   knowledgeTransferCondonationType?: string; //?Nuevo (Transferencia de Conocimiento condonación)
-  knowledgeTransferCondonationPercent?: ICondonationPercent[]; //?Nuevo (Transferencia de Conocimiento condonación)
+  knowledgeTransferCondonationPercent?: ICondonationPercent[] | string; //?Nuevo (Transferencia de Conocimiento condonación)
 
   //Aplica Periodo de Gracia
   applyGracePeriod?: boolean;
@@ -86,6 +86,9 @@ export interface IReglamentConsolidation {
 
   //Tab final, Requisitos (Los agregamos en paralelo a su respectiva tabla)
   requirementsForReglament?: IRequirementsForReglament[];
+  programName?: string;
+  initialPeriodNumber?: number;
+  endPeriodNumber?: number;
 
 }
 
@@ -173,5 +176,7 @@ export interface IReglamentConsolidationSave {
   modifyDate?: Date;
   createUser?: string;
   createDate?: Date;
+  initialPeriodNumber?: number;
+  endPeriodNumber?: number;
 
 }

@@ -33,6 +33,7 @@ const databaseConfig: DatabaseConfig = {
       },
       migrations: {
         naturalSort: true,
+        // paths: ["./database/migrations/tmp"],
       },
       healthCheck: false,
       debug: false,
