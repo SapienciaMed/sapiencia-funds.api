@@ -195,6 +195,12 @@ export default class BeneficiariesConsolidate extends BaseModel {
   })
   public currentManager: string;
 
+  @column({
+    columnName: "BAC_CODIGO_USUARIO_SAPIENCIA",
+    serializeAs: "sapienciaUserCode",
+  })
+  public sapienciaUserCode: number;
+
   //-----------------------------------------------------------------------------
   //-----------------------------------------------------------------------------
   //-----------------------------------------------------------------------------

@@ -29,7 +29,7 @@ export interface IServiceSocialRepository {
     consolidationBeneficiary: string,
     legalizationPeriod: string
   ): Promise<IValidateServiceSocial | null>;
-  validateConsolidate(consolidationBeneficiary: string): Promise<any | null>;
+  validateConsolidate(sapienciaUserCode: number): Promise<any | null>;
   getServiceSocialPaginate(
     filters: ISocialServiceFiltersInterface
   ): Promise<IPagingData<ISocialServiceBeneficiary>>;
@@ -102,12 +102,12 @@ export default class ServiceSocialRepository
     }
   }
 
-  async validateConsolidate(document: string): Promise<any | null> {
+  async validateConsolidate(sapienciaUserCode: number): Promise<any | null> {
     try {
       // Construir la consulta base con las condiciones siempre presentes
       let query = BeneficiariesConsolidate.query().where(
-        "numberDocument",
-        document
+        "sapienciaUserCode",
+        sapienciaUserCode
       ); //cambiar por idUsuario
 
       const data = await query.first();
