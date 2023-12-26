@@ -1,4 +1,5 @@
 import { EStatesBeneficiary } from "App/Constants/StatesBeneficiaryEnum";
+import { IBeneficiariesConsolidateInterface } from "App/Interfaces/BeneficiariesConsolidateInterface";
 import {
   IConsolidationTray,
   IConsolidationTrayParams,
@@ -43,6 +44,10 @@ export interface IServiceSocialRepository {
   getLastIdByIdServiceSocial(
     id: number
   ): Promise<ISocialServiceBeneficiary | null>;
+  updateStateBeneficiariesConsolidate(
+    id: number,
+    state: number
+  ): Promise<IBeneficiariesConsolidateInterface | null>;
 }
 
 export default class ServiceSocialRepository
@@ -162,6 +167,10 @@ export default class ServiceSocialRepository
     const res = BeneficiarySocialService.query();
     res.whereHas("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
       beneficiarieConsolidateQuery.where("id", filters.id);
+      // beneficiarieConsolidateQuery.where(
+      //   "idStatusProcessPacc",
+      //   EStatesBeneficiary.SocialServices
+      // );
     });
     res.preload("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
       beneficiarieConsolidateQuery.preload(
@@ -336,5 +345,22 @@ export default class ServiceSocialRepository
     }
 
     return res.serialize() as ISocialServiceBeneficiary;
+  }
+
+  async updateStateBeneficiariesConsolidate(
+    id: number,
+    state: number
+  ): Promise<IBeneficiariesConsolidateInterface | null> {
+    const toUpdate = await BeneficiariesConsolidate.find(id);
+
+    if (!toUpdate) {
+      return null;
+    }
+
+    toUpdate.fill({ ...toUpdate, idStatusProcessPacc: state });
+
+    await toUpdate.save();
+
+    return toUpdate.serialize() as IBeneficiariesConsolidateInterface;
   }
 }
