@@ -14,6 +14,7 @@ import {
   legalizedXLSXFilePath,
   legalizedXLSXRows,
 } from "./XLSX";
+import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
 
 export interface ILegalizedService {
   updateLegalizedComunneBudget(
@@ -30,7 +31,8 @@ export interface ILegalizedService {
 export default class LegalizedService implements ILegalizedService {
   constructor(
     private legalizedRepository: ILegalizedRepository,
-    private callBudgetRepository: ICallBudgetRepository
+    private callBudgetRepository: ICallBudgetRepository,
+    private callPeriodRepository: ICallPeriodRepository
   ) {}
   // CREATE LEGALIZED
   public async updateLegalizedComunneBudget(payload: ILegalizedPayload) {
@@ -54,12 +56,21 @@ export default class LegalizedService implements ILegalizedService {
   public async generateLegalizedXLSX(filters: ILegalizedPaginatedFilters) {
     const legalizedFound =
       await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
+    const periodsData = await this.callPeriodRepository.getAllCallPeriod();
+    const periodFound = periodsData.find(
+      (el) => el.id === filters.announcementId
+    );
+    const worksheetName = `Legalizado[${periodFound?.name}]`;
     await generateXLSX({
       columns: legalizedXLSXColumns,
       data: legalizedXLSXRows(legalizedFound),
       filePath: legalizedXLSXFilePath,
-      worksheetName: "LEGALIZADOS",
+      worksheetName,
     });
-    return new ApiResponse(legalizedXLSXFilePath, EResponseCodes.OK);
+    return new ApiResponse(
+      legalizedXLSXFilePath,
+      EResponseCodes.OK,
+      worksheetName
+    );
   }
 }
