@@ -879,10 +879,22 @@ Route.group(() => {
 //? ******** ESTRUCTURACIÓN DE REGLAMENTO (VERSIÓN 2.0) Y AJUSTES GENERALES ********
 
 Route.group(() => {
-  Route.post("/get-periods-sapi", "ReglamentConsolidationController.getPeriodsSapi");
-  Route.post("/create-reglament", "ReglamentConsolidationController.createReglament");
-  Route.post("/get-paginated", "ReglamentConsolidationController.getReglamentPaginate");
-  Route.get("/get-by-id/:id", "ReglamentConsolidationController.getReglamentById");
+  Route.post(
+    "/get-periods-sapi",
+    "ReglamentConsolidationController.getPeriodsSapi"
+  );
+  Route.post(
+    "/create-reglament",
+    "ReglamentConsolidationController.createReglament"
+  );
+  Route.post(
+    "/get-paginated",
+    "ReglamentConsolidationController.getReglamentPaginate"
+  );
+  Route.get(
+    "/get-by-id/:id",
+    "ReglamentConsolidationController.getReglamentById"
+  );
   // Route.get("/get-last-id", "ReglamentController.getLastId");
   // Route.post("/create", "ReglamentController.createReglament");
   // Route.put("/edit/:id", "ReglamentController.updateReglament");
@@ -955,30 +967,32 @@ Route.group(() => {
   Route.get(
     "/get-commune-resources",
     "AbsorptionPercentageController.getCommuneResources"
-  );
+  ).middleware("auth");
   Route.post(
     "/create",
     "AbsorptionPercentageController.createAbsorptionPercentage"
-  );
+  ).middleware(`auth:${PERMISSIONS.FUNDS_ABSORTION_PERCENTAGE_CREATE}`);
   Route.post(
     "/get-all-paginated",
     "AbsorptionPercentageController.getAllAbsorptionPercentagePaginated"
-  );
+  ).middleware(`auth:${PERMISSIONS.FUNDS_ABSORTION_PERCENTAGE_CONSULT}`);
   Route.put(
     "/:id/update-by-id",
     "AbsorptionPercentageController.updateAbsorptionPercentageById"
-  ).where("id", Route.matchers.number());
+  )
+    .where("id", Route.matchers.number())
+    .middleware(`auth:${PERMISSIONS.FUNDS_ABSORTION_PERCENTAGE_UPDATE}`);
   Route.delete(
     "/:id/delete-by-id",
     "AbsorptionPercentageController.deleteAbsorptionPercentageById"
-  ).where("id", Route.matchers.number());
+  )
+    .where("id", Route.matchers.number())
+    .middleware(`auth:${PERMISSIONS.FUNDS_ABSORTION_PERCENTAGE_DELETE}`);
   Route.get(
     "/generate-xlsx",
     "AbsorptionPercentageController.generateAbsorptionPercentageXLSX"
-  );
-})
-  .prefix("/api/v1/absorption-percentage")
-  .middleware(`auth:${PERMISSIONS.ABSORTION_PERCENTAGE}`);
+  ).middleware(`auth:${PERMISSIONS.FUNDS_ABSORTION_PERCENTAGE_DOWNLOAD_XLSX}`);
+}).prefix("/api/v1/absorption-percentage");
 
 // Route.group(() => {
 //   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
