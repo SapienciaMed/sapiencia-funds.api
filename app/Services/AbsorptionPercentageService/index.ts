@@ -172,6 +172,10 @@ export default class AbsorptionPercentageService
       filePath: absorptionPercentageXLSXFilePath,
       worksheetName,
     });
-    return new ApiResponse(absorptionPercentageXLSXFilePath, EResponseCodes.OK);
+    return new ApiResponse(
+      absorptionPercentageXLSXFilePath,
+      EResponseCodes.OK,
+      worksheetName
+    );
   }
 }
