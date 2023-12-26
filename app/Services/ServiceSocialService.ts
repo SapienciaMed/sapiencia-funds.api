@@ -85,6 +85,7 @@ export default class ServiceSocialService implements IServiceSocialService {
       legalizationPeriod: item.period,
       consolidationBeneficiary: item.id,
       hoursBorrowed: item.hoursServicePerform,
+      supportDocumentRoute: item.supportDocumentRoute
       // Agrega aquí cualquier otro campo que necesites
     }));
 
@@ -113,13 +114,13 @@ export default class ServiceSocialService implements IServiceSocialService {
       // Extraer los campos necesarios para la validación
       const consolidationBeneficiary = record.id;
       const legalizationPeriod = record.period;
-      const document = record.document; //cambiar por idUsuario
+      const sapienciaUserCode = record.id; //cambiar por idUsuario
       // const hoursBorrowed = record.hoursServicePerform;
 
       if (consolidationBeneficiary != null && legalizationPeriod != null) {
         //verificar si el registro existe en la tabla de BAC_BENEFICIARIOS_A_CONSOLIDAR para evitar errores con llaves foraneas
         const validateConsolidate =
-          await this.serviceSocialRepository.validateConsolidate(document); //cambiar por idUsuario
+          await this.serviceSocialRepository.validateConsolidate(sapienciaUserCode); //cambiar por idUsuario
 
         // Verificar si el registro existe en la base de datos
         if (validateConsolidate && validateConsolidate.id) {
@@ -129,8 +130,56 @@ export default class ServiceSocialService implements IServiceSocialService {
           );
 
           if (!existingRecord) {
+            const urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php"
+
             record.id = validateConsolidate.id;
+
+            if (record.period <= 10) {
+              record.supportDocumentRoute = JSON.stringify(
+                {
+                  documentPath: `${urlDocument}`,
+                  parameters: [
+                    {
+                      typeDocument: 'Acta_Servicio',
+                      document: record.document,
+                      period: record.period,
+                      pselection: record.pSelection
+                    },
+                    {
+                      typeDocument: 'Ficha_Servicio',
+                      document: record.document,
+                      period: record.period,
+                      pselection: record.pSelection
+                    },
+                    {
+                      typeDocument: 'Certificado_Servicio',
+                      document: record.document,
+                      period: record.period,
+                      pselection: record.pSelection
+                    }
+                  ]
+                }
+              );
+            } else {
+              if (record.performServiceSocial === 'SI') {
+                record.supportDocumentRoute = JSON.stringify(
+                  {
+                    documentPath: `${urlDocument}`,
+                    parameters: [
+                      {
+                        typeDocument: 'Formato_Unico',
+                        document: record.document,
+                        period: record.period,
+                        pselection: record.pSelection
+                      }
+                    ]
+                  }
+                )
+              }
+            }
+
             newRecords.push(record as never);
+
           }
         }
       }
