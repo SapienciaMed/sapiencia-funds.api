@@ -853,6 +853,10 @@ Route.group(() => {
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
   ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/update-cut-beneficiary",
+    "ConsolidationTrayController.updateCutBeneficiary"
+  ).middleware("auth:LIDER_PROYECTO");
   Route.get(
     "/get-beneficiary-by-id/:id",
     "ConsolidationTrayController.geBeneficiaryById"
