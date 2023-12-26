@@ -999,15 +999,18 @@ Route.group(() => {
 // }).prefix("/api/v1/fiducia");
 
 Route.group(() => {
-  Route.get("/get-all", "LegalizedController.getAllLegalized");
-  Route.get("/generate-xlsx", "LegalizedController.generateLegalizedXLSX");
+  Route.get("/get-all", "LegalizedController.getAllLegalized").middleware(
+    `auth:${PERMISSIONS.FUNDS_LEGALIZED_CONSULT}`
+  );
+  Route.get(
+    "/generate-xlsx",
+    "LegalizedController.generateLegalizedXLSX"
+  ).middleware(`auth:${PERMISSIONS.FUNDS_LEGALIZED_DOWNLOAD_XLSX}`);
   Route.put(
     "/update-commune-budget",
     "LegalizedController.updateLegalizedComunneBudget"
-  );
-})
-  .prefix("/api/v1/legalized")
-  .middleware(`auth:${PERMISSIONS.LEGALIZED}`);
+  ).middleware(`auth:${PERMISSIONS.FUNDS_LEGALIZED_UPDATE}`);
+}).prefix("/api/v1/legalized");
 
 Route.group(() => {
   Route.get("/get-fiducias", "FiduciaController.getFiduciaList");
