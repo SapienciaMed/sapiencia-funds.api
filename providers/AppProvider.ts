@@ -341,7 +341,7 @@ export default class AppProvider {
       () =>
         new LegalizedService.default(
           new LegalizedRepository.default(),
-          new CallBudgetRepository.default()
+          new CallBudgetRepository.default(),
           new CallPeriodRepository.default()
         )
     );
