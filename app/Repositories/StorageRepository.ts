@@ -21,7 +21,7 @@ export interface IStorageRepository {
 export default class StorageRepository implements IStorageRepository {
   storage: Storage;
   constructor() {
-    // this.storage = new Storage({ keyFilename }); //-->Local
+    //this.storage = new Storage({ keyFilename }); //-->Local
     this.storage = new Storage();
   }
 
@@ -31,10 +31,13 @@ export default class StorageRepository implements IStorageRepository {
   ): Promise<boolean> {
     try {
       const bucket = this.storage.bucket(bucketName);
+
       if (!file.tmpPath) return false;
+
       const [fileCloud] = await bucket.upload(file.tmpPath, {
         destination: `${path}${file.clientName}`,
       });
+
       return !!fileCloud;
     } catch (error) {
       return false;
@@ -56,7 +59,8 @@ export default class StorageRepository implements IStorageRepository {
     });
     return new ApiResponse(
       response.filter((file) => file.name),
-      EResponseCodes.OK
+      EResponseCodes.OK,
+      "Archivos google cloud"
     );
   }
 

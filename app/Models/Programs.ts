@@ -10,7 +10,7 @@ export default class Programs extends BaseModel {
 
   @hasMany(() => Reglament, {
     localKey: "id",
-    foreignKey: "program",
+    foreignKey: "idProgram",
   })
   public reglaments: HasMany<typeof Reglament>;
 }

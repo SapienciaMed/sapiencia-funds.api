@@ -1,5 +1,6 @@
 import { IBeneficiariesConsolidateInterface } from "./BeneficiariesConsolidateInterface";
 import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
+import { IFiles } from "./StorageInterfaces";
 export interface ISocialServiceFiltersInterface {
   id: number;
   page: number;
@@ -9,14 +10,16 @@ export interface ISocialServiceFiltersInterface {
 export interface ISocialServiceBeneficiary {
   id?: number;
   legalizationPeriod: string;
-  consolidationBeneficiary: number;
+  idConsolidationBeneficiary: number;
   hoursDone: number;
   committedHours: number;
   pendingHours: number;
   totalPendingHours?: number;
-  supportDocumentRoute: string;
+  documentPath: string;
   observation: string;
   state: boolean;
   files?: MultipartFileContract[];
+  infoFiles?: IFiles[];
+  editable: boolean;
   beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }

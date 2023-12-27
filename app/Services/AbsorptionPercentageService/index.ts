@@ -18,6 +18,7 @@ import {
   absorptionPercentageXLSXFilePath,
   absorptionPercentageXLSXRows,
 } from "./XLSX";
+import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
 
 export interface IAbsorptionPercentageService {
   createAbsortionPercentage(
@@ -42,7 +43,8 @@ export default class AbsorptionPercentageService
 {
   constructor(
     private absorptionPercentageRepository: IAbsorptionPercentageRepository,
-    private callBudgetRepository: ICallBudgetRepository
+    private callBudgetRepository: ICallBudgetRepository,
+    private callPeriodRepository: ICallPeriodRepository
   ) {}
   // GET COMMUNE RESOURCES
   public async getCommuneResources() {
@@ -159,12 +161,21 @@ export default class AbsorptionPercentageService
       await this.absorptionPercentageRepository.getAllAbsorptionPercentagePaginated(
         filters
       );
+    const periodsData = await this.callPeriodRepository.getAllCallPeriod();
+    const periodFound = periodsData.find(
+      (el) => el.id === filters.announcementId
+    );
+    const worksheetName = `PorcentajeAbsorcion[${periodFound?.name}]`;
     await generateXLSX({
       columns: absorptionPercentageXLSXColumns,
       data: absorptionPercentageXLSXRows(absorptionPercentageFound),
       filePath: absorptionPercentageXLSXFilePath,
-      worksheetName: "PORCENTAJE DE ABSORCIÓN",
+      worksheetName,
     });
-    return new ApiResponse(absorptionPercentageXLSXFilePath, EResponseCodes.OK);
+    return new ApiResponse(
+      absorptionPercentageXLSXFilePath,
+      EResponseCodes.OK,
+      worksheetName
+    );
   }
 }

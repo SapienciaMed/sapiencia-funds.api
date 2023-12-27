@@ -1,10 +1,16 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import LegalizedProvider from "@ioc:core.LegalizedProvider";
 import { EResponseCodes } from "App/Constants/ResponseCodesEnum";
-import { ILegalizedPaginatedFilters } from "App/Interfaces/Legalized";
+import {
+  ILegalizedPaginatedFilters,
+  ILegalizedPayload,
+} from "App/Interfaces/Legalized";
 import { ApiResponse } from "App/Utils/ApiResponses";
 import { DBException } from "App/Utils/DbHandlerError";
-import { filterLegalizedSchema } from "App/Validators/LegalizedValidator";
+import {
+  filterLegalizedSchema,
+  updateLegalizedSchema,
+} from "App/Validators/LegalizedValidator";
 
 export default class AbsorptionPercentageController {
   // GET ALL LEGALIZED
@@ -42,9 +48,30 @@ export default class AbsorptionPercentageController {
       const resp = await LegalizedProvider.generateLegalizedXLSX(filters);
       response.header(
         "Content-Disposition",
-        "attachment; filename=legalizados.xlsx"
+        `attachment; filename=${resp.operation.message}.xlsx`
       );
       return response.download(resp.data);
+    } catch (err) {
+      logger.error(err);
+      const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);
+      return response.badRequest(apiResp);
+    }
+  }
+  // UPDATE LEGALIZED COMMUNE BUDGET
+  public async updateLegalizedComunneBudget(ctx: HttpContextContract) {
+    const { request, response, logger } = ctx;
+    let payload: ILegalizedPayload;
+    try {
+      payload = await request.validate({
+        schema: updateLegalizedSchema,
+      });
+    } catch (err) {
+      return DBException.badRequest(ctx, err);
+    }
+    try {
+      const absorptionPercentageUpdated =
+        await LegalizedProvider.updateLegalizedComunneBudget(payload);
+      return response.ok(absorptionPercentageUpdated);
     } catch (err) {
       logger.error(err);
       const apiResp = new ApiResponse(null, EResponseCodes.FAIL, err.message);

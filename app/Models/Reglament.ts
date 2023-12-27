@@ -26,6 +26,12 @@ export default class Reglament extends BaseModel {
   public initialPeriod: string;
 
   @column({
+    columnName: "RCO_PERIODO_INICIAL_NUMERICO",
+    serializeAs: "initialPeriodNumber"
+  })
+  public initialPeriodNumber: number;
+
+  @column({
     columnName: "RCO_PERIODO_ABIERTO",
     serializeAs: "isOpenPeriod"
   })
@@ -36,6 +42,12 @@ export default class Reglament extends BaseModel {
     serializeAs: "endPeriod"
   })
   public endPeriod: string;
+
+  @column({
+    columnName: "RCO_PERIODO_FINAL_NUMERICO",
+    serializeAs: "endPeriodNumber"
+  })
+  public endPeriodNumber: number;
 
   @column({
     columnName: "RCO_APLICA_PORCENTAJE_TEORICO",

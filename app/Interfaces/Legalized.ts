@@ -19,3 +19,10 @@ export type ILegalizedItem = {
   order: number;
   fiduciaryName: string;
 };
+export type ILegalizedPayload = {
+  announcementId: number;
+  communeFundId: number;
+  resource: number;
+  fiduciaryId: number;
+  order: number;
+};
