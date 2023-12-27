@@ -25,6 +25,7 @@ import Reglament from '../../Models/Reglament';
 import Requeriment from '../../Models/Requeriment';
 import RequirementsConsolidate from '../../Models/RequirementsConsolidate';
 import KnowledgeTransfer from '../../Models/KnowledgeTransfer';
+import { IReglamentConsolidation } from '../../Interfaces/SapienciaGenericInterface';
 
 
 export interface IConsolidationTrayRepository {
@@ -853,10 +854,12 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
     if (!getReglaments || getReglaments == null) return false;
 
-    const convertReglaments = getReglaments.map((i) => i.serialize() as IReglamentInterface);
-    let objReglament: IReglamentInterface | null = null; //Solo debería traer un reglamento.
+    const convertReglaments = getReglaments.map((i) => i.serialize() as IReglamentConsolidation);
+    let objReglament: IReglamentConsolidation | null = null; //Solo debería traer un reglamento.
 
     for (const regl of convertReglaments) {
+
+      console.log(`Hola`);
 
       let initialPeriodNumber: number = 0;
       let endPeriodNumber: number = 0;
@@ -864,14 +867,19 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       //Como hay inconsistencias en la BD (02/12/2023) para capturar el error
       try {
 
-        const initialPeriod: string[] = regl.initialPeriod.split('-');
-        const endPeriod: string[] = regl.endPeriod.split('-');
+        const initialPeriod: string[] = regl.initialPeriod!.split('-');
+        const endPeriod: string[] = regl.endPeriod!.split('-');
 
         initialPeriodNumber = Number(initialPeriod[0] + initialPeriod[1]);
         endPeriodNumber = Number(endPeriod[0] + endPeriod[1]);
 
         if (isNaN(initialPeriodNumber)) initialPeriodNumber = 0;
         if (isNaN(endPeriodNumber)) endPeriodNumber = 0;
+
+        console.log({legalPeriodConvert});
+        console.log({initialPeriodNumber});
+        console.log({endPeriodNumber});
+        console.log("**************************");
 
       } catch (error) {
 
@@ -881,10 +889,14 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       }
 
       if (initialPeriodNumber !== 0 && endPeriodNumber !== 0) {
+        console.log("Entre");
         if (legalPeriodConvert >= initialPeriodNumber &&
             legalPeriodConvert <= endPeriodNumber &&
-            program === regl.program) {
+            program === regl.idProgram) {
+
           objReglament = regl;
+          console.log({regl});
+
         }
       }
 
@@ -899,8 +911,8 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ***************************************************************** //*
     const { user, page, perPage } = filters;
     const idBeneficiaryForApplyKnowledge: number = convertResAurora[0].id;
-    const applyKnowledgeTransferPercent: number = objReglament.knowledgeTransferPercentage;
-    const applyKnowledgeTransferHours: number = objReglament.knowledgeTransferHours;
+    const applyKnowledgeTransferPercent: number = objReglament.knowledgeTransferPercent!;
+    const applyKnowledgeTransferHours: number = objReglament.knowledgeTransferHours!;
     let infoPaginated: IApplyKnowledgeTransfer[] = [];
 
     const getKnowledgeTransferByBeneficiary = await KnowledgeTransfer
@@ -914,7 +926,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
 
       const objBody: IApplyKnowledgeTransfer = {
         idBeneficiary: idBeneficiaryForApplyKnowledge,
-        idReglament: objReglament.id,
+        idReglament: objReglament.id!,
         committedHours: applyKnowledgeTransferHours,
         workedHours: 0,
         pendingHours: applyKnowledgeTransferHours,
