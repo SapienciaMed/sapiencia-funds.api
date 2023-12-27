@@ -210,7 +210,7 @@ export default class ServiceSocialService implements IServiceSocialService {
             Number(item.legalizationPeriod.split("-")[0] ?? 0) &&
           Number(item.legalizationPeriod.split("-")[0] ?? 0) <=
             Number(period.endPeriod.split("-")[0] ?? 0) &&
-          Number(period.program) ==
+          Number(period.idProgram) ==
             (item.beneficiarieConsolidate?.idProgram ?? 0)
       );
 
