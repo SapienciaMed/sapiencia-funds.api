@@ -138,42 +138,46 @@ export default class ServiceSocialService implements IServiceSocialService {
             record.id = validateConsolidate.id;
 
             if (record.period <= 10) {
-              record.supportDocumentRoute = JSON.stringify({
-                documentPath: `${urlDocument}`,
-                parameters: [
-                  {
-                    typeDocument: "Acta_Servicio",
-                    document: record.document,
-                    period: record.period,
-                    pselection: record.pSelection,
-                  },
-                  {
-                    typeDocument: "Ficha_Servicio",
-                    document: record.document,
-                    period: record.period,
-                    pselection: record.pSelection,
-                  },
-                  {
-                    typeDocument: "Certificado_Servicio",
-                    document: record.document,
-                    period: record.period,
-                    pselection: record.pSelection,
-                  },
-                ],
-              });
-            } else {
-              if (record.performServiceSocial === "SI") {
-                record.supportDocumentRoute = JSON.stringify({
+              record.supportDocumentRoute = JSON.stringify(
+                {
                   documentPath: `${urlDocument}`,
                   parameters: [
                     {
-                      typeDocument: "Formato_Unico",
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection,
+                      documento: record.document,
+                      tipo: 'Acta_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
                     },
-                  ],
-                });
+                    {
+                      documento: record.document,
+                      tipo: 'Ficha_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
+                    },
+                    {
+                      documento: record.document,
+                      tipo: 'Certificado_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
+                    }
+                  ]
+                }
+              );
+            } else {
+              if (record.performServiceSocial === 'SI') {
+                record.supportDocumentRoute = JSON.stringify(
+                  {
+                    documentPath: `${urlDocument}`,
+                    parameters: [
+                      {
+                        documento: record.document,
+                        tipo: 'Formato_Unico',
+                        periodo: record.period,
+                        npseleccion: record.pSelection
+                      }
+                    ]
+                  }
+                )
               }
             }
 
