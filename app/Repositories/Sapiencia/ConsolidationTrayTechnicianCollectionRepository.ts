@@ -842,6 +842,7 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     if (!resAurora || resAurora == null) return false;
     const getLegalPeriod: string[] = convertResAurora[0].legalPeriod.split('-');
     const legalPeriodConvert: number = Number(getLegalPeriod[0] + getLegalPeriod[1]); //Para pasarlo de 2023-1 a un 20231 (Número validable)
+    const program: number = convertResAurora[0].idProgram;
 
     //* ******************************************** //*
     //* ** Traigamos los reglamentos para validar ** //*
@@ -880,7 +881,9 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
       }
 
       if (initialPeriodNumber !== 0 && endPeriodNumber !== 0) {
-        if (legalPeriodConvert >= initialPeriodNumber || legalPeriodConvert <= endPeriodNumber) {
+        if (legalPeriodConvert >= initialPeriodNumber &&
+            legalPeriodConvert <= endPeriodNumber &&
+            program === regl.program) {
           objReglament = regl;
         }
       }
