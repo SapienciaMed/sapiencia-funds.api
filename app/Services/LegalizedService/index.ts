@@ -15,6 +15,7 @@ import {
   legalizedXLSXRows,
 } from "./XLSX";
 import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
+import { dataHarcode } from "./data";
 
 export interface ILegalizedService {
   updateLegalizedComunneBudget(
@@ -47,15 +48,16 @@ export default class LegalizedService implements ILegalizedService {
     }
     return new ApiResponse(legalizedCreated, EResponseCodes.OK);
   }
-  public async getAllLegalized(filters: ILegalizedPaginatedFilters) {
-    const legalizedFound =
-      await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
-    return new ApiResponse(legalizedFound, EResponseCodes.OK);
+  // public async getAllLegalized(filters: ILegalizedPaginatedFilters) {
+  public async getAllLegalized() {
+    // const legalizedFound =
+    //   await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
+    return new ApiResponse(dataHarcode, EResponseCodes.OK);
   }
   // GENERATE LEGALIZED XLSX
   public async generateLegalizedXLSX(filters: ILegalizedPaginatedFilters) {
-    const legalizedFound =
-      await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
+    // const legalizedFound =
+    //   await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
     const periodsData = await this.callPeriodRepository.getAllCallPeriod();
     const periodFound = periodsData.find(
       (el) => el.id === filters.announcementId
@@ -63,7 +65,7 @@ export default class LegalizedService implements ILegalizedService {
     const worksheetName = `Legalizado[${periodFound?.name}]`;
     await generateXLSX({
       columns: legalizedXLSXColumns,
-      data: legalizedXLSXRows(legalizedFound),
+      data: legalizedXLSXRows(dataHarcode),
       filePath: legalizedXLSXFilePath,
       worksheetName,
     });
