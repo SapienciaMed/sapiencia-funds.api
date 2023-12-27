@@ -1,0 +1,39 @@
+paths:
+  /api/v1/service-social/import:
+    get:
+      tags:
+        - prueba
+      operationId: importServiceSocialData
+      summary: Import Service Social Data
+      description: Retrieve a list of service social data with detailed information.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        legalizationPeriod:
+                          type: integer
+                        consolidationBeneficiary:
+                          type: integer
+                        hoursBorrowed:
+                          type: string
+                        supportDocumentRoute:
+                          type: string
+                        id:
+                          type: integer
+                  operation:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+
+
+  

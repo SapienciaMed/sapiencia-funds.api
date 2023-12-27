@@ -75,4 +75,21 @@ export default class ReglamentConsolidationController {
 
   }
 
+  public async updateReglament({ request, response }: HttpContextContract) {
+
+    try {
+
+      const dataUpdate = request.body() as IReglamentConsolidation;
+      const { id } = request.params();
+
+      return response.send(
+        await ReglamentConsolidationProvider.updateReglament(dataUpdate, Number(id))
+      );
+    } catch (err) {
+      return response.badRequest(
+        new ApiResponse(null, EResponseCodes.FAIL, String(err))
+      );
+    }
+  }
+
 }
