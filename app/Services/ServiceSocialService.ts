@@ -85,7 +85,7 @@ export default class ServiceSocialService implements IServiceSocialService {
       legalizationPeriod: item.period,
       consolidationBeneficiary: item.id,
       hoursBorrowed: item.hoursServicePerform,
-      supportDocumentRoute: item.supportDocumentRoute
+      supportDocumentRoute: item.supportDocumentRoute,
       // Agrega aquí cualquier otro campo que necesites
     }));
 
@@ -120,7 +120,9 @@ export default class ServiceSocialService implements IServiceSocialService {
       if (consolidationBeneficiary != null && legalizationPeriod != null) {
         //verificar si el registro existe en la tabla de BAC_BENEFICIARIOS_A_CONSOLIDAR para evitar errores con llaves foraneas
         const validateConsolidate =
-          await this.serviceSocialRepository.validateConsolidate(sapienciaUserCode); //cambiar por idUsuario
+          await this.serviceSocialRepository.validateConsolidate(
+            sapienciaUserCode
+          ); //cambiar por idUsuario
 
         // Verificar si el registro existe en la base de datos
         if (validateConsolidate && validateConsolidate.id) {
@@ -130,56 +132,52 @@ export default class ServiceSocialService implements IServiceSocialService {
           );
 
           if (!existingRecord) {
-            const urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php"
+            const urlDocument =
+              "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
 
             record.id = validateConsolidate.id;
 
             if (record.period <= 10) {
-              record.supportDocumentRoute = JSON.stringify(
-                {
+              record.supportDocumentRoute = JSON.stringify({
+                documentPath: `${urlDocument}`,
+                parameters: [
+                  {
+                    typeDocument: "Acta_Servicio",
+                    document: record.document,
+                    period: record.period,
+                    pselection: record.pSelection,
+                  },
+                  {
+                    typeDocument: "Ficha_Servicio",
+                    document: record.document,
+                    period: record.period,
+                    pselection: record.pSelection,
+                  },
+                  {
+                    typeDocument: "Certificado_Servicio",
+                    document: record.document,
+                    period: record.period,
+                    pselection: record.pSelection,
+                  },
+                ],
+              });
+            } else {
+              if (record.performServiceSocial === "SI") {
+                record.supportDocumentRoute = JSON.stringify({
                   documentPath: `${urlDocument}`,
                   parameters: [
                     {
-                      typeDocument: 'Acta_Servicio',
+                      typeDocument: "Formato_Unico",
                       document: record.document,
                       period: record.period,
-                      pselection: record.pSelection
+                      pselection: record.pSelection,
                     },
-                    {
-                      typeDocument: 'Ficha_Servicio',
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection
-                    },
-                    {
-                      typeDocument: 'Certificado_Servicio',
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection
-                    }
-                  ]
-                }
-              );
-            } else {
-              if (record.performServiceSocial === 'SI') {
-                record.supportDocumentRoute = JSON.stringify(
-                  {
-                    documentPath: `${urlDocument}`,
-                    parameters: [
-                      {
-                        typeDocument: 'Formato_Unico',
-                        document: record.document,
-                        period: record.period,
-                        pselection: record.pSelection
-                      }
-                    ]
-                  }
-                )
+                  ],
+                });
               }
             }
 
             newRecords.push(record as never);
-
           }
         }
       }
@@ -210,7 +208,7 @@ export default class ServiceSocialService implements IServiceSocialService {
             Number(item.legalizationPeriod.split("-")[0] ?? 0) &&
           Number(item.legalizationPeriod.split("-")[0] ?? 0) <=
             Number(period.endPeriod.split("-")[0] ?? 0) &&
-          Number(period.idProgram) ==
+          Number(period.program) ==
             (item.beneficiarieConsolidate?.idProgram ?? 0)
       );
 
