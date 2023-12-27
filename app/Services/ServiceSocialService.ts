@@ -136,22 +136,22 @@ export default class ServiceSocialService implements IServiceSocialService {
                   documentPath: `${urlDocument}`,
                   parameters: [
                     {
-                      typeDocument: 'Acta_Servicio',
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection
+                      documento: record.document,
+                      tipo: 'Acta_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
                     },
                     {
-                      typeDocument: 'Ficha_Servicio',
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection
+                      documento: record.document,
+                      tipo: 'Ficha_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
                     },
                     {
-                      typeDocument: 'Certificado_Servicio',
-                      document: record.document,
-                      period: record.period,
-                      pselection: record.pSelection
+                      documento: record.document,
+                      tipo: 'Certificado_Servicio',
+                      periodo: record.period,
+                      npseleccion: record.pSelection
                     }
                   ]
                 }
@@ -163,10 +163,10 @@ export default class ServiceSocialService implements IServiceSocialService {
                     documentPath: `${urlDocument}`,
                     parameters: [
                       {
-                        typeDocument: 'Formato_Unico',
-                        document: record.document,
-                        period: record.period,
-                        pselection: record.pSelection
+                        documento: record.document,
+                        tipo: 'Formato_Unico',
+                        periodo: record.period,
+                        npseleccion: record.pSelection
                       }
                     ]
                   }
