@@ -82,7 +82,8 @@ export default class ServiceSocialService implements IServiceSocialService {
     const dataArray = receivedData.data;
 
     const transformedData = dataArray.map((item) => ({
-      legalizationPeriod: item.period,
+      
+      legalizationPeriod: item.periodDetail,
       consolidationBeneficiary: item.id,
       hoursBorrowed: item.hoursServicePerform,
       supportDocumentRoute: item.supportDocumentRoute,
@@ -113,8 +114,9 @@ export default class ServiceSocialService implements IServiceSocialService {
     for (const record of records) {
       // Extraer los campos necesarios para la validación
       const consolidationBeneficiary = record.id;
-      const legalizationPeriod = record.period;
+      const legalizationPeriod = record.periodDetail;
       const sapienciaUserCode = record.id; //cambiar por idUsuario
+    
       // const hoursBorrowed = record.hoursServicePerform;
 
       if (consolidationBeneficiary != null && legalizationPeriod != null) {
@@ -122,7 +124,7 @@ export default class ServiceSocialService implements IServiceSocialService {
         const validateConsolidate =
           await this.serviceSocialRepository.validateConsolidate(
             sapienciaUserCode
-          ); //cambiar por idUsuario
+          ); 
 
         // Verificar si el registro existe en la base de datos
         if (validateConsolidate && validateConsolidate.id) {
@@ -136,6 +138,7 @@ export default class ServiceSocialService implements IServiceSocialService {
               "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
 
             record.id = validateConsolidate.id;
+           
 
             if (record.period <= 10) {
               record.supportDocumentRoute = JSON.stringify(
@@ -146,19 +149,19 @@ export default class ServiceSocialService implements IServiceSocialService {
                       documento: record.document,
                       tipo: 'Acta_Servicio',
                       periodo: record.period,
-                      npseleccion: record.pSelection
+                      npseleccion: record.pselectionDetail
                     },
                     {
                       documento: record.document,
                       tipo: 'Ficha_Servicio',
                       periodo: record.period,
-                      npseleccion: record.pSelection
+                      npseleccion: record.pselectionDetail
                     },
                     {
                       documento: record.document,
                       tipo: 'Certificado_Servicio',
                       periodo: record.period,
-                      npseleccion: record.pSelection
+                      npseleccion: record.pselectionDetail
                     }
                   ]
                 }
@@ -173,7 +176,7 @@ export default class ServiceSocialService implements IServiceSocialService {
                         documento: record.document,
                         tipo: 'Formato_Unico',
                         periodo: record.period,
-                        npseleccion: record.pSelection
+                        npseleccion: record.pselectionDetail
                       }
                     ]
                   }
