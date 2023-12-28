@@ -994,7 +994,7 @@ Route.group(() => {
   Route.post(
     "/get-periods-sapi",
     "ReglamentConsolidationController.getPeriodsSapi"
-  ).middleware("auth:REGLAMENTO");
+  )//.middleware("auth:REGLAMENTO");
   Route.post(
     "/create-reglament",
     "ReglamentConsolidationController.createReglament"
