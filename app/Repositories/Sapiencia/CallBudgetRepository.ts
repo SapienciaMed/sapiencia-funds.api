@@ -56,6 +56,8 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
       DELIMITER //
       CREATE PROCEDURE getCommuneBudgetByPeriod(IN period INT)
       BEGIN
+        SET @@sql_mode =
+        REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', '');
         SELECT
           callg_control_presupuesto_comuna_fidu.comuna as communeFundId,
           callg_control_presupuesto_comuna_fidu.presupuesto_comuna as resource,
