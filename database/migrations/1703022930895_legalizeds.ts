@@ -23,7 +23,7 @@ export default class extends BaseSchema {
         .notNullable()
         .comment("Código del fondo comuna (db sapiencia)");
       table
-        .decimal(LEGALIZED_TABLE.RESOURCE, 15, 2)
+        .decimal(LEGALIZED_TABLE.RESOURCE, 20, 2)
         .notNullable()
         .comment("Valor del recurso");
       table
