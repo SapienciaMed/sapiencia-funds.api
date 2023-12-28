@@ -21,31 +21,31 @@ export default class extends BaseSchema {
         .notNullable()
         .comment("Código del fondo comuna (db sapiencia)");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.RESOURCE, 15, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.RESOURCE, 20, 2)
         .notNullable()
         .comment("Valor del recurso");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_1, 5, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_1, 30, 2)
         .notNullable()
         .comment("Porcentaje del escenario 1");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_2, 5, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_2, 30, 2)
         .notNullable()
         .comment("Porcentaje del escenario 2");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_3, 5, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_PERCENTAGE_3, 30, 2)
         .notNullable()
         .comment("Porcentaje del escenario 3");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_1, 15, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_1, 65, 2)
         .notNullable()
         .comment("Valor del escenario 1");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_2, 15, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_2, 65, 2)
         .notNullable()
         .comment("Valor del escenario 2");
       table
-        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_3, 15, 2)
+        .decimal(ABSORPTION_PERCENTAGE_TABLE.SCENERY_VALUE_3, 65, 2)
         .notNullable()
         .comment("Valor del escenario 3");
       table
