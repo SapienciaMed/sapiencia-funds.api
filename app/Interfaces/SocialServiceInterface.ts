@@ -1,6 +1,19 @@
 import { IBeneficiariesConsolidateInterface } from "./BeneficiariesConsolidateInterface";
 import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
 import { IFiles } from "./StorageInterfaces";
+
+export interface ExternalFilesSapiencia {
+  documentPath: string;
+  parameters: [
+    {
+      documento: string;
+      tipo: string;
+      periodo: string;
+      npseleccion: string;
+    }
+  ];
+}
+
 export interface ISocialServiceFiltersInterface {
   id: number;
   page: number;
@@ -20,6 +33,7 @@ export interface ISocialServiceBeneficiary {
   state: boolean;
   files?: MultipartFileContract[];
   infoFiles?: IFiles[];
+  externalInfoFiles?: ExternalFilesSapiencia;
   editable: boolean;
   beneficiarieConsolidate?: IBeneficiariesConsolidateInterface;
 }
