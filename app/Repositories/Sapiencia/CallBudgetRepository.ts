@@ -8,7 +8,6 @@ import {
 } from "App/Interfaces/Legalized";
 import CallBudget from "App/Models/Sapiencia/Callbudget";
 import { DATABASE_NAMES } from "App/Utils/helpers";
-import { DateTime } from "luxon";
 
 export interface ICallBudgetRepository {
   getAllCallBudget(): Promise<ICallBudget[]>;
@@ -107,7 +106,7 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
         payload;
       const query = `
         UPDATE callg_presupuesto_comuna_legalizacion
-        SET recurso_comuna = ?, orden = ?, fecha_actualizacion = ?
+        SET recurso_comuna = ?, orden = ?
         WHERE periodo = ? AND comuna = ? AND idfiducia = ?
       `;
       const existsOrderCommuneBudget = await this.existsOrderCommuneBudget(
@@ -116,17 +115,9 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
       if (existsOrderCommuneBudget) {
         throw new Error(`El orden ${order} ya existe`);
       }
-      const currentDate = DateTime.now().toSQLDate();
       const resp = await Database.connection(DATABASE_NAMES.SAPIENCIA).rawQuery(
         query,
-        [
-          resource,
-          order,
-          currentDate!,
-          announcementId,
-          communeFundId,
-          fiduciaryId,
-        ]
+        [resource, order, announcementId, communeFundId, fiduciaryId]
       );
       return resp?.[0]?.changedRows > 0;
     } catch (err) {

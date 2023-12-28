@@ -52,6 +52,9 @@ export default class Legalized extends BaseModel {
     autoUpdate: true,
     columnName: LEGALIZED_TABLE.UPDATED_AT,
     serializeAs: "updatedAt",
+    serialize: (value: DateTime) => {
+      return value ? value.setLocale("zh").toFormat("dd-MM-yyyy") : value;
+    },
   })
   public updatedAt: DateTime;
 }
