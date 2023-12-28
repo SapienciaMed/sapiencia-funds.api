@@ -236,6 +236,9 @@ export default class ServiceSocialService implements IServiceSocialService {
       item.committedHours = socialServiceHours;
       item.pendingHours = Number(socialServiceHours) - Number(item.hoursDone);
 
+      if (item.documentPath)
+        item.externalInfoFiles = JSON.parse(item.documentPath);
+
       // Calcular el total de horas pendientes acumuladas
       item.totalPendingHours = totalPendingHours + item.pendingHours;
       totalPendingHours = item.totalPendingHours;
