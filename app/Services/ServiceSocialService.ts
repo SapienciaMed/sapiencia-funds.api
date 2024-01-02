@@ -155,19 +155,19 @@ export default class ServiceSocialService implements IServiceSocialService {
                     {
                       documento: record.document,
                       tipo: 'Acta_Servicio',
-                      periodo: record.period,
+                      periodo: period,
                       npseleccion: record.pselectionDetail
                     },
                     {
                       documento: record.document,
                       tipo: 'Ficha_Servicio',
-                      periodo: record.period,
+                      periodo: period,
                       npseleccion: record.pselectionDetail
                     },
                     {
                       documento: record.document,
                       tipo: 'Certificado_Servicio',
-                      periodo: record.period,
+                      periodo: period,
                       npseleccion: record.pselectionDetail
                     }
                   ]
@@ -182,7 +182,7 @@ export default class ServiceSocialService implements IServiceSocialService {
                       {
                         documento: record.document,
                         tipo: 'Formato_Unico',
-                        periodo: record.period,
+                        periodo: period,
                         npseleccion: record.pselectionDetail
                       }
                     ]
