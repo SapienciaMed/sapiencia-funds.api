@@ -121,17 +121,17 @@ export default class ServiceSocialService implements IServiceSocialService {
 
       if (record.periodDetail === '2021-3') {
         period = 100
-      }else if(record.periodDetail === '2022-3'){
+      } else if (record.periodDetail === '2022-3') {
         period = 101
-      }else if(record.periodDetail === '2023-3'){
+      } else if (record.periodDetail === '2023-3') {
         period = 102
-      }else{
+      } else {
         if (period == 99) {
           period -= 1;
         } else {
           period = (period == 14) ? 99 : period + 1;
         }
-    }
+      }
 
       // const hoursBorrowed = record.hoursServicePerform;
 
@@ -150,11 +150,16 @@ export default class ServiceSocialService implements IServiceSocialService {
           );
 
           if (!existingRecord) {
-            const urlDocument =
-              "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
+
+            //EPM
+            let urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontend_renovacion_epm/uploads/index.php";
+            
+            //PP
+            if (record.origen === 'PP') {
+              urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
+            }      
 
             record.id = validateConsolidate.id;
-
 
             if (record.period <= 10) {
               record.supportDocumentRoute = JSON.stringify(
