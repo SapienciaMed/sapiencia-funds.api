@@ -484,14 +484,12 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
     let endPeriodCompare: number = 9999999;
     let arrayReglamentPrimary: IReglamentMiniForValidRanges[] = [];
 
-    // let getReglament: any;
-    // if( id ) getReglament = await Reglament.query().where("id",id);
-    // if( !id ) getReglament = await Reglament.query();
     let getReglament = await Reglament.query();
 
     const convertPrimaryReglament: IReglamentConsolidation[] = getReglament.map((i) => i.serialize() as IReglamentConsolidation);
 
-    if( convertPrimaryReglament.length <= 0 ) return false;
+    //* Si no hay reglamentos, entonces debemos dejar pasar normalmente
+    if( convertPrimaryReglament.length <= 0 ) return true;
 
     for (const i of convertPrimaryReglament) {
 
