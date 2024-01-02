@@ -6,15 +6,14 @@ import {
   ISummaryPriorizationXlsx,
 } from "App/Interfaces/ItemInterface";
 import Item from "App/Models/Item";
+import { IPrioritizationSummaryFilters } from "App/Interfaces/SummaryPriorizacionInterfaces";
 
 export interface ISummaryPriorizacionRepository {
   getVotingPaginate(
-    filters: IVotingFilters
+    filters: IPrioritizationSummaryFilters
   ): Promise<IPagingData<IItemResults>>;
 
-    getVotinXSLX(
-    filters: IVotingFilters
-  ): Promise<any>;
+  getVotinXSLX(filters: IVotingFilters): Promise<any>;
 }
 
 export default class SummaryPriorizacionRepository
@@ -22,9 +21,8 @@ export default class SummaryPriorizacionRepository
 {
   constructor() {}
 
-  async getVotingPaginate(
-    filters: IVotingFilters
-  ): Promise<IPagingData<IItemResults>> { // cambiar interface a ISummaryPriorization
+  async getVotingPaginate(filters: IPrioritizationSummaryFilters) {
+    // cambiar interface a ISummaryPriorization
     const toReturn: ISummaryPriorization[] = [];
 
     const query = Item.query()
@@ -35,11 +33,21 @@ export default class SummaryPriorizacionRepository
       )
       .sum("ITM_CANTIDAD as quota")
       .sum("ITM_COSTO_TOTAL as total")
-      .leftJoin("RTV_RESULTADO_VOTACION", "ITM_CODRTV_RESULTADO_VOTACION", "RTV_RESULTADO_VOTACION.RTV_CODIGO")
-      .leftJoin("MTA_MAESTRO_ACTIVIDAD", "ITM_CODMTA_MAESTRO_ACTIVIDAD", "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO")
-      .leftJoin("PMA_PROGRAMA", "MTA_CODPMA_PROGRAMA", "PMA_PROGRAMA.PMA_CODIGO")
-    
-    
+      .leftJoin(
+        "RTV_RESULTADO_VOTACION",
+        "ITM_CODRTV_RESULTADO_VOTACION",
+        "RTV_RESULTADO_VOTACION.RTV_CODIGO"
+      )
+      .leftJoin(
+        "MTA_MAESTRO_ACTIVIDAD",
+        "ITM_CODMTA_MAESTRO_ACTIVIDAD",
+        "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO"
+      )
+      .leftJoin(
+        "PMA_PROGRAMA",
+        "MTA_CODPMA_PROGRAMA",
+        "PMA_PROGRAMA.PMA_CODIGO"
+      );
 
     // const query = VotingResults.query().preload("items", (itemQuery) => {
     //   itemQuery.preload("activity", (activitiQuery) => {
@@ -48,10 +56,7 @@ export default class SummaryPriorizacionRepository
     // });
 
     if (filters.communeNeighborhood) {
-      query.whereILike(
-        "RTV_COMUNA_BARRIO",
-        `%${filters.communeNeighborhood}%`
-      );
+      query.whereIn("RTV_COMUNA_BARRIO", filters.communeNeighborhood);
     }
     if (filters.numberProject) {
       query.whereILike("RTV_NUMERO_PROYECTO", `%${filters.numberProject}%`);
@@ -66,7 +71,6 @@ export default class SummaryPriorizacionRepository
     res
       .map((i) => i.$extras)
       .forEach((i: any) => {
-
         toReturn.push({
           program: i.programa45,
           pct123: i.pct123,
@@ -78,8 +82,6 @@ export default class SummaryPriorizacionRepository
         });
       });
 
-
-
     const { meta } = res.serialize();
 
     // const itemsArray = dataArray.flatMap((votingResult) => votingResult.items);
@@ -90,9 +92,8 @@ export default class SummaryPriorizacionRepository
     };
   }
 
-    async getVotinXSLX(
-    filters: IVotingFilters
-  ): Promise<any> { // cambiar interface a ISummaryPriorization
+  async getVotinXSLX(filters: IVotingFilters): Promise<any> {
+    // cambiar interface a ISummaryPriorization
     const toReturn: ISummaryPriorizationXlsx[] = [];
 
     const query = Item.query()
@@ -103,11 +104,21 @@ export default class SummaryPriorizacionRepository
       )
       .sum("ITM_CANTIDAD as quota")
       .sum("ITM_COSTO_TOTAL as total")
-      .leftJoin("RTV_RESULTADO_VOTACION", "ITM_CODRTV_RESULTADO_VOTACION", "RTV_RESULTADO_VOTACION.RTV_CODIGO")
-      .leftJoin("MTA_MAESTRO_ACTIVIDAD", "ITM_CODMTA_MAESTRO_ACTIVIDAD", "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO")
-      .leftJoin("PMA_PROGRAMA", "MTA_CODPMA_PROGRAMA", "PMA_PROGRAMA.PMA_CODIGO")
-    
-    
+      .leftJoin(
+        "RTV_RESULTADO_VOTACION",
+        "ITM_CODRTV_RESULTADO_VOTACION",
+        "RTV_RESULTADO_VOTACION.RTV_CODIGO"
+      )
+      .leftJoin(
+        "MTA_MAESTRO_ACTIVIDAD",
+        "ITM_CODMTA_MAESTRO_ACTIVIDAD",
+        "MTA_MAESTRO_ACTIVIDAD.MTA_CODIGO"
+      )
+      .leftJoin(
+        "PMA_PROGRAMA",
+        "MTA_CODPMA_PROGRAMA",
+        "PMA_PROGRAMA.PMA_CODIGO"
+      );
 
     // const query = VotingResults.query().preload("items", (itemQuery) => {
     //   itemQuery.preload("activity", (activitiQuery) => {
@@ -116,10 +127,7 @@ export default class SummaryPriorizacionRepository
     // });
 
     if (filters.communeNeighborhood) {
-      query.whereILike(
-        "RTV_COMUNA_BARRIO",
-        `%${filters.communeNeighborhood}%`
-      );
+      query.whereILike("RTV_COMUNA_BARRIO", `%${filters.communeNeighborhood}%`);
     }
     if (filters.numberProject) {
       query.whereILike("RTV_NUMERO_PROYECTO", `%${filters.numberProject}%`);
@@ -134,7 +142,6 @@ export default class SummaryPriorizacionRepository
     res
       .map((i) => i.$extras)
       .forEach((i: any) => {
-
         toReturn.push({
           Programa: i.programa45,
           Porcentaje123: i.pct123,
@@ -146,11 +153,8 @@ export default class SummaryPriorizacionRepository
         });
       });
 
-
-
-
     // const itemsArray = dataArray.flatMap((votingResult) => votingResult.items);
 
-    return toReturn as any[]
+    return toReturn as any[];
   }
 }

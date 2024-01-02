@@ -21,7 +21,9 @@ export default class ItemValidators {
 }
 
 export const filterVotingSchema = schema.create({
-  communeNeighborhood: schema.array().members(schema.number()),
+  communeNeighborhood: schema
+    .array([rules.required()])
+    .members(schema.number()),
   numberProject: schema.number.optional([rules.unsigned()]),
   validity: schema.string([rules.required()]),
   ideaProject: schema.string.optional(),
@@ -30,7 +32,9 @@ export const filterVotingSchema = schema.create({
 });
 
 export const filterTotalVotingSchema = schema.create({
-  communeNeighborhood: schema.array().members(schema.number()),
+  communeNeighborhood: schema
+    .array([rules.required()])
+    .members(schema.number()),
   numberProject: schema.number.optional([rules.unsigned()]),
   validity: schema.string([rules.required()]),
   ideaProject: schema.string.optional(),
