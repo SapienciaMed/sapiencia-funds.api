@@ -114,10 +114,15 @@ export default class ServiceSocialService implements IServiceSocialService {
     for (const record of records) {
       // Extraer los campos necesarios para la validación
       const consolidationBeneficiary = record.id;
-      let legalizationPeriod = record.periodDetail;
+      const legalizationPeriod = record.periodDetail;
       const sapienciaUserCode = record.id; //cambiar por idUsuario
+      let period = record.period;
 
-      legalizationPeriod = (legalizationPeriod == 14) ? 72 : legalizationPeriod + 1;
+      if (period == 99) {
+        period -= 1;
+    } else {
+        period = (period == 14) ? 99 : period + 1;
+    }
     
       // const hoursBorrowed = record.hoursServicePerform;
 
