@@ -118,12 +118,21 @@ export default class ServiceSocialService implements IServiceSocialService {
       const sapienciaUserCode = record.id; //cambiar por idUsuario
       let period = record.period;
 
-      if (period == 99) {
-        period -= 1;
-    } else {
-        period = (period == 14) ? 99 : period + 1;
+
+      if (record.periodDetail === '2021-3') {
+        period = 100
+      }else if(record.periodDetail === '2022-3'){
+        period = 101
+      }else if(record.periodDetail === '2023-3'){
+        period = 102
+      }else{
+        if (period == 99) {
+          period -= 1;
+        } else {
+          period = (period == 14) ? 99 : period + 1;
+        }
     }
-    
+
       // const hoursBorrowed = record.hoursServicePerform;
 
       if (consolidationBeneficiary != null && legalizationPeriod != null) {
@@ -131,7 +140,7 @@ export default class ServiceSocialService implements IServiceSocialService {
         const validateConsolidate =
           await this.serviceSocialRepository.validateConsolidate(
             sapienciaUserCode
-          ); 
+          );
 
         // Verificar si el registro existe en la base de datos
         if (validateConsolidate && validateConsolidate.id) {
@@ -145,7 +154,7 @@ export default class ServiceSocialService implements IServiceSocialService {
               "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
 
             record.id = validateConsolidate.id;
-           
+
 
             if (record.period <= 10) {
               record.supportDocumentRoute = JSON.stringify(
