@@ -998,22 +998,22 @@ Route.group(() => {
   Route.post(
     "/create-reglament",
     "ReglamentConsolidationController.createReglament"
-  ).middleware("auth:REGLAMENTO");
+  )//.middleware("auth:REGLAMENTO");
   Route.post(
     "/get-paginated",
     "ReglamentConsolidationController.getReglamentPaginate"
-  ).middleware("auth:REGLAMENTO");
+  )//.middleware("auth:REGLAMENTO");
   Route.get(
     "/get-by-id/:id",
     "ReglamentConsolidationController.getReglamentById"
-  ).middleware("auth:REGLAMENTO");
+  )//.middleware("auth:REGLAMENTO");
   Route.post(
     "/edit-reglament/:id",
     "ReglamentConsolidationController.updateReglament"
-  ).middleware("auth:REGLAMENTO");
+  )//.middleware("auth:REGLAMENTO");
 })
   .prefix("/api/v1/reglament-v2")
-  .middleware("auth");
+  //.middleware("auth");
 
 Route.group(() => {
   Route.get(
