@@ -1,5 +1,6 @@
 import {
   IVotingFilters,
+  IVotingPaginateFilters,
   IVotingResults,
 } from "App/Interfaces/VotingResultsInterfaces";
 import { IVotingResultsRepository } from "App/Repositories/VotingResultsRepository";
@@ -7,6 +8,7 @@ import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { EResponseCodes } from "../Constants/ResponseCodesEnum";
 import { IMasterActivity } from "App/Interfaces/MasterActivityInterface";
 import { IItemResults } from "App/Interfaces/ItemInterface";
+import { removeDuplicatedItems } from "App/Utils/helpers";
 
 export interface IVotingResultsService {
   getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>>;
@@ -19,23 +21,26 @@ export interface IVotingResultsService {
     id: number
   ): Promise<ApiResponse<IVotingResults>>;
   getVotingPaginate(
-    filters: IVotingFilters
+    filters: IVotingPaginateFilters
   ): Promise<ApiResponse<IPagingData<IItemResults>>>;
-  getVotingPaginateXlsx(filters: IVotingFilters): Promise<any>
+  getVotingPaginateXlsx(filters: IVotingFilters): Promise<any>;
 
-  getPaginatedtotal(filters: IVotingFilters): Promise<any> 
+  getPaginatedtotal(
+    filters: Omit<IVotingPaginateFilters, "page" | "perPage">
+  ): Promise<any>;
 }
 
 export default class VotingResultsService implements IVotingResultsService {
   constructor(private votingResultsRepository: IVotingResultsRepository) {}
 
-  async getVotingPaginate(
-    filters: IVotingFilters
-  ): Promise<ApiResponse<IPagingData<IItemResults>>> {
-    const Activity = await this.votingResultsRepository.getVotingPaginate(
-      filters
-    );
-    return new ApiResponse(Activity, EResponseCodes.OK);
+  async getVotingPaginate(filters: IVotingPaginateFilters) {
+    const { communeNeighborhood } = filters;
+    const votingResultsFound =
+      await this.votingResultsRepository.getVotingPaginate({
+        ...filters,
+        communeNeighborhood: removeDuplicatedItems(communeNeighborhood),
+      });
+    return new ApiResponse(votingResultsFound, EResponseCodes.OK);
   }
 
   async getVotingPaginateXlsx(filters: IVotingFilters): Promise<any> {
@@ -45,11 +50,16 @@ export default class VotingResultsService implements IVotingResultsService {
     return new ApiResponse(Activity, EResponseCodes.OK);
   }
 
-  async getPaginatedtotal(filters: IVotingFilters): Promise<any> {
-    const Activity = await this.votingResultsRepository.getPaginatedtotal(
-      filters
-    );
-    return new ApiResponse(Activity, EResponseCodes.OK);
+  async getPaginatedtotal(
+    filters: Omit<IVotingPaginateFilters, "page" | "perPage">
+  ) {
+    const { communeNeighborhood } = filters;
+    const votingResultsFound =
+      await this.votingResultsRepository.getPaginatedtotal({
+        ...filters,
+        communeNeighborhood: removeDuplicatedItems(communeNeighborhood),
+      });
+    return new ApiResponse(votingResultsFound, EResponseCodes.OK);
   }
 
   async getVotingResultsById(id: string): Promise<ApiResponse<IVotingResults>> {
@@ -114,6 +124,4 @@ export default class VotingResultsService implements IVotingResultsService {
 
     return new ApiResponse(res, EResponseCodes.OK);
   }
-
- 
 }

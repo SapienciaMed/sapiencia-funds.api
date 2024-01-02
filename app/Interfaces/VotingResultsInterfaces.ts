@@ -23,3 +23,12 @@ export interface IVotingFilters {
   page: number;
   perPage: number;
 }
+
+export type IVotingPaginateFilters = {
+  communeNeighborhood: number[];
+  numberProject?: number;
+  validity: string;
+  ideaProject?: string;
+  page?: number;
+  perPage?: number;
+};

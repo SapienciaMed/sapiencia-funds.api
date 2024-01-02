@@ -2,6 +2,7 @@ import { IItemResults } from "App/Interfaces/ItemInterface";
 import { IMasterActivityVoting } from "App/Interfaces/MasterActivityInterface";
 import {
   IVotingFilters,
+  IVotingPaginateFilters,
   IVotingResults,
 } from "App/Interfaces/VotingResultsInterfaces";
 import { IVotingResultsRepository } from "App/Repositories/VotingResultsRepository";
@@ -11,7 +12,7 @@ export class VotingResultsRepositoryFake implements IVotingResultsRepository {
   getVotingPaginateXlsx(__filters: IVotingFilters): Promise<any> {
     throw new Error("Method not implemented.");
   }
-  getPaginatedtotal(__filters: IVotingFilters): Promise<any> {
+  getPaginatedtotal(__filters: IVotingPaginateFilters): Promise<any> {
     throw new Error("Method not implemented.");
   }
 

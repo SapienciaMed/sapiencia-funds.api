@@ -30,7 +30,7 @@ test.group("RolService TEST for getVotingResultsById", () => {
   });
 
   const filters = {
-    communeNeighborhood: 1,
+    communeNeighborhood: [1, 2],
     numberProject: 1,
     validity: "2024",
     ideaProject: "prueba",
