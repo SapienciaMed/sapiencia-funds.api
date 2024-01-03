@@ -1131,12 +1131,12 @@ Route.group(() => {
   Route.post(
     "/get-all-paginated",
     "RemnantController.getallRemnantsPaginated"
-  ).middleware("auth:FONDOS_REMANENTE_CONSULTAR");
+  ).middleware("auth:EXCEDENTE_CONTRATOS_CONSULTAR");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
   Route.put("/update/:id", "RemnantController.updateRemnan").middleware(
-    "auth:FONDOS_REMANENTE_EDITAR"
+    "auth:EXCEDENTE_CONTRATOS_EDITAR"
   );
   Route.delete("/delete/:id", "RemnantController.deleteRemnan");
 })
-  .prefix("/api/v1/remnants")
+  .prefix("/api/v1/surplus-contracts")
   .middleware("auth");
