@@ -57,7 +57,7 @@ export default class Reglament extends BaseModel {
 
   @column({
     columnName: "RCO_PORCENTAJE_TEORICO",
-    serializeAs: "theoreticalPercentage",
+    serializeAs: "theoreticalSemiannualPercent",
   })
   public theoreticalSemiannualPercent: number;
 
