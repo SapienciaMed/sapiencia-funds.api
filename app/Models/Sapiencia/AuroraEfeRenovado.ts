@@ -6,40 +6,46 @@ export default class AuroraEfeRenovado extends BaseModel {
 
   @column({ isPrimary: true, columnName: "id_usuario", serializeAs: "id" })
   public id: number;
-
   @column({ columnName: "periodo", serializeAs: "period" })
   public period: number;
-
-  @column({ columnName: "periodo_detalle", serializeAs: "periodDetail" })
-  public periodDetail: string;
-
+  @column({
+    columnName: "periodo_descripcion",
+    serializeAs: "periodDescription",
+  })
+  public periodDescription: string;
   @column({ columnName: "Pseleccion", serializeAs: "pSelection" })
-  public pSelection: string;
-
+  public pSelection: number;
+  @column({
+    columnName: "Pseleccion_descripcion",
+    serializeAs: "pSelectionDescription",
+  })
+  public pSelectionDescription: string;
+  @column({ columnName: "id_fondo", serializeAs: "idFund" })
+  public idFund: number;
+  @column({ columnName: "Fondo", serializeAs: "fund" })
+  public fund: string;
   @column({ columnName: "Documento", serializeAs: "document" })
-  public number: string;
-
+  public document: number;
   @column({ columnName: "Nombre", serializeAs: "name" })
   public name: string;
-
+  @column({ columnName: "Correo", serializeAs: "email" })
+  public email: string;
+  @column({ columnName: "Celular", serializeAs: "cellPhone" })
+  public cellPhone: string;
   @column({ columnName: "Modalidad_beneficio", serializeAs: "modalityBenefit" })
   public modalityBenefit: string;
-
-  @column({ columnName: "Periodo_Renovar", serializeAs: "renewPeriod" })
-  public renewPeriod: number;
-
+  @column({ columnName: "Periodo_renovar", serializeAs: "periodRenew" })
+  public periodRenew: string;
   @column({
     columnName: "Semestre_o_nivel_a_renovar",
-    serializeAs: "periodRenew",
+    serializeAs: "semesterLevelRenew",
   })
-  public periodRenew: string;
-
+  public semesterLevelRenew: string;
   @column({
     columnName: "Promedio_Acumulado",
     serializeAs: "accumulatedAverage",
   })
   public accumulatedAverage: string;
-
   @column({ columnName: "fecha_actualizacion", serializeAs: "dateUpdate" })
   public dateUpdate: string;
 }
