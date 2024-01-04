@@ -134,7 +134,6 @@ Route.group(() => {
     "get-paginated",
     "UploadInformationController.getUploadInformationPaginate"
   );
-  Route.get("/comunetype", "UploadInformationController.getComuneType");
   Route.get("/:id", "UploadInformationController.getUploadInformationById");
   Route.post("/create", "UploadInformationController.createUploadInformation");
 })
