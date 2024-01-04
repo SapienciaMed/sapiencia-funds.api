@@ -22,12 +22,12 @@ export interface IImportRepository {
 export default class ImportRepository implements IImportRepository {
   public async getSapienciaEPMBeneficiary(): Promise<IAuroraEPM[]> {
     const res = await AuroraEpmRenovado.all();
-    return res as IAuroraEPM[];
+    return res as unknown as IAuroraEPM[];
   }
 
   public async getSapienciaPPBeneficiary(): Promise<IAuroraPP[]> {
     const res = await AuroraPpRenovado.all();
-    return res as IAuroraPP[];
+    return res as unknown as IAuroraPP[];
   }
 
   public async getSapienciaEfeBeneficiary(): Promise<IAuroraEfe[]> {
