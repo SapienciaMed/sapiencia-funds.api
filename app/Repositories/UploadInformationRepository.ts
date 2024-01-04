@@ -2,10 +2,8 @@ import {
     IUploadInformation,
     IUploadInformationFilters
 } from "App/Interfaces/UploadInformationInterface";
-import {IGenericList,} from "App/Interfaces/GenericListInterface";
 import UploadInformation from "../Models/UploadInformation";
 import { IPagingData } from "App/Utils/ApiResponses";
-import GenericList from "App/Models/GenericList";
 
 export interface IUploadInformationRepository {
     createUploadInformation(
@@ -16,7 +14,6 @@ export interface IUploadInformationRepository {
         filters: IUploadInformationFilters
     ): Promise<IPagingData<IUploadInformation>>;
     getUploadInformationById(id: number): Promise<IUploadInformation[] | null>;
-    getComuneList(): Promise<IGenericList[]>;
   }
 
 export default class UploadInformationRepository
@@ -81,10 +78,5 @@ export default class UploadInformationRepository
   
       return uploadInformation.map((i) => i.serialize() as IUploadInformation);
     }
-
-    async getComuneList(): Promise<IGenericList[]> {
-      const comuneList = await GenericList.all();
-      return comuneList as IGenericList[];
-    }
-    
+ 
   }

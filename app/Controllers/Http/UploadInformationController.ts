@@ -76,18 +76,6 @@ public async getUploadInformation({ response }: HttpContextContract) {
     }
   }
 
-  public async getComuneType({ response }: HttpContextContract) {
-    try {
-      return response.send(
-        await UploadInformationProvider.getComuneList()
-      );
-    } catch (err) {
-      return response.badRequest(
-        new ApiResponse(null, EResponseCodes.FAIL, String(err))
-      );
-    }
-  }
-
   public async uploadInformation({ request, response }: HttpContextContract) {
     const files = request.files('files');
     const { id } = request.params();
