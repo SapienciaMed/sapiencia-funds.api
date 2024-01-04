@@ -13,6 +13,7 @@ export type ILegalizedPaginatedFilters = {
   announcementId: number;
 };
 export type ILegalizedItem = {
+  announcementId: number;
   communeFundId: number;
   resource: number;
   fiduciaryId: number;
@@ -25,4 +26,9 @@ export type ILegalizedPayload = {
   resource: number;
   fiduciaryId: number;
   order: number;
+};
+export type ILegalizedQueryFilters = {
+  announcementId: number;
+  communeFundId: number;
+  fiduciaryId: number;
 };

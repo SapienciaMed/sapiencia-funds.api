@@ -129,7 +129,7 @@ export default class AbsorptionPercentageController {
         );
       response.header(
         "Content-Disposition",
-        "attachment; filename=porcentaje_absorcion.xlsx"
+        `attachment; filename=${resp.operation.message}.xlsx`
       );
       return response.download(resp.data);
     } catch (err) {

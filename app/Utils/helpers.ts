@@ -44,3 +44,8 @@ export enum ENV_NAMES {
 export const DATABASE_NAMES = {
   SAPIENCIA: "mysql_sapiencia",
 };
+
+export const removeDuplicatedItems = (data: number[]) => {
+  const auxData = new Set(data);
+  return [...auxData];
+};

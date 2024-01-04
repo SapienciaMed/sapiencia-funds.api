@@ -134,7 +134,6 @@ Route.group(() => {
     "get-paginated",
     "UploadInformationController.getUploadInformationPaginate"
   );
-  Route.get("/comunetype", "UploadInformationController.getComuneType");
   Route.get("/:id", "UploadInformationController.getUploadInformationById");
   Route.post("/create", "UploadInformationController.createUploadInformation");
 })
@@ -838,6 +837,110 @@ Route.group(() => {
   .prefix("/api/v1/consolidation-tray-project-leader")
   .middleware("auth");
 
+//? ********** COMITÉ ********** ?//
+Route.group(() => {
+  Route.get(
+    "/get-cuts-generic",
+    "ConsolidationTrayController.getCutsForConsolidationTray"
+  ).middleware("auth:COMITE");
+  Route.post(
+    "/get-consolidation-tray",
+    "ConsolidationTrayController.geConsolidationTray"
+  ).middleware("auth:COMITE");
+  Route.post(
+    "/get-consolidation-tray-by-cut",
+    "ConsolidationTrayController.geConsolidationTrayByCut"
+  ).middleware("auth:COMITE");
+  Route.get(
+    "/get-beneficiary-by-id/:id",
+    "ConsolidationTrayController.geBeneficiaryById"
+  ).middleware("auth:COMITE");
+  Route.post(
+    "/update-cut-beneficiary",
+    "ConsolidationTrayController.updateCutBeneficiary"
+  ).middleware("auth:COMITE");
+  Route.post(
+    "/get-pqrsdf-external",
+    "ConsolidationTrayController.getPQRSDFExternal"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_SOPORTES_PQRSDF");
+  Route.post(
+    "/get-requirements-by-beneficiary",
+    "ConsolidationTrayController.getRequirementsByBeneficiary"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-requirements-by-beneficiary-list",
+    "ConsolidationTrayController.getRequirementsByBeneficiaryList"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/compliance-assignment-beneficiary",
+    "ConsolidationTrayController.complianceAssignmentBeneficiary"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/upload-requirement-file/:id",
+    "ConsolidationTrayController.uploadRequirementFile"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.get(
+    "/get-requirement-file/:id",
+    "ConsolidationTrayController.getUploadFiles"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/delete-requirement-file/:id/:beneficiary",
+    "ConsolidationTrayController.deleteUploadFiles"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/dowload-requirement-file/:id/:beneficiary",
+    "ConsolidationTrayController.dowloadUploadFiles"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_REQUISITOS_REGLAMENTO");
+  Route.post(
+    "/get-knowledge-transfer-by-beneficiary",
+    "ConsolidationTrayController.getKnowledgeTransferByBeneficiary"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/change-approve-or-reject-knowledge-transfer",
+    "ConsolidationTrayController.changeApproveOrRejectKnowledgeTransfer"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/upload-knowledge-transfer-file/:id/:idBeneficiary",
+    "ConsolidationTrayController.uploadKnowledgeTransferFile"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.get(
+    "/get-knowledge-transfer-file/:idBeneficiary",
+    "ConsolidationTrayController.getUploadKnowledgeTransferFiles"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+  Route.post(
+    "/get-requirements-knowledge-transfer",
+    "ConsolidationTrayController.getRequirementsKnowledgeTransfer"
+  )
+    .middleware("auth:COMITE")
+    .middleware("auth:VER_TRANSFERENCIA_CONOCIMIENTO");
+})
+  .prefix("/api/v1/consolidation-tray-committee")
+  .middleware("auth");
+
 //? ********** SERVICIO SOCIAL ********** ?//
 Route.group(() => {
   Route.get("/import", "ServiceSocialController.import");
@@ -852,6 +955,10 @@ Route.group(() => {
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
+  ).middleware("auth:SERVICIO_SOCIAL");
+  Route.post(
+    "/update-cut-beneficiary",
+    "ConsolidationTrayController.updateCutBeneficiary"
   ).middleware("auth:SERVICIO_SOCIAL");
   Route.get(
     "/get-beneficiary-by-id/:id",
@@ -886,27 +993,26 @@ Route.group(() => {
   Route.post(
     "/get-periods-sapi",
     "ReglamentConsolidationController.getPeriodsSapi"
-  );
+  )//.middleware("auth:REGLAMENTO");
   Route.post(
     "/create-reglament",
     "ReglamentConsolidationController.createReglament"
-  );
+  )//.middleware("auth:REGLAMENTO");
   Route.post(
     "/get-paginated",
     "ReglamentConsolidationController.getReglamentPaginate"
-  );
+  )//.middleware("auth:REGLAMENTO");
   Route.get(
     "/get-by-id/:id",
     "ReglamentConsolidationController.getReglamentById"
-  );
-  // Route.get("/get-last-id", "ReglamentController.getLastId");
-  // Route.post("/create", "ReglamentController.createReglament");
-  // Route.put("/edit/:id", "ReglamentController.updateReglament");
-  // Route.delete("/delete/:id", "ReglamentController.deleteReglament");
-  // Route.get("/programs", "ReglamentController.getPrograms");
+  )//.middleware("auth:REGLAMENTO");
+  Route.post(
+    "/edit-reglament/:id",
+    "ReglamentConsolidationController.updateReglament"
+  )//.middleware("auth:REGLAMENTO");
 })
   .prefix("/api/v1/reglament-v2")
-  .middleware("auth");
+  //.middleware("auth");
 
 Route.group(() => {
   Route.get(
@@ -1024,12 +1130,12 @@ Route.group(() => {
   Route.post(
     "/get-all-paginated",
     "RemnantController.getallRemnantsPaginated"
-  ).middleware("auth:FONDOS_REMANENTE_CONSULTAR");
+  ).middleware("auth:EXCEDENTE_CONTRATOS_CONSULTAR");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
   Route.put("/update/:id", "RemnantController.updateRemnan").middleware(
-    "auth:FONDOS_REMANENTE_EDITAR"
+    "auth:EXCEDENTE_CONTRATOS_EDITAR"
   );
   Route.delete("/delete/:id", "RemnantController.deleteRemnan");
 })
-  .prefix("/api/v1/remnants")
+  .prefix("/api/v1/surplus-contracts")
   .middleware("auth");

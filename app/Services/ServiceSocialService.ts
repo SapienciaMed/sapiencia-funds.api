@@ -13,6 +13,7 @@ import { IServiceSocialRepository } from "App/Repositories/ServiceSocialReposito
 import { IStorageRepository } from "App/Repositories/StorageRepository";
 import { ApiResponse, IPagingData } from "App/Utils/ApiResponses";
 import { MultipartFileContract } from "@ioc:Adonis/Core/BodyParser";
+import { EStatesBeneficiary } from "App/Constants/StatesBeneficiaryEnum";
 
 export interface IServiceSocialService {
   import(): Promise<ApiResponse<IImportServiceSocial[]>>;
@@ -81,9 +82,11 @@ export default class ServiceSocialService implements IServiceSocialService {
     const dataArray = receivedData.data;
 
     const transformedData = dataArray.map((item) => ({
-      legalizationPeriod: item.period,
+      
+      legalizationPeriod: item.periodDetail,
       consolidationBeneficiary: item.id,
       hoursBorrowed: item.hoursServicePerform,
+      supportDocumentRoute: item.supportDocumentRoute,
       // Agrega aquí cualquier otro campo que necesites
     }));
 
@@ -111,14 +114,33 @@ export default class ServiceSocialService implements IServiceSocialService {
     for (const record of records) {
       // Extraer los campos necesarios para la validación
       const consolidationBeneficiary = record.id;
-      const legalizationPeriod = record.period;
-      const document = record.document; //cambiar por idUsuario
+      const legalizationPeriod = record.periodDetail;
+      const sapienciaUserCode = record.id; //cambiar por idUsuario
+      let period = record.period;
+
+
+      if (record.periodDetail === '2021-3') {
+        period = 100
+      } else if (record.periodDetail === '2022-3') {
+        period = 101
+      } else if (record.periodDetail === '2023-3') {
+        period = 102
+      } else {
+        if (period == 99) {
+          period -= 1;
+        } else {
+          period = (period == 14) ? 99 : period + 1;
+        }
+      }
+
       // const hoursBorrowed = record.hoursServicePerform;
 
       if (consolidationBeneficiary != null && legalizationPeriod != null) {
         //verificar si el registro existe en la tabla de BAC_BENEFICIARIOS_A_CONSOLIDAR para evitar errores con llaves foraneas
         const validateConsolidate =
-          await this.serviceSocialRepository.validateConsolidate(document); //cambiar por idUsuario
+          await this.serviceSocialRepository.validateConsolidate(
+            sapienciaUserCode
+          );
 
         // Verificar si el registro existe en la base de datos
         if (validateConsolidate && validateConsolidate.id) {
@@ -128,7 +150,61 @@ export default class ServiceSocialService implements IServiceSocialService {
           );
 
           if (!existingRecord) {
+
+            //EPM
+            let urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontend_renovacion_epm/uploads/index.php";
+            
+            //PP
+            if (record.origen === 'PP') {
+              urlDocument = "https://fondos.sapiencia.gov.co/convocatorias/frontendrenovacionpp/uploads/index.php";
+            }      
+
             record.id = validateConsolidate.id;
+
+            if (record.period <= 10) {
+              record.supportDocumentRoute = JSON.stringify(
+                {
+                  documentPath: `${urlDocument}`,
+                  parameters: [
+                    {
+                      documento: record.document,
+                      tipo: 'Acta_Servicio',
+                      periodo: period,
+                      npseleccion: record.pselectionDetail
+                    },
+                    {
+                      documento: record.document,
+                      tipo: 'Ficha_Servicio',
+                      periodo: period,
+                      npseleccion: record.pselectionDetail
+                    },
+                    {
+                      documento: record.document,
+                      tipo: 'Certificado_Servicio',
+                      periodo: period,
+                      npseleccion: record.pselectionDetail
+                    }
+                  ]
+                }
+              );
+            } else {
+              if (record.performServiceSocial === 'SI') {
+                record.supportDocumentRoute = JSON.stringify(
+                  {
+                    documentPath: `${urlDocument}`,
+                    parameters: [
+                      {
+                        documento: record.document,
+                        tipo: 'Formato_Unico',
+                        periodo: period,
+                        npseleccion: record.pselectionDetail
+                      }
+                    ]
+                  }
+                )
+              }
+            }
+
             newRecords.push(record as never);
           }
         }
@@ -181,6 +257,9 @@ export default class ServiceSocialService implements IServiceSocialService {
       item.committedHours = socialServiceHours;
       item.pendingHours = Number(socialServiceHours) - Number(item.hoursDone);
 
+      if (item.documentPath)
+        item.externalInfoFiles = JSON.parse(item.documentPath);
+
       // Calcular el total de horas pendientes acumuladas
       item.totalPendingHours = totalPendingHours + item.pendingHours;
       totalPendingHours = item.totalPendingHours;
@@ -216,6 +295,11 @@ export default class ServiceSocialService implements IServiceSocialService {
           ...socialService,
         },
         id
+      );
+
+      await this.serviceSocialRepository.updateStateBeneficiariesConsolidate(
+        socialService.idConsolidationBeneficiary,
+        EStatesBeneficiary.PaccTechnician
       );
     }
 

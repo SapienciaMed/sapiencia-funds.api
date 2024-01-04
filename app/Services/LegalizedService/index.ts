@@ -14,6 +14,8 @@ import {
   legalizedXLSXFilePath,
   legalizedXLSXRows,
 } from "./XLSX";
+import { ICallPeriodRepository } from "App/Repositories/Sapiencia/CallPeriodRepository";
+import { DateTime } from "luxon";
 
 export interface ILegalizedService {
   updateLegalizedComunneBudget(
@@ -21,7 +23,7 @@ export interface ILegalizedService {
   ): Promise<ApiResponse<ILegalized>>;
   getAllLegalized(
     filters: ILegalizedPaginatedFilters
-  ): Promise<ApiResponse<ILegalizedItem[]>>;
+  ): Promise<ApiResponse<(ILegalizedItem & { updatedAt: DateTime | null })[]>>;
   generateLegalizedXLSX(
     filters: ILegalizedPaginatedFilters
   ): Promise<ApiResponse<string>>;
@@ -30,7 +32,8 @@ export interface ILegalizedService {
 export default class LegalizedService implements ILegalizedService {
   constructor(
     private legalizedRepository: ILegalizedRepository,
-    private callBudgetRepository: ICallBudgetRepository
+    private callBudgetRepository: ICallBudgetRepository,
+    private callPeriodRepository: ICallPeriodRepository
   ) {}
   // CREATE LEGALIZED
   public async updateLegalizedComunneBudget(payload: ILegalizedPayload) {
@@ -48,18 +51,54 @@ export default class LegalizedService implements ILegalizedService {
   public async getAllLegalized(filters: ILegalizedPaginatedFilters) {
     const legalizedFound =
       await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
-    return new ApiResponse(legalizedFound, EResponseCodes.OK);
+    let legalizedFoundMutated: (ILegalizedItem & {
+      updatedAt: DateTime | null;
+    })[] = [];
+    const legalizedFoundMutatedPromises: Promise<ILegalized | null>[] = [];
+    legalizedFound.map((legalizedData) => {
+      const { announcementId, communeFundId, fiduciaryId } = legalizedData;
+      const auxLegalizedPromise =
+        this.legalizedRepository.getLegalizedInfoByFilters({
+          announcementId,
+          communeFundId,
+          fiduciaryId,
+        });
+      legalizedFoundMutatedPromises.push(auxLegalizedPromise);
+    });
+    const legalizedFoundMutatedPromisesResolved = await Promise.all(
+      legalizedFoundMutatedPromises
+    );
+    legalizedFoundMutated = legalizedFound.map((legalizedDate, index) => {
+      let updatedAt: null | DateTime = null;
+      const dateFound = legalizedFoundMutatedPromisesResolved?.[index];
+      if (dateFound !== null) updatedAt = dateFound.updatedAt;
+      return {
+        ...legalizedDate,
+        updatedAt,
+      };
+    });
+
+    return new ApiResponse(legalizedFoundMutated, EResponseCodes.OK);
   }
   // GENERATE LEGALIZED XLSX
   public async generateLegalizedXLSX(filters: ILegalizedPaginatedFilters) {
     const legalizedFound =
       await this.callBudgetRepository.getCommuneBudgetByPeriod(filters);
+    const periodsData = await this.callPeriodRepository.getAllCallPeriod();
+    const periodFound = periodsData.find(
+      (el) => el.id === filters.announcementId
+    );
+    const worksheetName = `Legalizado[${periodFound?.name}]`;
     await generateXLSX({
       columns: legalizedXLSXColumns,
       data: legalizedXLSXRows(legalizedFound),
       filePath: legalizedXLSXFilePath,
-      worksheetName: "LEGALIZADOS",
+      worksheetName,
     });
-    return new ApiResponse(legalizedXLSXFilePath, EResponseCodes.OK);
+    return new ApiResponse(
+      legalizedXLSXFilePath,
+      EResponseCodes.OK,
+      worksheetName
+    );
   }
 }

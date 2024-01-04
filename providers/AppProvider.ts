@@ -317,7 +317,8 @@ export default class AppProvider {
       () =>
         new AbsorptionPercentageService.default(
           new AbsorptionPercentageRepository.default(),
-          new CallBudgetRepository.default()
+          new CallBudgetRepository.default(),
+          new CallPeriodRepository.default()
         )
     );
 
@@ -341,7 +342,8 @@ export default class AppProvider {
       () =>
         new LegalizedService.default(
           new LegalizedRepository.default(),
-          new CallBudgetRepository.default()
+          new CallBudgetRepository.default(),
+          new CallPeriodRepository.default()
         )
     );
   }
