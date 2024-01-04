@@ -1,6 +1,6 @@
 import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
 
-export default class AuroraPpRenovado extends BaseModel {
+export default class BeneficiaryRenewTransfer extends BaseModel {
   public static table = "giro_vwbeneficiario_proyec_renova_giro";
   public static connection = "mysql_sapiencia";
 
