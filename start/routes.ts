@@ -955,7 +955,8 @@ Route.group(() => {
   Route.post(
     "/get-consolidation-tray",
     "ConsolidationTrayController.geConsolidationTray"
-  ).middleware("auth:SERVICIO_SOCIAL");
+  )
+  // .middleware("auth:SERVICIO_SOCIAL");
   Route.post(
     "/update-cut-beneficiary",
     "ConsolidationTrayController.updateCutBeneficiary"
@@ -982,7 +983,7 @@ Route.group(() => {
   ).middleware("auth:SERVICIO_SOCIAL");
 })
   .prefix("/api/v1/consolidation-tray-social-service")
-  .middleware("auth");
+  // .middleware("auth");
 
 //* ********************************************************************************
 //* ********************************************************************************
