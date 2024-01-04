@@ -11,7 +11,7 @@ export default class ImportDataService implements IImportDataService {
 
   async importDataFromSapiencia(): Promise<ApiResponse<any[]>> {
     const epmBeneficiaries = await this.importDataRepository.getSapienciaEPMBeneficiary();
-    const ppBeneficiaries = await this.importDataRepository.getSapienciaPPBeneficiary();
+    // const ppBeneficiaries = await this.importDataRepository.getSapienciaPPBeneficiary();
     
 
     if (!epmBeneficiaries) {
