@@ -133,14 +133,19 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
         knowledgeTransferCondonationType: iter.knowledgeTransferCondonationType,
         knowledgeTransferCondonationPercent: arrayConvertKnowledgeTransferCondonationPercent,
 
+        applyGracePeriod: iter.applyGracePeriod,
         gracePeriodMonths: iter.gracePeriodMonths,
         graceDateApplication: iter.graceDateApplication,
+
         applyContinuousSuspension: iter.applyContinuousSuspension,
         continuosSuspencionQuantity: iter.continuosSuspencionQuantity,
+
         applyDiscontinuousSuspension: iter.applyDiscontinuousSuspension,
         discontinuousSuspensionQuantity: iter.discontinuousSuspensionQuantity,
+
         applySpecialSuspensions: iter.applySpecialSuspensions,
         specialSuspensionsQuantity: iter.specialSuspensionsQuantity,
+
         applyExtension: iter.applyExtension,
         extensionQuantity: iter.extensionQuantity,
 
