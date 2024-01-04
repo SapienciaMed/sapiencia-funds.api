@@ -1014,6 +1014,33 @@ Route.group(() => {
   .prefix("/api/v1/reglament-v2")
   //.middleware("auth");
 
+//* *******************************************************************************
+//* *******************************************************************************
+//* *******************************************************************************
+//? ************ CONSULTA A FUENTES DE CONOCIMIENTO (FUENTES DE GIROS) ************
+Route.group(() => {
+  Route.post(
+    "/get-spin-one",
+    "SpinsBeneficiaryController.ts.spinsSearch1"
+  )
+  //.middleware("auth:CERTIFICACION_VALORES");
+  //.middleware("auth:VALORES_GIRADOS_BENEFICIARIO");
+  Route.post(
+    "/get-spin-two",
+    "SpinsBeneficiaryController.ts.spinsSearch2"
+  )
+  //.middleware("auth:CERTIFICACION_VALORES");
+  //.middleware("auth:VALORES_GIRADOS_BENEFICIARIO");
+  Route.post(
+    "/get-spin-three",
+    "SpinsBeneficiaryController.ts.spinsSearch3"
+  )
+  //.middleware("auth:CERTIFICACION_VALORES");
+  //.middleware("auth:VALORES_GIRADOS_BENEFICIARIO");
+})
+.prefix("/api/v1/search-spins")
+//.middleware("auth");
+
 Route.group(() => {
   Route.get(
     "/get-by-id/:id",
