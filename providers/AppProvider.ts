@@ -78,6 +78,7 @@ export default class AppProvider {
     const RemnantService = await import("App/Services/RemnantService");
 
     const LegalizedService = await import("App/Services/LegalizedService");
+    const SpinsBeneficiariesConsolidateService = await import("App/Services/SpinsBeneficiariesConsolidateService");
     /**************************************************************************/
     /************************ EXTERNAL SERVICES ********************************/
     /**************************************************************************/
@@ -181,6 +182,10 @@ export default class AppProvider {
 
     const LegalizedRepository = await import(
       "App/Repositories/LegalizedRepository"
+    );
+
+    const SpinsBeneficiariesConsolidateRepository = await import(
+      "App/Repositories/SpinsBeneficiariesConsolidateRepository"
     );
     /**************************************************************************/
     /******************************** CORE  ***********************************/
@@ -346,6 +351,15 @@ export default class AppProvider {
           new CallPeriodRepository.default()
         )
     );
+
+    this.app.container.singleton(
+      "core.SpinsBeneficiariesConsolidateProvider",
+      () =>
+        new SpinsBeneficiariesConsolidateService.default(
+          new SpinsBeneficiariesConsolidateRepository.default()
+        )
+    );
+
   }
 
   public async boot() {
