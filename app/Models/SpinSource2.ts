@@ -1,8 +1,8 @@
 import { BaseModel, column, hasOne, HasOne } from "@ioc:Adonis/Lucid/Orm";
-import BeneficiariesConsolidate from "./SpinSource1";
+import BeneficiariesConsolidate from "./SpinSource2";
 
-export default class SpinSource1 extends BaseModel {
-  public static table = "GIR_GIROS_FUENTE1";
+export default class SpinSource2 extends BaseModel {
+  public static table = "GIR_GIROS_FUENTE2";
 
   @column({
     isPrimary: true,

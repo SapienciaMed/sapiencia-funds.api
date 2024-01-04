@@ -53,6 +53,21 @@ const databaseConfig: DatabaseConfig = {
       healthCheck: false,
       debug: false,
     },
+    mysql_convocatoria_dtf_financiera: {
+      client: "mysql2",
+      connection: {
+        host: Env.get("MYSQL2_HOST"),
+        port: Env.get("MYSQL2_PORT"),
+        user: Env.get("MYSQL2_USER"),
+        password: Env.get("MYSQL2_PASSWORD", ""),
+        database: Env.get("MYSQL3_DB_NAME"),
+      },
+      migrations: {
+        naturalSort: true,
+      },
+      healthCheck: false,
+      debug: false,
+    },
   },
 };
 

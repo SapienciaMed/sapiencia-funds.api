@@ -167,10 +167,10 @@ export default class ServiceSocialRepository
     const res = BeneficiarySocialService.query();
     res.whereHas("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
       beneficiarieConsolidateQuery.where("id", filters.id);
-      // beneficiarieConsolidateQuery.where(
-      //   "idStatusProcessPacc",
-      //   EStatesBeneficiary.SocialServices
-      // );
+      beneficiarieConsolidateQuery.where(
+        "idStatusProcessPacc",
+        filters.typeState
+      );
     });
     res.preload("beneficiarieConsolidate", (beneficiarieConsolidateQuery) => {
       beneficiarieConsolidateQuery.preload(
