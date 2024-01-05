@@ -189,7 +189,7 @@ export default class HistoricalGeneralTwists extends BaseModel {
 
   @column({
     columnName: "fecha_registro",
-    serializeAs: "registrationDAte",
+    serializeAs: "registrationDate",
   })
   public registrationDate: string;
 
@@ -276,6 +276,12 @@ export default class HistoricalGeneralTwists extends BaseModel {
     serializeAs: "approvedEmail",
   })
   public approvedEmail: string;
+
+  @column({
+    columnName: "fondo",
+    serializeAs: "fund",
+  })
+  public fund: string;
 
   @column({
     columnName: "periodo_a_renovar",
