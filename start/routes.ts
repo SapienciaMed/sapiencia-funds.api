@@ -1131,7 +1131,7 @@ Route.group(() => {
   Route.post(
     "/get-all-paginated",
     "RemnantController.getallRemnantsPaginated"
-  ).middleware("auth:EXCEDENTE_CONTRATOS_CONSULTAR");
+  )//.middleware("auth:EXCEDENTE_CONTRATOS_CONSULTAR");
   Route.get("/get-by-id/:id", "RemnantController.getRemnantById");
   Route.put("/update/:id", "RemnantController.updateRemnan").middleware(
     "auth:EXCEDENTE_CONTRATOS_EDITAR"
@@ -1139,4 +1139,4 @@ Route.group(() => {
   Route.delete("/delete/:id", "RemnantController.deleteRemnan");
 })
   .prefix("/api/v1/surplus-contracts")
-  .middleware("auth");
+  //.middleware("auth");
