@@ -1,4 +1,9 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import AuroraEfeRenovado from "./AuroraEfeRenovado";
+import AuroraEMRenovado from "./AuroraEnlazamundo";
+import AuroraEpmRenovado from "./AuroraEpmRenovado";
+import AuroraFaRenovado from "./AuroraFaRenovado";
+import AuroraPpRenovado from "./AuroraPpRenovado";
 
 export default class BeneficiaryRenewTransfer extends BaseModel {
   public static table = "giro_vwbeneficiario_proyec_renova_giro";
@@ -159,4 +164,34 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
 
   @column({ columnName: "id_estado_credito", serializeAs: "stateCreditId" })
   public stateCreditId: number;
+
+  @hasMany(() => AuroraEfeRenovado, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public efeRenovado: HasMany<typeof AuroraEfeRenovado>;
+
+  @hasMany(() => AuroraEMRenovado, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public EMRenovado: HasMany<typeof AuroraEMRenovado>;
+
+  @hasMany(() => AuroraEpmRenovado, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public epmRenovado: HasMany<typeof AuroraEpmRenovado>;
+
+  @hasMany(() => AuroraFaRenovado, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public faRenovado: HasMany<typeof AuroraFaRenovado>;
+
+  @hasMany(() => AuroraPpRenovado, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public ppRenovado: HasMany<typeof AuroraPpRenovado>;
 }

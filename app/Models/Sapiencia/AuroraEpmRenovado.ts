@@ -1,4 +1,7 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import BeneficiaryRenewTransfer from "./BeneficaryRenewTransfer";
+import CallFond from "./CallFond";
+import HistoricalGeneralTwists from "../Dtf_financiera/HistoricalGeneralTwists";
 
 export default class AuroraEpmRenovado extends BaseModel {
   public static table = "vw_aurora_epm_renovados";
@@ -16,7 +19,10 @@ export default class AuroraEpmRenovado extends BaseModel {
   @column({ columnName: "Pseleccion", serializeAs: "pSelection" })
   public pSelection: number;
 
-  @column({ columnName: "Pseleccion_descripcion", serializeAs: "pselectionDetail" })
+  @column({
+    columnName: "Pseleccion_descripcion",
+    serializeAs: "pselectionDetail",
+  })
   public pselectionDetail: string;
 
   @column({ columnName: "Documento", serializeAs: "document" })
@@ -49,9 +55,30 @@ export default class AuroraEpmRenovado extends BaseModel {
   })
   public performService: string;
 
-  @column({  columnName: "Total_horas_servicio_social", serializeAs: "hoursServicePerform" })
+  @column({
+    columnName: "Total_horas_servicio_social",
+    serializeAs: "hoursServicePerform",
+  })
   public hoursServicePerform: string;
 
   @column({ columnName: "Operador", serializeAs: "operator" })
   public operator: string;
+
+  @hasMany(() => BeneficiaryRenewTransfer, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public beneficiaryRenewTransfer: HasMany<typeof BeneficiaryRenewTransfer>;
+
+  @hasMany(() => CallFond, {
+    localKey: "id",
+    foreignKey: "userId",
+  })
+  public callFond: HasMany<typeof CallFond>;
+
+  @hasMany(() => HistoricalGeneralTwists, {
+    localKey: "document",
+    foreignKey: "document",
+  })
+  public historicalGeneralTwists: HasMany<typeof HistoricalGeneralTwists>;
 }

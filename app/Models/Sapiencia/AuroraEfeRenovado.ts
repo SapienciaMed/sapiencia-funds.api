@@ -1,4 +1,7 @@
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
+import BeneficiaryRenewTransfer from "./BeneficaryRenewTransfer";
+import CallFond from "./CallFond";
+import HistoricalGeneralTwists from "../Dtf_financiera/HistoricalGeneralTwists";
 
 export default class AuroraEfeRenovado extends BaseModel {
   public static table = "vw_aurora_efe_renovados";
@@ -48,4 +51,22 @@ export default class AuroraEfeRenovado extends BaseModel {
   public accumulatedAverage: string;
   @column({ columnName: "fecha_actualizacion", serializeAs: "dateUpdate" })
   public dateUpdate: string;
+
+  @hasMany(() => BeneficiaryRenewTransfer, {
+    localKey: "id",
+    foreignKey: "id",
+  })
+  public beneficiaryRenewTransfer: HasMany<typeof BeneficiaryRenewTransfer>;
+
+  @hasMany(() => CallFond, {
+    localKey: "id",
+    foreignKey: "userId",
+  })
+  public callFond: HasMany<typeof CallFond>;
+
+  @hasMany(() => HistoricalGeneralTwists, {
+    localKey: "document",
+    foreignKey: "document",
+  })
+  public historicalGeneralTwists: HasMany<typeof HistoricalGeneralTwists>;
 }
