@@ -1064,14 +1064,23 @@ export default class ReglamentConsolidationRepository implements IReglamentConso
 
     }
 
-    console.log("**************************");
-    console.log(arrayNewsRequirements);
-    console.log("**************************");
-    console.log(arrayDeletesRequirements);
-    console.log("**************************");
+    // Actualizamos lo que tengamos que actualizar
+      for (const updateAll of data) {
 
-    //Si los array estan en 0, quiere decir que no se modifció nada de los requisitos
-    if( arrayDeletesRequirements.length === 0 && arrayNewsRequirements.length === 0 ) return true;
+        //Actualizamos en general si existe el id, si existe es porque ya estaba el campo
+        if( updateAll.id && updateAll.id != null && updateAll.id != undefined ){
+
+          const updateRequirement = await Requeriment.find(Number(updateAll.id));
+          if (!updateRequirement) return false; //No se encontró el requisito del reglamento
+
+          updateRequirement.active = updateAll.active!;
+          updateRequirement.mandatoryFor = updateAll.mandatoryFor!;
+          updateRequirement.description = updateAll.description!;
+          await updateRequirement.save();
+
+        }
+
+      }
 
     //Borramos lo que tengamos que borrar
     for (const iterDelete of arrayDeletesRequirements) {
