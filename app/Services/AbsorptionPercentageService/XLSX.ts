@@ -39,7 +39,12 @@ export const absorptionPercentageXLSXColumns = [
 ];
 
 export const absorptionPercentageXLSXRows = (
-  absorptionPercentage: IPagingData<IAbsorptionPercentaje>
+  absorptionPercentage: IPagingData<
+    Omit<
+      IAbsorptionPercentaje,
+      "userModified" | "updatedAt" | "userCreated" | "createdAt"
+    >
+  >
 ) =>
   absorptionPercentage.array.reduce((prev, curr) => {
     return [

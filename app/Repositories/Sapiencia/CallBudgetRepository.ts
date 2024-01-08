@@ -12,7 +12,6 @@ import { DATABASE_NAMES } from "App/Utils/helpers";
 export interface ICallBudgetRepository {
   getAllCallBudget(): Promise<ICallBudget[]>;
   getAllCommuneResources(): Promise<ICommuneResource[]>;
-  getResourceByCommuneId(communeId: number): Promise<ICommuneResource>;
   getCommuneBudgetByPeriod(
     filters: ILegalizedPaginatedFilters
   ): Promise<ILegalizedItem[]>;
@@ -36,17 +35,6 @@ export default class CallBudgetRepository implements ICallBudgetRepository {
       query
     );
     return resp?.[0]?.[0]?.filter((el: ICommuneResource) => el.recurso !== "0");
-  }
-  public async getResourceByCommuneId(communeId: number) {
-    const query = `CALL getResourceByCommune(${communeId})`;
-    const resp = await Database.connection(DATABASE_NAMES.SAPIENCIA).rawQuery(
-      query
-    );
-    const resourceFound = resp?.[0]?.[0];
-    if (resourceFound?.length === 0) {
-      throw new Error("No se ha encontrado un recurso para esta comuna");
-    }
-    return resourceFound?.[0];
   }
   // GET COMMUNE BUDGET BY PERIOD
   public async getCommuneBudgetByPeriod(filters: ILegalizedPaginatedFilters) {

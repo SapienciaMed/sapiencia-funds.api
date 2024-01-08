@@ -15,15 +15,25 @@ export type IAbsorptionPercentaje = {
   userCreated: string;
   createdAt: DateTime;
 };
+export type AbsortionPercentageItem = {
+  resource: number;
+  communeFundId: number;
+};
 export type IAbsortionPercentageCreateSchema = {
   announcementId: number;
-  communeFundId: number;
   sceneryPercentage1: number;
   sceneryPercentage2: number;
   sceneryPercentage3: number;
+  absorptionItems: AbsortionPercentageItem[];
 };
-export type IAbsortionPercentageUpdateSchema =
-  Partial<IAbsortionPercentageCreateSchema>;
+export type IAbsortionPercentageUpdateSchema = {
+  announcementId?: number;
+  communeFundId?: number;
+  resource?: number;
+  sceneryPercentage1?: number;
+  sceneryPercentage2?: number;
+  sceneryPercentage3?: number;
+};
 export type IAbsortionPercentageFullCreateSchema = {
   announcementId: number;
   communeFundId: number;
@@ -35,6 +45,7 @@ export type IAbsortionPercentageFullCreateSchema = {
   sceneryValue2: number;
   sceneryValue3: number;
   userCreated: string;
+  absorptionItems?: AbsortionPercentageItem[];
 };
 export type ICommuneResource = {
   comuna: number;

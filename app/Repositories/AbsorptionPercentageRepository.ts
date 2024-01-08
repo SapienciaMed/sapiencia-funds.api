@@ -11,10 +11,22 @@ import { IPagingData } from "App/Utils/ApiResponses";
 export interface IAbsorptionPercentageRepository {
   createAbsortionPercentage(
     payload: IAbsortionPercentageFullCreateSchema
-  ): Promise<IAbsorptionPercentaje>;
+  ): Promise<
+    Omit<
+      IAbsortionPercentageFullCreateSchema,
+      "userCreated" | "updatedAt" | "createdAt" | "absorptionItems"
+    >
+  >;
   getAllAbsorptionPercentagePaginated(
     filters: IAbsortionPercentagePaginatedFilters
-  ): Promise<IPagingData<IAbsorptionPercentaje>>;
+  ): Promise<
+    IPagingData<
+      Omit<
+        IAbsorptionPercentaje,
+        "userModified" | "updatedAt" | "userCreated" | "createdAt"
+      >
+    >
+  >;
   getAbsorptionPercentageById(id: number): Promise<AbsorptionPercentaje>;
   updateAbsorptionPercentageById(
     id: number,
@@ -30,9 +42,17 @@ export default class AbsorptionPercentageRepository
   public async createAbsortionPercentage(
     payload: IAbsortionPercentageFullCreateSchema
   ) {
+    delete payload.absorptionItems;
     const newAbsorptionPercentage = new AbsorptionPercentaje();
     await newAbsorptionPercentage.fill(payload).save();
-    return newAbsorptionPercentage.serialize() as IAbsorptionPercentaje;
+    return newAbsorptionPercentage.serialize({
+      fields: {
+        omit: ["userCreated", "updatedAt", "createdAt"],
+      },
+    }) as Omit<
+      IAbsortionPercentageFullCreateSchema,
+      "userCreated" | "updatedAt" | "createdAt" | "absorptionItems"
+    >;
   }
   // GET ALL ABSORPTION PERCENTAGE PAGINATED
   public async getAllAbsorptionPercentagePaginated(
@@ -45,8 +65,18 @@ export default class AbsorptionPercentageRepository
     }
     const { data, meta } = (
       await absorptionPercentageQuery.paginate(page, perPage)
-    ).serialize();
-    return { array: data as IAbsorptionPercentaje[], meta };
+    ).serialize({
+      fields: {
+        omit: ["userModified", "updatedAt", "userCreated", "createdAt"],
+      },
+    });
+    return {
+      array: data as Omit<
+        IAbsorptionPercentaje,
+        "userModified" | "updatedAt" | "userCreated" | "createdAt"
+      >[],
+      meta,
+    };
   }
   // GET ABSORPTION PERCENTAGE BY ID
   public async getAbsorptionPercentageById(id: number) {
