@@ -20,6 +20,7 @@ export default class SpinsBeneficiariesConsolidateRepository
   }
 
   async spinsSearch2(body: ISpinsBeneficiary): Promise<any[] | null> {
+    console.log(body);
     const res = await HistoricalGeneralTwists.query().where("solicitud", 4);
 
     const infoRotatedValues = res.map((i) => {
