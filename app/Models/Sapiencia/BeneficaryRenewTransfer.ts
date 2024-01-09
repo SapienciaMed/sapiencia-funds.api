@@ -1,10 +1,15 @@
 import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
 
 export default class BeneficiaryRenewTransfer extends BaseModel {
+
   public static table = "giro_vwbeneficiario_proyec_renova_giro";
   public static connection = "mysql_sapiencia";
 
-  @column({ isPrimary: true, columnName: "id_usuario", serializeAs: "id" })
+  @column({
+    isPrimary: true,
+    columnName: "id_usuario",
+    serializeAs: "id"
+  })
   public id: number;
 
   @column({
@@ -19,13 +24,22 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public PeriodLegalization: string;
 
-  @column({ columnName: "documento_beneficiario", serializeAs: "document" })
+  @column({
+    columnName: "documento_beneficiario",
+    serializeAs: "document"
+  })
   public document: number;
 
-  @column({ columnName: "nombre_beneficiario", serializeAs: "name" })
+  @column({
+    columnName: "nombre_beneficiario",
+    serializeAs: "name"
+  })
   public name: string;
 
-  @column({ columnName: "idfiducia", serializeAs: "idFiducia" })
+  @column({
+    columnName: "idfiducia",
+    serializeAs: "idFiducia"
+  })
   public idFiducia: number;
 
   @column({
@@ -34,10 +48,16 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public contractNumber: string;
 
-  @column({ columnName: "id_fondo", serializeAs: "idFund" })
+  @column({
+    columnName: "id_fondo",
+    serializeAs: "idFund"
+  })
   public idFund: number;
 
-  @column({ columnName: "nombrefondo", serializeAs: "fundName" })
+  @column({
+    columnName: "nombrefondo",
+    serializeAs: "fundName"
+  })
   public fundName: string;
 
   @column({
@@ -46,10 +66,16 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public fundIdentification: string;
 
-  @column({ columnName: "comunagiros", serializeAs: "communeTransfer" })
+  @column({
+    columnName: "comunagiros",
+    serializeAs: "communeTransfer"
+  })
   public communeTransfer: number;
 
-  @column({ columnName: "observacion", serializeAs: "observation" })
+  @column({
+    columnName: "observacion",
+    serializeAs: "observation"
+  })
   public observation: string;
 
   @column({
@@ -64,10 +90,16 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public projectedCalculatedPeriod: number;
 
-  @column({ columnName: "tipo_modalidad", serializeAs: "modalityType" })
+  @column({
+    columnName: "tipo_modalidad",
+    serializeAs: "modalityType"
+  })
   public modalityType: number;
 
-  @column({ columnName: "total_semestres", serializeAs: "totalSemester" })
+  @column({
+    columnName: "total_semestres",
+    serializeAs: "totalSemester"
+  })
   public totalSemester: number;
 
   @column({
@@ -82,10 +114,16 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public projectedValueSustenance: number;
 
-  @column({ columnName: "total_proyectado", serializeAs: "totalProjected" })
+  @column({
+    columnName: "total_proyectado",
+    serializeAs: "totalProjected"
+  })
   public totalProjected: number;
 
-  @column({ columnName: "id_renovacionusuario", serializeAs: "idRenewUser" })
+  @column({
+    columnName: "id_renovacionusuario",
+    serializeAs: "idRenewUser"
+  })
   public idRenewUser: number;
 
   @column({
@@ -94,7 +132,10 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public renewSemesterNumber: number;
 
-  @column({ columnName: "periodo_calculado", serializeAs: "periodCalculated" })
+  @column({
+    columnName: "periodo_calculado",
+    serializeAs: "periodCalculated"
+  })
   public periodCalculated: number;
 
   @column({
@@ -109,7 +150,10 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public sustenanceRenewValue: number;
 
-  @column({ columnName: "total_renovacion", serializeAs: "renewTotal" })
+  @column({
+    columnName: "total_renovacion",
+    serializeAs: "renewTotal"
+  })
   public renewTotal: number;
 
   @column({
@@ -130,7 +174,10 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public sustenanceTransferValue: number;
 
-  @column({ columnName: "total_girado", serializeAs: "totalTransfer" })
+  @column({
+    columnName: "total_girado",
+    serializeAs: "totalTransfer"
+  })
   public totalTransfer: number;
 
   @column({
@@ -139,7 +186,10 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public diferenceTransferProjected: number;
 
-  @column({ columnName: "giro_matricula", serializeAs: "transferEnrollment" })
+  @column({
+    columnName: "giro_matricula",
+    serializeAs: "transferEnrollment"
+  })
   public transferEnrollment: string;
 
   @column({
@@ -148,15 +198,27 @@ export default class BeneficiaryRenewTransfer extends BaseModel {
   })
   public transferSustenance: string;
 
-  @column({ columnName: "fecharegistro", serializeAs: "registerDate" })
+  @column({
+    columnName: "fecharegistro",
+    serializeAs: "registerDate"
+  })
   public registerDate: string;
 
-  @column({ columnName: "id_usuariosgiros", serializeAs: "usersTransferId" })
+  @column({
+    columnName: "id_usuariosgiros",
+    serializeAs: "usersTransferId"
+  })
   public usersTransferId: string;
 
-  @column({ columnName: "estado_credito", serializeAs: "stateCredit" })
+  @column({
+    columnName: "estado_credito",
+    serializeAs: "stateCredit"
+  })
   public stateCredit: string;
 
-  @column({ columnName: "id_estado_credito", serializeAs: "stateCreditId" })
+  @column({
+    columnName: "id_estado_credito",
+    serializeAs: "stateCreditId"
+  })
   public stateCreditId: number;
 }
