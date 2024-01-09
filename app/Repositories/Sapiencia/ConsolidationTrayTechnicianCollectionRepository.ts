@@ -110,7 +110,11 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     // --------------------------------------------------- //
     // --------------- INFORMACIÓN QUEMADA --------------- //
     // --------------------------------------------------- //
-    const { page, perPage, statusPaccSearch } = filters;
+    const { page,
+            perPage,
+            statusPaccSearch,
+            programParamId,
+            cutParamId } = filters;
     let infoPaginated: IConsolidationTrayParams[] = [];
     const infoWithCutAndProgram: IConsolidationTrayParams[] = [];
 
@@ -120,40 +124,58 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
 
-    //* ******************************************** //*
-    //* Ordenemos por el corte según la fecha actual //*
-    //* ******************************************** //*
+    //* ********************************************** //*
+    //* Ordenemos por el corte según la fecha actual   //*
+    //* Aplicamos filtros adicionales si es el caso    //*
+    //* ********************************************** //*
     for (const data of convertResAurora) {
 
       if (data.statusPacc.id === statusPaccSearch) {
 
-        const getNumericDateNow: number = Date.parse(Date());
-        const getNumericDateIncomeCut: number = Date.parse(data.cuts.from);
-        const getNumericDateFinallyCut: number = Date.parse(data.cuts.until);
+        const objParams: IConsolidationTrayParams = {
+          idBenef: data.id,
+          idCut: data.idCut,
+          idProgram: data.idProgram,
+          creditId: data.creditNumber,
+          nroFiducy: data.fiducyContractNumber,
+          document: data.numberDocument,
+          fullName: data.fullName,
+          program: data.programs.value, //Programa - Tabla maestros Programa
+          legalDate: data.legalPeriod,
+          dateIncomeCut: data.cuts.from, //Cortes - Tabla Cortes
+          cut: data.cuts.name, //Cortes - Tabla Cortes
+          dateFinallyCut: data.cuts.until, //Cortes - Tabla Cortes
+          dateEndGracePeriod: data.dateEndGracePeriod,
+          status: data.statusPacc.description, //Estados - Tabla maestros Pacc
+          reason: data.reason,
+          characterization: data.characterization,
+          currentResponsible: data.currentManager,
+        }
 
-        if (getNumericDateNow >= getNumericDateIncomeCut && getNumericDateNow <= getNumericDateFinallyCut) {
 
-          const objParams: IConsolidationTrayParams = {
-            idBenef: data.id,
-            idCut: data.idCut,
-            idProgram: data.idProgram,
-            creditId: data.creditNumber,
-            nroFiducy: data.fiducyContractNumber,
-            document: data.numberDocument,
-            fullName: data.fullName,
-            program: data.programs.value, //Programa - Tabla maestros Programa
-            legalDate: data.legalPeriod,
-            dateIncomeCut: data.cuts.from, //Cortes - Tabla Cortes
-            cut: data.cuts.name, //Cortes - Tabla Cortes
-            dateFinallyCut: data.cuts.until, //Cortes - Tabla Cortes
-            dateEndGracePeriod: data.dateEndGracePeriod,
-            status: data.statusPacc.description, //Estados - Tabla maestros Pacc
-            reason: data.reason,
-            characterization: data.characterization,
-            currentResponsible: data.currentManager,
+        if ( cutParamId && cutParamId === data.idCut ) {
+
+          if( programParamId ){
+
+            if( data.idProgram === programParamId ){
+
+              infoWithCutAndProgram.push(objParams);
+
+            }
+
+          }else{
+
+            infoWithCutAndProgram.push(objParams);
+
           }
 
-          infoWithCutAndProgram.push(objParams);
+        }else{
+
+          if ( cutParamId && cutParamId === data.idCut ) {
+
+            infoWithCutAndProgram.push(objParams);
+
+          }
 
         }
 
@@ -225,7 +247,13 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
     //* ************************************* //*
     //* Aplicamos paginación de manera manual //*
     //* ************************************* //*
-    const { searchParam, cutParamName, cutParamId, page, perPage, statusPaccSearch } = filters;
+    const { searchParam,
+            cutParamName,
+            cutParamId,
+            page,
+            perPage,
+            statusPaccSearch,
+            programParamId } = filters;
     const start: number = (page! - 1) * perPage!;
     const end: number = start + perPage!;
     let auxCount1: number = 0; //Control Paginación Manual
@@ -261,24 +289,40 @@ export default class ConsolidationTrayTechnicianCollectionRepository implements 
           currentResponsible: data.currentManager,
         }
 
-        if (!cutParamName || cutParamName == null || cutParamName == "") {
 
-          if (data.cuts.id === cutParamId) {
+        // Si viene que filtramos también por programa, tabs Acto Administrativo
+        if( programParamId ){
 
-            infoFiltered.push(objParams);
-            auxCount1 += 1;
+          if (!cutParamName || cutParamName == null || cutParamName == "") {
+
+            if (data.cuts.id === cutParamId && programParamId === data.idProgram) {
+              infoFiltered.push(objParams);
+              auxCount1 += 1;
+            }
+
+          } else {
+
+            if (cutParamName === "TODOS" && programParamId === data.idProgram) {
+              infoAllData.push(objParams);
+            }
 
           }
 
-        } else {
+        // Si no viene este filtro de programa, tabs antes del Acto Administrativo
+        }else{
 
-          if (cutParamName === "TODOS") {
+          if (!cutParamName || cutParamName == null || cutParamName == "") {
 
-            infoAllData.push(objParams);
+            if (data.cuts.id === cutParamId) {
+              infoFiltered.push(objParams);
+              auxCount1 += 1;
+            }
 
-          }else{
+          } else {
 
-            //TODO. Revisar paginación Adonis.
+            if (cutParamName === "TODOS") {
+              infoAllData.push(objParams);
+            }
 
           }
 
